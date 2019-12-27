@@ -13,55 +13,56 @@ import { GroupListComponent } from './group-list/group-list.component';
 import { GroupDetailComponent } from './group-detail/group-detail.component';
 import { ConfigListComponent } from './config-list/config-list.component';
 import { ConfigDetailComponent } from './config-detail/config-detail.component';
+import { AuthGuard } from 'src/app/_helpers';
 
 const domainRoutes: Routes = [
   {
     path: '',
-    component: DomainComponent,
+    component: DomainComponent, canActivate: [AuthGuard],
     children: [
       {
         path: '',
-        component: DomainDetailComponent
+        component: DomainDetailComponent, canActivate: [AuthGuard]
       },
       {
         path: 'detail',
-        component: DomainDetailComponent
+        component: DomainDetailComponent, canActivate: [AuthGuard]
       },
       {
         path: 'groups',
-        component: GroupListComponent
+        component: GroupListComponent, canActivate: [AuthGuard]
       },
       {
         path: 'group/detail',
-        component: GroupDetailComponent
+        component: GroupDetailComponent, canActivate: [AuthGuard]
       },
       {
         path: 'group/configs',
-        component: ConfigListComponent
+        component: ConfigListComponent, canActivate: [AuthGuard]
       },
       {
         path: 'group/config/detail',
-        component: ConfigDetailComponent
+        component: ConfigDetailComponent, canActivate: [AuthGuard]
       },
       {
         path: 'metrics',
-        component: MetricsComponent
+        component: MetricsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'change-log',
-        component: ChangelogComponent
+        component: ChangelogComponent, canActivate: [AuthGuard]
       },
       {
         path: 'components',
-        component: ComponentsComponent
+        component: ComponentsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'environments',
-        component: EnvironmentsComponent
+        component: EnvironmentsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'lab',
-        component: LabComponent
+        component: LabComponent, canActivate: [AuthGuard]
       }
     ]
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -18,18 +18,22 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        return this.http.post<any>(`http://localhost:8080/authenticate`, { username, password })
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.post<any>(`http://localhost:3000/admin/login`, { email: username, password }, { headers })
             .pipe(
                 catchError(this.handleError),
-                map(token => {
-                localStorage.setItem('currentToken', token.token);
-                this.currentToken = token.token;
-                this.currentTokenSubject.next(token.token);
-                return token.token;
-            }));
+                map(data => {
+                    localStorage.setItem('currentToken', data.token);
+                    this.currentToken = data.token;
+                    this.currentTokenSubject.next(data.token);
+                    return data;
+                }
+            ));
     }
 
     logout() {
+        this.http.post(`http://localhost:3000/admin/logout`, null).subscribe();
         localStorage.removeItem('currentToken');
         this.currentTokenSubject.next(null);
     }
@@ -39,8 +43,10 @@ export class AuthenticationService {
         if (error.error instanceof ErrorEvent) {
             errorMessage = `Error: ${error.error.message}`;
         } else {
-            if (error.error.status === 401) {
-                errorMessage = 'Username or password is incorrect';
+            if (error.status === 401) {
+                errorMessage = 'Email or password is incorrect';
+            } else if (error.status === 422) {
+                errorMessage = 'Invalid email format';
             } else {
                 errorMessage = `Error Code: ${error.status} - Message: ${error.message}`;
             }
