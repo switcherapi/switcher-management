@@ -17,8 +17,30 @@ export class AuthenticationService {
         return this.currentTokenSubject.value;
     }
 
+    keepAlive() {
+        if (this.currentTokenSubject.value) {
+            const headers = new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.currentTokenSubject.value.toString()
+            })
+
+            return this.http.post(`http://localhost:3000/admin/refresh/me`, null, { headers }).pipe(
+                catchError(err => {
+                    localStorage.removeItem('currentToken');
+                    this.currentTokenSubject.next(null);
+                    return [];
+                }),
+                map(data => {
+                    return this.currentTokenSubject.value;
+                }
+            ));
+        }
+    }
+
     login(username: string, password: string) {
-        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        })
 
         return this.http.post<any>(`http://localhost:3000/admin/login`, { email: username, password }, { headers })
             .pipe(
@@ -33,7 +55,12 @@ export class AuthenticationService {
     }
 
     logout() {
-        this.http.post(`http://localhost:3000/admin/logout`, null).subscribe();
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': this.currentTokenSubject.value.toString()
+        })
+
+        this.http.post(`http://localhost:3000/admin/logoutAll`, null, { headers }).subscribe();
         localStorage.removeItem('currentToken');
         this.currentTokenSubject.next(null);
     }
