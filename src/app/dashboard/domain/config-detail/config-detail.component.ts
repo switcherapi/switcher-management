@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainRouteService } from '../domain-route/domain-route.service';
-import { PathRoute } from '../domain-route/path-route';
+import { DomainRouteService } from '../domain/domain-route.service';
+import { PathRoute } from '../domain/path-route';
 
 @Component({
   selector: 'app-config-detail',
@@ -18,23 +18,23 @@ export class ConfigDetailComponent implements OnInit {
   }
 
   updatePathRoute() {
-    this.domainRouteService.clearPath();
+    // this.domainRouteService.clearPath();
     
-    this.pathRoute = {
-      id: '1',
-      name: 'Domain Name',
-      path: '/dashboard/domain',
-      type: 'Domain'
-    };
+    // this.pathRoute = {
+    //   id: '1',
+    //   name: 'Domain Name',
+    //   path: '/dashboard/domain',
+    //   type: 'Domain'
+    // };
 
-    this.domainRouteService.updatePath(this.pathRoute);
+    // this.domainRouteService.updatePath(this.pathRoute);
 
-    this.pathRoute = {
-      id: '1',
-      name: 'Group 1',
-      path: '/dashboard/domain/group/detail',
-      type: 'Group'
-    };
+    // this.pathRoute = {
+    //   id: '1',
+    //   name: 'Group 1',
+    //   path: '/dashboard/domain/group/detail',
+    //   type: 'Group'
+    // };
 
     this.domainRouteService.updatePath(this.pathRoute);
 

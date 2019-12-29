@@ -27,7 +27,7 @@ export class DomainPreviewComponent implements OnInit {
   }
 
   selectDomain() {
-    this.router.navigate(['/dashboard/domain/' + this.domain.id]);
+    this.router.navigate(['/dashboard/domain/'], { queryParams: { id: this.domain.id } });
   }
 
 }

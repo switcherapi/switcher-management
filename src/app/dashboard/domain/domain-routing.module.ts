@@ -14,7 +14,6 @@ import { GroupDetailComponent } from './group-detail/group-detail.component';
 import { ConfigListComponent } from './config-list/config-list.component';
 import { ConfigDetailComponent } from './config-detail/config-detail.component';
 import { AuthGuard } from '../../auth/guards/auth.guard';
-import { DomainDetailResolverService } from './domain-detail/domain-detail-resolver.service';
 
 const routes: Routes = [
   {
@@ -22,11 +21,8 @@ const routes: Routes = [
     component: DomainComponent, canActivate: [AuthGuard],
     children: [
       {
-        path: ':id',
-        component: DomainDetailComponent, canActivate: [AuthGuard],
-        resolve: {
-          domain: DomainDetailResolverService
-        }
+        path: '',
+        component: DomainDetailComponent, canActivate: [AuthGuard]
       },
       {
         path: 'groups',

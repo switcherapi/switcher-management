@@ -1,5 +1,5 @@
 <div class="card mt-4">
-    <h4 class="card-header">{{ getPathRoute().getCurrentRoute().name }}</h4>
+    <h4 class="card-header">{{ getCurrentRoute().name }}</h4>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="navbar-nav">
             <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
@@ -11,7 +11,19 @@
             <a class="nav-item nav-link" routerLink="/dashboard/domain/lab">Lab</a>
         </div>
     </nav>
-    <app-domain-route></app-domain-route>
+
+    <div>
+        <a *ngIf="pathRouters[0]" [routerLink]=pathRouters[0].path [queryParams]="{ id: pathRouters[0].id }">
+            <span class="badge"></span>{{ pathRouters[0].name }}
+        </a>
+        <a *ngIf="pathRouters[1]" [routerLink]=pathRouters[1].path [queryParams]="{ id: pathRouters[1].id }">
+            / <span class="badge"></span>{{ pathRouters[1].name }}
+        </a>
+        <a *ngIf="pathRouters[2]" [routerLink]=pathRouters[2].path [queryParams]="{ id: pathRouters[2].id }">
+            / <span class="badge"></span>{{ pathRouters[2].name }}
+        </a>
+    </div>
+
     <div class="card-body">
         <router-outlet></router-outlet>
     </div>

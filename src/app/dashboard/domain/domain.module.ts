@@ -13,9 +13,8 @@ import { GroupListComponent } from './group-list/group-list.component';
 import { GroupPreviewComponent } from './group-preview/group-preview.component';
 import { GroupDetailComponent } from './group-detail/group-detail.component';
 
-import { DomainRouteComponent } from './domain-route/domain-route.component';
-import { DomainRouteService } from './domain-route/domain-route.service';
-import { PathRoute } from './domain-route/path-route';
+import { DomainRouteService } from './domain/domain-route.service';
+import { PathRoute } from './domain/path-route';
 import { ConfigListComponent } from './config-list/config-list.component';
 import { ConfigPreviewComponent } from './config-preview/config-preview.component';
 import { ConfigDetailComponent } from './config-detail/config-detail.component';
@@ -31,8 +30,7 @@ import { ConfigDetailComponent } from './config-detail/config-detail.component';
     LabComponent, 
     GroupListComponent, 
     GroupPreviewComponent, 
-    GroupDetailComponent, 
-    DomainRouteComponent, 
+    GroupDetailComponent,
     ConfigListComponent, 
     ConfigPreviewComponent, 
     ConfigDetailComponent
@@ -43,7 +41,7 @@ import { ConfigDetailComponent } from './config-detail/config-detail.component';
   ],
   providers: [ 
     DomainRouteService, 
-    PathRoute 
+    PathRoute
   ]
 })
 export class DomainModule { }

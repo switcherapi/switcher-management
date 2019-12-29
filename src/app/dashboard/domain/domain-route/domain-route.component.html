@@ -1,9 +1,0 @@
-<a *ngIf="getPathRoute().getDomain()" [routerLink]=getPathRoute().getDomain().path>
-    <span class="badge"></span>{{ getPathRoute().getDomain().name }}
-</a>
-<a *ngIf="getPathRoute().getGroup()" [routerLink]=getPathRoute().getGroup().path>
-    / <span class="badge"></span>{{ getPathRoute().getGroup().name }}
-</a>
-<a *ngIf="getPathRoute().getConfig()" [routerLink]=getPathRoute().getConfig().path>
-    / <span class="badge"></span>{{ getPathRoute().getConfig().name }}
-</a>

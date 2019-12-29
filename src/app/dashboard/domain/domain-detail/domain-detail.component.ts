@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainRouteService } from '../domain-route/domain-route.service';
-import { PathRoute } from '../domain-route/path-route';
+import { DomainRouteService } from '../domain/domain-route.service';
+import { PathRoute } from '../domain/path-route';
 import { ActivatedRoute } from '@angular/router';
 import { Domain } from '../../model/domain';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-domain-detail',
@@ -15,23 +16,22 @@ export class DomainDetailComponent implements OnInit {
     private domainRouteService: DomainRouteService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
+    private dashboardService: DashboardService
   ) { }
 
   ngOnInit() {
-    this.route.data
-    .subscribe((data: { domain: Domain }) => {
-      this.updatePathRoute(data.domain);
+    this.route.queryParams.subscribe(params => {
+      this.dashboardService.getDomain(params.id).subscribe(domain => {
+        this.updatePathRoute(domain);
+      })
     });
-    
   }
 
   updatePathRoute(domain: Domain) {
-    this.domainRouteService.clearPath();
-    
     this.pathRoute = {
       id: domain.id,
       name: domain.name,
-      path: '/dashboard/domain/' + domain.id,
+      path: '/dashboard/domain/',
       type: 'Domain'
     };
 
