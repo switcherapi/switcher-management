@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainRouteService } from './domain-route.service';
+import { DomainRouteService } from '../services/domain-route.service';
 import { Router } from '@angular/router';
-import { PathRoute } from './path-route';
+import { PathRoute } from '../model/path-route';
 import { delay } from 'rxjs/operators';
+import { Types } from '../../domain/model/path-route'
 
 @Component({
   selector: 'app-domain',
@@ -23,31 +24,33 @@ export class DomainComponent implements OnInit {
 
   ngOnInit() {
     this.domainRouteSerice.pathChange.pipe(delay(0)).subscribe((pathRoute: PathRoute) => {
-      this.selectedDomain = this.domainRouteSerice.getPathElement('selectedDomain');
-      this.selectedGroup = this.domainRouteSerice.getPathElement('selectedGroup');
-      this.selectedConfig = this.domainRouteSerice.getPathElement('selectedConfig');
+      this.selectedDomain = this.domainRouteSerice.getPathElement(Types.SELECTED_DOMAIN);
+      this.selectedGroup = this.domainRouteSerice.getPathElement(Types.SELECTED_GROUP);
+      this.selectedConfig = this.domainRouteSerice.getPathElement(Types.SELECTED_CONFIG);
       this.currentPathRoute = pathRoute;
     })
   }
 
   getLabelListChildren() {
-    if (this.currentPathRoute.type === 'Domain') {
+    if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
       return 'Groups';
-    } else if (this.currentPathRoute.type === 'Group' || this.currentPathRoute.type === 'Config') {
+    } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
+      this.currentPathRoute.type === Types.CONFIG_TYPE) {
       return 'Switchers';
     }
   }
 
   gotoListChildren() {
-    if (this.currentPathRoute.type === 'Domain') {
+    if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
       this.router.navigate(['/dashboard/domain/groups']);
-    } else if (this.currentPathRoute.type === 'Group' || this.currentPathRoute.type === 'Config') {
+    } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
+      this.currentPathRoute.type === Types.CONFIG_TYPE) {
       this.router.navigate(['/dashboard/domain/group/configs']);
     }
   }
 
   gotoDetails() {
-    this.router.navigate([this.currentPathRoute.path], { queryParams: { id: this.currentPathRoute.id } });
+    this.router.navigate([this.currentPathRoute.path], { state: { element: JSON.stringify(this.currentPathRoute.element) } });
   }
 
   getCurrentRoute(): PathRoute {
@@ -58,12 +61,24 @@ export class DomainComponent implements OnInit {
     return this.selectedDomain;
   }
 
+  getDomainElement(): string {
+    return JSON.stringify(this.selectedDomain.element);
+  }
+
   getGroup(): PathRoute {
     return this.selectedGroup;
   }
 
+  getGroupElement(): string {
+    return JSON.stringify(this.selectedGroup.element);
+  }
+
   getConfig(): PathRoute {
     return this.selectedConfig;
+  }
+
+  getConfigElement(): string {
+    return JSON.stringify(this.selectedConfig.element);
   }
 
 }

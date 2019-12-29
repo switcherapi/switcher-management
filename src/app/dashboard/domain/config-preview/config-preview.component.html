@@ -1,6 +1,4 @@
-<div class="card mt-4">
-    <h4 class="card-header">Config</h4>
-    <div class="card-body">
-        <button routerLink="/dashboard/domain/group/config/detail">Select config</button>
-    </div>
+<h4 class="card-header">{{getConfig().key}}</h4>
+<div class="card-body">
+    <button (click)="selectConfig()">Select config</button>
 </div>

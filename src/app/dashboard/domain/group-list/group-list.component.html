@@ -1,7 +1,5 @@
 <div class="card mt-4">
-    <div class="card-body">
-        <app-group-preview></app-group-preview>
-        <app-group-preview></app-group-preview>
-        <app-group-preview></app-group-preview>
+    <div *ngFor="let group of groups$ | async">
+        <app-group-preview [group]="group"></app-group-preview>
     </div>
 </div>

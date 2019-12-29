@@ -1,6 +1,5 @@
 <div class="card mt-4">
-    <div class="card-body">
-        <app-config-preview></app-config-preview>
-        <app-config-preview></app-config-preview>
+    <div *ngFor="let config of configs$ | async">
+        <app-config-preview [config]="config"></app-config-preview>
     </div>
 </div>

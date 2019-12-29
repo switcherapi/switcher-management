@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Domain } from '../model/domain';
+import { Domain } from '../domain/model/domain';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -27,7 +27,7 @@ export class DomainPreviewComponent implements OnInit {
   }
 
   selectDomain() {
-    this.router.navigate(['/dashboard/domain/'], { queryParams: { id: this.domain.id } });
+    this.router.navigate(['/dashboard/domain/'], { state: { element: JSON.stringify(this.domain) } });
   }
 
 }

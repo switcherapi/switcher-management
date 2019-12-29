@@ -1,6 +1,4 @@
-<div class="card mt-4">
-    <h4 class="card-header">Group</h4>
-    <div class="card-body">
-        <button routerLink="/dashboard/domain/group/detail">Select group</button>
-    </div>
+<h4 class="card-header">{{getGroup().name}}</h4>
+<div class="card-body">
+    <button (click)="selectGroup()">Select group</button>
 </div>

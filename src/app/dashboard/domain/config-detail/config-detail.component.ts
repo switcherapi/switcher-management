@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainRouteService } from '../domain/domain-route.service';
-import { PathRoute } from '../domain/path-route';
+import { DomainRouteService } from '../services/domain-route.service';
+import { PathRoute, Types } from '../model/path-route';
+import { Config } from '../model/config';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-config-detail',
@@ -11,38 +14,28 @@ export class ConfigDetailComponent implements OnInit {
 
   constructor(
     private domainRouteService: DomainRouteService,
-    private pathRoute: PathRoute) { }
+    private pathRoute: PathRoute,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
-    this.updatePathRoute();
+    this.route.paramMap
+    .pipe(map(() => window.history.state)).subscribe(data => {
+      if (data.element) {
+        this.updatePathRoute(JSON.parse(data.element));
+      } else {
+        this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_CONFIG).element);
+      }
+    })
   }
 
-  updatePathRoute() {
-    // this.domainRouteService.clearPath();
-    
-    // this.pathRoute = {
-    //   id: '1',
-    //   name: 'Domain Name',
-    //   path: '/dashboard/domain',
-    //   type: 'Domain'
-    // };
-
-    // this.domainRouteService.updatePath(this.pathRoute);
-
-    // this.pathRoute = {
-    //   id: '1',
-    //   name: 'Group 1',
-    //   path: '/dashboard/domain/group/detail',
-    //   type: 'Group'
-    // };
-
-    this.domainRouteService.updatePath(this.pathRoute);
-
+  updatePathRoute(config: Config) {
     this.pathRoute = {
-      id: '1',
-      name: 'Config 1',
+      id: config.id,
+      element: config,
+      name: config.key,
       path: '/dashboard/domain/group/config/detail',
-      type: 'Config'
+      type: Types.CONFIG_TYPE
     };
 
     this.domainRouteService.updatePath(this.pathRoute);

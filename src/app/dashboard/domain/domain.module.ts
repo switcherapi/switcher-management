@@ -13,8 +13,8 @@ import { GroupListComponent } from './group-list/group-list.component';
 import { GroupPreviewComponent } from './group-preview/group-preview.component';
 import { GroupDetailComponent } from './group-detail/group-detail.component';
 
-import { DomainRouteService } from './domain/domain-route.service';
-import { PathRoute } from './domain/path-route';
+import { DomainRouteService } from './services/domain-route.service';
+import { PathRoute } from './model/path-route';
 import { ConfigListComponent } from './config-list/config-list.component';
 import { ConfigPreviewComponent } from './config-preview/config-preview.component';
 import { ConfigDetailComponent } from './config-detail/config-detail.component';

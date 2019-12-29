@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainRouteService } from '../domain/domain-route.service';
-import { PathRoute } from '../domain/path-route';
+import { DomainRouteService } from '../services/domain-route.service';
+import { PathRoute, Types } from '../model/path-route';
+import { Group } from '../model/group';
+import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-group-detail',
@@ -12,29 +15,27 @@ export class GroupDetailComponent implements OnInit {
   constructor(
     private domainRouteService: DomainRouteService,
     private pathRoute: PathRoute,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.updatePathRoute();
+    this.route.paramMap
+    .pipe(map(() => window.history.state)).subscribe(data => {
+      if (data.element) {
+        this.updatePathRoute(JSON.parse(data.element));
+      } else {
+        this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).element);
+      }
+    })
   }
 
-  updatePathRoute() {
-    // this.domainRouteService.clearPath();
-    
-    // this.pathRoute = {
-    //   id: '1',
-    //   name: 'Domain Name',
-    //   path: '/dashboard/domain',
-    //   type: 'Domain'
-    // };
-
-    this.domainRouteService.updatePath(this.pathRoute);
-
+  updatePathRoute(group: Group) {
     this.pathRoute = {
-      id: '1',
-      name: 'Group 1',
+      id: group.id,
+      element: group,
+      name: group.name,
       path: '/dashboard/domain/group/detail',
-      type: 'Group'
+      type: Types.GROUP_TYPE
     };
 
     this.domainRouteService.updatePath(this.pathRoute);
