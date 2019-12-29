@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomainRouteService } from './domain-route.service';
 import { Router } from '@angular/router';
 import { PathRoute } from './path-route';
-import { startWith, tap, delay } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-domain',
@@ -11,7 +11,9 @@ import { startWith, tap, delay } from 'rxjs/operators';
 })
 export class DomainComponent implements OnInit {
 
-  pathRouters = [];
+  selectedDomain: PathRoute;
+  selectedGroup: PathRoute;
+  selectedConfig: PathRoute;
 
   constructor(
     private domainRouteSerice: DomainRouteService,
@@ -21,16 +23,11 @@ export class DomainComponent implements OnInit {
 
   ngOnInit() {
     this.domainRouteSerice.pathChange.pipe(delay(0)).subscribe((pathRoute: PathRoute) => {
-        if (pathRoute.type === 'Domain') {
-          this.pathRouters[0] = pathRoute;
-        } else if (pathRoute.type === 'Group') {
-          this.pathRouters[1] = pathRoute;
-        } else if (pathRoute.type === 'Config') {
-          this.pathRouters[2] = pathRoute;
-        }
-  
-        this.currentPathRoute = pathRoute;
-      })
+      this.selectedDomain = this.domainRouteSerice.getPathElement('selectedDomain');
+      this.selectedGroup = this.domainRouteSerice.getPathElement('selectedGroup');
+      this.selectedConfig = this.domainRouteSerice.getPathElement('selectedConfig');
+      this.currentPathRoute = pathRoute;
+    })
   }
 
   getLabelListChildren() {
@@ -53,8 +50,20 @@ export class DomainComponent implements OnInit {
     this.router.navigate([this.currentPathRoute.path], { queryParams: { id: this.currentPathRoute.id } });
   }
 
-  getCurrentRoute() {
+  getCurrentRoute(): PathRoute {
     return this.currentPathRoute;
+  }
+
+  getDomain(): PathRoute {
+    return this.selectedDomain;
+  }
+
+  getGroup(): PathRoute {
+    return this.selectedGroup;
+  }
+
+  getConfig(): PathRoute {
+    return this.selectedConfig;
   }
 
 }

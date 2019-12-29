@@ -13,14 +13,14 @@
     </nav>
 
     <div>
-        <a *ngIf="pathRouters[0]" [routerLink]=pathRouters[0].path [queryParams]="{ id: pathRouters[0].id }">
-            <span class="badge"></span>{{ pathRouters[0].name }}
+        <a *ngIf="getDomain()" [routerLink]=getDomain().path [queryParams]="{ id: getDomain().id }">
+            <span class="badge"></span>{{ getDomain().name }}
         </a>
-        <a *ngIf="pathRouters[1]" [routerLink]=pathRouters[1].path [queryParams]="{ id: pathRouters[1].id }">
-            / <span class="badge"></span>{{ pathRouters[1].name }}
+        <a *ngIf="getGroup()" [routerLink]=getGroup().path [queryParams]="{ id: getGroup().id }">
+            <span class="badge"></span>{{ getGroup().name }}
         </a>
-        <a *ngIf="pathRouters[2]" [routerLink]=pathRouters[2].path [queryParams]="{ id: pathRouters[2].id }">
-            / <span class="badge"></span>{{ pathRouters[2].name }}
+        <a *ngIf="getConfig()" [routerLink]=getConfig().path [queryParams]="{ id: getConfig().id }">
+            <span class="badge"></span>{{ getConfig().name }}
         </a>
     </div>
 
