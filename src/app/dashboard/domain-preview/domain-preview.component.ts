@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Domain } from '../model/domain';
-import { DomainRouteService } from '../domain/domain-route/domain-route.service';
-import { PathRoute } from '../domain/domain-route/path-route';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-domain-preview',
@@ -13,9 +11,8 @@ export class DomainPreviewComponent implements OnInit {
   @Input() domain: Domain;
 
   constructor(
-    private domainRouteService: DomainRouteService,
-    private pathRoute: PathRoute,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -30,14 +27,7 @@ export class DomainPreviewComponent implements OnInit {
   }
 
   selectDomain() {
-    this.pathRoute = {
-      id: this.domain.id,
-      name: this.domain.name,
-      path: '/dashboard/domain',
-      type: 'Domain'
-    };
-    
-    this.domainRouteService.updatePath(this.pathRoute);
+    this.router.navigate(['/dashboard/domain/' + this.domain.id]);
   }
 
 }

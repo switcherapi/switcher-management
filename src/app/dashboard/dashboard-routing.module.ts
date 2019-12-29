@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DomainListComponent } from './domain-list/domain-list.component';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
-const appRoutes: Routes = [
+const routes: Routes = [
   { path: 'dashboard',  component: DomainListComponent, canActivate: [AuthGuard] },
 
   {
@@ -17,7 +17,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forChild(appRoutes)
+    RouterModule.forChild(routes)
   ],
   exports: [
     RouterModule

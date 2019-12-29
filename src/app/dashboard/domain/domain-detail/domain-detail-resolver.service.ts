@@ -8,8 +8,8 @@ import {
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
 
-import { DashboardService } from '../services/dashboard.service';
-import { Domain } from '../model/domain';
+import { DashboardService } from '../../services/dashboard.service';
+import { Domain } from '../../model/domain';
 
 @Injectable({
   providedIn: 'root',
