@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Domain } from '../domain/model/domain';
-import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-domain-list',
@@ -11,18 +8,25 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./domain-list.component.css']
 })
 export class DomainListComponent implements OnInit {
-  domains$: Observable<Domain[]>;
+  domains$: Domain[];
+  loading = false;
+  error = '';
 
   constructor(
-    private dashboardService: DashboardService,
-    private route: ActivatedRoute
+    private dashboardService: DashboardService
   ) { }
 
   ngOnInit() {
-    this.domains$ = this.route.paramMap.pipe(
-      switchMap(() => {
-        return this.dashboardService.getDomains();
-      })
-    );
+    this.loading = true;
+    this.error = '';
+    this.dashboardService.getDomains().subscribe(data => {
+      if (data) {
+        this.domains$ = data;
+      }
+      this.loading = false;
+    }, error => {
+      this.error = error;
+      this.loading = false;
+    });
   }
 }

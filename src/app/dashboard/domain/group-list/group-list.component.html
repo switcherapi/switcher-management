@@ -1,5 +1,7 @@
-<div class="card mt-4">
-    <div *ngFor="let group of groups$ | async">
+<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+<div *ngIf="!error" class="card mt-4">
+    <div *ngFor="let group of groups$">
         <app-group-preview [group]="group"></app-group-preview>
     </div>
 </div>

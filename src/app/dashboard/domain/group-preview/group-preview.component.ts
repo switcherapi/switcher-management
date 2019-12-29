@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Group } from '../model/group';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-group-preview',
@@ -11,7 +11,6 @@ export class GroupPreviewComponent implements OnInit {
   @Input() group: Group;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 

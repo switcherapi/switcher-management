@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Config } from 'protractor';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-config-preview',
@@ -11,7 +11,6 @@ export class ConfigPreviewComponent implements OnInit {
   @Input() config: Config;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Domain } from '../domain/model/domain';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-domain-preview',
@@ -11,7 +11,6 @@ export class DomainPreviewComponent implements OnInit {
   @Input() domain: Domain;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 

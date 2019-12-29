@@ -1,7 +1,9 @@
 <div class="card mt-4">
     <h4 class="card-header">Dashboard - Domains</h4>
     <div class="card-body">
-        <div *ngFor="let domain of domains$ | async">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        <div *ngFor="let domain of domains$">
             <app-domain-preview [domain]="domain"></app-domain-preview>
         </div>
     </div>
