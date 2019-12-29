@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DomainRouteService } from '../domain-route/domain-route.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Domain } from '../../model/domain';
+import { PathRoute } from '../domain-route/path-route';
 
 @Component({
   selector: 'app-domain',
@@ -8,13 +10,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./domain.component.css']
 })
 export class DomainComponent implements OnInit {
-
   constructor(
     private domainRouteSerice: DomainRouteService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private pathRoute: PathRoute
   ) { }
 
   ngOnInit() {
+    this.route.data
+    .subscribe((data: { domain: Domain }) => {
+      console.log(data)
+    });
   }
 
   getPathRoute() {

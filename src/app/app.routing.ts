@@ -2,7 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login';
 import { DocumentationComponent } from './documentation/documentation.component';
-import { AuthGuard } from './_helpers';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 const routes: Routes = [
     { path: '',   redirectTo: '/login', pathMatch: 'full' },
@@ -21,7 +21,7 @@ const routes: Routes = [
         data: { preload: true }
     },
 
-    { path: 'documentation', component: DocumentationComponent },
+    { path: 'documentation', component: DocumentationComponent, canActivate: [AuthGuard] },
 
     { path: '**', redirectTo: '' }
 ];

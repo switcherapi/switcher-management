@@ -1,5 +1,5 @@
 export class PathRoute {
-  id: number;
+  id: string;
   name: string;
   path: string;
   type: string;

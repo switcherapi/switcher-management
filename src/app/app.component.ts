@@ -1,21 +1,31 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from './auth/services/auth.service';
 
-import { AuthenticationService } from './_services';
-
-@Component({ selector: 'app', templateUrl: 'app.component.html' })
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
 export class AppComponent {
-    currentToken: String;
 
-    constructor(
-        private router: Router,
-        private authenticationService: AuthenticationService
-    ) {
-        this.authenticationService.currentToken.subscribe(x => this.currentToken = x);
-    }
+  currentToken: String; 
 
-    logout() {
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
-    }
+  constructor(
+      private router: Router,
+      private authService: AuthService
+  ) {
+    this.authService.currentToken.subscribe(x => this.currentToken = x);
+  }
+
+  ngOnInit() {
+    this.authService.logoff.subscribe((currentToken: String) => {
+      this.currentToken = currentToken;
+    })
+  }
+
+  logout() {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+  }
+  
 }

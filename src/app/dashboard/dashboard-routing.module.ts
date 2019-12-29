@@ -2,9 +2,9 @@ import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { DomainListComponent } from './domain-list/domain-list.component';
-import { AuthGuard } from '../_helpers/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
-const peopleRoutes: Routes = [
+const appRoutes: Routes = [
   { path: 'dashboard',  component: DomainListComponent, canActivate: [AuthGuard] },
 
   {
@@ -17,7 +17,7 @@ const peopleRoutes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forChild(peopleRoutes)
+    RouterModule.forChild(appRoutes)
   ],
   exports: [
     RouterModule

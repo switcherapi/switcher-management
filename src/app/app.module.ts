@@ -6,11 +6,15 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { appRoutingModule } from './app.routing';
 
-import { ErrorInterceptor } from './_helpers';
 import { LoginComponent } from './login';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PeopleModule } from './people/people.module';
 import { DocumentationComponent } from './documentation/documentation.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { AuthService } from './auth/services/auth.service';
+import { TokenInterceptor } from './auth/token.interceptor';
 
 @NgModule({
     imports: [
@@ -19,7 +23,11 @@ import { DocumentationComponent } from './documentation/documentation.component'
         HttpClientModule,
         appRoutingModule,
         PeopleModule,
-        DashboardModule
+        DashboardModule,
+        NoopAnimationsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     declarations: [
         AppComponent,
@@ -27,8 +35,14 @@ import { DocumentationComponent } from './documentation/documentation.component'
         DocumentationComponent
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
-    ],
+        AuthGuard,
+        AuthService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: TokenInterceptor,
+          multi: true
+        }
+      ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

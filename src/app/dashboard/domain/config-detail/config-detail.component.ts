@@ -11,7 +11,7 @@ export class ConfigDetailComponent implements OnInit {
 
   constructor(
     private domainRouteService: DomainRouteService,
-    private pathRoute: PathRoute,) { }
+    private pathRoute: PathRoute) { }
 
   ngOnInit() {
     this.updatePathRoute();
@@ -21,7 +21,7 @@ export class ConfigDetailComponent implements OnInit {
     this.domainRouteService.clearPath();
     
     this.pathRoute = {
-      id: 1,
+      id: '1',
       name: 'Domain Name',
       path: '/dashboard/domain',
       type: 'Domain'
@@ -30,7 +30,7 @@ export class ConfigDetailComponent implements OnInit {
     this.domainRouteService.updatePath(this.pathRoute);
 
     this.pathRoute = {
-      id: 1,
+      id: '1',
       name: 'Group 1',
       path: '/dashboard/domain/group/detail',
       type: 'Group'
@@ -39,7 +39,7 @@ export class ConfigDetailComponent implements OnInit {
     this.domainRouteService.updatePath(this.pathRoute);
 
     this.pathRoute = {
-      id: 1,
+      id: '1',
       name: 'Config 1',
       path: '/dashboard/domain/group/config/detail',
       type: 'Config'

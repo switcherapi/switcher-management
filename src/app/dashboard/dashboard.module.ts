@@ -5,12 +5,17 @@ import { DomainPreviewComponent } from './domain-preview/domain-preview.componen
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DomainRouteService } from './domain/domain-route/domain-route.service';
+import { PathRoute } from './domain/domain-route/path-route';
 
 @NgModule({
   declarations: [DomainListComponent, DomainPreviewComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule
+  ],
+  providers: [ 
+    DomainRouteService, 
+    PathRoute 
   ]
 })
 export class DashboardModule { }

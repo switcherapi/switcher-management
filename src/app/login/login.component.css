@@ -1,0 +1,13 @@
+:host {
+  text-align: center;
+  display: block;
+  margin-top: 30%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.card {
+  flex-direction: row;
+}

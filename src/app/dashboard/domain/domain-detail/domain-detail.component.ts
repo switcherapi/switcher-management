@@ -22,7 +22,7 @@ export class DomainDetailComponent implements OnInit {
     this.domainRouteService.clearPath();
     
     this.pathRoute = {
-      id: 1,
+      id: '1',
       name: 'Domain Name',
       path: '/dashboard/domain',
       type: 'Domain'

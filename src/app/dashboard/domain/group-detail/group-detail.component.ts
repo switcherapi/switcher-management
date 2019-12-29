@@ -22,7 +22,7 @@ export class GroupDetailComponent implements OnInit {
     this.domainRouteService.clearPath();
     
     this.pathRoute = {
-      id: 1,
+      id: '1',
       name: 'Domain Name',
       path: '/dashboard/domain',
       type: 'Domain'
@@ -31,7 +31,7 @@ export class GroupDetailComponent implements OnInit {
     this.domainRouteService.updatePath(this.pathRoute);
 
     this.pathRoute = {
-      id: 1,
+      id: '1',
       name: 'Group 1',
       path: '/dashboard/domain/group/detail',
       type: 'Group'
