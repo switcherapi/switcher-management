@@ -11,7 +11,11 @@ export class TokenInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService) { 
+    this.authService.releaseOldSessions.subscribe(() => {
+      this.isRefreshing = false;
+    })
+  }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.authService.getJwtToken()) {
@@ -19,7 +23,9 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(catchError(error => {
-      if (error instanceof HttpErrorResponse && error.status === 401 && request.url !== `${environment.apiUrl}/admin/login`) {
+      if (error instanceof HttpErrorResponse && error.status === 401 
+        && request.url !== `${environment.apiUrl}/admin/login`
+        && request.url !== `${environment.apiUrl}/admin/refresh/me`) {
         return this.handle401Error(request, next);
       } else {
         return throwError(error);

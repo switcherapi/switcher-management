@@ -15,7 +15,7 @@ import { PathRoute } from './domain/model/path-route';
   ],
   providers: [ 
     DomainRouteService, 
-    PathRoute 
+    PathRoute
   ]
 })
 export class DashboardModule { }

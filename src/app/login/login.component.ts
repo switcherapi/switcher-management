@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
             }).subscribe(success => {
                 if (success) {
                     this.router.navigate([this.returnUrl]);
+                    this.authService.releaseOldSessions.emit(true);
                 }
                 this.loading = false;
             }, error => {

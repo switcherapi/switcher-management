@@ -1,0 +1,7 @@
+<mat-tab-group>
+    <div *ngFor="let strategy of strategies">
+        <mat-tab label="{{strategy.strategy}}">
+            <app-strategy-detail [strategy]="strategy"></app-strategy-detail>
+        </mat-tab>
+    </div>
+</mat-tab-group>

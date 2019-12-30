@@ -6,6 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { Group } from '../domain/model/group';
 import { Config } from '../domain/model/config';
 import { catchError } from 'rxjs/operators';
+import { Strategy } from '../domain/model/strategy';
 
 @Injectable({
   providedIn: 'root'
@@ -30,13 +31,17 @@ export class DashboardService {
     return this.http.get<Config[]>(`${environment.apiUrl}/config`, { params: { group: id } }).pipe(catchError(this.handleError));
   }
 
+  public getStrategiesByConfig(id: string): Observable<Strategy[]> {
+    return this.http.get<Strategy[]>(`${environment.apiUrl}/configstrategy`, { params: { config: id } }).pipe(catchError(this.handleError));
+  }
+
   handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
     } else {
         if (error.status === 401) {
-          errorMessage = 'You are not allowed to perform this operation';
+          return throwError(error);
         } else if (error.status === 422) {
           errorMessage = 'Invalid arguments';
         } else if (error.status === 0) {

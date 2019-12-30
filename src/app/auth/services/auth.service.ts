@@ -11,6 +11,7 @@ import { Tokens } from '../models/tokens';
 export class AuthService {
 
   @Output() logoff: EventEmitter<String> = new EventEmitter();
+  @Output() releaseOldSessions: EventEmitter<any> = new EventEmitter();
 
   private readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
@@ -34,6 +35,11 @@ export class AuthService {
         }),
         mapTo(true),
         catchError(this.handleError));
+  }
+
+  cleanSession() {
+    this.currentTokenSubject.next(null);
+    this.doLogoutUser();
   }
 
   logout() {

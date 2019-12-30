@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Domain } from '../domain/model/domain';
+import { environment } from 'src/environments/environment';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-domain-list',
@@ -13,7 +15,8 @@ export class DomainListComponent implements OnInit {
   error = '';
 
   constructor(
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private errorHandler: RouterErrorHandler
   ) { }
 
   ngOnInit() {
@@ -25,8 +28,15 @@ export class DomainListComponent implements OnInit {
       }
       this.loading = false;
     }, error => {
-      this.error = error;
+      this.error = this.errorHandler.doError(error);
       this.loading = false;
     });
+
+    setTimeout(() => {
+      if (!this.domains$) {
+        this.error = 'Failed to connect to Switcher API';
+      }
+      this.loading = false;
+    }, environment.timeout);
   }
 }
