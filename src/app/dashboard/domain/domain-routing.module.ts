@@ -14,7 +14,6 @@ import { GroupDetailComponent } from './group-detail/group-detail.component';
 import { ConfigListComponent } from './config-list/config-list.component';
 import { ConfigDetailComponent } from './config-detail/config-detail.component';
 import { AuthGuard } from '../../auth/guards/auth.guard';
-import { StrategyListComponent } from './strategy-list/strategy-list.component';
 
 const routes: Routes = [
   {
@@ -60,6 +59,11 @@ const routes: Routes = [
       {
         path: 'lab',
         component: LabComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'team',
+        loadChildren: () => import('./team/team.module').then(mod => mod.TeamModule),
+        data: { preload: true }
       }
     ]
   }

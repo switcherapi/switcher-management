@@ -22,6 +22,7 @@ export class DomainRouteService {
       sessionStorage.setItem(Types.SELECTED_CONFIG, JSON.stringify(pathRoute));
     }
 
+    sessionStorage.setItem(Types.CURRENT_ROUTE, JSON.stringify(pathRoute));
     this.pathChange.emit(pathRoute);
   }
 

@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 import { Domain } from '../domain/model/domain';
 import { environment } from 'src/environments/environment';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-domain-list',
   templateUrl: './domain-list.component.html',
   styleUrls: ['./domain-list.component.css']
 })
-export class DomainListComponent implements OnInit {
+export class DomainListComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
+
   domains$: Domain[];
   loading = false;
   error = '';
@@ -22,7 +26,7 @@ export class DomainListComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.error = '';
-    this.dashboardService.getDomains().subscribe(data => {
+    this.dashboardService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.domains$ = data;
       }
@@ -38,5 +42,10 @@ export class DomainListComponent implements OnInit {
       }
       this.loading = false;
     }, environment.timeout);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

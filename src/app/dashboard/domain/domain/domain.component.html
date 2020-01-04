@@ -1,5 +1,5 @@
 <div class="card mt-4">
-    <h4 class="card-header">{{ getCurrentRoute().name }}</h4>
+    <h4 class="card-header" *ngIf="getCurrentRoute()">{{ getCurrentRoute().name }}</h4>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="navbar-nav">
             <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
@@ -8,6 +8,7 @@
             <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log">Change Log</a>
             <a class="nav-item nav-link" routerLink="/dashboard/domain/components">Components</a>
             <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
+            <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
             <a class="nav-item nav-link" routerLink="/dashboard/domain/lab">Lab</a>
         </div>
     </nav>

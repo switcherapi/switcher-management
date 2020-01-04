@@ -8,7 +8,6 @@ import { appRoutingModule } from './app.routing';
 
 import { LoginComponent } from './login';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { PeopleModule } from './people/people.module';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
@@ -22,7 +21,6 @@ import { TokenInterceptor } from './auth/token.interceptor';
         ReactiveFormsModule,
         HttpClientModule,
         appRoutingModule,
-        PeopleModule,
         DashboardModule,
         NoopAnimationsModule,
         MatButtonModule,

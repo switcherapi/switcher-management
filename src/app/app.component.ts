@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 
@@ -6,7 +6,7 @@ import { AuthService } from './auth/services/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
 
   currentToken: String; 
 
@@ -21,6 +21,10 @@ export class AppComponent {
     this.authService.logoff.subscribe((currentToken: String) => {
       this.currentToken = currentToken;
     })
+  }
+
+  ngOnDestroy(): void {
+    this.authService.logoff.unsubscribe();
   }
 
   logout() {

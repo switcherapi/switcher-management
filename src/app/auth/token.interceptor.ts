@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
@@ -6,7 +6,7 @@ import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class TokenInterceptor implements HttpInterceptor, OnDestroy {
 
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -15,6 +15,10 @@ export class TokenInterceptor implements HttpInterceptor {
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
     })
+  }
+
+  ngOnDestroy(): void {
+    this.authService.releaseOldSessions.unsubscribe();
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

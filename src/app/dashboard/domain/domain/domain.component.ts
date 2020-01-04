@@ -1,56 +1,78 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainRouteService } from '../services/domain-route.service';
 import { Router } from '@angular/router';
 import { PathRoute } from '../model/path-route';
-import { delay } from 'rxjs/operators';
+import { delay, takeUntil } from 'rxjs/operators';
 import { Types } from '../../domain/model/path-route'
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-domain',
   templateUrl: './domain.component.html',
   styleUrls: ['./domain.component.css']
 })
-export class DomainComponent implements OnInit {
+export class DomainComponent implements OnInit, OnDestroy {
 
   selectedDomain: PathRoute;
   selectedGroup: PathRoute;
   selectedConfig: PathRoute;
+  currentPathRoute: PathRoute;
+
+  private unsubscribe: Subject<void> = new Subject();
 
   constructor(
-    private domainRouteSerice: DomainRouteService,
-    private router: Router,
-    private currentPathRoute: PathRoute
+    private domainRouteService: DomainRouteService,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.domainRouteSerice.pathChange.pipe(delay(0)).subscribe((pathRoute: PathRoute) => {
-      this.selectedDomain = this.domainRouteSerice.getPathElement(Types.SELECTED_DOMAIN);
-      this.selectedGroup = this.domainRouteSerice.getPathElement(Types.SELECTED_GROUP);
-      this.selectedConfig = this.domainRouteSerice.getPathElement(Types.SELECTED_CONFIG);
-      this.currentPathRoute = pathRoute;
-    })
+    if (!this.currentPathRoute) {
+      this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
+        this.updateRoute();
+      });
+    }
+
+    this.updateRoute();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  updateRoute() {
+      this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+      this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
+      this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
+      this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
   }
 
   getLabelListChildren() {
-    if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-      return 'Groups';
-    } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
-      this.currentPathRoute.type === Types.CONFIG_TYPE) {
-      return 'Switchers';
+    if (this.currentPathRoute) {
+      if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
+        return 'Groups';
+      } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
+        this.currentPathRoute.type === Types.CONFIG_TYPE) {
+        return 'Switchers';
+      }
     }
   }
 
   gotoListChildren() {
-    if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-      this.router.navigate(['/dashboard/domain/groups']);
-    } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
-      this.currentPathRoute.type === Types.CONFIG_TYPE) {
-      this.router.navigate(['/dashboard/domain/group/configs']);
+    if (this.currentPathRoute) {
+      if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
+        this.router.navigate(['/dashboard/domain/groups']);
+      } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
+        this.currentPathRoute.type === Types.CONFIG_TYPE) {
+        this.router.navigate(['/dashboard/domain/group/configs']);
+      }
     }
   }
 
   gotoDetails() {
-    this.router.navigate([this.currentPathRoute.path], { state: { element: JSON.stringify(this.currentPathRoute.element) } });
+    if (this.currentPathRoute) {
+      this.router.navigate([this.currentPathRoute.path], { state: { element: JSON.stringify(this.currentPathRoute.element) } });
+    }
   }
 
   getCurrentRoute(): PathRoute {

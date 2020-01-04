@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainRouteService } from '../services/domain-route.service';
 import { PathRoute, Types } from '../model/path-route';
 import { ActivatedRoute } from '@angular/router';
 import { Domain } from '../model/domain';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-domain-detail',
   templateUrl: './domain-detail.component.html',
   styleUrls: ['./domain-detail.component.css']
 })
-export class DomainDetailComponent implements OnInit {
+export class DomainDetailComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
 
   state$: Observable<object>;
 
@@ -23,13 +24,18 @@ export class DomainDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap
-      .pipe(map(() => window.history.state)).subscribe(data => {
+      .pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data.element) {
           this.updatePathRoute(JSON.parse(data.element));
         } else {
           this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).element);
         }
       })
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   updatePathRoute(domain: Domain) {

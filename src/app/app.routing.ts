@@ -15,12 +15,6 @@ const routes: Routes = [
         data: { preload: true }
     },
 
-    {
-        path: 'people',
-        loadChildren: () => import('./people/people.module').then(mod => mod.PeopleModule),
-        data: { preload: true }
-    },
-
     { path: 'documentation', component: DocumentationComponent, canActivate: [AuthGuard] },
 
     { path: '**', redirectTo: '' }

@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainRouteService } from '../services/domain-route.service';
 import { PathRoute, Types } from '../model/path-route';
 import { Config } from '../model/config';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { DashboardService } from '../../services/dashboard.service';
 import { Strategy } from '../model/strategy';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { environment } from 'src/environments/environment';
 
@@ -15,7 +15,9 @@ import { environment } from 'src/environments/environment';
   templateUrl: './config-detail.component.html',
   styleUrls: ['./config-detail.component.css']
 })
-export class ConfigDetailComponent implements OnInit {
+export class ConfigDetailComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
+  
   strategies:  Strategy[];
   loading = false;
   hasStrategies = false;
@@ -31,7 +33,7 @@ export class ConfigDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap
-    .pipe(map(() => window.history.state)).subscribe(data => {
+    .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
       if (data.element) {
         this.updatePathRoute(JSON.parse(data.element));
       } else {
@@ -40,6 +42,11 @@ export class ConfigDetailComponent implements OnInit {
     })
 
     this.initStrategies();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   updatePathRoute(config: Config) {
@@ -57,7 +64,7 @@ export class ConfigDetailComponent implements OnInit {
   private initStrategies() {
     this.loading = true;
     this.error = '';
-    this.dashboardService.getStrategiesByConfig(this.pathRoute.id).subscribe(data => {
+    this.dashboardService.getStrategiesByConfig(this.pathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.hasStrategies = data.length > 0;
         this.strategies = data;

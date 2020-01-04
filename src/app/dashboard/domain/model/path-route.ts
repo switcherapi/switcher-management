@@ -14,4 +14,5 @@ export class Types {
   public static SELECTED_DOMAIN ='selectedDomain';
   public static SELECTED_GROUP ='selectedGroup';
   public static SELECTED_CONFIG ='selectedConfig';
+  public static CURRENT_ROUTE = 'currentRoute';
 }

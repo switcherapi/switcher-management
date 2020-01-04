@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AuthService } from '../auth/services/auth.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+    private unsubscribe: Subject<void> = new Subject();
+
     loginForm: FormGroup;
     loading = false;
     submitted = false;
@@ -51,7 +55,7 @@ export class LoginComponent implements OnInit {
             {
                 email: this.f.username.value,
                 password: this.f.password.value
-            }).subscribe(success => {
+            }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
                 if (success) {
                     this.router.navigate([this.returnUrl]);
                     this.authService.releaseOldSessions.emit(true);
@@ -63,7 +67,12 @@ export class LoginComponent implements OnInit {
             });
     }
 
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    }
+
     onKey(event: any) {
         this.error = '';
-      }
+    }
 }

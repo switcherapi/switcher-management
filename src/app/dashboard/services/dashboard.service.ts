@@ -7,6 +7,7 @@ import { Group } from '../domain/model/group';
 import { Config } from '../domain/model/config';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain/model/strategy';
+import { Team } from '../domain/model/team';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,10 @@ export class DashboardService {
 
   public getStrategiesByConfig(id: string): Observable<Strategy[]> {
     return this.http.get<Strategy[]>(`${environment.apiUrl}/configstrategy`, { params: { config: id } }).pipe(catchError(this.handleError));
+  }
+
+  public getTeamsByDomain(id: string): Observable<Team[]> {
+    return this.http.get<Team[]>(`${environment.apiUrl}/team`, { params: { domain: id } }).pipe(catchError(this.handleError));
   }
 
   handleError(error) {

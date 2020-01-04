@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Group } from '../model/group';
 import { DashboardService } from '../../services/dashboard.service';
 import { DomainRouteService } from '../services/domain-route.service';
 import { Types } from '../model/path-route';
 import { environment } from 'src/environments/environment';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-list',
   templateUrl: './group-list.component.html',
   styleUrls: ['./group-list.component.css']
 })
-export class GroupListComponent implements OnInit {
+export class GroupListComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
+
   groups$: Group[];
   loading = false;
   error = '';
@@ -25,7 +29,9 @@ export class GroupListComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.error = '';
-    this.dashboardService.getGroupsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).subscribe(data => {
+    this.dashboardService.getGroupsByDomain(
+      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+
       if (data) {
         this.groups$ = data;
       }
@@ -41,6 +47,11 @@ export class GroupListComponent implements OnInit {
       }
       this.loading = false;
     }, environment.timeout);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
 }

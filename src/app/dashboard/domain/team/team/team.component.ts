@@ -1,22 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Config } from 'protractor';
-import { DashboardService } from '../../services/dashboard.service';
-import { DomainRouteService } from '../services/domain-route.service';
-import { Types } from '../model/path-route';
-import { environment } from 'src/environments/environment';
+import { Team } from '../../model/team';
+import { DashboardService } from 'src/app/dashboard/services/dashboard.service';
+import { DomainRouteService } from '../../services/domain-route.service';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { Types } from '../../model/path-route';
+import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-config-list',
-  templateUrl: './config-list.component.html',
-  styleUrls: ['./config-list.component.css']
+  selector: 'app-team',
+  templateUrl: './team.component.html',
+  styleUrls: ['./team.component.css']
 })
-export class ConfigListComponent implements OnInit, OnDestroy {
+export class TeamComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  configs$: Config[];
+  teams$: Team[];
   loading = false;
   error = '';
 
@@ -29,11 +29,11 @@ export class ConfigListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.error = '';
-    this.dashboardService.getConfigsByGroup(
-      this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        
+    this.dashboardService.getTeamsByDomain(
+      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+
       if (data) {
-        this.configs$ = data;
+        this.teams$ = data;
       }
       this.loading = false;
     }, error => {
@@ -42,7 +42,7 @@ export class ConfigListComponent implements OnInit, OnDestroy {
     });
 
     setTimeout(() => {
-      if (!this.configs$) {
+      if (!this.teams$) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
