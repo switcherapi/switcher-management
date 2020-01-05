@@ -26,7 +26,7 @@ export class TeamPreviewComponent implements OnInit {
   }
 
   selectTeam() {
-    this.router.navigate(['/dashboard/domain/team/edit'], { state: { element: JSON.stringify(this.team) } });
+    this.router.navigate(['/dashboard/domain/team/edit'], { state: { team: JSON.stringify(this.team) } });
   }
 
 
