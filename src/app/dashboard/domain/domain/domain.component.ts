@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainRouteService } from '../services/domain-route.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { PathRoute } from '../model/path-route';
 import { delay, takeUntil } from 'rxjs/operators';
 import { Types } from '../../domain/model/path-route'
@@ -22,7 +22,8 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   constructor(
     private domainRouteService: DomainRouteService,
-    private router: Router
+    private router: Router,
+    private activeRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -41,10 +42,10 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   updateRoute() {
-      this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-      this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
-      this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
-      this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
+    this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
+    this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
+    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
   }
 
   getLabelListChildren() {
@@ -73,6 +74,18 @@ export class DomainComponent implements OnInit, OnDestroy {
     if (this.currentPathRoute) {
       this.router.navigate([this.currentPathRoute.path], { state: { element: JSON.stringify(this.currentPathRoute.element) } });
     }
+  }
+
+  getTitle(): String {
+    const components = this.activeRoute.snapshot.routeConfig.children;
+    const uri = this.router.routerState.snapshot.url.split('/domain/');
+    const component = components.filter(comp => comp.path ===  uri[uri.length-1].split('/')[0]);
+
+    if (component.length && component[0].data) {
+      return component[0].data.title.replace('$', this.currentPathRoute.name);
+    }
+
+    return this.currentPathRoute.name
   }
 
   getCurrentRoute(): PathRoute {

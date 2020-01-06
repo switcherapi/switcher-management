@@ -1,5 +1,5 @@
 <div class="card mt-4">
-    <h4 class="card-header" *ngIf="getCurrentRoute()">{{ getCurrentRoute().name }}</h4>
+    <h4 class="card-header" *ngIf="getCurrentRoute()">{{ getTitle() }}</h4>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="navbar-nav">
             <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
