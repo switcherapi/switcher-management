@@ -26,7 +26,7 @@ export class ConfigPreviewComponent implements OnInit {
   }
 
   selectConfig() {
-    this.router.navigate(['/dashboard/domain/group/config/detail'], { state: { element: JSON.stringify(this.config) } });
+    this.router.navigate(['/dashboard/domain/group/switcher/detail'], { state: { element: JSON.stringify(this.config) } });
   }
 
 }

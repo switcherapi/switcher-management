@@ -3,10 +3,10 @@ import { DomainRouteService } from '../services/domain-route.service';
 import { PathRoute, Types } from '../model/path-route';
 import { Config } from '../model/config';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { DashboardService } from '../../services/dashboard.service';
 import { Strategy } from '../model/strategy';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { environment } from 'src/environments/environment';
 
@@ -54,7 +54,7 @@ export class ConfigDetailComponent implements OnInit, OnDestroy {
       id: config.id,
       element: config,
       name: config.key,
-      path: '/dashboard/domain/group/config/detail',
+      path: '/dashboard/domain/group/switcher/detail',
       type: Types.CONFIG_TYPE
     };
 

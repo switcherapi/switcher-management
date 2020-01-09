@@ -33,11 +33,11 @@ const routes: Routes = [
         component: GroupDetailComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group/configs',
+        path: 'group/switchers',
         component: ConfigListComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group/config/detail',
+        path: 'group/switcher/detail',
         component: ConfigDetailComponent, canActivate: [AuthGuard]
       },
       {

@@ -21,7 +21,6 @@ import { ConfigDetailComponent } from './config-detail/config-detail.component';
 import { StrategyDetailComponent } from './strategy-detail/strategy-detail.component';
 import { StrategyListComponent } from './strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @NgModule({
   declarations: [
