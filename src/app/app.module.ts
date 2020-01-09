@@ -15,12 +15,15 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { AuthService } from './auth/services/auth.service';
 import { TokenInterceptor } from './auth/token.interceptor';
 
+import { GraphQLModule } from './graphql.module';
+
 @NgModule({
     imports: [
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
         appRoutingModule,
+        GraphQLModule,
         DashboardModule,
         NoopAnimationsModule,
         MatButtonModule,
