@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { appRoutingModule } from './app.routing';
 
 import { LoginComponent } from './login';
-import { DashboardModule } from './dashboard/dashboard.module';
+import { DashboardModule } from './dashboard-module/dashboard.module';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';

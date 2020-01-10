@@ -11,7 +11,7 @@ const routes: Routes = [
 
     {
         path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(mod => mod.DashboardModule),
+        loadChildren: () => import('./dashboard-module/dashboard.module').then(mod => mod.DashboardModule),
         data: { preload: true }
     },
 
