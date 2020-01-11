@@ -4,7 +4,14 @@ import { AuthService } from './auth/services/auth.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styles: [`
+    .backgroud-style {
+      background: #24292e !important;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  `]
 })
 export class AppComponent implements OnDestroy {
 

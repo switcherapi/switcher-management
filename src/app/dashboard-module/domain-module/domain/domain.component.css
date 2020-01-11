@@ -1,0 +1,16 @@
+h4 {
+    color:#fff;
+    background-color:rgb(66, 71, 77);
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+}
+
+.backgroud-style {
+    background: #24292e !important;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+.svg-style {
+    margin-right: 6px;
+    margin-bottom: 6px;
+}

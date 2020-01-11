@@ -17,6 +17,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   selectedGroup: PathRoute;
   selectedConfig: PathRoute;
   currentPathRoute: PathRoute;
+  icon: number;
 
   private unsubscribe: Subject<void> = new Subject();
 
@@ -46,6 +47,7 @@ export class DomainComponent implements OnInit, OnDestroy {
     this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
     this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
+    this.getTitle();
   }
 
   getLabelListChildren() {
@@ -82,9 +84,11 @@ export class DomainComponent implements OnInit, OnDestroy {
     const component = components.filter(comp => comp.path ===  uri[uri.length-1].split('/')[0]);
 
     if (component.length && component[0].data) {
+      this.icon = component[0].data.icon;
       return component[0].data.title.replace('$', this.currentPathRoute.name);
     }
 
+    this.icon = 0;
     return this.currentPathRoute.name
   }
 

@@ -11,3 +11,9 @@ mat-form-field {
 .card {
   flex-direction: row;
 }
+
+h4 {
+  color:#fff;
+  background-color:rgb(66, 71, 77);
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+}

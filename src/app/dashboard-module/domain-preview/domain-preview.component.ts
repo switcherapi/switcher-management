@@ -17,14 +17,6 @@ export class DomainPreviewComponent implements OnInit {
   ngOnInit() {
   }
 
-  getDomainName() {
-    return this.domain.name;
-  }
-
-  getDomain() {
-    return this.domain;
-  }
-
   selectDomain() {
     this.router.navigate(['/dashboard/domain/'], { state: { element: JSON.stringify(this.domain) } });
   }

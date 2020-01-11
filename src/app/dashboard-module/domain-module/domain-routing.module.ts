@@ -44,42 +44,48 @@ const routes: Routes = [
         path: 'metrics',
         component: MetricsComponent, canActivate: [AuthGuard],
         data: {
-          title: 'Metrics'
+          title: 'Metrics',
+          icon: 1
         }
       },
       {
         path: 'change-log',
         component: ChangelogComponent, canActivate: [AuthGuard],
         data: {
-          title: 'Change Log: $'
+          title: 'Change Log: $',
+          icon: 2
         }
       },
       {
         path: 'components',
         component: ComponentsComponent, canActivate: [AuthGuard],
         data: {
-          title: 'Components'
+          title: 'Components',
+          icon: 3
         }
       },
       {
         path: 'environments',
         component: EnvironmentsComponent, canActivate: [AuthGuard],
         data: {
-          title: 'Environments'
+          title: 'Environments',
+          icon: 4
         }
       },
       {
         path: 'lab',
         component: LabComponent, canActivate: [AuthGuard],
         data: {
-          title: 'Lab'
+          title: 'Lab',
+          icon: 5
         }
       },
       {
         path: 'team',
         loadChildren: () => import('./team-module/team.module').then(mod => mod.TeamModule),
         data: {
-          title: 'Teams'
+          title: 'Teams',
+          icon: 6
         }
       }
     ]
