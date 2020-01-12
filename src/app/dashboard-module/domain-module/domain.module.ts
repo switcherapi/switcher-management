@@ -21,6 +21,8 @@ import { ConfigDetailComponent } from './config/config-detail/config-detail.comp
 import { StrategyDetailComponent } from './config/strategy-detail/strategy-detail.component';
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { AppMaterialModule } from 'src/app/shared/app-material.module';
+import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,11 @@ import { MatTabsModule } from '@angular/material/tabs';
   imports: [
     CommonModule,
     DomainRoutingModule,
-    MatTabsModule
+    MatTabsModule,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [ 
     DomainRouteService, 

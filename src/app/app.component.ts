@@ -11,6 +11,13 @@ import { AuthService } from './auth/services/auth.service';
       padding-top: 0;
       padding-bottom: 0;
     }
+
+    .divider-style {
+      width: 40px;
+      transform: rotate(90deg);
+      color:white;
+      background:#89847d;
+    }
   `]
 })
 export class AppComponent implements OnDestroy {

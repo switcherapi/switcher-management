@@ -1,0 +1,51 @@
+.header-section {
+  grid-area: header;
+  display: inline-flex;
+}
+
+.toggle-section {
+  grid-area: toggle;
+  display: inline-block;
+  text-align: center; 
+}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'header empty empty empty empty toggle';
+  grid-gap: 2px;
+  background-color: rgba(0, 0, 0, .03);
+  padding: 2px;
+  margin-bottom: 10px;
+}
+
+.grid-container>div {
+  background-color: rgb(255, 255, 255);
+}
+
+.btn-element {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  display: block;
+  font-size: 24px;
+  margin-top: 7px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  color: #595959;
+}
+
+.toggle-style {
+  margin-top: 14px;
+}
+
+.svg-style {
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+:host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: #b0d2ff;
+}
+
+:host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #549bfb;
+}

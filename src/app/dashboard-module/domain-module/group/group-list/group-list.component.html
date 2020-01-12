@@ -1,6 +1,14 @@
 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!error" class="card mt-4">
+<div *ngIf="!error" class="card mt-4" style="border: 0px; margin: 0px !important;">
+    <div style="text-align: end;">
+        <mat-form-field style="width: 180px;">
+            <mat-select placeholder="Environment selection">
+                <mat-option value="option">Production</mat-option>
+                <mat-option value="option">QA</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
     <div *ngFor="let group of groups$">
         <app-group-preview [group]="group"></app-group-preview>
     </div>

@@ -6,14 +6,14 @@ import { DomainPreviewComponent } from './domain-preview/domain-preview.componen
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DomainRouteService } from './services/domain-route.service';
 import { PathRoute } from './domain-module/model/path-route';
-import { MatButtonModule } from '@angular/material';
+import { AppMaterialModule } from '../shared/app-material.module';
 
 @NgModule({
   declarations: [DomainListComponent, DomainPreviewComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    MatButtonModule
+    AppMaterialModule
   ],
   providers: [ 
     DomainRouteService, 

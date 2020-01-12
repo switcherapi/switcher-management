@@ -29,4 +29,8 @@ export class GroupPreviewComponent implements OnInit {
     this.router.navigate(['/dashboard/domain/group/detail'], { state: { element: JSON.stringify(this.group) } });
   }
 
+  changeStatus() {
+    console.log('status changed')
+  }
+
 }

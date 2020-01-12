@@ -10,12 +10,12 @@ import { LoginComponent } from './login';
 import { DashboardModule } from './dashboard-module/dashboard.module';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AuthService } from './auth/services/auth.service';
 import { TokenInterceptor } from './auth/token.interceptor';
 
 import { GraphQLModule } from './graphql.module';
+import { AppMaterialModule } from './shared/app-material.module';
 
 @NgModule({
     imports: [
@@ -26,9 +26,7 @@ import { GraphQLModule } from './graphql.module';
         GraphQLModule,
         DashboardModule,
         NoopAnimationsModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule
+        AppMaterialModule
     ],
     declarations: [
         AppComponent,
