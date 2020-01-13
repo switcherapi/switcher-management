@@ -1,7 +1,7 @@
 <div class="col-md-6 offset-md-3 mt-5">
-        <div class="card">
+    <div class="card">
         <h4 class="card-header">
-            <img src="assets\switcherapi.svg" style="width: 180px;"/>
+            <img src="assets\switcherapi_management_white.png" style="width: 220px;"/>
         </h4>
         <div class="card-body">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -15,8 +15,9 @@
                         <input matInput type="password" id="password" (keyup)="onKey($event)" placeholder="Password" formControlName="password" required>
                     </mat-form-field>
                 </div>
-                <button [disabled]="loading" class="btn btn-primary">
+                <button mat-button class="btn-element" [disabled]="loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
                     Login
                 </button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>

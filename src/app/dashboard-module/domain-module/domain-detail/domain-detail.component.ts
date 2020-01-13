@@ -50,4 +50,8 @@ export class DomainDetailComponent implements OnInit, OnDestroy {
     this.domainRouteService.updatePath(this.pathRoute);
   }
 
+  getDomain() {
+    return this.pathRoute.element;
+  }
+
 }

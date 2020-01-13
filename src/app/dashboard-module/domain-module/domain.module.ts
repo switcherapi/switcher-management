@@ -22,7 +22,7 @@ import { StrategyDetailComponent } from './config/strategy-detail/strategy-detai
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
-import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,9 @@ import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectMod
     MatButtonModule,
     MatSlideToggleModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [ 
     DomainRouteService, 
