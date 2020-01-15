@@ -3,13 +3,24 @@
   display: inline-flex;
 }
 
-.grid-container {
+.grid-container.activated {
   display: grid;
   grid-template-areas:
     'header empty empty empty empty';
   grid-gap: 2px;
   background-color: rgba(0,0,0,.03);
   padding: 2px;
+  background: #549bfb94;
+}
+
+.grid-container.deactivated {
+  display: grid;
+  grid-template-areas:
+    'header empty empty empty empty';
+  grid-gap: 2px;
+  background-color: rgba(0,0,0,.03);
+  padding: 2px;
+  background: #d0d0d0;
 }
 
 .grid-container>div {

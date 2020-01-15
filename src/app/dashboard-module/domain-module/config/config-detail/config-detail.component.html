@@ -1,3 +1,53 @@
-<p>config-detail works!</p>
-
-<app-strategy-list *ngIf="hasStrategies" [strategies]="strategies"></app-strategy-list>
+<div class="detail-body">
+    <section class="header activated">
+        <div class="header-container">
+            <div class="description">
+                <mat-form-field>
+                    <input matInput placeholder="Name" value="{{getConfig().key}}" readonly>
+                </mat-form-field>
+                <mat-form-field>
+                    <textarea matInput placeholder="Description" value="{{getConfig().description}}" rows="4" readonly></textarea>
+                </mat-form-field>
+            </div>
+            <div class="description">
+                <mat-form-field>
+                    <input matInput placeholder="Created At" value="{{getConfig().createdAt}}" readonly>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Last Update" value="{{getConfig().updatedAt}}" readonly>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Created By" value="{{getConfig().owner}}" readonly>
+                </mat-form-field>
+            </div>
+            <div class="description">
+                <app-environment-config></app-environment-config>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="options-section">
+            <button mat-button class="btn-element" (click)="selectGroup()">
+                <svg class="bi bi-wrench" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2.102 4.223A3.004 3.004 0 005 8c.27 0 .532-.036.78-.103l6.342 6.252A3.003 3.003 0 0015 18a3 3 0 10-.851-5.878L7.897 5.781A3.004 3.004 0 004.223 2.1l2.141 2.142L6 6l-1.757.364-2.141-2.141zm13.37 9.019L15 13l-.471.242-.529.026-.287.445-.445.287-.026.529L13 15l.242.471.026.529.445.287.287.445.529.026L15 17l.471-.242.529-.026.287-.445.445-.287.026-.529L17 15l-.242-.471-.026-.529-.445-.287-.287-.445-.529-.026z" clip-rule="evenodd"></path>
+                </svg>Edit
+            </button>
+            <button mat-button class="btn-element" (click)="selectGroup()">
+                <svg class="bi bi-braces" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.114 10.063V9.9c1.005-.102 1.497-.615 1.497-1.6V6.503c0-1.094.39-1.538 1.354-1.538h.273V4h-.376C5.25 4 4.49 4.759 4.49 6.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538v-1.798c0-.984-.492-1.497-1.497-1.6zM15.886 9.9v.163c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456V9.332c-1.114 0-1.49-.362-1.49-1.456V6.352C15.51 4.759 14.75 4 13.138 4h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V8.3c0 .984.492 1.497 1.497 1.6z"></path>
+                  </svg>Add Strategy
+            </button>
+            <button mat-button class="btn-element" style="background: #fb5454;" (click)="selectGroup()">
+                <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.5 7.5A.5.5 0 018 8v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V8z"></path>
+                    <path fill-rule="evenodd" d="M16.5 5a1 1 0 01-1 1H15v9a2 2 0 01-2 2H7a2 2 0 01-2-2V6h-.5a1 1 0 01-1-1V4a1 1 0 011-1H8a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM6.118 6L6 6.059V15a1 1 0 001 1h6a1 1 0 001-1V6.059L13.882 6H6.118zM4.5 5V4h11v1h-11z" clip-rule="evenodd"></path>
+                </svg>Remove
+            </button>
+        </div>
+    </section>
+    <section>
+        <div class="strategy-section">
+            <app-strategy-list *ngIf="hasStrategies" [strategies]="strategies"></app-strategy-list>
+        </div>
+    </section>
+</div>

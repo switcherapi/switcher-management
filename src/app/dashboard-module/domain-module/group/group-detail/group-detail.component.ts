@@ -48,4 +48,8 @@ export class GroupDetailComponent implements OnInit, OnDestroy {
     this.domainRouteService.updatePath(this.pathRoute);
   }
 
+  getGroup() {
+    return this.pathRoute.element;
+  }
+
 }

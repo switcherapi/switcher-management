@@ -9,7 +9,7 @@
   text-align: center; 
 }
 
-.grid-container {
+.grid-container.activated {
   display: grid;
   grid-template-areas:
     'header empty empty empty empty toggle';
@@ -17,6 +17,18 @@
   background-color: rgba(0, 0, 0, .03);
   padding: 2px;
   margin-bottom: 10px;
+  background: #549bfb94;
+}
+
+.grid-container.deactivated {
+  display: grid;
+  grid-template-areas:
+    'header empty empty empty empty toggle';
+  grid-gap: 2px;
+  background-color: rgba(0, 0, 0, .03);
+  padding: 2px;
+  margin-bottom: 10px;
+  background: #d0d0d0;
 }
 
 .grid-container>div {

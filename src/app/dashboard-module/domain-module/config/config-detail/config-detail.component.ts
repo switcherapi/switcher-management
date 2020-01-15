@@ -61,6 +61,10 @@ export class ConfigDetailComponent implements OnInit, OnDestroy {
     this.domainRouteService.updatePath(this.pathRoute);
   }
 
+  getConfig() {
+    return this.pathRoute.element;
+  }
+
   private initStrategies() {
     this.loading = true;
     this.error = '';

@@ -29,4 +29,8 @@ export class ConfigPreviewComponent implements OnInit {
     this.router.navigate(['/dashboard/domain/group/switcher/detail'], { state: { element: JSON.stringify(this.config) } });
   }
 
+  changeStatus() {
+    console.log('status changed')
+  }
+
 }
