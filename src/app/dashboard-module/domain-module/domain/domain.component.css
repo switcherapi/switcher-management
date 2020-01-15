@@ -1,34 +1,41 @@
 h4 {
-    color:#fff;
-    background-color:rgb(66, 71, 77);
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+  color: #fff;
+  background-color: rgb(66, 71, 77);
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
 
 .backgroud-style {
-    background: #24292e !important;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+  background: #24292e !important;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 
 .svg-style {
-    margin-right: 6px;
-    margin-bottom: 6px;
+  margin-right: 6px;
+  margin-bottom: 6px;
 }
 
 .router-history {
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
-    font-size: larger;
-    color:#24292e;
-    font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: larger;
+  color: #24292e;
+  font-weight: bold;
 }
 
 .div-router-history {
-    padding-left: 16px;
-    padding-top: 8px;
+  padding-left: 16px;
+  padding-top: 8px;
+  display: -webkit-inline-box;
 }
 
 .btn-element {
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
-    font-size: xx-large;
-    color: #24292e;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: xx-large;
+  color: #24292e;
+}
+
+.btn-add-element {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: xx-large;
+  color: #549bfb;
 }
