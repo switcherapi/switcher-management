@@ -1,0 +1,12 @@
+.btn-element {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  display: block;
+  font-size: 16px;
+  background: #549bfb;
+  color: white;
+}
+
+.svg-style {
+  margin-right: 6px;
+  margin-bottom: 6px;
+}

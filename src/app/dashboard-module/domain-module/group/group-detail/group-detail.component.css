@@ -14,7 +14,7 @@
 }
 
 .header-container {
-  display: -webkit-inline-box;
+  display: flex;
   flex-flow: row no-wrap;
   justify-content: space-between;
   margin-left: 20px;
@@ -27,9 +27,6 @@
 
 .description {
   display: grid;
-  width: 350px;
-  padding-right: 40px;
-  align-content: baseline;
 }
 
 .options-section {

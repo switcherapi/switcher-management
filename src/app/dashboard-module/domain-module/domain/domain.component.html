@@ -45,23 +45,15 @@
 
     <div>
         <div class="div-router-history">
-            <div *ngIf="getDomain()">
-                <a class="router-history" [routerLink]=getDomain().path [state]="{ element: getDomainElement() }">
-                    <span class="badge"></span>{{ getDomain().name }}
-                </a>
-                <a *ngIf="!getGroup()" class="router-history" [routerLink]=getDomain().path title="Create Group">+</a>
-            </div>
-            <div *ngIf="getGroup()">
-                <a *ngIf="getGroup()" class="router-history" [routerLink]=getGroup().path [state]="{ element: getGroupElement() }">
-                    / <span class="badge"></span>{{ getGroup().name }}
-                </a>
-                <a *ngIf="!getConfig()" class="router-history" [routerLink]=getDomain().path title="Create Switcher">+</a>
-            </div>
-            <div *ngIf="getConfig()">
-                <a *ngIf="getConfig()"  class="router-history" [routerLink]=getConfig().path [state]="{ element: getConfigElement() }">
-                    / <span class="badge"></span>{{ getConfig().name }}
-                </a>
-            </div>
+            <a class="router-history" [routerLink]=getDomain()?.path [state]="{ element: getDomainElement() }">
+                <span class="badge"></span>{{ getDomain()?.name }}
+            </a>
+            <a *ngIf="getGroup()" class="router-history" [routerLink]=getGroup()?.path [state]="{ element: getGroupElement() }">
+                / <span class="badge"></span>{{ getGroup()?.name }}
+            </a>
+            <a *ngIf="getConfig()"  class="router-history" [routerLink]=getConfig()?.path [state]="{ element: getConfigElement() }">
+                / <span class="badge"></span>{{ getConfig()?.name }}
+            </a>
         </div>
     </div>
 

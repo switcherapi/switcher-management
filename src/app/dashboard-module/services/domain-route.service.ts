@@ -12,22 +12,22 @@ export class DomainRouteService {
 
   updatePath(pathRoute: PathRoute) {
     if (pathRoute.type === Types.DOMAIN_TYPE) {
-      sessionStorage.removeItem(Types.SELECTED_GROUP);
-      sessionStorage.removeItem(Types.SELECTED_CONFIG);
-      sessionStorage.setItem(Types.SELECTED_DOMAIN, JSON.stringify(pathRoute));
+      localStorage.removeItem(Types.SELECTED_GROUP);
+      localStorage.removeItem(Types.SELECTED_CONFIG);
+      localStorage.setItem(Types.SELECTED_DOMAIN, JSON.stringify(pathRoute));
     } else if (pathRoute.type === Types.GROUP_TYPE) {
-      sessionStorage.removeItem(Types.SELECTED_CONFIG);
-      sessionStorage.setItem(Types.SELECTED_GROUP, JSON.stringify(pathRoute));
+      localStorage.removeItem(Types.SELECTED_CONFIG);
+      localStorage.setItem(Types.SELECTED_GROUP, JSON.stringify(pathRoute));
     } else if (pathRoute.type === Types.CONFIG_TYPE) {
-      sessionStorage.setItem(Types.SELECTED_CONFIG, JSON.stringify(pathRoute));
+      localStorage.setItem(Types.SELECTED_CONFIG, JSON.stringify(pathRoute));
     }
 
-    sessionStorage.setItem(Types.CURRENT_ROUTE, JSON.stringify(pathRoute));
+    localStorage.setItem(Types.CURRENT_ROUTE, JSON.stringify(pathRoute));
     this.pathChange.emit(pathRoute);
   }
 
   getPathElement(elementType: string) : PathRoute {
-    return JSON.parse(sessionStorage.getItem(elementType));
+    return JSON.parse(localStorage.getItem(elementType));
   }
 
 }

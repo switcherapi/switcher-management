@@ -89,7 +89,7 @@ export class DomainComponent implements OnInit, OnDestroy {
     }
 
     this.icon = 0;
-    return this.currentPathRoute.name
+    return this.currentPathRoute ? this.currentPathRoute.name : '';
   }
 
   getCurrentRoute(): PathRoute {
@@ -101,7 +101,8 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   getDomainElement(): string {
-    return JSON.stringify(this.selectedDomain.element);
+    
+    return this.selectedDomain ? JSON.stringify(this.selectedDomain.element) : '';
   }
 
   getGroup(): PathRoute {
@@ -109,7 +110,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   getGroupElement(): string {
-    return JSON.stringify(this.selectedGroup.element);
+    return this.selectedGroup ? JSON.stringify(this.selectedGroup.element) : '';
   }
 
   getConfig(): PathRoute {
@@ -117,7 +118,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   getConfigElement(): string {
-    return JSON.stringify(this.selectedConfig.element);
+    return this.selectedConfig ? JSON.stringify(this.selectedConfig.element) : '';
   }
 
 }
