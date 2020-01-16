@@ -48,10 +48,10 @@
             <a class="router-history" [routerLink]=getDomain()?.path [state]="{ element: getDomainElement() }">
                 <span class="badge"></span>{{ getDomain()?.name }}
             </a>
-            <a *ngIf="getGroup()" class="router-history" [routerLink]=getGroup()?.path [state]="{ element: getGroupElement() }">
+            <a *ngIf="showPath('Group')" class="router-history" [routerLink]=getGroup()?.path [state]="{ element: getGroupElement() }">
                 / <span class="badge"></span>{{ getGroup()?.name }}
             </a>
-            <a *ngIf="getConfig()"  class="router-history" [routerLink]=getConfig()?.path [state]="{ element: getConfigElement() }">
+            <a *ngIf="showPath('Config')"  class="router-history" [routerLink]=getConfig()?.path [state]="{ element: getConfigElement() }">
                 / <span class="badge"></span>{{ getConfig()?.name }}
             </a>
         </div>

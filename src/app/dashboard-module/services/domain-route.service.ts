@@ -12,11 +12,11 @@ export class DomainRouteService {
 
   updatePath(pathRoute: PathRoute) {
     if (pathRoute.type === Types.DOMAIN_TYPE) {
-      localStorage.removeItem(Types.SELECTED_GROUP);
-      localStorage.removeItem(Types.SELECTED_CONFIG);
+      // localStorage.removeItem(Types.SELECTED_GROUP);
+      // localStorage.removeItem(Types.SELECTED_CONFIG);
       localStorage.setItem(Types.SELECTED_DOMAIN, JSON.stringify(pathRoute));
     } else if (pathRoute.type === Types.GROUP_TYPE) {
-      localStorage.removeItem(Types.SELECTED_CONFIG);
+      // localStorage.removeItem(Types.SELECTED_CONFIG);
       localStorage.setItem(Types.SELECTED_GROUP, JSON.stringify(pathRoute));
     } else if (pathRoute.type === Types.CONFIG_TYPE) {
       localStorage.setItem(Types.SELECTED_CONFIG, JSON.stringify(pathRoute));

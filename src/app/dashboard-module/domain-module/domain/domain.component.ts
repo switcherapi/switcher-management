@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Type } from '@angular/core';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PathRoute } from '../model/path-route';
@@ -119,6 +119,15 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   getConfigElement(): string {
     return this.selectedConfig ? JSON.stringify(this.selectedConfig.element) : '';
+  }
+
+  showPath(type: string) {
+    if (this.currentPathRoute.type === Types.GROUP_TYPE) {
+      return type === Types.DOMAIN_TYPE ? true : type === Types.GROUP_TYPE;
+    } else if (this.currentPathRoute.type === Types.CONFIG_TYPE) {
+      return true;
+    }
+    return false;
   }
 
 }
