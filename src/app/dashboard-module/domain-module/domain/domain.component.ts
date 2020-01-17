@@ -122,10 +122,12 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   showPath(type: string) {
-    if (this.currentPathRoute.type === Types.GROUP_TYPE) {
-      return type === Types.DOMAIN_TYPE ? true : type === Types.GROUP_TYPE;
-    } else if (this.currentPathRoute.type === Types.CONFIG_TYPE) {
-      return true;
+    if (this.currentPathRoute) {
+      if (this.currentPathRoute.type === Types.GROUP_TYPE) {
+        return type === Types.DOMAIN_TYPE ? true : type === Types.GROUP_TYPE;
+      } else if (this.currentPathRoute.type === Types.CONFIG_TYPE) {
+        return true;
+      }
     }
     return false;
   }

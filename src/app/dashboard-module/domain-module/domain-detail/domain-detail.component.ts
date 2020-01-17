@@ -54,4 +54,8 @@ export class DomainDetailComponent implements OnInit, OnDestroy {
     return this.pathRoute.element;
   }
 
+  edit() {
+    console.log(this.pathRoute.element.name)
+  }
+
 }

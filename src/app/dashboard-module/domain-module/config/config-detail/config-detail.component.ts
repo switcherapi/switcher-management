@@ -65,6 +65,10 @@ export class ConfigDetailComponent implements OnInit, OnDestroy {
     return this.pathRoute.element;
   }
 
+  edit() {
+    console.log(this.pathRoute.element.key)
+  }
+
   private initStrategies() {
     this.loading = true;
     this.error = '';
