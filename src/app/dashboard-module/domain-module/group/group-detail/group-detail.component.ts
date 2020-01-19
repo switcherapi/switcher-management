@@ -5,20 +5,25 @@ import { Group } from '../../model/group';
 import { map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
+import { DetailComponent } from '../../common/detail-component';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-group-detail',
   templateUrl: './group-detail.component.html',
   styleUrls: ['./group-detail.component.css']
 })
-export class GroupDetailComponent implements OnInit, OnDestroy {
+export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   constructor(
     private domainRouteService: DomainRouteService,
+    private adminService: AdminService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute
-  ) { }
+  ) { 
+    super(adminService);
+  }
 
   ngOnInit() {
     this.route.paramMap
@@ -28,7 +33,9 @@ export class GroupDetailComponent implements OnInit, OnDestroy {
       } else {
         this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).element);
       }
-    })
+    });
+
+    super.loadAdmin(this.getGroup().owner);
   }
 
   ngOnDestroy() {

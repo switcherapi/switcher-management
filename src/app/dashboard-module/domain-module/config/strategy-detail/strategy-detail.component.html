@@ -22,7 +22,7 @@
                     <input matInput placeholder="Last Update" value="{{strategy.updatedAt}}" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Created By" value="{{strategy.owner}}" readonly>
+                    <input matInput placeholder="Created By" value="{{createdBy}}" readonly>
                 </mat-form-field>
             </div>
             <div id="srategyValueSection" class="values-section">
@@ -38,9 +38,11 @@
                                 </mat-list-option>
                             </mat-selection-list>
                         </mat-card-content>
-                        <mat-form-field>
-                            <input matInput placeholder="Selected" value="{{strategyValueSelection?.selectedOptions.selected[0]?.value}}">
-                        </mat-form-field>
+                        <form [formGroup]="valueSelection">
+                            <mat-form-field>
+                                <input formControlName="valueSelection" matInput placeholder="Selected">
+                            </mat-form-field>
+                        </form>
                         <div style="display: inline-flex;">
                             <button mat-button class="btn-element" (click)="edit()">Add</button>
                             <button mat-button class="btn-element" (click)="edit()">Update</button>

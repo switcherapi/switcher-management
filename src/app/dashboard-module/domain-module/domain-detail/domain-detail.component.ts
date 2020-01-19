@@ -5,22 +5,27 @@ import { ActivatedRoute } from '@angular/router';
 import { Domain } from '../model/domain';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { DetailComponent } from '../common/detail-component';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-domain-detail',
   templateUrl: './domain-detail.component.html',
   styleUrls: ['./domain-detail.component.css']
 })
-export class DomainDetailComponent implements OnInit, OnDestroy {
+export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   state$: Observable<object>;
 
   constructor(
     private domainRouteService: DomainRouteService,
+    private adminService: AdminService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    super(adminService);
+  }
 
   ngOnInit() {
     this.route.paramMap
@@ -30,7 +35,9 @@ export class DomainDetailComponent implements OnInit, OnDestroy {
         } else {
           this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).element);
         }
-      })
+      });
+    
+    super.loadAdmin(this.getDomain().owner);
   }
 
   ngOnDestroy() {

@@ -9,13 +9,16 @@ import { Subject } from 'rxjs';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { environment } from 'src/environments/environment';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
+import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { DetailComponent } from '../../common/detail-component';
 
 @Component({
   selector: 'app-config-detail',
   templateUrl: './config-detail.component.html',
   styleUrls: ['./config-detail.component.css']
 })
-export class ConfigDetailComponent implements OnInit, OnDestroy {
+export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   
   strategies:  Strategy[];
@@ -28,8 +31,12 @@ export class ConfigDetailComponent implements OnInit, OnDestroy {
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
     private configService: ConfigService,
+    private adminService: AdminService,
+    private strategyService: StrategyService,
     private errorHandler: RouterErrorHandler
-  ) { }
+  ) { 
+    super(adminService);
+  }
 
   ngOnInit() {
     this.route.paramMap
@@ -42,6 +49,7 @@ export class ConfigDetailComponent implements OnInit, OnDestroy {
     })
 
     this.initStrategies();
+    super.loadAdmin(this.getConfig().owner);
   }
 
   ngOnDestroy() {
@@ -72,7 +80,7 @@ export class ConfigDetailComponent implements OnInit, OnDestroy {
   private initStrategies() {
     this.loading = true;
     this.error = '';
-    this.configService.getStrategiesByConfig(this.pathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+    this.strategyService.getStrategiesByConfig(this.pathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.hasStrategies = data.length > 0;
         this.strategies = data;
