@@ -50,5 +50,13 @@
 }
 
 .strategy-section {
-  margin-top: 40px;
+  margin-top: 20px;
+}
+
+:host /deep/ .flex-column {
+  display: block ruby;
+}
+
+:host /deep/ .tab-content {
+  margin-top: -30px;
 }

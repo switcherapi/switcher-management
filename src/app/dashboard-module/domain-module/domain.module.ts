@@ -13,6 +13,7 @@ import { GroupListComponent } from './group/group-list/group-list.component';
 import { GroupPreviewComponent } from './group/group-preview/group-preview.component';
 import { GroupDetailComponent } from './group/group-detail/group-detail.component';
 
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DomainRouteService } from '../services/domain-route.service';
 import { PathRoute } from './model/path-route';
 import { ConfigListComponent } from './config/config-list/config-list.component';
@@ -22,8 +23,9 @@ import { StrategyDetailComponent } from './config/strategy-detail/strategy-detai
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
-import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule } from '@angular/material';
+import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule } from '@angular/material';
 import { EnvironmentConfigComponent } from './environment-config/environment-config.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,9 @@ import { EnvironmentConfigComponent } from './environment-config/environment-con
     EnvironmentConfigComponent
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule,
     CommonModule,
     DomainRoutingModule,
     MatTabsModule,
@@ -54,7 +59,11 @@ import { EnvironmentConfigComponent } from './environment-config/environment-con
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSelectModule,
+    MatListModule,
+    MatCardModule,
+    MatOptionModule
   ],
   providers: [ 
     DomainRouteService, 

@@ -1,0 +1,40 @@
+.header.activated {
+  background: linear-gradient(to right, #549bfb 0, #549bfb 10px, #fff 10px, #fff 100%) no-repeat;
+}
+
+.header.deactivated {
+  background: linear-gradient(to right, #24292e 0, #42474d 10px, #fff 10px, #fff 100%) no-repeat;
+}
+
+.header-container {
+  display: flex;
+  flex-flow: row no-wrap;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.description {
+  display: grid;
+  align-content: baseline;
+}
+
+.options-section {
+  float: right;
+  display: -webkit-inline-box;
+}
+
+.values-section {
+  width: 350px;
+  padding-left: 10px;
+}
+
+.btn-element {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  display: block;
+  font-size: 16px;
+  margin-top: 7px;
+  margin-left: 10px;
+  background: #549bfb;
+  color: white;
+}

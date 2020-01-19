@@ -45,9 +45,30 @@
             </button>
         </div>
     </section>
-    <section>
-        <div class="strategy-section">
-            <app-strategy-list *ngIf="hasStrategies" [strategies]="strategies"></app-strategy-list>
-        </div>
+    <section id="strategy-section" style="padding-top: 6px;">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [orientation]="horizontal">
+            <ngb-tab *ngIf="hasStrategies" title="Strategies" id="1">
+                <ng-template ngbTabContent>
+                    <div class="strategy-section">
+                        <app-strategy-list [strategies]="strategies" style="width: 100%; display: grid;"></app-strategy-list>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Automation" id="2">
+                <ng-template ngbTabContent>
+                    <div class="strategy-section" style="margin-top: 40px;">
+                        Automation works!
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Metrics" id="3">
+                <ng-template ngbTabContent>
+                    <div class="strategy-section" style="margin-top: 40px;">
+                        Metrics works!
+                    </div>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
     </section>
 </div>

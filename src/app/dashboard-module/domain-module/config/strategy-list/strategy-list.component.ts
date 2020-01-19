@@ -1,6 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input } from '@angular/core';
 import { Strategy } from '../../model/strategy';
-import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-strategy-list',
@@ -12,7 +11,10 @@ export class StrategyListComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  scrollToBottom(): void {
+    window.scrollTo(0, document.querySelector('#strategy-section').scrollHeight);
   }
 
 }
