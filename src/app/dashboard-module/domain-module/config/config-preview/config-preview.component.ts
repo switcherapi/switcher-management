@@ -60,11 +60,13 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(envName: string): void {
-    this.classStatus = this.config.activated[envName] ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = this.config.activated[envName] ? 'btn-element activated' : 'btn-element deactivated';
+    const status = this.config.activated[envName] == undefined ? this.config.activated['default'] : this.config.activated[envName];
 
-    this.environmentStatusSelection.get('environmentStatusSelection').setValue(this.config.activated[envName]);
-    this.selectedEnvStatus = this.config.activated[envName];
+    this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
+    this.classBtnStatus = status ? 'btn-element activated' : 'btn-element deactivated';
+
+    this.environmentStatusSelection.get('environmentStatusSelection').setValue(status);
+    this.selectedEnvStatus = status;
   }
 
   changeStatus(event: MatSlideToggleChange) {

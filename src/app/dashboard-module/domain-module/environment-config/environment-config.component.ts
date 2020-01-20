@@ -45,8 +45,12 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
     this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
       this.selectedEnvName = s.source._value.toString();
-      this.selectedEnvStatus = this.currentEnvironment[this.selectedEnvName];
-      this.environmentStatusSelection.get('environmentStatusSelection').setValue(this.currentEnvironment[this.selectedEnvName]);
+
+      const currentEnv = this.currentEnvironment[this.selectedEnvName] === undefined ? 
+        this.currentEnvironment['default'] : this.currentEnvironment[this.selectedEnvName];
+
+      this.selectedEnvStatus = currentEnv;
+      this.environmentStatusSelection.get('environmentStatusSelection').setValue(currentEnv);
       this.statusChanged.emit(this.selectedEnvStatus);
     });
   }
