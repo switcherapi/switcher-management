@@ -2,6 +2,9 @@ import { AdminService } from '../../services/admin.service';
 
 export class DetailComponent {
     createdBy: string;
+    classStatus: string;
+    editing: boolean;
+    currentStatus: boolean;
 
     constructor(
         private service: AdminService,

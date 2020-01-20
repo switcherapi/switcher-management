@@ -22,6 +22,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   selectedEnvStatus: boolean;
 
   classStatus: string;
+  classBtnStatus: string;
 
   constructor(
     private router: Router,
@@ -60,6 +61,8 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
 
   updateStatus(envName: string): void {
     this.classStatus = this.config.activated[envName] ? 'grid-container activated' : 'grid-container deactivated';
+    this.classBtnStatus = this.config.activated[envName] ? 'btn-element activated' : 'btn-element deactivated';
+
     this.environmentStatusSelection.get('environmentStatusSelection').setValue(this.config.activated[envName]);
     this.selectedEnvStatus = this.config.activated[envName];
   }

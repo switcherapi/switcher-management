@@ -22,6 +22,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   selectedEnvStatus: boolean;
 
   classStatus: string;
+  classBtnStatus: string;
 
   constructor(
     private router: Router,
@@ -60,6 +61,8 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
 
   updateStatus(envName: string): void {
     this.classStatus = this.group.activated[envName] ? 'grid-container activated' : 'grid-container deactivated';
+    this.classBtnStatus = this.group.activated[envName] ? 'btn-element activated' : 'btn-element deactivated';
+
     this.environmentStatusSelection.get('environmentStatusSelection').setValue(this.group.activated[envName]);
     this.selectedEnvStatus = this.group.activated[envName];
   }

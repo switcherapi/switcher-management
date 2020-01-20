@@ -20,8 +20,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
 
-  classStatus: string;
-
   state$: Observable<object>;
 
   constructor(
@@ -68,7 +66,13 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   updateStatus(status: boolean): void {
-    this.classStatus = status ? 'header activated' : 'header deactivated';
+    this.currentStatus = status;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
   getDomain() {
@@ -76,7 +80,13 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   edit() {
-    console.log(this.pathRoute.element.name)
+    this.editing = !this.editing;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
 }

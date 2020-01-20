@@ -86,7 +86,22 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   updateStatus(status: boolean): void {
-    this.classStatus = status ? 'header activated' : 'header deactivated';
+    this.currentStatus = status;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
+  edit() {
+    this.editing = !this.editing;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
+  }
 }

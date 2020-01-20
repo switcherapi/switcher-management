@@ -80,7 +80,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   updateStatus(status: boolean): void {
-    this.classStatus = status ? 'header activated' : 'header deactivated';
+    this.currentStatus = status;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
   getConfig() {
@@ -88,7 +94,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   edit() {
-    console.log(this.pathRoute.element.key)
+    this.editing = !this.editing;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
   private initStrategies() {

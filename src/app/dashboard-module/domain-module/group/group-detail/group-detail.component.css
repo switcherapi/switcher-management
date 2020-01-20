@@ -1,9 +1,13 @@
 .header.activated {
-  background: linear-gradient(to right, #549bfb 0, #549bfb 10px, #fff 10px, #fff 100%) no-repeat;
+  background: linear-gradient(to right, #549bfb 0, #549bfb 10px, #f7f7f7 10px, #fff 100%) no-repeat;
 }
 
 .header.deactivated {
-  background: linear-gradient(to right, #24292e 0, #42474d 10px, #fff 10px, #fff 100%) no-repeat;
+  background: linear-gradient(to right, #9e9e9e 0, #9e9e9e 10px, #f7f7f7 10px, #fff 100%) no-repeat;
+}
+
+.header.editing {
+  background: linear-gradient(to right, #ff3333 0, #ff3333 10px, #fff 10px, #fff 100%) no-repeat;
 }
 
 .header {
@@ -46,5 +50,15 @@
   margin-top: 7px;
   margin-left: 10px;
   background: #549bfb;
+  color: white;
+}
+
+.btn-element.save {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  display: block;
+  font-size: 16px;
+  margin-top: 7px;
+  margin-left: 10px;
+  background: #2ec454;
   color: white;
 }

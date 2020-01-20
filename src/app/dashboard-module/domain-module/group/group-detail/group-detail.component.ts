@@ -20,8 +20,6 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
 
-  classStatus: string;
-
   constructor(
     private domainRouteService: DomainRouteService,
     private adminService: AdminService,
@@ -66,7 +64,13 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   updateStatus(status: boolean): void {
-    this.classStatus = status ? 'header activated' : 'header deactivated';
+    this.currentStatus = status;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
   getGroup() {
@@ -74,7 +78,13 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   edit() {
-    console.log(this.pathRoute.element.name)
+    this.editing = !this.editing;
+
+    if (this.editing) {
+      this.classStatus = 'header editing';
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
   }
 
 }
