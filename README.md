@@ -1,3 +1,5 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9FKW64V67RKXW&source=url)
+
 ![Switcher API Management: Cloud-based Feature Flag API](https://github.com/petruki/switcherapi-assets/blob/master/logo/switcherapi_management_grey.png)
 
 # About  
