@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { PathRoute, Types } from '../model/path-route';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailComponent } from '../common/detail-component';
 import { AdminService } from '../../services/admin.service';
+import { EnvironmentConfigComponent } from '../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-domain-detail',
@@ -15,6 +16,11 @@ import { AdminService } from '../../services/admin.service';
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @ViewChild('envSelectionChange', { static: true })
+  private envSelectionChange: EnvironmentConfigComponent;
+
+  classStatus: string;
 
   state$: Observable<object>;
 
@@ -37,6 +43,10 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         }
       });
     
+    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.updateStatus(status);
+    });
+    
     super.loadAdmin(this.getDomain().owner);
   }
 
@@ -55,6 +65,10 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     };
 
     this.domainRouteService.updatePath(this.pathRoute);
+  }
+
+  updateStatus(status: boolean): void {
+    this.classStatus = status ? 'header activated' : 'header deactivated';
   }
 
   getDomain() {

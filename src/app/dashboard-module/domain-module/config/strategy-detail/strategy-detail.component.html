@@ -1,5 +1,5 @@
 <div class="detail-body">
-    <section class="header activated">
+    <section [ngClass]="classStatus">
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <form [formGroup]="operationCategory">
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="description">
-                <app-environment-config></app-environment-config>
+                <app-environment-config #envSelectionChange [currentEnvironment]="strategy?.activated"></app-environment-config>
             </div>
         </div>
     </section>

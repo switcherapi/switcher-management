@@ -10,15 +10,18 @@
             </button>
         </div>
         <div style="float: right; margin-top: -10px;">
-            <mat-form-field>
-                <mat-select placeholder="Environment selection">
-                    <mat-option value="option">Production</mat-option>
-                    <mat-option value="option">QA</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <form [formGroup]="environmentSelection">
+                <mat-form-field>
+                    <mat-select #envSelectionChange placeholder="Environment selection" formControlName="environmentSelection">
+                        <mat-option *ngFor="let environment of environments" [value]="environment.name">
+                            {{environment.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
         </div>
     </div>
     <div *ngFor="let config of configs$">
-        <app-config-preview [config]="config"></app-config-preview>
+        <app-config-preview [config]="config" [configListComponent]="this"></app-config-preview>
     </div>
 </div>

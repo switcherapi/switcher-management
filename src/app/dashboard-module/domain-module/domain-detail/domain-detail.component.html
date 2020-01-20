@@ -1,5 +1,5 @@
 <div class="detail-body">
-    <section class="header activated">
+    <section [ngClass]="classStatus">
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
@@ -21,7 +21,7 @@
                 </mat-form-field>
             </div>
             <div class="description">
-                <app-environment-config></app-environment-config>
+                <app-environment-config #envSelectionChange [currentEnvironment]="getDomain()?.activated"></app-environment-config>
             </div>
         </div>
     </section>

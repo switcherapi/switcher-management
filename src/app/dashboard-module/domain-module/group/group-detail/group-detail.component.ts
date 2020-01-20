@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Group } from '../../model/group';
@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-group-detail',
@@ -15,6 +16,11 @@ import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @ViewChild('envSelectionChange', { static: true })
+  private envSelectionChange: EnvironmentConfigComponent;
+
+  classStatus: string;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -35,6 +41,10 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       }
     });
 
+    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.updateStatus(status);
+    });
+
     super.loadAdmin(this.getGroup().owner);
   }
 
@@ -53,6 +63,10 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     };
 
     this.domainRouteService.updatePath(this.pathRoute);
+  }
+
+  updateStatus(status: boolean): void {
+    this.classStatus = status ? 'header activated' : 'header deactivated';
   }
 
   getGroup() {

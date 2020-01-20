@@ -1,4 +1,4 @@
-<div class="grid-container activated">
+<div [ngClass]="classStatus">
     <div class="header-section">
         <button mat-button class="btn-element" (click)="selectGroup()">
             <svg class="bi bi-toggles" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
@@ -8,6 +8,9 @@
         </button>
     </div>
     <div class="toggle-section">
-        <mat-slide-toggle [checked]="true" [toggleChange]="changeStatus()" class="toggle-style"></mat-slide-toggle>
+        <form [formGroup]="environmentStatusSelection">
+            <mat-slide-toggle [checked]="selectedEnvStatus" class="toggle-style" (change)="changeStatus($event)" formControlName="environmentStatusSelection">
+            </mat-slide-toggle>
+        </form>
     </div>
 </div>  

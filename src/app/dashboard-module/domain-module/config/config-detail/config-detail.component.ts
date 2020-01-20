@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Config } from '../../model/config';
@@ -12,6 +12,7 @@ import { ConfigService } from 'src/app/dashboard-module/services/config.service'
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
+import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-config-detail',
@@ -20,6 +21,11 @@ import { DetailComponent } from '../../common/detail-component';
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @ViewChild('envSelectionChange', { static: true })
+  private envSelectionChange: EnvironmentConfigComponent;
+
+  classStatus: string;
   
   strategies:  Strategy[];
   loading = false;
@@ -48,6 +54,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
     })
 
+    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.updateStatus(status);
+    });
+
     this.initStrategies();
     super.loadAdmin(this.getConfig().owner);
   }
@@ -67,6 +77,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     };
 
     this.domainRouteService.updatePath(this.pathRoute);
+  }
+
+  updateStatus(status: boolean): void {
+    this.classStatus = status ? 'header activated' : 'header deactivated';
   }
 
   getConfig() {

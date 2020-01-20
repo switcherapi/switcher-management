@@ -1,21 +1,31 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Strategy } from '../../model/strategy';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
+import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-strategy-detail',
   templateUrl: './strategy-detail.component.html',
   styleUrls: ['./strategy-detail.component.css']
 })
-export class StrategyDetailComponent extends DetailComponent implements OnInit {
+export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
+  
   @Input() strategy: Strategy;
 
   @ViewChild(MatSelectionList, { static: true })
   private strategyValueSelection: MatSelectionList;
+
+  @ViewChild('envSelectionChange', { static: true })
+  private envSelectionChange: EnvironmentConfigComponent;
+
+  classStatus: string;
 
   operationCategory: FormGroup;
   valueSelection: FormGroup;
@@ -34,8 +44,17 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit {
     this.loadStrategySelectionComponent();
     this.loadOperationSelectionComponent();
     this.loadStrategyRequirements();
-    super.loadAdmin(this.strategy.owner);
 
+    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.updateStatus(status);
+    });
+
+    super.loadAdmin(this.strategy.owner);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   loadStrategySelectionComponent(): void {
@@ -64,6 +83,10 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit {
       this.strategyOperations = req.operationsAvailable.operations;
       this.operationCategory.get('operationCategory').setValue(this.strategy.operation);
     });
+  }
+
+  updateStatus(status: boolean): void {
+    this.classStatus = status ? 'header activated' : 'header deactivated';
   }
 
 }
