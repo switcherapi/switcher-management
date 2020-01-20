@@ -8,7 +8,6 @@ import { MetricsComponent } from './metrics/metrics.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';
 import { EnvironmentsComponent } from './environments/environments.component';
-import { LabComponent } from './lab/lab.component';
 import { GroupListComponent } from './group/group-list/group-list.component';
 import { GroupPreviewComponent } from './group/group-preview/group-preview.component';
 import { GroupDetailComponent } from './group/group-detail/group-detail.component';
@@ -34,7 +33,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ChangelogComponent, 
     ComponentsComponent, 
     EnvironmentsComponent, 
-    LabComponent, 
     GroupListComponent, 
     GroupPreviewComponent, 
     GroupDetailComponent,

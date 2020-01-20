@@ -7,27 +7,17 @@ import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
-import { MatSelect, MatSelectionListChange } from '@angular/material';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Environment } from '../../model/environment';
+import { FormBuilder } from '@angular/forms';
 import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
+import { ListComponent } from '../../common/list-component';
 
 @Component({
   selector: 'app-config-list',
   templateUrl: './config-list.component.html',
   styleUrls: ['./config-list.component.css']
 })
-export class ConfigListComponent implements OnInit, OnDestroy {
+export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
-
-  @ViewChildren("envSelectionChange")
-  public component: QueryList<MatSelect>
-  private envSelectionChange: MatSelect;
-
-  environmentSelection: FormGroup;
-
-  environments: Environment[];
-  @Output() environmentSelectionChange: EventEmitter<string> = new EventEmitter();
 
   configs$: Config[];
   loading = false;
@@ -39,11 +29,11 @@ export class ConfigListComponent implements OnInit, OnDestroy {
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
     private errorHandler: RouterErrorHandler
-  ) { }
+  ) { 
+    super(fb, environmentService, domainRouteService);
+  }
 
   ngOnInit() {
-    this.loadOperationSelectionComponent();
-
     this.loading = true;
     this.error = '';
     this.configService.getConfigsByGroup(
@@ -51,7 +41,7 @@ export class ConfigListComponent implements OnInit, OnDestroy {
         
       if (data) {
         this.configs$ = data;
-        this.loadEnvironments();
+        super.loadEnvironments();
       }
       this.loading = false;
     }, error => {
@@ -68,41 +58,12 @@ export class ConfigListComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.component.changes.subscribe((comps: QueryList<MatSelect>) => {
-      this.envSelectionChange = comps.first;
-      this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
-        this.environmentSelectionChange.emit(s.source._value.toString());
-      });
-    });
+    super.ngAfterViewInit();
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  loadEnvironments(): void {
-    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).subscribe(env => {
-      this.environments = env;
-      this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
-      this.environmentSelectionChange.emit(this.setProductionFirst());
-    });
-  }
-
-  loadOperationSelectionComponent(): void {
-    this.environmentSelection = this.fb.group({
-      environmentSelection: [null, Validators.required]
-    });
-  }
-
-  setProductionFirst(): string {
-    const defaultEnv = this.environments.find(env => env.name === 'default');
-
-    if (defaultEnv) {
-      return defaultEnv.name;
-    }
-
-    return this.environments[0].name;
   }
 
 }

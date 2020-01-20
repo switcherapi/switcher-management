@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Group } from '../../model/group';
 import { Router } from '@angular/router';
-import { Environment } from '../../model/environment';
 import { GroupListComponent } from '../group-list/group-list.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';

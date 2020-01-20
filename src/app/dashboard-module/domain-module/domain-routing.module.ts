@@ -5,7 +5,6 @@ import { MetricsComponent } from './metrics/metrics.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';
 import { EnvironmentsComponent } from './environments/environments.component';
-import { LabComponent } from './lab/lab.component';
 
 import { DomainComponent } from './domain/domain.component';
 import { DomainDetailComponent } from './domain-detail/domain-detail.component';
@@ -70,14 +69,6 @@ const routes: Routes = [
         data: {
           title: 'Environments',
           icon: 4
-        }
-      },
-      {
-        path: 'lab',
-        component: LabComponent, canActivate: [AuthGuard],
-        data: {
-          title: 'Lab',
-          icon: 5
         }
       },
       {
