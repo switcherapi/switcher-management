@@ -9,7 +9,7 @@
     </div>
     <div class="toggle-section">
         <form [formGroup]="environmentStatusSelection">
-            <mat-slide-toggle [checked]="selectedEnvStatus" class="toggle-style" (change)="changeStatus($event)" formControlName="environmentStatusSelection">
+            <mat-slide-toggle [checked]="selectedEnvStatus" class="toggle-style" (change)="updateEnvironmentStatus($event)" formControlName="environmentStatusSelection">
             </mat-slide-toggle>
         </form>
     </div>

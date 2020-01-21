@@ -8,6 +8,8 @@ import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
+import { ToastService } from 'src/app/_helpers/toast.service';
+import { GroupService } from 'src/app/dashboard-module/services/group.service';
 
 @Component({
   selector: 'app-group-detail',
@@ -22,9 +24,11 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   constructor(
     private domainRouteService: DomainRouteService,
+    private groupService: GroupService,
     private adminService: AdminService,
     private pathRoute: PathRoute,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) { 
     super(adminService);
   }
@@ -39,8 +43,12 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       }
     });
 
-    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.updateStatus(status);
+    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.selectEnvironment(status);
+    });
+
+    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.updateEnvironmentStatus(env);
     });
 
     super.loadAdmin(this.getGroup().owner);
@@ -60,10 +68,22 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       type: Types.GROUP_TYPE
     };
 
-    this.domainRouteService.updatePath(this.pathRoute);
+    this.domainRouteService.updatePath(this.pathRoute, true);
   }
 
-  updateStatus(status: boolean): void {
+  updateEnvironmentStatus(env : any): void {
+    this.selectEnvironment(env.status);
+    this.groupService.setGroupEnvironmentStatus(this.getGroup().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSucess(`Environment updated with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  selectEnvironment(status: boolean): void {
     this.currentStatus = status;
 
     if (this.editing) {

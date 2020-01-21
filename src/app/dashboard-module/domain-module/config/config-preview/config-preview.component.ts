@@ -6,6 +6,10 @@ import { ConfigListComponent } from '../config-list/config-list.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { MatSlideToggleChange } from '@angular/material';
+import { ToastService } from 'src/app/_helpers/toast.service';
+import { ConfigService } from 'src/app/dashboard-module/services/config.service';
+import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
+import { Types } from '../../model/path-route';
 
 @Component({
   selector: 'app-config-preview',
@@ -20,19 +24,23 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
 
   environmentStatusSelection: FormGroup;
   selectedEnvStatus: boolean;
+  selectedEnv: string;
 
   classStatus: string;
   classBtnStatus: string;
 
   constructor(
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private domainRouteService: DomainRouteService,
+    private configService: ConfigService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
     this.loadOperationSelectionComponent();
     this.configListComponent.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
-      this.updateStatus(envName);
+      this.selectEnvironment(envName);
     });
   }
 
@@ -55,11 +63,24 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     return this.config;
   }
 
+  updatePathRoute(config: Config) {
+    const pathRoute = {
+      id: config.id,
+      element: config,
+      name: config.key,
+      path: '/dashboard/domain/group/switcher/detail',
+      type: Types.CONFIG_TYPE
+    };
+
+    this.domainRouteService.updatePath(pathRoute, false);
+  }
+
   selectConfig() {
     this.router.navigate(['/dashboard/domain/group/switcher/detail'], { state: { element: JSON.stringify(this.config) } });
   }
 
-  updateStatus(envName: string): void {
+  selectEnvironment(envName: string): void {
+    this.selectedEnv = envName;
     const status = this.config.activated[envName] == undefined ? this.config.activated['default'] : this.config.activated[envName];
 
     this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
@@ -69,12 +90,18 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     this.selectedEnvStatus = status;
   }
 
-  changeStatus(event: MatSlideToggleChange) {
-    // Invoke API
-    // console.log(event.checked);
-    // console.log(this.environmentSelection.get('environmentSelection').value);
-    this.config.activated[this.environmentStatusSelection.get('environmentStatusSelection').value] = event.checked;
-    this.updateStatus(this.environmentStatusSelection.get('environmentStatusSelection').value);
+  updateEnvironmentStatus(event: MatSlideToggleChange) {
+    this.config.activated[this.selectedEnv] = event.checked;
+    this.selectEnvironment(this.selectedEnv);
+
+    this.configService.setConfigEnvironmentStatus(this.getConfig().id, this.selectedEnv, event.checked).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSucess(`Environment updated with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
+    });
   }
 
 }

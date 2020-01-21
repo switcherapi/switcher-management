@@ -23,5 +23,12 @@ export class StrategyService extends ApiService {
   public getStrategiesRequirements(strategy: string): Observable<StrategyReq> {
     return this.http.get<StrategyReq>(`${environment.apiUrl}/configstrategy/req/${strategy}`).pipe(catchError(super.handleError));
   }
+
+  public setStrategyEnvironmentStatus(id: string, env: string, status: boolean): Observable<Strategy> {
+    const body = {
+      [`${env}`]: status
+    }
+    return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/updateStatus/` + id), body).pipe(catchError(super.handleError));
+  }
   
 }

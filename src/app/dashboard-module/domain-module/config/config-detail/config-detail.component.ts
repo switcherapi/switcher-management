@@ -13,6 +13,7 @@ import { StrategyService } from 'src/app/dashboard-module/services/strategy.serv
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-config-detail',
@@ -39,7 +40,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private configService: ConfigService,
     private adminService: AdminService,
     private strategyService: StrategyService,
-    private errorHandler: RouterErrorHandler
+    private errorHandler: RouterErrorHandler,
+    private toastService: ToastService
   ) { 
     super(adminService);
   }
@@ -54,8 +56,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
     })
 
-    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.updateStatus(status);
+    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.selectEnvironment(status);
+    });
+
+    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.updateEnvironmentStatus(env);
     });
 
     this.initStrategies();
@@ -76,10 +82,22 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       type: Types.CONFIG_TYPE
     };
 
-    this.domainRouteService.updatePath(this.pathRoute);
+    this.domainRouteService.updatePath(this.pathRoute, true);
   }
 
-  updateStatus(status: boolean): void {
+  updateEnvironmentStatus(env : any): void {
+    this.selectEnvironment(env.status);
+    this.configService.setConfigEnvironmentStatus(this.getConfig().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSucess(`Environment updated with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  selectEnvironment(status: boolean): void {
     this.currentStatus = status;
 
     if (this.editing) {

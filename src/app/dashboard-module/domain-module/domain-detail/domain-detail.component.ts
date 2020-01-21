@@ -8,6 +8,8 @@ import { map, takeUntil } from 'rxjs/operators';
 import { DetailComponent } from '../common/detail-component';
 import { AdminService } from '../../services/admin.service';
 import { EnvironmentConfigComponent } from '../environment-config/environment-config.component';
+import { DomainService } from '../../services/domain.service';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-domain-detail',
@@ -24,9 +26,11 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   constructor(
     private domainRouteService: DomainRouteService,
+    private domainService: DomainService,
     private adminService: AdminService,
     private pathRoute: PathRoute,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) {
     super(adminService);
   }
@@ -41,8 +45,12 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         }
       });
     
-    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.updateStatus(status);
+    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.selectEnvironment(status);
+    });
+
+    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.updateEnvironmentStatus(env);
     });
     
     super.loadAdmin(this.getDomain().owner);
@@ -62,10 +70,22 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       type: Types.DOMAIN_TYPE
     };
 
-    this.domainRouteService.updatePath(this.pathRoute);
+    this.domainRouteService.updatePath(this.pathRoute, true);
   }
 
-  updateStatus(status: boolean): void {
+  updateEnvironmentStatus(env : any): void {
+    this.selectEnvironment(env.status);
+    this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSucess(`Environment updated with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  selectEnvironment(status: boolean): void {
     this.currentStatus = status;
 
     if (this.editing) {

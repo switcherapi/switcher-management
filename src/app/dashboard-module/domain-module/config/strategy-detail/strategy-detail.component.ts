@@ -8,6 +8,7 @@ import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -35,7 +36,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   constructor(
     private fb: FormBuilder,
     private strategyService: StrategyService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private toastService: ToastService
     ) {
       super(adminService);
      }
@@ -45,8 +47,12 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.loadOperationSelectionComponent();
     this.loadStrategyRequirements();
 
-    this.envSelectionChange.statusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.updateStatus(status);
+    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
+      this.selectEnvironment(status);
+    });
+
+    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.updateEnvironmentStatus(env);
     });
 
     super.loadAdmin(this.strategy.owner);
@@ -85,7 +91,18 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     });
   }
 
-  updateStatus(status: boolean): void {
+  updateEnvironmentStatus(env : any): void {
+    this.selectEnvironment(env.status);
+    this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.toastService.showSucess(`Environment updated with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  selectEnvironment(status: boolean): void {
     this.currentStatus = status;
 
     if (this.editing) {

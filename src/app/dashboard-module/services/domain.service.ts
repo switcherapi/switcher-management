@@ -27,4 +27,11 @@ export class DomainService extends ApiService {
     return this.http.get<Domain>(`${environment.apiUrl}/domain/` + id).pipe(catchError(super.handleError));
   }
 
+  public setDomainEnvironmentStatus(id: string, env: string, status: boolean): Observable<Domain> {
+    const body = {
+      [`${env}`]: status
+    }
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/updateStatus/` + id), body).pipe(catchError(super.handleError));
+  }
+
 }

@@ -16,7 +16,8 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   @Input() currentEnvironment: Map<string, boolean>;
-  @Output() statusChanged: EventEmitter<boolean> = new EventEmitter();
+  @Output() outputEnvChanged: EventEmitter<boolean> = new EventEmitter();
+  @Output() outputStatusChanged: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSelect, { static: true })
   private envSelectionChange: MatSelect;
@@ -40,7 +41,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       this.environments = env;
       this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
       this.selectedEnvStatus = this.currentEnvironment[this.environmentSelection.get('environmentSelection').value];
-      this.statusChanged.emit(this.selectedEnvStatus);
+      this.outputEnvChanged.emit(this.selectedEnvStatus);
     });
 
     this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
@@ -51,7 +52,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
       this.selectedEnvStatus = currentEnv;
       this.environmentStatusSelection.get('environmentStatusSelection').setValue(currentEnv);
-      this.statusChanged.emit(this.selectedEnvStatus);
+      this.outputEnvChanged.emit(this.selectedEnvStatus);
     });
   }
 
@@ -81,11 +82,12 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(event: MatSlideToggleChange) {
-    // Invoke API
-    // console.log(event.checked);
-    // console.log(this.environmentSelection.get('environmentSelection').value);
     this.currentEnvironment[this.environmentSelection.get('environmentSelection').value] = event.checked;
-    this.statusChanged.emit(event.checked);
+    const envChanged = {
+      environment: this.environmentSelection.get('environmentSelection').value,
+      status: event.checked
+    }
+    this.outputStatusChanged.emit(envChanged);
   }
 
 }

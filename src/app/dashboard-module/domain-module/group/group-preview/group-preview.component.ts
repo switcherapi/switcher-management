@@ -6,6 +6,10 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material';
+import { GroupService } from 'src/app/dashboard-module/services/group.service';
+import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
+import { Types } from '../../model/path-route';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-group-preview',
@@ -20,19 +24,23 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
 
   environmentStatusSelection: FormGroup;
   selectedEnvStatus: boolean;
+  selectedEnv: string;
 
   classStatus: string;
   classBtnStatus: string;
 
   constructor(
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private domainRouteService: DomainRouteService,
+    private groupService: GroupService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
     this.loadOperationSelectionComponent();
     this.groupListComponent.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
-      this.updateStatus(envName);
+      this.selectEnvironment(envName);
     });
   }
 
@@ -55,11 +63,24 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     return this.group;
   }
 
+  updatePathRoute(group: Group) {
+    const pathRoute = {
+      id: group.id,
+      element: group,
+      name: group.name,
+      path: '/dashboard/domain/group/detail',
+      type: Types.GROUP_TYPE
+    };
+
+    this.domainRouteService.updatePath(pathRoute, false);
+  }
+
   selectGroup() {
     this.router.navigate(['/dashboard/domain/group/detail'], { state: { element: JSON.stringify(this.group) } });
   }
 
-  updateStatus(envName: string): void {
+  selectEnvironment(envName: string): void {
+    this.selectedEnv = envName;
     const status = this.group.activated[envName] == undefined ? this.group.activated['default'] : this.group.activated[envName];
 
     this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
@@ -69,12 +90,18 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     this.selectedEnvStatus = status;
   }
 
-  changeStatus(event: MatSlideToggleChange) {
-    // Invoke API
-    // console.log(event.checked);
-    // console.log(this.environmentSelection.get('environmentSelection').value);
-    this.group.activated[this.environmentStatusSelection.get('environmentStatusSelection').value] = event.checked;
-    this.updateStatus(this.environmentStatusSelection.get('environmentStatusSelection').value);
+  updateEnvironmentStatus(event: MatSlideToggleChange) {
+    this.group.activated[this.selectedEnv] = event.checked;
+    this.selectEnvironment(this.selectedEnv);
+
+    this.groupService.setGroupEnvironmentStatus(this.getGroup().id, this.selectedEnv, event.checked).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSucess(`Environment updated with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
+    });
   }
 
 }

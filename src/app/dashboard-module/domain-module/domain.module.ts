@@ -24,6 +24,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule } from '@angular/material';
 import { EnvironmentConfigComponent } from './environment-config/environment-config.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsContainer } from 'src/app/_helpers/toasts-container.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ConfigDetailComponent, 
     StrategyDetailComponent, 
     StrategyListComponent, 
-    EnvironmentConfigComponent
+    EnvironmentConfigComponent,
+    ToastsContainer
   ],
   imports: [
     FormsModule,
