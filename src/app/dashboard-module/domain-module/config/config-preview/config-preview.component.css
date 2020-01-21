@@ -72,3 +72,11 @@
 :host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
   background-color: #549bfb;
 }
+
+@media only screen and (max-width: 600px) {
+  .header-section {
+    grid-area: header;
+    display: inline-flex;
+    width: 100%;
+  }
+}

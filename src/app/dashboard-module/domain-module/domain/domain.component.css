@@ -39,3 +39,9 @@ h4 {
   font-size: xx-large;
   color: #549bfb;
 }
+
+@media only screen and (max-width: 600px) {
+  .navbar-nav {
+    flex-direction: column;
+  }
+}

@@ -28,6 +28,11 @@
   display: -webkit-inline-box;
 }
 
+.operations-style {
+  width: 350px !important; 
+  margin-top: 10px;
+}
+
 .values-section {
   width: 350px;
   padding-left: 10px;
@@ -55,4 +60,33 @@
 
 .readonly-fields {
   color: #666;
+}
+
+@media only screen and (max-width: 600px) {
+  .header-container {
+    display: block;
+    flex-flow: row no-wrap;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  .description {
+    display: grid;
+    align-self: start;
+    width: 90% !important;
+  }
+
+  .options-section {
+    float: right;
+    display: contents;
+  }
+
+  .operations-style {
+    margin-top: 10px;
+  }
+
+  :host /deep/ .mat-form-field-wrapper {
+    width: 90%;
+  }
 }

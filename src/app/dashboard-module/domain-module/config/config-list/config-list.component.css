@@ -10,3 +10,24 @@
   margin-right: 6px;
   margin-bottom: 6px;
 }
+
+.header-style {
+  display: block ruby; 
+  padding-top: 10px;
+}
+
+.environment-style {
+  float: right; 
+  margin-top: -10px;
+}
+
+@media only screen and (max-width: 600px) {
+  .header-style {
+    display: grid;
+  }
+
+  .environment-style {
+    float: right; 
+    margin-top: 10px;
+  }
+}

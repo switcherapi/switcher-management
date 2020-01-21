@@ -1,7 +1,7 @@
 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
 <div *ngIf="!loading && !error" class="card mt-4" style="border: 0px; margin: 0px !important;">
-    <div style="display: block ruby; padding-top: 10px;">
+    <div class="header-style">
         <div>
             <button mat-button class="btn-element" (click)="selectGroup()">
                 <svg class="bi bi-wrench" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
@@ -9,7 +9,7 @@
                 </svg>Create New
             </button>
         </div>
-        <div style="float: right; margin-top: -10px;">
+        <div class="environment-style">
             <form [formGroup]="environmentSelection">
                 <mat-form-field>
                     <mat-select #envSelectionChange placeholder="Environment selection" formControlName="environmentSelection">

@@ -75,3 +75,24 @@
 :host /deep/ .tab-content {
   margin-top: -30px;
 }
+
+@media only screen and (max-width: 600px) {
+  .header-container {
+    display: block;
+    flex-flow: row no-wrap;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  .description {
+    display: grid;
+    align-self: start;
+    width: 90% !important;
+  }
+
+  .options-section {
+    float: right;
+    display: contents;
+  }
+}

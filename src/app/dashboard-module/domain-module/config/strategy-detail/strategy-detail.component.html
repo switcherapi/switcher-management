@@ -3,7 +3,7 @@
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <form [formGroup]="operationCategory">
-                    <mat-form-field style="width: 350px !important; margin-top: 10px;">
+                    <mat-form-field class="operations-style">
                         <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Operation Name" [value]="strategy.operation" readonly>
                         <mat-select *ngIf="editing" placeholder="Operation Name" formControlName="operationCategory">
                             <mat-option *ngFor="let operation of strategyOperations" [value]="operation">

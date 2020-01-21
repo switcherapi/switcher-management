@@ -1,0 +1,9 @@
+@media only screen and (max-width: 600px) {
+  :host /deep/ .mat-tab-labels {
+    display: block !important;
+  }
+
+  :host /deep/ .mat-tab-header {
+    padding-top: 12px;
+  }
+}
