@@ -89,7 +89,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   loadStrategyRequirements(): void {
     this.strategyService.getStrategiesRequirements(this.strategy.strategy).subscribe(req => {
-      this.strategyOperations = req.operationsAvailable.operations;
+      this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
       this.operationCategory.get('operationCategory').setValue(this.strategy.operation);
     });
   }
@@ -116,10 +116,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   edit() {
-    this.editing = !this.editing;
-
-    if (this.editing) {
+    if (!this.editing) {
       this.classStatus = 'header editing';
+      this.editing = true;
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
       
@@ -132,9 +131,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         if (data) {
           this.toastService.showSucess(`Strategy updated with success`);
           this.strategy = data;
+          this.editing = false;
         }
       }, error => {
         this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
+        this.editing = false;
       });
     }
   }

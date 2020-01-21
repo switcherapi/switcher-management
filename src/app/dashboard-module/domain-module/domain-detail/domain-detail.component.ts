@@ -107,10 +107,9 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   edit() {
-    this.editing = !this.editing;
-
-    if (this.editing) {
+    if (!this.editing) {
       this.classStatus = 'header editing';
+      this.editing = true;
     } else {
       this.domainDescription = this.descElement.nativeElement.value;
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
@@ -118,9 +117,11 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         if (data) {
           this.updatePathRoute(data);
           this.toastService.showSucess(`Domain updated with success`);
+          this.editing = false;
         }
       }, error => {
         this.toastService.showError(`Unable to update '${this.getDomain().name}' domain`);
+        this.editing = false;
       });
     }
   }

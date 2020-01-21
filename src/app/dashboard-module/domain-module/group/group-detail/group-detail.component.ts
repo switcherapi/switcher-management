@@ -104,10 +104,9 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   edit() {
-    this.editing = !this.editing;
-
-    if (this.editing) {
+    if (!this.editing) {
       this.classStatus = 'header editing';
+      this.editing = true;
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
@@ -120,9 +119,11 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         if (data) {
           this.updatePathRoute(data);
           this.toastService.showSucess(`Group updated with success`);
+          this.editing = false;
         }
       }, error => {
         this.toastService.showError(`Unable to update '${this.getGroup().name}' group`);
+        this.editing = false;
       });
     }
   }

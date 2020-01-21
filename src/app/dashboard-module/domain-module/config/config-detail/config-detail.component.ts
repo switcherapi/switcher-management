@@ -118,10 +118,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   edit() {
-    this.editing = !this.editing;
-
-    if (this.editing) {
+    if (!this.editing) {
       this.classStatus = 'header editing';
+      this.editing = true;
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
@@ -134,9 +133,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         if (data) {
           this.updatePathRoute(data);
           this.toastService.showSucess(`Switcher updated with success`);
+          this.editing = false
         }
       }, error => {
         this.toastService.showError(`Unable to update '${this.getConfig().name}' switcher`);
+        this.editing = false;
       });
     }
   }

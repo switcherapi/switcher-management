@@ -24,6 +24,18 @@ export class StrategyService extends ApiService {
     return this.http.get<StrategyReq>(`${environment.apiUrl}/configstrategy/req/${strategy}`).pipe(catchError(super.handleError));
   }
 
+  public getAvailableOperations(strategy: Strategy, requirements: StrategyReq): string[] {
+    let operations = [];
+
+    requirements.operationRequirements.forEach(opReq => {
+      if (opReq.max >= strategy.values.length) {
+        operations.push(opReq.operation);
+      } 
+    })
+
+    return operations;
+  }
+
   public setStrategyEnvironmentStatus(id: string, env: string, status: boolean): Observable<Strategy> {
     const body = {
       [`${env}`]: status
