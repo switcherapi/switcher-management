@@ -5,7 +5,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-domain-preview',
   templateUrl: './domain-preview.component.html',
-  styleUrls: ['./domain-preview.component.css']
+  styleUrls: [
+    '../domain-module/common/css/preview.component.css', 
+    './domain-preview.component.css'
+  ]
 })
 export class DomainPreviewComponent implements OnInit {
   @Input() domain: Domain;

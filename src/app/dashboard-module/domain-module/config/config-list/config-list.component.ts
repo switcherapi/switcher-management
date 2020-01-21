@@ -14,7 +14,10 @@ import { ListComponent } from '../../common/list-component';
 @Component({
   selector: 'app-config-list',
   templateUrl: './config-list.component.html',
-  styleUrls: ['./config-list.component.css']
+  styleUrls: [
+    '../../common/css/list.component.css', 
+    './config-list.component.css'
+  ]
 })
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

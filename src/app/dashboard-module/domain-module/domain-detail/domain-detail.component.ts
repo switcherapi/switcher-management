@@ -15,7 +15,10 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-domain-detail',
   templateUrl: './domain-detail.component.html',
-  styleUrls: ['./domain-detail.component.css']
+  styleUrls: [
+    '../common/css/detail.component.css', 
+    './domain-detail.component.css'
+  ]
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

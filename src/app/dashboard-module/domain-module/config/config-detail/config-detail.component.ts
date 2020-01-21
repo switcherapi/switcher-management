@@ -18,7 +18,10 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 @Component({
   selector: 'app-config-detail',
   templateUrl: './config-detail.component.html',
-  styleUrls: ['./config-detail.component.css']
+  styleUrls: [
+    '../../common/css/detail.component.css', 
+    './config-detail.component.css'
+  ]
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

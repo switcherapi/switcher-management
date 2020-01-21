@@ -14,7 +14,10 @@ import { ListComponent } from '../../common/list-component';
 @Component({
   selector: 'app-group-list',
   templateUrl: './group-list.component.html',
-  styleUrls: ['./group-list.component.css']
+  styleUrls: [
+    '../../common/css/list.component.css', 
+    './group-list.component.css'
+  ]
 })
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy, AfterViewInit {
   private unsubscribe: Subject<void> = new Subject();

@@ -13,7 +13,10 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 @Component({
   selector: 'app-strategy-detail',
   templateUrl: './strategy-detail.component.html',
-  styleUrls: ['./strategy-detail.component.css']
+  styleUrls: [
+    '../../common/css/detail.component.css', 
+    './strategy-detail.component.css'
+  ]
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

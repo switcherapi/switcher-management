@@ -14,7 +14,10 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 @Component({
   selector: 'app-group-preview',
   templateUrl: './group-preview.component.html',
-  styleUrls: ['./group-preview.component.css']
+  styleUrls: [
+    '../../common/css/preview.component.css', 
+    './group-preview.component.css'
+  ]
 })
 export class GroupPreviewComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

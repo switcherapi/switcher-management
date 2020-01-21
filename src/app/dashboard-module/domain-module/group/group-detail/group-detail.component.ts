@@ -14,7 +14,10 @@ import { GroupService } from 'src/app/dashboard-module/services/group.service';
 @Component({
   selector: 'app-group-detail',
   templateUrl: './group-detail.component.html',
-  styleUrls: ['./group-detail.component.css']
+  styleUrls: [
+    '../../common/css/detail.component.css', 
+    './group-detail.component.css'
+  ]
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

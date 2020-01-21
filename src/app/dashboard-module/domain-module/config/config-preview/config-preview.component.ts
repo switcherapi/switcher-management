@@ -14,7 +14,10 @@ import { Types } from '../../model/path-route';
 @Component({
   selector: 'app-config-preview',
   templateUrl: './config-preview.component.html',
-  styleUrls: ['./config-preview.component.css']
+  styleUrls: [
+    '../../common/css/preview.component.css', 
+    './config-preview.component.css'
+  ]
 })
 export class ConfigPreviewComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
