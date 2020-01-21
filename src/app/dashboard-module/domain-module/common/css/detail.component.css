@@ -64,7 +64,7 @@
   color: white;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1200px) {
   .header-container {
     display: block;
     flex-flow: row no-wrap;

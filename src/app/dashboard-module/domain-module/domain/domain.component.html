@@ -31,15 +31,22 @@
             {{ title }}
         </div>
     </h4>
-    <nav class="navbar navbar-expand navbar-dark bg-dark backgroud-style">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
-            <a class="nav-item nav-link" (click)="gotoListChildren()">{{ getLabelListChildren() }}</a>
-            <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics" >Metrics</a>
-            <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log">Change Log</a>
-            <a class="nav-item nav-link" routerLink="/dashboard/domain/components">Components</a>
-            <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
-            <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark backgroud-style">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" 
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Domain menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
+                <a class="nav-item nav-link" (click)="gotoListChildren()">{{ getLabelListChildren() }}</a>
+                <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics" >Metrics</a>
+                <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log">Change Log</a>
+                <a class="nav-item nav-link" routerLink="/dashboard/domain/components">Components</a>
+                <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
+                <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
+            </div>
         </div>
     </nav>
 

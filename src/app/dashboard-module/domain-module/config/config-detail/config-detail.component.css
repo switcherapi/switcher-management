@@ -10,9 +10,23 @@
   margin-top: -30px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1200px) {
   .options-section {
     float: right;
     display: contents;
+  }
+
+  .strategy-control-style {
+    display: flex;
+  }
+
+  :host /deep/ .mat-tab-header {
+    display: contents;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .strategy-control-style {
+    display: grid;
   }
 }

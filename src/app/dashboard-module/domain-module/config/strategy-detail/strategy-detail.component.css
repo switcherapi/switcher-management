@@ -1,5 +1,5 @@
 .operations-style {
-  width: 350px !important; 
+  width: 350px !important;
   margin-top: 10px;
 }
 
@@ -12,7 +12,30 @@
   color: #666;
 }
 
-@media only screen and (max-width: 600px) {
+.strategy-values-control {
+  display: flex;
+}
+
+.strategy-controll-style {
+  display: ruby-base;
+}
+
+.description-values {
+  display: grid;
+  align-self: start;
+}
+
+@media only screen and (max-width: 430px) {
+  .header {
+    columns: 1;
+  }
+
+  .description {
+    display: grid;
+    align-self: start;
+    width: 95% !important;
+  }
+
   .options-section {
     float: right;
     display: contents;
@@ -20,9 +43,67 @@
 
   .operations-style {
     margin-top: 10px;
+    width: 90% !important;
   }
 
-  :host /deep/ .mat-form-field-wrapper {
-    width: 90%;
+  .header.activated {
+    background: linear-gradient(to right, #549bfb 0, #549bfb 10px, #f7f7f7 10px, #fff 100%) no-repeat;
+    width: 80%;
+  }
+  
+  .header.deactivated {
+    background: linear-gradient(to right, #9e9e9e 0, #9e9e9e 10px, #f7f7f7 10px, #fff 100%) no-repeat;
+    width: 80%;
+  }
+  
+  .header.editing {
+    background: linear-gradient(to right, #ff3333 0, #ff3333 10px, #fff 10px, #fff 100%) no-repeat;
+    width: 80%;
+  }
+
+  .strategy-values-control {
+    display: grid;
+  }
+
+  .strategy-control-style {
+    display: flex;
+  }
+
+  .description-values {
+    display: flex;
+  }
+
+  :host /deep/ .mat-card {
+    width: 75% !important;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .description {
+    display: grid;
+    align-self: start;
+    width: 95% !important;
+  }
+
+  .options-section {
+    float: right;
+    display: contents;
+  }
+
+  .operations-style {
+    margin-top: 10px;
+    width: 90% !important;
+  }
+
+  .strategy-values-control {
+    display: grid;
+  }
+
+  .strategy-control-style {
+    display: flex;
+  }
+
+  .description-values {
+    display: flex;
   }
 }

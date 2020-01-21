@@ -29,7 +29,7 @@
                 </mat-form-field>
             </div>
             <div id="srategyValueSection" class="values-section">
-                <div class="description">
+                <div class="description-values">
                     <mat-card style="margin-top: 10px;">
                         <mat-card-header>
                           <mat-card-subtitle>Values</mat-card-subtitle>
@@ -46,7 +46,7 @@
                                 <input formControlName="valueSelection" matInput placeholder="Selected">
                             </mat-form-field>
                         </form>
-                        <div style="display: inline-flex;">
+                        <div class="strategy-values-control">
                             <button mat-button class="btn-element" (click)="addValue()">Add</button>
                             <button mat-button class="btn-element" (click)="editValue()">Update</button>
                             <button mat-button class="btn-element" (click)="removeValue()">Remove</button>
@@ -59,7 +59,7 @@
             </div>
         </div>
     </section>
-    <section style="display: ruby-base;">
+    <section class="strategy-control-style">
         <div class="options-section">
             <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()">
                 <svg class="bi bi-wrench" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
