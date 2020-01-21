@@ -3,24 +3,25 @@
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
-                    <input matInput placeholder="Name" value="{{getConfig().key}}" 
+                    <input #keyElement matInput placeholder="Name" [value]="getConfig().key" maxlength="40"
                         [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}">
                 </mat-form-field>
                 <mat-form-field>
-                    <textarea matInput placeholder="Description" value="{{getConfig()?.description}}" 
+                    <textarea #descElement matInput placeholder="Description" [value]="getConfig()?.description" maxlength="256"
                         [ngStyle]="editing ? {'color': 'black'} : ''" rows="4" readonly="{{ !editing }}">
                     </textarea>
+                    <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                 </mat-form-field>
             </div>
             <div class="description" style="width: 300px;">
                 <mat-form-field>
-                    <input matInput placeholder="Created At" value="{{getConfig().createdAt}}" readonly>
+                    <input matInput placeholder="Created At" [value]="getConfig().createdAt" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Last Update" value="{{getConfig().updatedAt}}" readonly>
+                    <input matInput placeholder="Last Update" [value]="getConfig().updatedAt" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Created By" value="{{createdBy}}" readonly>
+                    <input matInput placeholder="Created By" [value]="createdBy" readonly>
                 </mat-form-field>
             </div>
             <div class="description">

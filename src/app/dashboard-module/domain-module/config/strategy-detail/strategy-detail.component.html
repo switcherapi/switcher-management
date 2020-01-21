@@ -4,28 +4,28 @@
             <div class="description" style="width: 350px;">
                 <form [formGroup]="operationCategory">
                     <mat-form-field style="width: 350px !important; margin-top: 10px;">
-                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Operation Name" value="{{strategy.operation}}" readonly>
+                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Operation Name" [value]="strategy.operation" readonly>
                         <mat-select *ngIf="editing" placeholder="Operation Name" formControlName="operationCategory">
                             <mat-option *ngFor="let operation of strategyOperations" [value]="operation">
                                 {{operation}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <!-- <p>{{operationCategory.get('operationCategory').value | json}}</p> -->
                 </form>
                 <mat-form-field>
-                    <textarea matInput class="readonly-fields" placeholder="Description" value="{{strategy?.description}}" 
+                    <textarea #descElement matInput class="readonly-fields" placeholder="Description" [value]="strategy?.description" maxlength="256"
                         [ngStyle]="editing ? {'color': 'black'} : ''" rows="4" readonly="{{ !editing }}">
                     </textarea>
+                    <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput class="readonly-fields" placeholder="Created At" value="{{strategy.createdAt}}" readonly>
+                    <input matInput class="readonly-fields" placeholder="Created At" [value]="strategy.createdAt" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput class="readonly-fields" placeholder="Last Update" value="{{strategy.updatedAt}}" readonly>
+                    <input matInput class="readonly-fields" placeholder="Last Update" [value]="strategy.updatedAt" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput class="readonly-fields" placeholder="Created By" value="{{createdBy}}" readonly>
+                    <input matInput class="readonly-fields" placeholder="Created By" [value]="createdBy" readonly>
                 </mat-form-field>
             </div>
             <div id="srategyValueSection" class="values-section">

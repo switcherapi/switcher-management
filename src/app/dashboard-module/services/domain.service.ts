@@ -8,7 +8,7 @@ import { Config } from '../domain-module/model/config';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
 import { Team } from '../domain-module/model/team';
-import { ApiService } from './api-service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,13 @@ export class DomainService extends ApiService {
       [`${env}`]: status
     }
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/updateStatus/` + id), body).pipe(catchError(super.handleError));
+  }
+
+  public updateDomain(id: string, description: string): Observable<Domain> {
+    const body = {
+      description
+    }
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/` + id), body).pipe(catchError(super.handleError));
   }
 
 }

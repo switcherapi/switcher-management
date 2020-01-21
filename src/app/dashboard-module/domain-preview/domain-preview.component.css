@@ -1,6 +1,7 @@
 .header-section {
   grid-area: header;
   display: inline-flex;
+  width: 400px;
 }
 
 .grid-container.activated {

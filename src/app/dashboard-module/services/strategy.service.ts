@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
-import { ApiService } from './api-service';
+import { ApiService } from './api.service';
 import { StrategyReq } from '../domain-module/model/strategy_req';
 
 @Injectable({
@@ -29,6 +29,14 @@ export class StrategyService extends ApiService {
       [`${env}`]: status
     }
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/updateStatus/` + id), body).pipe(catchError(super.handleError));
+  }
+
+  public updateStrategy(id: string, description: string, operation: string): Observable<Strategy> {
+    const body = {
+      description,
+      operation
+    }
+    return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/` + id), body).pipe(catchError(super.handleError));
   }
   
 }

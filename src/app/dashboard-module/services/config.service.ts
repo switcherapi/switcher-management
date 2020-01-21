@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Config } from '../domain-module/model/config';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
-import { ApiService } from './api-service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,14 @@ export class ConfigService extends ApiService {
       [`${env}`]: status
     }
     return this.http.patch<Config>((`${environment.apiUrl}/config/updateStatus/` + id), body).pipe(catchError(super.handleError));
+  }
+
+  public updateConfig(id: string, key: string, description: string): Observable<Config> {
+    const body = {
+      key,
+      description
+    }
+    return this.http.patch<Config>((`${environment.apiUrl}/config/` + id), body).pipe(catchError(super.handleError));
   }
   
 }

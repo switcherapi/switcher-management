@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { Strategy } from '../../model/strategy';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -25,6 +25,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
+
+  @ViewChild('descElement', { static: true }) 
+  descElement: ElementRef;
 
   classStatus: string;
 
@@ -119,6 +122,20 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.classStatus = 'header editing';
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      
+      const body = {
+        operation: this.operationCategory.get('operationCategory').value,
+        description: this.descElement.nativeElement.value
+      };
+
+      this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.toastService.showSucess(`Strategy updated with success`);
+          this.strategy = data;
+        }
+      }, error => {
+        this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
+      });
     }
   }
 }

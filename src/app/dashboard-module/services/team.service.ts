@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Team } from '../domain-module/model/team';
-import { ApiService } from './api-service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Config } from '../../model/config';
@@ -25,6 +25,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
+
+  @ViewChild('descElement', { static: true }) 
+  descElement: ElementRef;
+
+  @ViewChild('keyElement', { static: true }) 
+  keyElement: ElementRef;
 
   classStatus: string;
   
@@ -118,6 +124,20 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.classStatus = 'header editing';
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+
+      const body = {
+        key: this.keyElement.nativeElement.value,
+        description: this.descElement.nativeElement.value
+      };
+
+      this.configService.updateConfig(this.getConfig().id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.updatePathRoute(data);
+          this.toastService.showSucess(`Switcher updated with success`);
+        }
+      }, error => {
+        this.toastService.showError(`Unable to update '${this.getConfig().name}' switcher`);
+      });
     }
   }
 

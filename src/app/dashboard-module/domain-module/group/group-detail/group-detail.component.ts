@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Group } from '../../model/group';
@@ -21,6 +21,12 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
+
+  @ViewChild('descElement', { static: true }) 
+  descElement: ElementRef;
+
+  @ViewChild('nameElement', { static: true }) 
+  nameElement: ElementRef;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -104,6 +110,20 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       this.classStatus = 'header editing';
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+
+      const body = {
+        name: this.nameElement.nativeElement.value,
+        description: this.descElement.nativeElement.value
+      };
+
+      this.groupService.updateGroup(this.getGroup().id, body.name, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.updatePathRoute(data);
+          this.toastService.showSucess(`Group updated with success`);
+        }
+      }, error => {
+        this.toastService.showError(`Unable to update '${this.getGroup().name}' group`);
+      });
     }
   }
 
