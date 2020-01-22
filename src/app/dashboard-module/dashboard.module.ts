@@ -7,16 +7,31 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DomainRouteService } from './services/domain-route.service';
 import { PathRoute } from './domain-module/model/path-route';
 import { AppMaterialModule } from '../shared/app-material.module';
+import { DomainCreateComponent } from './domain-create/domain-create.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToasterModule } from '../_helpers/toaster/toaster.module';
 
 @NgModule({
-  declarations: [DomainListComponent, DomainPreviewComponent],
+  declarations: [
+    DomainListComponent, 
+    DomainPreviewComponent,
+    DomainCreateComponent
+  ],
+  entryComponents: [
+    DomainCreateComponent
+  ],
   imports: [
+    FormsModule,
     CommonModule,
+    NgbModule,
+    ReactiveFormsModule,
     DashboardRoutingModule,
-    AppMaterialModule
+    AppMaterialModule,
+    ToasterModule
   ],
   providers: [ 
-    DomainRouteService, 
+    DomainRouteService,
     PathRoute
   ]
 })

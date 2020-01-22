@@ -6,4 +6,5 @@ export class Domain {
   createdAt: Date;
   updatedAt: Date;
   activated: Map<string, boolean>;
+  apiKey: string;
 }

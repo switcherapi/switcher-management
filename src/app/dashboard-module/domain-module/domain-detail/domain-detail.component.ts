@@ -11,6 +11,8 @@ import { EnvironmentConfigComponent } from '../environment-config/environment-co
 import { DomainService } from '../../services/domain.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { DomainCreateComponent } from '../../domain-create/domain-create.component';
 
 @Component({
   selector: 'app-domain-detail',
@@ -39,7 +41,8 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     private adminService: AdminService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private dialog: MatDialog
   ) {
     super(adminService);
   }
@@ -127,6 +130,21 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         this.editing = false;
       });
     }
+  }
+
+  generateApiKey() {
+    this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.dialog.open(DomainCreateComponent, {
+          width: '400px',
+          data: { apiKey: data.apiKey, domainName: this.getDomain().name }
+        });
+      }
+    }, error => {
+      this.toastService.showError(`Unable to generate an API Key`);
+      console.log(error);
+    });
+
   }
 
 }

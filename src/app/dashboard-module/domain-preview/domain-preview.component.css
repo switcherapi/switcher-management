@@ -1,7 +1,7 @@
 .header-section {
   grid-area: header;
   display: inline-flex;
-  width: 100%;
+  width: 400px;
 }
 
 .grid-container.activated {
@@ -22,4 +22,10 @@
   background-color: rgba(0, 0, 0, .03);
   padding: 2px;
   background: linear-gradient(to right, #9e9e9e 0, #9e9e9e, #9e9e9e 10px, #fff 100%) no-repeat;
+}
+
+@media only screen and (max-width: 800px) {
+  .header-section {
+    width: 100%;
+  }
 }

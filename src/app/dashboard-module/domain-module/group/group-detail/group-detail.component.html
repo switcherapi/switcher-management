@@ -3,8 +3,14 @@
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
-                    <input #nameElement matInput placeholder="Name" [value]="getGroup().name" maxlength="40"
-                        [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}">
+                    <input #nameElement matInput placeholder="Name" [value]="getGroup().name" maxlength="30"
+                        [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="nameFormControl">
+                    <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                        Name must contains at least 5 characters
+                    </mat-error>
+                    <mat-error *ngIf="nameFormControl.hasError('required')">
+                        Name is <strong>required</strong>
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field>
                     <textarea #descElement matInput placeholder="Description" [value]="getGroup()?.description" maxlength="256"

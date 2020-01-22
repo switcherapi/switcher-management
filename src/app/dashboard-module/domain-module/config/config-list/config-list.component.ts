@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Config } from 'protractor';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { Types } from '../../model/path-route';
@@ -10,6 +10,9 @@ import { ConfigService } from 'src/app/dashboard-module/services/config.service'
 import { FormBuilder } from '@angular/forms';
 import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { ListComponent } from '../../common/list-component';
+import { MatDialog } from '@angular/material';
+import { ToastService } from 'src/app/_helpers/toast.service';
+import { ConfigCreateComponent } from '../config-create/config-create.component';
 
 @Component({
   selector: 'app-config-list',
@@ -28,10 +31,12 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
 
   constructor(
     private fb: FormBuilder,
+    private dialog: MatDialog,
     private configService: ConfigService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
-    private errorHandler: RouterErrorHandler
+    private errorHandler: RouterErrorHandler,
+    private toastService: ToastService
   ) { 
     super(fb, environmentService, domainRouteService);
   }
@@ -67,6 +72,26 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  createConfig(): void {
+    const dialogRef = this.dialog.open(ConfigCreateComponent, {
+      width: '400px',
+      data: { key: '',  description: '' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.configService.createConfig(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id, result.key, result.description).subscribe(data => {
+          if (data) {
+            this.ngOnInit();
+          }
+        }, error => {
+          this.toastService.showError('Unable to create a new switcher.');
+          console.log(error);
+        });
+      }
+    });
   }
 
 }

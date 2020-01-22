@@ -34,4 +34,12 @@ export class GroupService extends ApiService {
     return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/` + id), body).pipe(catchError(super.handleError));
   }
 
+  public createGroup(domain: string, name: string, description: string): Observable<Group> {
+    const body = {
+      name,
+      description,
+      domain
+    }
+    return this.http.post<Group>((`${environment.apiUrl}/groupconfig/create`), body).pipe(catchError(super.handleError));
+  }
 }

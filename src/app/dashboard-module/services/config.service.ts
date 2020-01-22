@@ -38,5 +38,14 @@ export class ConfigService extends ApiService {
     }
     return this.http.patch<Config>((`${environment.apiUrl}/config/` + id), body).pipe(catchError(super.handleError));
   }
+
+  public createConfig(group: string, key: string, description: string): Observable<Config> {
+    const body = {
+      key,
+      description,
+      group
+    }
+    return this.http.post<Config>((`${environment.apiUrl}/config/create`), body).pipe(catchError(super.handleError));
+  }
   
 }

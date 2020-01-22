@@ -10,6 +10,9 @@ import { GroupService } from 'src/app/dashboard-module/services/group.service';
 import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { FormBuilder } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
+import { GroupCreateComponent } from '../group-create/group-create.component';
+import { MatDialog } from '@angular/material';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-group-list',
@@ -22,16 +25,18 @@ import { ListComponent } from '../../common/list-component';
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy, AfterViewInit {
   private unsubscribe: Subject<void> = new Subject();
   
-  groups$: Group[];
+  groups: Group[];
   loading = false;
   error = '';
 
   constructor(
     private fb: FormBuilder,
+    private dialog: MatDialog,
     private groupService: GroupService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
-    private errorHandler: RouterErrorHandler
+    private errorHandler: RouterErrorHandler,
+    private toastService: ToastService
   ) {
     super(fb, environmentService, domainRouteService);
   }
@@ -41,9 +46,8 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     this.error = '';
     this.groupService.getGroupsByDomain(
       this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-
       if (data) {
-        this.groups$ = data;
+        this.groups = data;
         super.loadEnvironments();
       }
       this.loading = false;
@@ -53,7 +57,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     });
 
     setTimeout(() => {
-      if (!this.groups$) {
+      if (!this.groups) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
@@ -67,6 +71,26 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  createGroup(): void {
+    const dialogRef = this.dialog.open(GroupCreateComponent, {
+      width: '400px',
+      data: { name: '',  description: '' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.groupService.createGroup(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, result.name, result.description).subscribe(data => {
+          if (data) {
+            this.ngOnInit();
+          }
+        }, error => {
+          this.toastService.showError('Unable to create a new group.');
+          console.log(error);
+        });
+      }
+    });
   }
 
 }

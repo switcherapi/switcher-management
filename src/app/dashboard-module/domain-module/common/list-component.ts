@@ -20,7 +20,7 @@ export class ListComponent {
     constructor(
         private formBuilder: FormBuilder,
         private envService: EnvironmentService,
-        private drService : DomainRouteService
+        private drService: DomainRouteService
     ) {
         this.loadOperationSelectionComponent();
     }
@@ -41,12 +41,14 @@ export class ListComponent {
 
     ngAfterViewInit(): void {
         this.component.changes.subscribe((comps: QueryList<MatSelect>) => {
-          this.envSelectionChange = comps.first;
-          this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
-            this.environmentSelectionChange.emit(s.source._value.toString());
-          });
+            if (comps.first) {
+                this.envSelectionChange = comps.first;
+                this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
+                    this.environmentSelectionChange.emit(s.source._value.toString());
+                });
+            }
         });
-      }
+    }
 
     setProductionFirst(): string {
         const defaultEnv = this.environments.find(env => env.name === 'default');

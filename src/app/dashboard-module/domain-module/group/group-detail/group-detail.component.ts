@@ -10,6 +10,7 @@ import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { GroupService } from 'src/app/dashboard-module/services/group.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-group-detail',
@@ -30,6 +31,11 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   @ViewChild('nameElement', { static: true }) 
   nameElement: ElementRef;
+
+  nameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(5)
+  ]);
 
   constructor(
     private domainRouteService: DomainRouteService,

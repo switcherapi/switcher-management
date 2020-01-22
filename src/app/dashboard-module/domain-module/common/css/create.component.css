@@ -1,0 +1,24 @@
+.header-create {
+  background: linear-gradient(to right, #549bfb 0, #549bfb, #5298ff 10px, #fff 100%) no-repeat;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.header {
+  border-radius: 20px;
+}
+
+.description {
+  width: 90%;
+}
+
+.btn-cancel {
+  background: #8e8e8e;
+  color: white;
+}
+
+.btn-save {
+  background: #549bfb;
+  color: white;
+}

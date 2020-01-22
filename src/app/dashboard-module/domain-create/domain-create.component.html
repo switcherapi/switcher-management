@@ -1,0 +1,41 @@
+<h1 *ngIf="!data.apiKey" mat-dialog-title class="header-create">New domain</h1>
+<h1 *ngIf="data.apiKey" mat-dialog-title class="header-create">{{ data.domainName }}</h1>
+<div mat-dialog-content>
+    <section class="header activated">
+        <div *ngIf="!data.apiKey" class="header-container">
+            <div class="description">
+                <mat-form-field>
+                    <input #nameElement matInput placeholder="Name" maxlength="20" style="color: black" [formControl]="nameFormControl">
+                    <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                        Name must contains at least 5 characters
+                      </mat-error>
+                      <mat-error *ngIf="nameFormControl.hasError('required')">
+                        Name is <strong>required</strong>
+                      </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <textarea #descElement matInput placeholder="Description" [(ngModel)]="data.description" maxlength="256" style="color: black" rows="3">
+                    </textarea>
+                    <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+        <div *ngIf="data.apiKey" class="header-container">
+            <div class="description">
+                <mat-form-field>
+                    <textarea matInput placeholder="API Key" [(ngModel)]="data.apiKey" style="color: black" readonly>
+                    </textarea>
+                    <mat-hint align="end"><strong style="color: red;">Keep this key in a safe place</strong></mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+    </section>
+</div>
+<div *ngIf="!data.apiKey" mat-dialog-actions style="float: right;">
+    <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
+    <button class="btn-save" mat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+</div>
+<div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
+    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)" value="click to copy">Copy</button>
+    <button class="btn-save" mat-button (click)="onCancel()">Ok</button>
+</div>

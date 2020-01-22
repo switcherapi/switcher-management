@@ -5,6 +5,9 @@ import { environment } from 'src/environments/environment';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
+import { ToastService } from 'src/app/_helpers/toast.service';
+import { DomainCreateComponent } from '../domain-create/domain-create.component';
 
 @Component({
   selector: 'app-domain-list',
@@ -19,8 +22,10 @@ export class DomainListComponent implements OnInit, OnDestroy {
   error = '';
 
   constructor(
+    private dialog: MatDialog,
     private domainService: DomainService,
-    private errorHandler: RouterErrorHandler
+    private errorHandler: RouterErrorHandler,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -47,5 +52,33 @@ export class DomainListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  createDomain(): void {
+    const dialogRef = this.dialog.open(DomainCreateComponent, {
+      width: '400px',
+      data: { name: '',  description: '' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.domainService.createDomain(result.name, result.description).subscribe(data => {
+          if (data) {
+            this.confirmKeyCreated(data.apiKey, data.domain.name);
+            this.ngOnInit();
+          }
+        }, error => {
+          this.toastService.showError('Unable to create a new domain.');
+          console.log(error);
+        });
+      }
+    });
+  }
+
+  confirmKeyCreated(apiKey: string, domainName: string): void {
+    this.dialog.open(DomainCreateComponent, {
+      width: '400px',
+      data: { apiKey, domainName }
+    });
   }
 }

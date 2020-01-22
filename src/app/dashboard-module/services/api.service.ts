@@ -14,7 +14,8 @@ export class ApiService {
             } else if (error.status === 0) {
                 errorMessage = 'Switcher API is offline';
             } else {
-                errorMessage = `Error Code: ${error.status} - Message: ${error.message}`;
+                errorMessage = `Error Code: ${error.status} - Message: ${error.message} 
+                    - Error: ${JSON.stringify(error.error)}`;
             }
         }
         return throwError(errorMessage);

@@ -14,6 +14,7 @@ import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-config-detail',
@@ -34,6 +35,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   @ViewChild('keyElement', { static: true }) 
   keyElement: ElementRef;
+
+  keyFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(5)
+  ]);
 
   classStatus: string;
   
