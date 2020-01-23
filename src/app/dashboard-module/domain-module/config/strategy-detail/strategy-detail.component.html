@@ -40,7 +40,7 @@
                             </mat-selection-list>
                         </mat-card-content>
                         <mat-form-field>
-                            <input #inputValue matInput placeholder="Selected" maxlength="30" [formControl]="valueSelectionFormControl">
+                            <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl">
                             <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
                                 Please, check the value format
                             </mat-error>

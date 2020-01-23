@@ -152,6 +152,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         if (data) {
           this.strategyValueSelection.deselectAll();
           this.strategy = data;
+          this.loadStrategyRequirements();
           this.toastService.showSucess(`Strategy updated with success`);
         }
       }, error => {
@@ -168,6 +169,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.strategyService.updateValue(this.strategy.id, oldValue, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.strategy = data;
+          this.loadStrategyRequirements();
           this.toastService.showSucess(`Strategy updated with success`);
         }
       }, error => {
@@ -183,6 +185,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.strategyService.deleteValue(this.strategy.id, value).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.strategy = data;
+          this.loadStrategyRequirements();
           this.toastService.showSucess(`Strategy updated with success`);
         }
       }, error => {
