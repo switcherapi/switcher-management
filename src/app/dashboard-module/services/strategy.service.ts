@@ -50,5 +50,27 @@ export class StrategyService extends ApiService {
     }
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/` + id), body).pipe(catchError(super.handleError));
   }
+
+  public addValue(id: string, newValue: string): Observable<Strategy> {
+    const body = {
+      value: newValue
+    }
+    return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/addval/` + id), body).pipe(catchError(super.handleError));
+  }
+
+  public updateValue(id: string, oldvalue: string, newvalue: string): Observable<Strategy> {
+    const body = {
+      oldvalue,
+      newvalue
+    }
+    return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/updateval/` + id), body).pipe(catchError(super.handleError));
+  }
+
+  public deleteValue(id: string, value: string): Observable<Strategy> {
+    const body = {
+      value
+    }
+    return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/removeval/` + id), body).pipe(catchError(super.handleError));
+  }
   
 }

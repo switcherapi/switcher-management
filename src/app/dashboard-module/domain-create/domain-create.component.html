@@ -33,7 +33,7 @@
 </div>
 <div *ngIf="!data.apiKey" mat-dialog-actions style="float: right;">
     <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
-    <button class="btn-save" mat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+    <button class="btn-save" mat-button (click)="onSave(data)">Save</button>
 </div>
 <div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
     <button class="btn-save" mat-button (click)="copyKey(data.apiKey)" value="click to copy">Copy</button>

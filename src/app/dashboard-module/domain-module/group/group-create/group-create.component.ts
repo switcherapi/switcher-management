@@ -32,4 +32,12 @@ export class GroupCreateComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onSave(data: any) {
+    const { valid } = this.nameFormControl;
+
+    if (valid) {
+        this.dialogRef.close(data);
+    }      
+  }
+
 }

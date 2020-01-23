@@ -13,6 +13,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomainCreateComponent } from '../../domain-create/domain-create.component';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-domain-detail',
@@ -42,7 +43,8 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
     private toastService: ToastService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _modalService: NgbModal
   ) {
     super(adminService);
   }
@@ -133,18 +135,41 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   generateApiKey() {
-    this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.dialog.open(DomainCreateComponent, {
-          width: '400px',
-          data: { apiKey: data.apiKey, domainName: this.getDomain().name }
-        });
-      }
-    }, error => {
-      this.toastService.showError(`Unable to generate an API Key`);
-      console.log(error);
-    });
-
+    this._modalService.open(NgbdModalConfirm).result.then(() => {
+      this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.dialog.open(DomainCreateComponent, {
+            width: '400px',
+            data: { apiKey: data.apiKey, domainName: this.getDomain().name }
+          });
+        }
+      }, error => {
+        this.toastService.showError(`Unable to generate an API Key`);
+        console.log(error);
+      });
+    }).catch(reject => {});
   }
+}
 
+@Component({
+  selector: 'ngbd-modal-confirm',
+  template: `
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title">API Key</h4>
+      <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Are you sure you want to generate a new key for this domain?</strong></p>
+      <span class="text-danger">This operation can not be undone.</span>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close()">Ok</button>
+    </div>
+    `
+})
+export class NgbdModalConfirm {
+  constructor(public modal: NgbActiveModal) {}
 }

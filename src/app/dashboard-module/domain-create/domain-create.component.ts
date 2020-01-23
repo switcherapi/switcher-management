@@ -32,6 +32,14 @@ export class DomainCreateComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onSave(data: any) {
+    const { valid } = this.nameFormControl;
+
+    if (valid) {
+        this.dialogRef.close(data);
+    }      
+  }
+
   copyKey(val: string){
     let selBox = document.createElement('textarea');
       selBox.style.position = 'fixed';

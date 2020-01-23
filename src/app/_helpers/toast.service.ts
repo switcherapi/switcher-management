@@ -13,7 +13,7 @@ export class ToastService {
     }
 
     showError(textOrTpl: string | TemplateRef<any>) {
-        this.show(textOrTpl, { classname: 'bg-danger text-light', delay: 5000 });
+        this.show(textOrTpl, { classname: 'bg-danger text-light', delay: 8000 });
     }
 
     remove(toast) {

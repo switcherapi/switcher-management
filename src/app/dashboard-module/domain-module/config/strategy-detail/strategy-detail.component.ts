@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { Strategy } from '../../model/strategy';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
@@ -9,6 +9,7 @@ import { EnvironmentConfigComponent } from '../../environment-config/environment
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { StrategyReq } from '../../model/strategy_req';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -22,6 +23,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   private unsubscribe: Subject<void> = new Subject();
   
   @Input() strategy: Strategy;
+  private strategyReq: StrategyReq;
 
   @ViewChild(MatSelectionList, { static: true })
   private strategyValueSelection: MatSelectionList;
@@ -34,8 +36,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   classStatus: string;
 
-  operationCategory: FormGroup;
-  valueSelection: FormGroup;
+  valueSelectionFormControl = new FormControl('');
+  operationCategoryFormControl = new FormControl('');
 
   strategyOperations: string[] = [];
 
@@ -73,27 +75,25 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.strategyValueSelection.selectionChange.subscribe((s: MatSelectionListChange) => {
       this.strategyValueSelection.deselectAll();
       s.option.selected = true;
-      this.valueSelection.get('valueSelection').setValue(s.source.selectedOptions.selected[0].value);
+      this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
     });
   }
 
   loadOperationSelectionComponent(): void {
-    this.operationCategory = this.fb.group({
-      operationCategory: [null, Validators.required]
-    });
-    
     let toSelect = this.strategyOperations.find(operation => operation === this.strategy.operation);
-    this.operationCategory.get('operationCategory').setValue(toSelect);
-
-    this.valueSelection = this.fb.group({
-      valueSelection: [null, Validators.required]
-    });
+    this.operationCategoryFormControl.setValue(toSelect);
   }
 
   loadStrategyRequirements(): void {
     this.strategyService.getStrategiesRequirements(this.strategy.strategy).subscribe(req => {
+      this.strategyReq = req;
       this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
-      this.operationCategory.get('operationCategory').setValue(this.strategy.operation);
+      this.operationCategoryFormControl.setValue(this.strategy.operation);
+
+      this.valueSelectionFormControl.setValidators([
+        Validators.required,
+        valueInputValidator(this.strategyReq.operationsAvailable.validator)
+      ]);
     });
   }
 
@@ -120,13 +120,14 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   edit() {
     if (!this.editing) {
+      this.loadStrategyRequirements();
       this.classStatus = 'header editing';
       this.editing = true;
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
       
       const body = {
-        operation: this.operationCategory.get('operationCategory').value,
+        operation: this.operationCategoryFormControl.value,
         description: this.descElement.nativeElement.value
       };
 
@@ -137,9 +138,67 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.editing = false;
         }
       }, error => {
+        console.log(error)
         this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
         this.editing = false;
       });
     }
   }
+
+  addValue(newValue: string) {
+    const { valid } = this.valueSelectionFormControl;
+    if (valid) {
+      this.strategyService.addValue(this.strategy.id, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.strategyValueSelection.deselectAll();
+          this.strategy = data;
+          this.toastService.showSucess(`Strategy updated with success`);
+        }
+      }, error => {
+        this.toastService.showError(error.error);
+      });
+    } else {
+      this.toastService.showError(`Unable to execute this operation`);
+    }
+  }
+
+  editValue(oldValue: string, newValue: string) {
+    const { valid } = this.valueSelectionFormControl;
+    if (valid) {
+      this.strategyService.updateValue(this.strategy.id, oldValue, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.strategy = data;
+          this.toastService.showSucess(`Strategy updated with success`);
+        }
+      }, error => {
+        this.toastService.showError(error.error);
+      });
+    } else {
+      this.toastService.showError(`Unable to execute this operation`);
+    }
+  }
+
+  removeValue(value: string) {
+    if (this.strategyValueSelection.options.length > 1) {
+      this.strategyService.deleteValue(this.strategy.id, value).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.strategy = data;
+          this.toastService.showSucess(`Strategy updated with success`);
+        }
+      }, error => {
+        this.toastService.showError(error.error);
+      });
+    } else {
+      this.toastService.showError(`One value is required, update or add new values`);
+    }
+  }
+}
+
+function valueInputValidator(format: string): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (!control.value.match(format)) {
+      return [control.value]
+    }
+    return null;
+  };
 }

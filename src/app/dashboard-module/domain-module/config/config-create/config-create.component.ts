@@ -32,4 +32,12 @@ export class ConfigCreateComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onSave(data: any) {
+    const { valid } = this.keyFormControl;
+
+    if (valid) {
+        this.dialogRef.close(data);
+    }      
+  }
+
 }

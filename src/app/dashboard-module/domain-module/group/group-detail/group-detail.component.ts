@@ -117,23 +117,29 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       this.classStatus = 'header editing';
       this.editing = true;
     } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      const { valid } = this.nameFormControl;
 
-      const body = {
-        name: this.nameElement.nativeElement.value,
-        description: this.descElement.nativeElement.value
-      };
+      if (valid) {
+        this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
-      this.groupService.updateGroup(this.getGroup().id, body.name, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.updatePathRoute(data);
-          this.toastService.showSucess(`Group updated with success`);
-          this.editing = false;
-        }
-      }, error => {
-        this.toastService.showError(`Unable to update '${this.getGroup().name}' group`);
-        this.editing = false;
-      });
+        const body = {
+          name: this.nameElement.nativeElement.value,
+          description: this.descElement.nativeElement.value
+        };
+
+        this.groupService.updateGroup(this.getGroup().id, body.name, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          if (data) {
+            this.updatePathRoute(data);
+            this.toastService.showSucess(`Group updated with success`);
+            this.editing = false;
+          }
+        }, error => {
+          console.log(error)
+          this.toastService.showError(`Unable to update group`);
+          this.classStatus = 'header editing';
+          this.editing = true;
+        });
+      }
     }
   }
 

@@ -131,23 +131,29 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.classStatus = 'header editing';
       this.editing = true;
     } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      const { valid } = this.keyFormControl;
 
-      const body = {
-        key: this.keyElement.nativeElement.value,
-        description: this.descElement.nativeElement.value
-      };
+      if (valid) {
+        this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
-      this.configService.updateConfig(this.getConfig().id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.updatePathRoute(data);
-          this.toastService.showSucess(`Switcher updated with success`);
-          this.editing = false
-        }
-      }, error => {
-        this.toastService.showError(`Unable to update '${this.getConfig().name}' switcher`);
-        this.editing = false;
-      });
+        const body = {
+          key: this.keyElement.nativeElement.value,
+          description: this.descElement.nativeElement.value
+        };
+
+        this.configService.updateConfig(this.getConfig().id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          if (data) {
+            this.updatePathRoute(data);
+            this.toastService.showSucess(`Switcher updated with success`);
+            this.editing = false
+          }
+        }, error => {
+          console.log(error)
+          this.toastService.showError(`Unable to update switcher`);
+          this.classStatus = 'header editing';
+          this.editing = true;
+        });
+      }
     }
   }
 
