@@ -74,7 +74,8 @@ export class AuthService {
         } else if (error.status === 422) {
             errorMessage = 'Invalid email format';
         } else {
-            errorMessage = `Error Code: ${error.status} - Message: ${error.message}`;
+            console.log(error);
+            errorMessage = `Switcher API is offline`;
         }
     }
     return throwError(errorMessage);
