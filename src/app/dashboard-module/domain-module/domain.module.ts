@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DomainComponent } from './domain/domain.component';
 
 import { DomainRoutingModule } from './domain-routing.module';
-import { DomainDetailComponent, NgbdModalConfirm } from './domain-detail/domain-detail.component';
+import { DomainDetailComponent } from './domain-detail/domain-detail.component';
 import { MetricsComponent } from './metrics/metrics.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';
@@ -27,6 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GroupCreateComponent } from './group/group-create/group-create.component';
 import { ConfigCreateComponent } from './config/config-create/config-create.component';
 import { ToasterModule } from 'src/app/_helpers/toaster/toaster.module';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 
 @NgModule({
   declarations: [

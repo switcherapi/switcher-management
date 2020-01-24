@@ -29,5 +29,25 @@ export class DomainRouteService {
     return JSON.parse(localStorage.getItem(elementType));
   }
 
+  removePath(elementType: string) {
+    if (elementType === Types.DOMAIN_TYPE) {
+      localStorage.removeItem(Types.SELECTED_DOMAIN);
+      localStorage.removeItem(Types.SELECTED_GROUP);
+      localStorage.removeItem(Types.SELECTED_CONFIG);
+      localStorage.removeItem(Types.CURRENT_ROUTE);
+    } else if (elementType === Types.GROUP_TYPE) {
+      localStorage.removeItem(Types.SELECTED_GROUP);
+      localStorage.removeItem(Types.SELECTED_CONFIG);
+      localStorage.removeItem(Types.CURRENT_ROUTE);
+      localStorage.setItem(Types.CURRENT_ROUTE, localStorage.getItem(Types.SELECTED_DOMAIN));
+      this.pathChange.emit(this.getPathElement(Types.DOMAIN_TYPE));
+    } else if (elementType === Types.CONFIG_TYPE) {
+      localStorage.removeItem(Types.SELECTED_CONFIG);
+      localStorage.removeItem(Types.CURRENT_ROUTE);
+      localStorage.setItem(Types.CURRENT_ROUTE, localStorage.getItem(Types.SELECTED_GROUP));
+      this.pathChange.emit(this.getPathElement(Types.GROUP_TYPE));
+    }
+  }
+
 }
 

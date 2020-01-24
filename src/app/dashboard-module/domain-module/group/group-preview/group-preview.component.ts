@@ -100,7 +100,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     this.groupService.setGroupEnvironmentStatus(this.getGroup().id, this.selectedEnv, event.checked).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
-        this.toastService.showSucess(`Environment updated with success`);
+        this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);

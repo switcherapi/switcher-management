@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Injector, Input, Output } from '@angular/core';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { PathRoute, Types } from '../model/path-route';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Domain } from '../model/domain';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -14,6 +14,8 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomainCreateComponent } from '../../domain-create/domain-create.component';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventEmitter } from 'events';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 
 @Component({
   selector: 'app-domain-detail',
@@ -42,6 +44,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     private adminService: AdminService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
+    private router: Router,
     private toastService: ToastService,
     private dialog: MatDialog,
     private _modalService: NgbModal
@@ -93,7 +96,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
-        this.toastService.showSucess(`Environment updated with success`);
+        this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
@@ -124,7 +127,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.domainService.updateDomain(this.getDomain().id, this.domainDescription).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.updatePathRoute(data);
-          this.toastService.showSucess(`Domain updated with success`);
+          this.toastService.showSuccess(`Domain updated with success`);
           this.editing = false;
         }
       }, error => {
@@ -135,41 +138,41 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   generateApiKey() {
-    this._modalService.open(NgbdModalConfirm).result.then(() => {
-      this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.dialog.open(DomainCreateComponent, {
-            width: '400px',
-            data: { apiKey: data.apiKey, domainName: this.getDomain().name }
-          });
-        }
-      }, error => {
-        this.toastService.showError(`Unable to generate an API Key`);
-        console.log(error);
-      });
-    }).catch(reject => {});
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'API Key';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to generate a new key for this domain?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          if (data) {
+            this.dialog.open(DomainCreateComponent, {
+              width: '400px',
+              data: { apiKey: data.apiKey, domainName: this.getDomain().name }
+            });
+          }
+        }, error => {
+          this.toastService.showError(`Unable to generate an API Key`);
+          console.log(error);
+        });
+      }
+    })
   }
-}
 
-@Component({
-  selector: 'ngbd-modal-confirm',
-  template: `
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">API Key</h4>
-      <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p><strong>Are you sure you want to generate a new key for this domain?</strong></p>
-      <span class="text-danger">This operation can not be undone.</span>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancel</button>
-      <button type="button" class="btn btn-danger" (click)="modal.close()">Ok</button>
-    </div>
-    `
-})
-export class NgbdModalConfirm {
-  constructor(public modal: NgbActiveModal) {}
+  delete() {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Domain removal';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to remove this domain?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.domainService.deleteDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          this.domainRouteService.removePath(Types.GROUP_TYPE);
+          this.router.navigate(['/dashboard/']);
+          this.toastService.showSuccess(`Domain removed with success`);
+        }, error => {
+          this.toastService.showError(`Unable to remove this domain`);
+          console.log(error);
+        });
+      }
+    });
+  }
 }

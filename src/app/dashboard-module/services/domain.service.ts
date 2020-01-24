@@ -53,4 +53,8 @@ export class DomainService extends ApiService {
     return this.http.get<any>(`${environment.apiUrl}/domain/generateApiKey/` + id).pipe(catchError(super.handleError));
   }
 
+  public deleteDomain(id: string): Observable<Domain> {
+    return this.http.delete<Domain>(`${environment.apiUrl}/domain/${id}`).pipe(catchError(super.handleError));
+  }
+
 }

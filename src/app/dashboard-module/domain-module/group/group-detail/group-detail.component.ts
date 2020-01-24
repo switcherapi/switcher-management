@@ -3,7 +3,7 @@ import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Group } from '../../model/group';
 import { map, takeUntil } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
@@ -11,6 +11,8 @@ import { EnvironmentConfigComponent } from '../../environment-config/environment
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { GroupService } from 'src/app/dashboard-module/services/group.service';
 import { FormControl, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 
 @Component({
   selector: 'app-group-detail',
@@ -43,7 +45,9 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     private adminService: AdminService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private router: Router,
+    private toastService: ToastService,
+    private _modalService: NgbModal
   ) { 
     super(adminService);
   }
@@ -91,7 +95,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     this.groupService.setGroupEnvironmentStatus(this.getGroup().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
-        this.toastService.showSucess(`Environment updated with success`);
+        this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
@@ -130,7 +134,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         this.groupService.updateGroup(this.getGroup().id, body.name, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updatePathRoute(data);
-            this.toastService.showSucess(`Group updated with success`);
+            this.toastService.showSuccess(`Group updated with success`);
             this.editing = false;
           }
         }, error => {
@@ -141,6 +145,24 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         });
       }
     }
+  }
+  
+  delete() {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Group removal';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to remove this group?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.groupService.deleteGroup(this.getGroup().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          this.domainRouteService.removePath(Types.GROUP_TYPE);
+          this.router.navigate(['/dashboard/domain/groups']);
+          this.toastService.showSuccess(`Group removed with success`);
+        }, error => {
+          this.toastService.showError(`Unable to remove this group`);
+          console.log(error);
+        });
+      }
+    });
   }
 
 }

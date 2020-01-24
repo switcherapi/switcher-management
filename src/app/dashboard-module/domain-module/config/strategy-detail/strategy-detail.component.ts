@@ -101,7 +101,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.selectEnvironment(env.status);
     this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
-        this.toastService.showSucess(`Environment updated with success`);
+        this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
@@ -133,7 +133,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
       this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
-          this.toastService.showSucess(`Strategy updated with success`);
+          this.toastService.showSuccess(`Strategy updated with success`);
           this.strategy = data;
           this.editing = false;
         }
@@ -153,7 +153,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.strategyValueSelection.deselectAll();
           this.strategy = data;
           this.loadStrategyRequirements();
-          this.toastService.showSucess(`Strategy updated with success`);
+          this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
         this.toastService.showError(error.error);
@@ -170,7 +170,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         if (data) {
           this.strategy = data;
           this.loadStrategyRequirements();
-          this.toastService.showSucess(`Strategy updated with success`);
+          this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
         this.toastService.showError(error.error);
@@ -186,7 +186,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         if (data) {
           this.strategy = data;
           this.loadStrategyRequirements();
-          this.toastService.showSucess(`Strategy updated with success`);
+          this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
         this.toastService.showError(error.error);

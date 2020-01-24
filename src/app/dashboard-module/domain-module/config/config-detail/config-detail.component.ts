@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Config } from '../../model/config';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
 import { Strategy } from '../../model/strategy';
 import { Subject } from 'rxjs';
@@ -15,6 +15,8 @@ import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 
 @Component({
   selector: 'app-config-detail',
@@ -52,11 +54,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private domainRouteService: DomainRouteService,
     private pathRoute: PathRoute,
     private route: ActivatedRoute,
+    private router: Router,
     private configService: ConfigService,
     private adminService: AdminService,
     private strategyService: StrategyService,
     private errorHandler: RouterErrorHandler,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private _modalService: NgbModal
   ) { 
     super(adminService);
   }
@@ -105,7 +109,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.configService.setConfigEnvironmentStatus(this.getConfig().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
-        this.toastService.showSucess(`Environment updated with success`);
+        this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
@@ -144,7 +148,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.configService.updateConfig(this.getConfig().id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updatePathRoute(data);
-            this.toastService.showSucess(`Switcher updated with success`);
+            this.toastService.showSuccess(`Switcher updated with success`);
             this.editing = false
           }
         }, error => {
@@ -155,6 +159,24 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         });
       }
     }
+  }
+
+  delete() {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Switcher removal';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to remove this switcher?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.configService.deleteConfig(this.getConfig().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          this.domainRouteService.removePath(Types.CONFIG_TYPE);
+          this.router.navigate(['/dashboard/domain/group/switchers']);
+          this.toastService.showSuccess(`Switcher removed with success`);
+        }, error => {
+          this.toastService.showError(`Unable to remove this switcher`);
+          console.log(error);
+        });
+      }
+    });
   }
 
   private initStrategies() {

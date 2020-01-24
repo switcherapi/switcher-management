@@ -28,7 +28,7 @@ export class ConfigService extends ApiService {
     const body = {
       [`${env}`]: status
     }
-    return this.http.patch<Config>((`${environment.apiUrl}/config/updateStatus/` + id), body).pipe(catchError(super.handleError));
+    return this.http.patch<Config>(`${environment.apiUrl}/config/updateStatus/${id}`, body).pipe(catchError(super.handleError));
   }
 
   public updateConfig(id: string, key: string, description: string): Observable<Config> {
@@ -36,7 +36,7 @@ export class ConfigService extends ApiService {
       key,
       description
     }
-    return this.http.patch<Config>((`${environment.apiUrl}/config/` + id), body).pipe(catchError(super.handleError));
+    return this.http.patch<Config>(`${environment.apiUrl}/config/${id}`, body).pipe(catchError(super.handleError));
   }
 
   public createConfig(group: string, key: string, description: string): Observable<Config> {
@@ -46,6 +46,10 @@ export class ConfigService extends ApiService {
       group
     }
     return this.http.post<Config>((`${environment.apiUrl}/config/create`), body).pipe(catchError(super.handleError));
+  }
+
+  public deleteConfig(id: string): Observable<Config> {
+    return this.http.delete<Config>(`${environment.apiUrl}/config/${id}`).pipe(catchError(super.handleError));
   }
   
 }

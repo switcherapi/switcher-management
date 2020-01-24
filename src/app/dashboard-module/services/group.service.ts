@@ -42,4 +42,8 @@ export class GroupService extends ApiService {
     }
     return this.http.post<Group>((`${environment.apiUrl}/groupconfig/create`), body).pipe(catchError(super.handleError));
   }
+
+  public deleteGroup(id: string): Observable<Group> {
+    return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/${id}`).pipe(catchError(super.handleError));
+  }
 }

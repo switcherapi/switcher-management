@@ -8,7 +8,7 @@ export class ToastService {
         this.toasts.push({ textOrTpl, ...options });
     }
 
-    showSucess(textOrTpl: string | TemplateRef<any>) {
+    showSuccess(textOrTpl: string | TemplateRef<any>) {
         this.show(textOrTpl, { classname: 'bg-success text-light', delay: 2000 });
     }
 
