@@ -16,6 +16,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   @Input() currentEnvironment: Map<string, boolean>;
+  @Input() notSelectableEnvironments: boolean;
   @Output() outputEnvChanged: EventEmitter<boolean> = new EventEmitter();
   @Output() outputStatusChanged: EventEmitter<any> = new EventEmitter();
 
@@ -44,16 +45,18 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       this.outputEnvChanged.emit(this.selectedEnvStatus);
     });
 
-    this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
-      this.selectedEnvName = s.source._value.toString();
+    if (this.envSelectionChange) {
+      this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
+        this.selectedEnvName = s.source._value.toString();
 
-      const currentEnv = this.currentEnvironment[this.selectedEnvName] === undefined ? 
-        this.currentEnvironment['default'] : this.currentEnvironment[this.selectedEnvName];
+        const currentEnv = this.currentEnvironment[this.selectedEnvName] === undefined ? 
+          this.currentEnvironment['default'] : this.currentEnvironment[this.selectedEnvName];
 
-      this.selectedEnvStatus = currentEnv;
-      this.environmentStatusSelection.get('environmentStatusSelection').setValue(currentEnv);
-      this.outputEnvChanged.emit(this.selectedEnvStatus);
-    });
+        this.selectedEnvStatus = currentEnv;
+        this.environmentStatusSelection.get('environmentStatusSelection').setValue(currentEnv);
+        this.outputEnvChanged.emit(this.selectedEnvStatus);
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -66,18 +69,30 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       environmentSelection: [null, Validators.required]
     });
 
+    if (this.notSelectableEnvironments) {
+      this.environmentSelection.get('environmentSelection').disable({ onlySelf: true});
+    }
+
     this.environmentStatusSelection = this.fb.group({
       environmentStatusSelection: [null, Validators.required]
     });
   }
 
   setProductionFirst(): string {
-    const defaultEnv = this.environments.find(env => env.name === 'default');
+    const env = JSON.parse(JSON.stringify(this.currentEnvironment));
+    var keys = Object.keys(env);
+    let defaultEnv: Environment;
+    for (var i = 0; i < keys.length; i++) {
+      defaultEnv = this.environments.find(env => env.name === 'default' || env.name === keys[i]);
+      break;
+    }
 
     if (defaultEnv) {
+      this.selectedEnvName = defaultEnv.name
       return defaultEnv.name;
     }
 
+    this.selectedEnvName = this.environments[0].name; 
     return this.environments[0].name;
   }
 

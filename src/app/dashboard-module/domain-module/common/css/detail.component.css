@@ -79,3 +79,10 @@
     width: 90% !important;
   }
 }
+
+@media only screen and (max-width: 450px) {
+  .options-section {
+    display: grid;
+    float: none;
+  }
+}

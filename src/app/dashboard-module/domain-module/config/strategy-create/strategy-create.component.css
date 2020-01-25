@@ -1,0 +1,45 @@
+.description {
+  display: grid;
+  align-self: start;
+  width: 100% !important;
+}
+
+.strategy-values-control {
+  display: flex;
+}
+
+.description-values {
+  display: grid;
+  align-self: start;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.main-content {
+  display: flex;
+}
+
+.left-content {
+  width: 50%;
+  padding-right: 20px;
+}
+
+.right-content {
+  width: 50%;
+}
+
+@media only screen and (max-width: 800px) {
+
+  .main-content {
+    display: grid;
+  }
+
+  .left-content {
+    width: 100%;
+    padding-right: 20px;
+  }
+
+  .right-content {
+    width: 100%;
+  }
+}

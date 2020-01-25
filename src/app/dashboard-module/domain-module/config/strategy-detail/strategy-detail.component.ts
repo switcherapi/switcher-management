@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { Strategy } from '../../model/strategy';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
+import { MatSelectionList, MatSelectionListChange, MatDialog } from '@angular/material';
+import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
@@ -10,6 +10,10 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { StrategyReq } from '../../model/strategy_req';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { StrategyListComponent } from '../strategy-list/strategy-list.component';
+import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.component';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -23,6 +27,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   private unsubscribe: Subject<void> = new Subject();
   
   @Input() strategy: Strategy;
+  @Input() strategyList: StrategyListComponent;
+
   private strategyReq: StrategyReq;
 
   @ViewChild(MatSelectionList, { static: true })
@@ -42,19 +48,22 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   strategyOperations: string[] = [];
 
   constructor(
-    private fb: FormBuilder,
     private strategyService: StrategyService,
     private adminService: AdminService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private _modalService: NgbModal,
+    private dialog: MatDialog
     ) {
       super(adminService);
      }
 
   ngOnInit() {
-    this.loadStrategySelectionComponent();
-    this.loadOperationSelectionComponent();
-    this.loadStrategyRequirements();
-
+    if (this.strategy.values) {
+      this.loadStrategySelectionComponent();
+      this.loadOperationSelectionComponent();
+      this.loadStrategyRequirements();
+    }
+    
     this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
       this.selectEnvironment(status);
     });
@@ -143,6 +152,56 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         this.editing = false;
       });
     }
+  }
+
+  delete() {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Strategy removal';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to remove this strategy?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.strategyService.deleteStrategy(this.strategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          this.strategyList.reloadStrategies(this.strategy);
+          this.toastService.showSuccess(`Strategy removed with success`);
+        }, error => {
+          this.toastService.showError(`Unable to remove this strategy`);
+          console.log(error);
+        });
+      }
+    });
+  }
+
+  cloneStrategy(): void {
+    const dialogRef = this.dialog.open(StrategyCloneComponent, {
+      width: '400px',
+      data: { currentEnvironment: this.envSelectionChange.selectedEnvName }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.strategyService.getStrategiesByConfig(this.strategy.config, result.environment).subscribe(data => {
+          if (data.length) {
+            this.toastService.showError(`Strategy already exist in ${result.environment}`);
+          } else {
+            this.strategyService.createStrategy(
+              this.strategy.config, 
+              this.strategy.description, 
+              this.strategy.strategy, 
+              this.strategy.operation, 
+              result.environment, 
+              this.strategy.values).subscribe(data => {
+                this.toastService.showSuccess(`Strategy cloned with success`);
+              }, error => {
+                this.toastService.showError(error.error);
+                console.log(error);
+              });
+          }
+        }, error => {
+          this.toastService.showError(error.error);
+          console.log(error);
+        });
+      }
+    });
   }
 
   addValue(newValue: string) {

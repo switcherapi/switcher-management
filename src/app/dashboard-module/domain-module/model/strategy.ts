@@ -7,6 +7,7 @@ export class Strategy {
     updatedAt: Date;
     activated: Map<string, boolean>;
     owner: string;
+    config: string;
     values: string[];
 }
 

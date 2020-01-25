@@ -17,6 +17,8 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-config-detail',
@@ -48,6 +50,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   strategies:  Strategy[];
   loading = false;
   hasStrategies = false;
+  hasNewStrategy = false;
   error = '';
 
   constructor(
@@ -60,12 +63,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private strategyService: StrategyService,
     private errorHandler: RouterErrorHandler,
     private toastService: ToastService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private dialog: MatDialog
   ) { 
     super(adminService);
   }
 
   ngOnInit() {
+    this.hasNewStrategy = false;
     this.route.paramMap
     .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
       if (data.element) {
@@ -77,13 +82,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
       this.selectEnvironment(status);
+      this.initStrategies();
     });
 
     this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.updateEnvironmentStatus(env);
     });
 
-    this.initStrategies();
     super.loadAdmin(this.getConfig().owner);
   }
 
@@ -179,10 +184,38 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
+  addStrategy() {
+    const dialogRef = this.dialog.open(StrategyCreateComponent, {
+      width: '700px',
+      data: {
+        currentStrategies: this.strategies
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.hasNewStrategy = true;
+          this.strategyService.createStrategy(
+            this.getConfig().id, 
+            result.description, 
+            result.strategy, 
+            result.operation, 
+            this.envSelectionChange.selectedEnvName, 
+            result.values).subscribe(data => {
+              this.initStrategies();
+              this.toastService.showSuccess(`Strategy created with success`);
+            }, error => {
+              this.toastService.showError(error.error);
+              console.log(error);
+            });
+      }
+    });
+  }
+
   private initStrategies() {
     this.loading = true;
     this.error = '';
-    this.strategyService.getStrategiesByConfig(this.pathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+    this.strategyService.getStrategiesByConfig(this.pathRoute.id, this.envSelectionChange.selectedEnvName).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.hasStrategies = data.length > 0;
         this.strategies = data;

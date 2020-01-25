@@ -7,7 +7,8 @@ import { Strategy } from '../../model/strategy';
   styleUrls: ['./strategy-list.component.css']
 })
 export class StrategyListComponent implements OnInit {
-  @Input() strategies = new EventEmitter<Strategy[]>();
+  @Input() strategies: Strategy[];
+  @Input() moveToEnd: boolean;
 
   constructor() { }
 
@@ -15,6 +16,10 @@ export class StrategyListComponent implements OnInit {
 
   scrollToBottom(): void {
     window.scrollTo(0, document.querySelector('#strategy-section').scrollHeight);
+  }
+
+  reloadStrategies(strategy: Strategy) {
+    this.strategies.splice(this.strategies.indexOf(strategy), 1);
   }
 
 }

@@ -6,10 +6,6 @@
   display: block ruby;
 }
 
-:host /deep/ .tab-content {
-  margin-top: -30px;
-}
-
 @media only screen and (max-width: 1200px) {
   .options-section {
     float: right;

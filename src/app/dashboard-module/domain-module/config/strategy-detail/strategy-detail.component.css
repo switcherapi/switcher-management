@@ -66,7 +66,8 @@
   }
 
   .strategy-control-style {
-    display: flex;
+    display: grid !important;
+    width: 80%;
   }
 
   .description-values {
@@ -96,7 +97,7 @@
   }
 
   .strategy-values-control {
-    display: grid;
+    display: flex;
   }
 
   .strategy-control-style {

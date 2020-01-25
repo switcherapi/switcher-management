@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
 import { ApiService } from './api.service';
-import { StrategyReq } from '../domain-module/model/strategy_req';
+import { StrategyReq, OperationReq } from '../domain-module/model/strategy_req';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +16,8 @@ export class StrategyService extends ApiService {
     super();
   }
 
-  public getStrategiesByConfig(id: string): Observable<Strategy[]> {
-    return this.http.get<Strategy[]>(`${environment.apiUrl}/configstrategy`, { params: { config: id } }).pipe(catchError(super.handleError));
+  public getStrategiesByConfig(id: string, enviroment: string): Observable<Strategy[]> {
+    return this.http.get<Strategy[]>(`${environment.apiUrl}/configstrategy`, { params: { config: id, env: enviroment || 'default' } }).pipe(catchError(super.handleError));
   }
 
   public getStrategiesRequirements(strategy: string): Observable<StrategyReq> {
@@ -34,6 +34,15 @@ export class StrategyService extends ApiService {
     })
 
     return operations;
+  }
+
+  public validateStrategy(operation: string, values: string[], requirements: StrategyReq): boolean {
+    const operationReq = requirements.operationRequirements.filter(op => op.operation === operation)[0];
+
+    if (values.length > operationReq.max || values.length < operationReq.min)
+      return false;
+    else
+      return true;
   }
 
   public setStrategyEnvironmentStatus(id: string, env: string, status: boolean): Observable<Strategy> {
@@ -71,6 +80,22 @@ export class StrategyService extends ApiService {
       value
     }
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/removeval/` + id), body).pipe(catchError(super.handleError));
+  }
+
+  public createStrategy(config: string, description: string, strategy: string, operation: string, env: string, values: string[]): Observable<Strategy> {
+    const body = {
+      description,
+      strategy,
+      values,
+      operation,
+      config,
+      env
+    }
+    return this.http.post<Strategy>((`${environment.apiUrl}/configstrategy/create`), body).pipe(catchError(super.handleError));
+  }
+
+  public deleteStrategy(id: string): Observable<Strategy> {
+    return this.http.delete<Strategy>(`${environment.apiUrl}/configstrategy/${id}`).pipe(catchError(super.handleError));
   }
   
 }

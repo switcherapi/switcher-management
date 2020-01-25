@@ -1,7 +1,7 @@
-<mat-tab-group (selectedTabChange)="scrollToBottom()">
+<mat-tab-group (selectedTabChange)="scrollToBottom()" [selectedIndex]="moveToEnd ? strategies.length : 0">
     <div *ngFor="let strategy of strategies">
         <mat-tab label="{{strategy.strategy}}">
-            <app-strategy-detail [strategy]="strategy"></app-strategy-detail>
+            <app-strategy-detail [strategy]="strategy" [strategyList]="this"></app-strategy-detail>
         </mat-tab>
     </div>
 </mat-tab-group>

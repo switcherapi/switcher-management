@@ -28,6 +28,8 @@ import { GroupCreateComponent } from './group/group-create/group-create.componen
 import { ConfigCreateComponent } from './config/config-create/config-create.component';
 import { ToasterModule } from 'src/app/_helpers/toaster/toaster.module';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
+import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
 
 @NgModule({
   declarations: [
@@ -48,12 +50,16 @@ import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
     EnvironmentConfigComponent,
     GroupCreateComponent,
     ConfigCreateComponent,
-    NgbdModalConfirm
+    NgbdModalConfirm,
+    StrategyCreateComponent,
+    StrategyCloneComponent
   ],
   entryComponents: [
     GroupCreateComponent,
     ConfigCreateComponent,
-    NgbdModalConfirm
+    StrategyCreateComponent,
+    NgbdModalConfirm,
+    StrategyCloneComponent
   ],
   imports: [
     FormsModule,

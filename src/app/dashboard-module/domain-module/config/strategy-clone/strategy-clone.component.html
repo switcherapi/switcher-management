@@ -1,0 +1,23 @@
+<h1 mat-dialog-title class="header-create">Clone strategy</h1>
+<div mat-dialog-content>
+    <section class="header activated">
+        <div class="header-container">
+            <div class="description">
+                <mat-form-field>
+                    <input matInput class="readonly-fields" placeholder="From environment" [value]="data.currentEnvironment" readonly>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-select #envSelectionChange placeholder="To environment" [formControl]="environmentSelection">
+                        <mat-option *ngFor="let environment of environments" [value]="environment.name">
+                            {{environment.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </section>
+</div>
+<div mat-dialog-actions style="float: right;">
+    <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
+    <button class="btn-save" mat-button (click)="onSave(data)">Clone</button>
+</div>
