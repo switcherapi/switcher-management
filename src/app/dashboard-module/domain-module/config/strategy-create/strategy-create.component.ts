@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl, ValidatorFn } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
@@ -6,6 +6,8 @@ import { StrategyService } from 'src/app/dashboard-module/services/strategy.serv
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { Strategy } from '../../model/strategy';
 import { StrategyReq } from '../../model/strategy_req';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-strategy-create',
@@ -16,14 +18,11 @@ import { StrategyReq } from '../../model/strategy_req';
     './strategy-create.component.css'
   ]
 })
-export class StrategyCreateComponent implements OnInit {
+export class StrategyCreateComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
+
   operations: string[] = [];
-  strategies = [
-    'NETWORK_VALIDATION',
-    'VALUE_VALIDATION',
-    'TIME_VALIDATION',
-    'DATE_VALIDATION'
-  ];
+  strategies: string[] = [];
 
   strategySelected: string;
   strategyReq: StrategyReq;
@@ -54,10 +53,11 @@ export class StrategyCreateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private strategyService: StrategyService,
-    private toastService: ToastService) { }
+    private toastService: ToastService
+  ) { }
 
   ngOnInit(): void {
-    this.loadAvailableStrategies();
+    this.loadStrategies();
 
     this.elementCreationFormGroup = this.formBuilder.group({
       strategyFormControl: this.strategyFormControl,
@@ -65,20 +65,23 @@ export class StrategyCreateComponent implements OnInit {
       descFormControl: this.descFormControl
     });
 
-    this.strategyFormControl.valueChanges.subscribe(value => {
+    this.strategyFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.loadOperations(value);
       this.data.strategy = value;
     })
 
-    this.operationFormControl.valueChanges.subscribe(value => {
+    this.operationFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.operation = value;
     })
 
-    this.descFormControl.valueChanges.subscribe(value => {
+    this.descFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.description = value;
     })
+  }
 
-    this.loadOperations(this.strategies[0]);
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   loadAvailableStrategies(): void {
@@ -86,10 +89,11 @@ export class StrategyCreateComponent implements OnInit {
     currentStrategies.forEach(strategy => {
       this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1);
     })
+    this.loadOperations(this.strategies[0]);
   }
 
   loadOperations(strategySelected: string): void {
-    this.strategyService.getStrategiesRequirements(strategySelected).subscribe(req => {
+    this.strategyService.getStrategiesRequirements(strategySelected).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
       this.strategyReq = req;
       this.data.values = [];
       this.operations = req.operationsAvailable.operations
@@ -98,6 +102,13 @@ export class StrategyCreateComponent implements OnInit {
         Validators.required,
         valueInputValidator(req.operationsAvailable.validator)
       ]);
+    });
+  }
+
+  loadStrategies(): void {
+    this.strategyService.getStrategiesAvailable().pipe(takeUntil(this.unsubscribe)).subscribe(req => {
+      this.strategies = req.strategiesAvailable;
+      this.loadAvailableStrategies();
     });
   }
 

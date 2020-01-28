@@ -1,6 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-domain-create',
@@ -11,7 +13,8 @@ import { FormControl, Validators } from '@angular/forms';
     './domain-create.component.css'
   ]
 })
-export class DomainCreateComponent implements OnInit {
+export class DomainCreateComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
 
   nameFormControl = new FormControl('', [
     Validators.required,
@@ -23,9 +26,14 @@ export class DomainCreateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
-    this.nameFormControl.valueChanges.subscribe(value => {
+    this.nameFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.name = value;
     })
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   onCancel(): void {

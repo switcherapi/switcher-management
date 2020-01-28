@@ -1,6 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-config-create',
@@ -11,7 +13,8 @@ import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms'
     './config-create.component.css'
   ]
 })
-export class ConfigCreateComponent implements OnInit {
+export class ConfigCreateComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
 
   elementCreationFormGroup: FormGroup;
 
@@ -36,13 +39,18 @@ export class ConfigCreateComponent implements OnInit {
       descFormControl: this.descFormControl
     });
 
-    this.keyFormControl.valueChanges.subscribe(value => {
+    this.keyFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.key = value;
     })
 
-    this.descFormControl.valueChanges.subscribe(value => {
+    this.descFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.description = value;
     })
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   onCancel(): void {

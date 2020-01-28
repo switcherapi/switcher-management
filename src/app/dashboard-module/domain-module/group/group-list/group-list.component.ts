@@ -81,7 +81,8 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.groupService.createGroup(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, result.name, result.description).subscribe(data => {
+        this.groupService.createGroup(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, result.name, result.description)
+          .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.ngOnInit();
           }

@@ -1,0 +1,67 @@
+.grid-container {
+  display: grid;
+  grid-template-areas: 'header none toggle';
+  grid-gap: 2px;
+  background-color: rgba(0, 0, 0, .03);
+  padding: 2px;
+  margin-bottom: 10px;
+  background: #549bfb94
+}
+
+.label-env-name {
+  font-size: x-large;
+  color: white;
+  margin-top: 4px;
+  margin-left: 14px;
+  width: 600px;
+}
+
+.toggle-section {
+  columns: 2;
+  display: ruby;
+  padding: 5px;
+}
+
+.btn-element.remove {
+  margin-right: 10px; 
+  background:#fb5454; 
+}
+
+.btn-element.reset {
+  margin-right: 10px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .label-env-name {
+    width: 500px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .label-env-name {
+    width: 300px;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .label-env-name {
+    width: 200px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .label-env-name {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .toggle-section {
+    display: inline-grid;
+  }
+
+  .btn-element {
+    margin-bottom: 5px;
+    width: 100%;
+  }
+}

@@ -65,6 +65,7 @@
 .svg-style {
   margin-right: 6px;
   margin-bottom: 6px;
+  font-size: large;
 }
 
 :host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {

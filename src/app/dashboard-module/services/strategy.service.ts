@@ -20,6 +20,10 @@ export class StrategyService extends ApiService {
     return this.http.get<Strategy[]>(`${environment.apiUrl}/configstrategy`, { params: { config: id, env: enviroment || 'default' } }).pipe(catchError(super.handleError));
   }
 
+  public getStrategiesAvailable(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/configstrategy/spec/strategies/`).pipe(catchError(super.handleError));
+  }
+
   public getStrategiesRequirements(strategy: string): Observable<StrategyReq> {
     return this.http.get<StrategyReq>(`${environment.apiUrl}/configstrategy/req/${strategy}`).pipe(catchError(super.handleError));
   }

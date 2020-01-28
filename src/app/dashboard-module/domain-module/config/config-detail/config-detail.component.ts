@@ -192,7 +192,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(result => {
       if (result) {
         this.hasNewStrategy = true;
           this.strategyService.createStrategy(

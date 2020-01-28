@@ -81,7 +81,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   loadStrategySelectionComponent(): void {
-    this.strategyValueSelection.selectionChange.subscribe((s: MatSelectionListChange) => {
+    this.strategyValueSelection.selectionChange.pipe(takeUntil(this.unsubscribe)).subscribe((s: MatSelectionListChange) => {
       this.strategyValueSelection.deselectAll();
       s.option.selected = true;
       this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
@@ -94,7 +94,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   loadStrategyRequirements(): void {
-    this.strategyService.getStrategiesRequirements(this.strategy.strategy).subscribe(req => {
+    this.strategyService.getStrategiesRequirements(this.strategy.strategy).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
       this.strategyReq = req;
       this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
       this.operationCategoryFormControl.setValue(this.strategy.operation);
@@ -179,7 +179,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.strategyService.getStrategiesByConfig(this.strategy.config, result.environment).subscribe(data => {
+        this.strategyService.getStrategiesByConfig(this.strategy.config, result.environment).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data.length) {
             this.toastService.showError(`Strategy already exist in ${result.environment}`);
           } else {
@@ -215,7 +215,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
-        this.toastService.showError(error.error);
+        this.toastService.showError(error ? error.error : 'Unable to add this value');
       });
     } else {
       this.toastService.showError(`Unable to execute this operation`);
@@ -232,7 +232,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
-        this.toastService.showError(error.error);
+        this.toastService.showError(error ? error.error : 'Unable to edit this value');
       });
     } else {
       this.toastService.showError(`Unable to execute this operation`);
@@ -248,7 +248,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
-        this.toastService.showError(error.error);
+        this.toastService.showError(error ? error.error : 'Unable to remove this value');
       });
     } else {
       this.toastService.showError(`One value is required, update or add new values`);

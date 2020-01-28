@@ -19,4 +19,20 @@ export class EnvironmentService extends ApiService {
     return this.http.get<Environment[]>(`${environment.apiUrl}/environment`, { params: { domain: id } }).pipe(catchError(super.handleError));
   }
 
+  public createEnvironment(domain: string, name: string): Observable<Environment> {
+    const body = {
+      name,
+      domain
+    }
+    return this.http.post<Environment>(`${environment.apiUrl}/environment/create`, body).pipe(catchError(super.handleError));
+  }
+
+  public deleteEnvironment(id: string): Observable<Environment> {
+    return this.http.delete<Environment>(`${environment.apiUrl}/environment/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public resetEnvironment(id: string): Observable<any> {
+    return this.http.patch<any>(`${environment.apiUrl}/environment/recover/${id}`, null).pipe(catchError(super.handleError));
+  }
+
 }

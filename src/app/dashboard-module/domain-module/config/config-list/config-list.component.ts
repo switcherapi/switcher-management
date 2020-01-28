@@ -82,7 +82,9 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.configService.createConfig(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id, result.key, result.description).subscribe(data => {
+        this.configService.createConfig(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id, result.key, result.description)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => {
           if (data) {
             this.ngOnInit();
           }
