@@ -6,7 +6,7 @@ import { DomainRoutingModule } from './domain-routing.module';
 import { DomainDetailComponent } from './domain-detail/domain-detail.component';
 import { MetricsComponent } from './metrics/metrics.component';
 import { ChangelogComponent } from './changelog/changelog.component';
-import { ComponentsComponent } from './components/components.component';
+import { ComponentsComponent, ComponentEditDialog } from './components/components.component';
 import { EnvironmentsComponent } from './environments/environments.component';
 import { GroupListComponent } from './group/group-list/group-list.component';
 import { GroupPreviewComponent } from './group/group-preview/group-preview.component';
@@ -52,14 +52,16 @@ import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.c
     ConfigCreateComponent,
     NgbdModalConfirm,
     StrategyCreateComponent,
-    StrategyCloneComponent
+    StrategyCloneComponent,
+    ComponentEditDialog
   ],
   entryComponents: [
     GroupCreateComponent,
     ConfigCreateComponent,
     StrategyCreateComponent,
     NgbdModalConfirm,
-    StrategyCloneComponent
+    StrategyCloneComponent,
+    ComponentEditDialog
   ],
   imports: [
     FormsModule,

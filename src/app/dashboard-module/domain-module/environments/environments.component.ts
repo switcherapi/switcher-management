@@ -9,7 +9,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
-import { DomainCreateComponent } from '../../domain-create/domain-create.component';
 
 @Component({
   selector: 'app-environments',
