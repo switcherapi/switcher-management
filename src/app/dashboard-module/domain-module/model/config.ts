@@ -1,3 +1,5 @@
+import { SwitcherComponent } from './switcher-component';
+
 export class Config {
   id: string;
   key: string;
@@ -6,4 +8,5 @@ export class Config {
   createdAt: Date;
   updatedAt: Date;
   activated: Map<string, boolean>;
+  components: any[];
 }

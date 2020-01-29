@@ -2,6 +2,12 @@
   margin-top: 20px;
 }
 
+.switcher-component-section {
+  display: grid; 
+  padding: 15px;
+  width: 100%;
+}
+
 :host /deep/ .flex-column {
   display: block ruby;
 }

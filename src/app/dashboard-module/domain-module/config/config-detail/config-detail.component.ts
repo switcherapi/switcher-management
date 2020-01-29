@@ -3,9 +3,9 @@ import { DomainRouteService } from '../../../services/domain-route.service';
 import { PathRoute, Types } from '../../model/path-route';
 import { Config } from '../../model/config';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Strategy } from '../../model/strategy';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { environment } from 'src/environments/environment';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
@@ -18,7 +18,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { ComponentService } from 'src/app/dashboard-module/services/component.service';
+import { SwitcherComponent } from '../../model/switcher-component';
 
 @Component({
   selector: 'app-config-detail',
@@ -39,6 +42,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   @ViewChild('keyElement', { static: true }) 
   keyElement: ElementRef;
+  
+  @ViewChild('componentInput', { static: false }) 
+  componentInput: ElementRef<HTMLInputElement>;
+  
+  @ViewChild('auto', { static: false }) 
+  matAutocomplete: MatAutocomplete;
 
   keyFormControl = new FormControl('', [
     Validators.required,
@@ -47,11 +56,20 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   classStatus: string;
   
+  config: Config;
   strategies:  Strategy[];
   loading = false;
   hasStrategies = false;
   hasNewStrategy = false;
   error = '';
+
+  // Component attributes
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  componentForm = new FormControl();
+  filteredComponents: Observable<string[]>;
+  components: string[] = [];
+  availableComponents: SwitcherComponent[];
+  listComponents: string[] = [];
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -61,6 +79,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private configService: ConfigService,
     private adminService: AdminService,
     private strategyService: StrategyService,
+    private componentService: ComponentService,
     private errorHandler: RouterErrorHandler,
     private toastService: ToastService,
     private _modalService: NgbModal,
@@ -72,13 +91,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ngOnInit() {
     this.hasNewStrategy = false;
     this.route.paramMap
-    .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
-      if (data.element) {
-        this.updatePathRoute(JSON.parse(data.element));
-      } else {
-        this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_CONFIG).element);
-      }
-    })
+      .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
+        if (data.element) {
+          this.loadConfig(JSON.parse(data.element));
+        } else {
+          this.loadConfig(this.domainRouteService.getPathElement(Types.SELECTED_CONFIG).element);
+        }
+      });
 
     this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
       this.selectEnvironment(status);
@@ -88,8 +107,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.updateEnvironmentStatus(env);
     });
-
-    super.loadAdmin(this.getConfig().owner);
   }
 
   ngOnDestroy() {
@@ -97,7 +114,42 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.unsubscribe.complete();
   }
 
-  updatePathRoute(config: Config) {
+  getConfig(): Config {
+    return this.pathRoute.element;
+  }
+
+  loadComponents(): void {
+    this.components = this.config.components.map(component => component.name);
+    
+    this.componentService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(values => {
+        this.availableComponents = values;
+
+        values = values.filter(value => !this.components.includes(value.name));
+        this.listComponents = values.map(value => value.name);
+        this.filteredComponents = this.componentForm.valueChanges.pipe(
+          startWith(null),
+          map((component: string | null) => component ? this._filter(component) : this.listComponents.slice()));
+      });
+  }
+
+  loadConfig(config: Config) {
+    this.updatePathRoute(config);
+    this.configService.getConfigById(config.id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.config = data;
+        this.loadComponents();
+        super.loadAdmin(this.config.owner);
+        this.keyFormControl.setValue(config.key);
+      }
+    }, error => {
+      console.log(error);
+      this.toastService.showError(`Unable to load this Switcher`);
+    });
+  }
+
+  updatePathRoute(config: Config): void {
     this.pathRoute = {
       id: config.id,
       element: config,
@@ -111,12 +163,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   updateEnvironmentStatus(env : any): void {
     this.selectEnvironment(env.status);
-    this.configService.setConfigEnvironmentStatus(this.getConfig().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+    this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
-        this.updatePathRoute(data);
+        this.loadConfig(data);
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
+      console.log(error);
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
     });
   }
@@ -129,10 +182,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
     }
-  }
-
-  getConfig() {
-    return this.pathRoute.element;
   }
 
   edit() {
@@ -150,9 +199,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           description: this.descElement.nativeElement.value
         };
 
-        this.configService.updateConfig(this.getConfig().id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        this.configService.updateConfig(this.config.id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
-            this.updatePathRoute(data);
+            this.updateConfig(data);
             this.toastService.showSuccess(`Switcher updated with success`);
             this.editing = false
           }
@@ -172,7 +221,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this switcher?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.configService.deleteConfig(this.getConfig().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.domainRouteService.removePath(Types.CONFIG_TYPE);
           this.router.navigate(['/dashboard/domain/group/switchers']);
           this.toastService.showSuccess(`Switcher removed with success`);
@@ -196,7 +245,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       if (result) {
         this.hasNewStrategy = true;
           this.strategyService.createStrategy(
-            this.getConfig().id, 
+            this.config.id, 
             result.description, 
             result.strategy, 
             result.operation, 
@@ -205,11 +254,33 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
               this.initStrategies();
               this.toastService.showSuccess(`Strategy created with success`);
             }, error => {
-              this.toastService.showError(error.error);
+              this.toastService.showError(error ? error.error : 'Unable to add strategy');
               console.log(error);
             });
       }
     });
+  }
+
+  private updateConfig(config: Config): void {
+    const currentConfigComponents = this.config.components.map(component => component.name);
+
+    if (this.components.length != currentConfigComponents.length || this.components.every(function (u, i) {
+      return u != currentConfigComponents[i];
+    })
+    ) {
+      const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
+      this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.config = data;
+          this.loadConfig(data);
+        }
+      }, error => {
+        this.toastService.showError(error ? error.error : 'Something went wront when updating components');
+        console.log(error)
+      });
+    } else {
+      this.loadConfig(config);
+    }
   }
 
   private initStrategies() {
@@ -234,4 +305,47 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }, environment.timeout);
   }
 
+  addComponent(event: MatChipInputEvent): void {
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
+
+      if (!this.listComponents.includes(value)) {
+        return;
+      }
+
+      if ((value || '').trim()) {
+        this.components.push(value.trim());
+      }
+
+      if (input) {
+        input.value = '';
+      }
+
+      this.componentForm.setValue(null);
+    }
+  }
+
+  removeComponent(component: string): void {
+    const index = this.components.indexOf(component);
+
+    if (index >= 0) {
+      this.components.splice(index, 1);
+      this.listComponents.push(component);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.components.push(event.option.viewValue);
+    this.listComponents.splice(this.listComponents.indexOf(event.option.viewValue), 1);
+    this.componentInput.nativeElement.value = '';
+    this.componentForm.setValue(null);
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  }
+  
 }

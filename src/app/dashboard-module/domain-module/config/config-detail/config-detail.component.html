@@ -3,7 +3,7 @@
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
-                    <input #keyElement matInput placeholder="Name" [value]="getConfig().key" maxlength="30"
+                    <input #keyElement matInput placeholder="Name" [value]="config?.key" maxlength="30"
                         [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="keyFormControl">
                     <mat-error *ngIf="keyFormControl.hasError('minlength')">
                         Key must contains at least 5 characters
@@ -13,7 +13,7 @@
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <textarea #descElement matInput placeholder="Description" [value]="getConfig()?.description" maxlength="256"
+                    <textarea #descElement matInput placeholder="Description" [value]="config?.description" maxlength="256"
                         [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                     </textarea>
                     <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
@@ -21,19 +21,48 @@
             </div>
             <div class="description" style="width: 300px;">
                 <mat-form-field>
-                    <input matInput placeholder="Created At" [value]="getConfig().createdAt" readonly>
+                    <input matInput placeholder="Created At" [value]="config?.createdAt" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Last Update" [value]="getConfig().updatedAt" readonly>
+                    <input matInput placeholder="Last Update" [value]="config?.updatedAt" readonly>
                 </mat-form-field>
                 <mat-form-field>
                     <input matInput placeholder="Created By" [value]="createdBy" readonly>
                 </mat-form-field>
             </div>
             <div class="description">
-                <app-environment-config #envSelectionChange [currentEnvironment]="getConfig()?.activated"></app-environment-config>
+                <app-environment-config #envSelectionChange [currentEnvironment]="getConfig().activated"></app-environment-config>
             </div>
         </div>
+    </section>
+    <section class="strategy-control-style">
+        <mat-form-field class="switcher-component-section">
+            <mat-chip-list #chipList aria-label="Component selection">
+              <mat-chip
+                *ngFor="let component of components"
+                [selectable]="true"
+                [removable]="editing"
+                (removed)="removeComponent(component)">
+                {{component}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input
+                placeholder="Switcher Components"
+                #componentInput
+                [formControl]="componentForm"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="addComponent($event)"
+                [readonly]="!editing">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let component of filteredComponents | async" [value]="component">
+                {{component}}
+              </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
     </section>
     <section class="strategy-control-style">
         <div class="options-section">

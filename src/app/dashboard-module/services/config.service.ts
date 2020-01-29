@@ -20,6 +20,11 @@ export class ConfigService extends ApiService {
     return this.http.get<Config[]>(`${environment.apiUrl}/config`, { params: { group: id } }).pipe(catchError(super.handleError));
   }
 
+  public getConfigById(id: string, resolveComponents: boolean): Observable<Config> {
+    const resolve = resolveComponents ? 'true' : 'false';
+    return this.http.get<Config>(`${environment.apiUrl}/config/${id}`, { params: { resolveComponents: resolve } }).pipe(catchError(super.handleError));
+  }
+
   public getStrategiesByConfig(id: string): Observable<Strategy[]> {
     return this.http.get<Strategy[]>(`${environment.apiUrl}/configstrategy`, { params: { config: id } }).pipe(catchError(super.handleError));
   }
@@ -37,6 +42,13 @@ export class ConfigService extends ApiService {
       description
     }
     return this.http.patch<Config>(`${environment.apiUrl}/config/${id}`, body).pipe(catchError(super.handleError));
+  }
+
+  public updateConfigComponents(id: string, componentsId: string[]): Observable<Config> {
+    const body = {
+      components: componentsId
+    }
+    return this.http.patch<Config>(`${environment.apiUrl}/config/updateComponents/${id}`, body).pipe(catchError(super.handleError));
   }
 
   public createConfig(group: string, key: string, description: string): Observable<Config> {

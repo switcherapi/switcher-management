@@ -87,6 +87,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       type: Types.GROUP_TYPE
     };
 
+    this.nameFormControl.setValue(group.name);
     this.domainRouteService.updatePath(this.pathRoute, true);
   }
 
