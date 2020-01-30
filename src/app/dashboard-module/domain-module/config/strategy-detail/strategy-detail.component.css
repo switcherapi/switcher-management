@@ -25,6 +25,22 @@
   align-self: start;
 }
 
+.strategy-menu {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.svg-style {
+  vertical-align: middle;
+}
+
+.options-section-label {
+  vertical-align: baseline !important;
+}
+
+.btn-element {
+  display: block ruby;
+}
+
 @media only screen and (max-width: 430px) {
   .header {
     columns: 1;
@@ -36,9 +52,12 @@
     width: 95% !important;
   }
 
+  .options-section-label {
+    vertical-align: baseline;
+  }
+
   .options-section {
-    float: right;
-    display: contents;
+    display: flex;
   }
 
   .operations-style {
@@ -79,16 +98,17 @@
   }
 }
 
+@media only screen and (max-width: 770px) {
+  .options-section-label {
+    display: none;
+  }
+}
+
 @media only screen and (max-width: 1200px) {
   .description {
     display: grid;
     align-self: start;
     width: 95% !important;
-  }
-
-  .options-section {
-    float: right;
-    display: contents;
   }
 
   .operations-style {

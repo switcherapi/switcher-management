@@ -1,0 +1,60 @@
+table {
+  width: 100%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: #5298ff45;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail-panel {
+  overflow: hidden;
+  display: flex;
+}
+
+.element-detail {
+  padding: 10px;
+  width: 100%;
+}
+
+.element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.element-description {
+  padding: 16px;
+}
+
+.mat-header-row {
+  background: #549bfb94;
+}
+
+.mat-header-cell {
+  color: white;
+  font-size: unset;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+h1 {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: x-large;
+}
+
+@media only screen and (max-width: 520px) {
+  .element-detail-panel {
+    display: block;
+  }
+}

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Group } from '../domain-module/model/group';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { History } from '../domain-module/model/history';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,14 @@ export class GroupService extends ApiService {
 
   public deleteGroup(id: string): Observable<Group> {
     return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public getHistory(id: string): Observable<History[]> {
+    return this.http.get<History[]>(`${environment.apiUrl}/groupconfig/history/${id}`, 
+      { 
+        params: {
+          sortBy: 'date:desc'
+      }
+    }).pipe(catchError(super.handleError));
   }
 }

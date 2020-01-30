@@ -8,6 +8,14 @@
   width: 100%;
 }
 
+.options-section-label {
+  vertical-align: baseline !important;
+}
+
+.btn-element {
+  display: block ruby;
+}
+
 :host /deep/ .flex-column {
   display: block ruby;
 }
@@ -28,7 +36,7 @@
 }
 
 @media only screen and (max-width: 430px) {
-  .strategy-control-style {
-    display: grid;
+  .options-section-label {
+    display: none;
   }
 }

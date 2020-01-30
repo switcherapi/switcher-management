@@ -9,6 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
 import { Team } from '../domain-module/model/team';
 import { ApiService } from './api.service';
+import { History } from '../domain-module/model/history';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,15 @@ export class DomainService extends ApiService {
 
   public deleteDomain(id: string): Observable<Domain> {
     return this.http.delete<Domain>(`${environment.apiUrl}/domain/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public getHistory(id: string): Observable<History[]> {
+    return this.http.get<History[]>(`${environment.apiUrl}/domain/history/${id}`, 
+      { 
+        params: {
+          sortBy: 'date:desc'
+      }
+    }).pipe(catchError(super.handleError));
   }
 
 }

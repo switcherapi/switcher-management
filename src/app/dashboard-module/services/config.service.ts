@@ -6,6 +6,7 @@ import { Config } from '../domain-module/model/config';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
 import { ApiService } from './api.service';
+import { History } from '../domain-module/model/history';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,15 @@ export class ConfigService extends ApiService {
 
   public deleteConfig(id: string): Observable<Config> {
     return this.http.delete<Config>(`${environment.apiUrl}/config/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public getHistory(id: string): Observable<History[]> {
+    return this.http.get<History[]>(`${environment.apiUrl}/config/history/${id}`, 
+      { 
+        params: {
+          sortBy: 'date:desc'
+      }
+    }).pipe(catchError(super.handleError));
   }
   
 }

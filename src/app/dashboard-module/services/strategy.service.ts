@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
 import { ApiService } from './api.service';
 import { StrategyReq, OperationReq } from '../domain-module/model/strategy_req';
+import { History } from '../domain-module/model/history';
 
 @Injectable({
   providedIn: 'root'
@@ -100,6 +101,15 @@ export class StrategyService extends ApiService {
 
   public deleteStrategy(id: string): Observable<Strategy> {
     return this.http.delete<Strategy>(`${environment.apiUrl}/configstrategy/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public getHistory(id: string): Observable<History[]> {
+    return this.http.get<History[]>(`${environment.apiUrl}/configstrategy/history/${id}`, 
+      { 
+        params: {
+          sortBy: 'date:desc'
+      }
+    }).pipe(catchError(super.handleError));
   }
   
 }

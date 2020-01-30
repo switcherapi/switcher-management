@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { Strategy } from '../../model/strategy';
-import { MatSelectionList, MatSelectionListChange, MatDialog } from '@angular/material';
+import { MatSelectionList, MatSelectionListChange, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
@@ -19,13 +19,13 @@ import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.compone
   selector: 'app-strategy-detail',
   templateUrl: './strategy-detail.component.html',
   styleUrls: [
-    '../../common/css/detail.component.css', 
+    '../../common/css/detail.component.css',
     './strategy-detail.component.css'
   ]
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
-  
+
   @Input() strategy: Strategy;
   @Input() strategyList: StrategyListComponent;
 
@@ -37,7 +37,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
 
-  @ViewChild('descElement', { static: true }) 
+  @ViewChild('descElement', { static: true })
   descElement: ElementRef;
 
   classStatus: string;
@@ -53,9 +53,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     private toastService: ToastService,
     private _modalService: NgbModal,
     private dialog: MatDialog
-    ) {
-      super(adminService);
-     }
+  ) {
+    super(adminService);
+  }
 
   ngOnInit() {
     if (this.strategy.values) {
@@ -63,7 +63,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.loadOperationSelectionComponent();
       this.loadStrategyRequirements();
     }
-    
+
     this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
       this.selectEnvironment(status);
     });
@@ -106,7 +106,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     });
   }
 
-  updateEnvironmentStatus(env : any): void {
+  updateEnvironmentStatus(env: any): void {
     this.selectEnvironment(env.status);
     this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
@@ -134,7 +134,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.editing = true;
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-      
+
       const body = {
         operation: this.operationCategoryFormControl.value,
         description: this.descElement.nativeElement.value
@@ -184,11 +184,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             this.toastService.showError(`Strategy already exist in ${result.environment}`);
           } else {
             this.strategyService.createStrategy(
-              this.strategy.config, 
-              this.strategy.description, 
-              this.strategy.strategy, 
-              this.strategy.operation, 
-              result.environment, 
+              this.strategy.config,
+              this.strategy.description,
+              this.strategy.strategy,
+              this.strategy.operation,
+              result.environment,
               this.strategy.values).subscribe(data => {
                 this.toastService.showSuccess(`Strategy cloned with success`);
               }, error => {
@@ -254,6 +254,15 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.toastService.showError(`One value is required, update or add new values`);
     }
   }
+
+  showChangeLog() {
+    this.dialog.open(ChangeLogDialog, {
+      width: '1200px',
+      data: {
+        strategy: this.strategy
+      }
+    });
+  }
 }
 
 function valueInputValidator(format: string): ValidatorFn {
@@ -263,4 +272,37 @@ function valueInputValidator(format: string): ValidatorFn {
     }
     return null;
   };
+}
+
+@Component({
+  selector: 'strategy-changelog-dialog',
+  templateUrl: 'strategy-changelog-dialog.html',
+  styles: [`
+    .btn-cancel {
+      float: right;
+      margin-right: 10px;
+    }
+    
+    .mat-dialog-content {
+      padding-bottom: 20px;
+    }
+
+    .header-log {
+      background: linear-gradient(to right, #549bfb 0, #549bfb, #5298ff 10px, #fff 100%) no-repeat;
+      color: white;
+      padding: 10px;
+      border-radius: 20px;
+    }
+  `]
+})
+export class ChangeLogDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<ChangeLogDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: Strategy) { }
+
+  onClose() {
+    this.dialogRef.close();
+  }
+
 }

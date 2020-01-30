@@ -1,1 +1,46 @@
-<p>changelog works!</p>
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of dataColumns">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{getColumnLabel(column)}}</strong></th>
+            <td mat-cell *matCellDef="let element">{{formatResumedData(element[column])}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="dataColumns.length">
+                <div class="element-detail-panel"
+                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    <div class="element-detail">
+                        <h1>Before</h1>
+                        <mat-list role="list" *ngFor="let key of getElementKeys(element.oldValue)">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="{{key}}" [value]="getElementValue(key, element.oldValue)"
+                                    readonly>
+                            </mat-form-field>
+                        </mat-list>
+                    </div>
+                    <div class="element-detail">
+                        <h1>After</h1>
+                        <mat-list role="list" *ngFor="let key of getElementKeys(element.newValue)">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="{{key}}" [value]="getElementValue(key, element.newValue)"
+                                    readonly>
+                            </mat-form-field>
+                        </mat-list>
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="dataColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: dataColumns;" class="element-row"
+            [class.expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+</div>

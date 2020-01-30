@@ -18,10 +18,10 @@ import { PathRoute } from './model/path-route';
 import { ConfigListComponent } from './config/config-list/config-list.component';
 import { ConfigPreviewComponent } from './config/config-preview/config-preview.component';
 import { ConfigDetailComponent } from './config/config-detail/config-detail.component';
-import { StrategyDetailComponent } from './config/strategy-detail/strategy-detail.component';
+import { StrategyDetailComponent, ChangeLogDialog } from './config/strategy-detail/strategy-detail.component';
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule, MatDialogModule, MatAutocompleteModule, MatChipsModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule, MatDialogModule, MatAutocompleteModule, MatChipsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, MatExpansionModule } from '@angular/material';
 import { EnvironmentConfigComponent } from './environment-config/environment-config.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GroupCreateComponent } from './group/group-create/group-create.component';
@@ -53,7 +53,8 @@ import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.c
     NgbdModalConfirm,
     StrategyCreateComponent,
     StrategyCloneComponent,
-    ComponentEditDialog
+    ComponentEditDialog,
+    ChangeLogDialog
   ],
   entryComponents: [
     GroupCreateComponent,
@@ -61,7 +62,8 @@ import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.c
     StrategyCreateComponent,
     NgbdModalConfirm,
     StrategyCloneComponent,
-    ComponentEditDialog
+    ComponentEditDialog,
+    ChangeLogDialog
   ],
   imports: [
     FormsModule,
@@ -84,6 +86,10 @@ import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.c
     MatAutocompleteModule,
     MatChipsModule,
     MatIconModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatExpansionModule,
     ToasterModule
   ],
   providers: [ 
