@@ -47,7 +47,7 @@
 
 .btn-element {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  display: block;
+  display: block ruby;
   font-size: 16px;
   margin-top: 7px;
   margin-left: 10px;
@@ -57,7 +57,7 @@
 
 .btn-element.save {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  display: block;
+  display: block ruby;
   font-size: 16px;
   margin-top: 7px;
   margin-left: 10px;

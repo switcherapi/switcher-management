@@ -51,7 +51,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   keyFormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(5)
+    Validators.minLength(3)
   ]);
 
   classStatus: string;

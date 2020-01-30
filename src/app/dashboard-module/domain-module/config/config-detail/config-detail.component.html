@@ -6,7 +6,7 @@
                     <input #keyElement matInput placeholder="Name" [value]="config?.key" maxlength="30"
                         [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="keyFormControl">
                     <mat-error *ngIf="keyFormControl.hasError('minlength')">
-                        Key must contains at least 5 characters
+                        Key must contains at least 3 characters
                     </mat-error>
                     <mat-error *ngIf="keyFormControl.hasError('required')">
                         Key is <strong>required</strong>
