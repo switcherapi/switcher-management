@@ -1,7 +1,15 @@
-<h1 mat-dialog-title class="header-create">Edit Component</h1>
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>Edit Component</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
 <div mat-dialog-content>
     <mat-form-field>
-        <input matInput #inputName [(ngModel)]="data.name" minlength="2" maxlength="20">
+        <input matInput #inputName [(ngModel)]="data.name" minlength="2" maxlength="20" cdkFocusInitial>
     </mat-form-field>
 </div>
 <div>

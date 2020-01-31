@@ -1,4 +1,12 @@
-<h1 mat-dialog-title class="header-create">New strategy</h1>
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>New strategy</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
 <div mat-dialog-content>
     <section class="header activated">
         <div class="header-container">
@@ -62,5 +70,5 @@
 </div>
 <div mat-dialog-actions style="float: right;">
     <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
-    <button class="btn-save" mat-button (click)="onSave(data)">Save</button>
+    <button class="btn-save" mat-button (click)="onSave(data)" cdkFocusInitial>Save</button>
 </div>

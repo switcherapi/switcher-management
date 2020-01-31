@@ -1,7 +1,15 @@
-<h1 mat-dialog-title class="header-log">Strategy Change Log</h1>
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>Strategy Change Log</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
 <div mat-dialog-content>
     <app-changelog [strategy]="data.strategy"></app-changelog>
 </div>
 <div>
-    <button class="btn-cancel" mat-button (click)="onClose()">Close</button>
+    <button class="btn-cancel" mat-button (click)="onClose()" cdkFocusInitial>Close</button>
 </div>

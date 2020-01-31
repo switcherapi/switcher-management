@@ -1,11 +1,19 @@
-<h1 mat-dialog-title class="header-create">New group</h1>
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>New group</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
 <div mat-dialog-content>
     <section class="header activated">
         <div class="header-container">
             <div class="description">
                 <form [formGroup]="elementCreationFormGroup">
                     <mat-form-field>
-                        <input #nameElement matInput placeholder="Name" maxlength="30" style="color: black" [formControl]="nameFormControl">
+                        <input #nameElement matInput cdkFocusInitial placeholder="Name" maxlength="30" style="color: black" [formControl]="nameFormControl">
                         <mat-error *ngIf="nameFormControl.hasError('minlength')">
                             Name must contains at least 5 characters
                         </mat-error>

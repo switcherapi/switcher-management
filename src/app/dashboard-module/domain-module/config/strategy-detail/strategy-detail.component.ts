@@ -277,10 +277,14 @@ function valueInputValidator(format: string): ValidatorFn {
 @Component({
   selector: 'strategy-changelog-dialog',
   templateUrl: 'strategy-changelog-dialog.html',
+  styleUrls: [
+    '../../common/css/create.component.css'
+  ],
   styles: [`
     .btn-cancel {
       float: right;
       margin-right: 10px;
+      background: #8e8e8e;
     }
     
     .mat-dialog-content {

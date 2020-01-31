@@ -1,11 +1,19 @@
-<h1 mat-dialog-title class="header-create">New switcher</h1>
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>New switcher</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
 <div mat-dialog-content>
     <section class="header activated">
         <div class="header-container">
             <div class="description">
                 <form [formGroup]="elementCreationFormGroup">
                     <mat-form-field>
-                        <input #nameElement matInput placeholder="Key" maxlength="30" style="color: black" [formControl]="keyFormControl">
+                        <input #nameElement matInput cdkFocusInitial placeholder="Key" maxlength="30" style="color: black" [formControl]="keyFormControl">
                         <mat-error *ngIf="keyFormControl.hasError('minlength')">
                             Key must contains at least 3 characters
                         </mat-error>
