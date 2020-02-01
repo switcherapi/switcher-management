@@ -6,11 +6,14 @@ import { Environment } from '../model/environment';
 import { MatSelectionListChange, MatSelect, MatSlideToggleChange } from '@angular/material';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { Types } from '../model/path-route';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-environment-config',
   templateUrl: './environment-config.component.html',
-  styleUrls: ['./environment-config.component.css']
+  styleUrls: [
+    '../common/css/detail.component.css',
+    './environment-config.component.css']
 })
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
@@ -19,6 +22,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   @Input() notSelectableEnvironments: boolean;
   @Output() outputEnvChanged: EventEmitter<boolean> = new EventEmitter();
   @Output() outputStatusChanged: EventEmitter<any> = new EventEmitter();
+  @Output() outputEnvRemoved: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(MatSelect, { static: true })
   private envSelectionChange: MatSelect;
@@ -37,13 +41,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadOperationSelectionComponent();
-
-    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).subscribe(env => {
-      this.environments = env;
-      this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
-      this.selectedEnvStatus = this.currentEnvironment[this.environmentSelection.get('environmentSelection').value];
-      this.outputEnvChanged.emit(this.selectedEnvStatus);
-    });
+    this.loadEnvironments();
 
     if (this.envSelectionChange) {
       this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
@@ -62,6 +60,16 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  loadEnvironments() {
+    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.environments = env;
+      this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
+      this.selectedEnvStatus = this.currentEnvironment[this.environmentSelection.get('environmentSelection').value];
+      this.outputEnvChanged.emit(this.selectedEnvStatus);
+    });
   }
 
   loadOperationSelectionComponent(): void {
@@ -103,6 +111,24 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       status: event.checked
     }
     this.outputStatusChanged.emit(envChanged);
+  }
+
+  removeEnvironment() {
+    this.outputEnvRemoved.emit(this.selectedEnvName);
+    this.loadEnvironments();
+  }
+
+  isDisableToRemove(): boolean {
+    if (this.selectedEnvName === 'default')
+      return true;
+   
+    if (this.notSelectableEnvironments)
+      return true;
+
+    if (this.currentEnvironment[this.selectedEnvName] === undefined)
+      return true;
+    
+    return false;
   }
 
 }

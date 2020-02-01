@@ -27,6 +27,13 @@ export class GroupService extends ApiService {
     return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/updateStatus/` + id), body).pipe(catchError(super.handleError));
   }
 
+  public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Group> {
+    const body = {
+      env
+    }
+    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/removeStatus/${id}`), body).pipe(catchError(super.handleError));
+  }
+
   public updateGroup(id: string, name: string, description: string): Observable<Group> {
     const body = {
       name,

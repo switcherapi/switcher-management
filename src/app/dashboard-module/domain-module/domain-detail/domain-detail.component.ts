@@ -70,6 +70,10 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.updateEnvironmentStatus(env);
     });
 
+    this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.removeEnvironmentStatus(env);
+    });
+
     super.loadAdmin(this.getDomain().owner);
   }
 
@@ -100,6 +104,18 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  removeEnvironmentStatus(env : any): void {
+    this.domainService.removeDomainEnvironmentStatus(this.getDomain().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSuccess(`Environment removed with success`);
+      }
+    }, error => {
+      console.log(error);
+      this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
 

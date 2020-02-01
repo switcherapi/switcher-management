@@ -37,6 +37,13 @@ export class ConfigService extends ApiService {
     return this.http.patch<Config>(`${environment.apiUrl}/config/updateStatus/${id}`, body).pipe(catchError(super.handleError));
   }
 
+  public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Config> {
+    const body = {
+      env
+    }
+    return this.http.patch<Config>((`${environment.apiUrl}/config/removeStatus/${id}`), body).pipe(catchError(super.handleError));
+  }
+
   public updateConfig(id: string, key: string, description: string): Observable<Config> {
     const body = {
       key,

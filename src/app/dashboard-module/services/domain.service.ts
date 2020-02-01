@@ -25,21 +25,28 @@ export class DomainService extends ApiService {
   }
 
   public getDomain(id: string): Observable<Domain> {
-    return this.http.get<Domain>(`${environment.apiUrl}/domain/` + id).pipe(catchError(super.handleError));
+    return this.http.get<Domain>(`${environment.apiUrl}/domain/${id}`).pipe(catchError(super.handleError));
   }
 
   public setDomainEnvironmentStatus(id: string, env: string, status: boolean): Observable<Domain> {
     const body = {
       [`${env}`]: status
     }
-    return this.http.patch<Domain>((`${environment.apiUrl}/domain/updateStatus/` + id), body).pipe(catchError(super.handleError));
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/updateStatus/${id}`), body).pipe(catchError(super.handleError));
+  }
+
+  public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Domain> {
+    const body = {
+      env
+    }
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/removeStatus/${id}`), body).pipe(catchError(super.handleError));
   }
 
   public updateDomain(id: string, description: string): Observable<Domain> {
     const body = {
       description
     }
-    return this.http.patch<Domain>((`${environment.apiUrl}/domain/` + id), body).pipe(catchError(super.handleError));
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/${id}`), body).pipe(catchError(super.handleError));
   }
 
   public createDomain(name: string, description: string): Observable<any> {
@@ -51,7 +58,7 @@ export class DomainService extends ApiService {
   }
 
   public generateApiKey(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/domain/generateApiKey/` + id).pipe(catchError(super.handleError));
+    return this.http.get<any>(`${environment.apiUrl}/domain/generateApiKey/${id}`).pipe(catchError(super.handleError));
   }
 
   public deleteDomain(id: string): Observable<Domain> {

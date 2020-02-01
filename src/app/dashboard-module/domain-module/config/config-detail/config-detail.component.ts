@@ -107,6 +107,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.updateEnvironmentStatus(env);
     });
+
+    this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.removeEnvironmentStatus(env);
+    });
+
   }
 
   ngOnDestroy() {
@@ -171,6 +176,18 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }, error => {
       console.log(error);
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  removeEnvironmentStatus(env : any): void {
+    this.configService.removeDomainEnvironmentStatus(this.config.id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSuccess(`Environment removed with success`);
+      }
+    }, error => {
+      console.log(error);
+      this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
 

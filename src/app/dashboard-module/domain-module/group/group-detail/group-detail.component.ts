@@ -70,6 +70,10 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       this.updateEnvironmentStatus(env);
     });
 
+    this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.removeEnvironmentStatus(env);
+    });
+
     super.loadAdmin(this.getGroup().owner);
   }
 
@@ -100,6 +104,17 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  removeEnvironmentStatus(env : any): void {
+    this.groupService.removeDomainEnvironmentStatus(this.getGroup().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.toastService.showSuccess(`Environment removed with success`);
+      }
+    }, error => {
+      this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
 
