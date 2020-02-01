@@ -5,10 +5,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-team-preview',
   templateUrl: './team-preview.component.html',
-  styleUrls: ['./team-preview.component.css']
+  styleUrls: [
+    '../../common/css/detail.component.css',
+    './team-preview.component.css']
 })
 export class TeamPreviewComponent implements OnInit {
   @Input() team: Team;
+
+  editing: boolean;
 
   constructor(
     private router: Router
@@ -28,6 +32,14 @@ export class TeamPreviewComponent implements OnInit {
   selectTeam() {
     this.router.navigate(['/dashboard/domain/team/edit'], { state: { team: JSON.stringify(this.team) } });
   }
+  
+  edit() {
+    if (!this.editing) {
+      this.editing = true;
+    } else {
+      this.editing = false;
 
+    }
+  }
 
 }

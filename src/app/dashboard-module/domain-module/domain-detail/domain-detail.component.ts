@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Injector, Input, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { PathRoute, Types } from '../model/path-route';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,8 +13,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomainCreateComponent } from '../../domain-create/domain-create.component';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventEmitter } from 'events';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 
 @Component({

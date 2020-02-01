@@ -1,0 +1,38 @@
+.btn-remove {
+  background: #fb5454;
+  display: block ruby;
+  margin-right: 20px;
+}
+
+.btn-edit {
+  display: block ruby !important;
+}
+
+.options-section-label {
+  vertical-align: baseline !important;
+}
+
+.options-section {
+  display: block ruby;
+}
+
+@media only screen and (max-width: 1200px) {
+  .options-section {
+    float: none;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+
+}
+
+@media only screen and (max-width: 450px) {
+  .options-section {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .options-section-label {
+    display: none;
+  }
+
+}
