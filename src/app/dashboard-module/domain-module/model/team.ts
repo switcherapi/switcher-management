@@ -1,7 +1,9 @@
 import { Role } from './role';
 
 export class Team {
-  id: string;
+  _id: string;
   name: string;
+  active: boolean;
   roles: Role[];
+  members: any[];
 }

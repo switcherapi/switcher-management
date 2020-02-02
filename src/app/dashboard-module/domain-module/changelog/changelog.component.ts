@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { Types, PathRoute } from '../model/path-route';
 import { DomainService } from '../../services/domain.service';
 import { takeUntil } from 'rxjs/operators';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { trigger, state, style } from '@angular/animations';
 import { History } from '../model/history';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -32,7 +32,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   
-  dataSource: MatTableDataSource<History>;;
+  dataSource: MatTableDataSource<History>;
   dataColumns = ['newValue', 'date', 'updatedBy'];
   columnsToDisplay = [
     {

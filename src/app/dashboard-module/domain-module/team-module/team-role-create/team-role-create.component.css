@@ -1,0 +1,9 @@
+.strategy-values-control {
+  display: flex;
+}
+
+.description-values {
+  display: grid;
+  align-self: start;
+  padding-bottom: 20px;
+}

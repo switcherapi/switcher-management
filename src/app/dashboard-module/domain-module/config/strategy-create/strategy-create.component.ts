@@ -68,15 +68,15 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
     this.strategyFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.loadOperations(value);
       this.data.strategy = value;
-    })
+    });
 
     this.operationFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.operation = value;
-    })
+    });
 
     this.descFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.description = value;
-    })
+    });
   }
 
   ngOnDestroy() {

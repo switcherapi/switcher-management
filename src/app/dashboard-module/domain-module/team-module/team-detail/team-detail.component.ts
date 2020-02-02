@@ -1,15 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Team } from '../../model/team';
+import { map, takeUntil } from 'rxjs/operators';
+import { Types } from '../../model/path-route';
 
 @Component({
-  selector: 'app-team-edit',
-  templateUrl: './team-edit.component.html',
-  styleUrls: ['./team-edit.component.css']
+  selector: 'app-team-detail',
+  templateUrl: './team-detail.component.html',
+  styleUrls: [
+    '../../common/css/detail.component.css',
+    './team-detail.component.css'
+  ]
 })
-export class TeamEditComponent implements OnInit, OnDestroy {
+export class TeamDetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   constructor(
@@ -20,7 +24,10 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.team) {
+        localStorage.setItem(Types.SELECTED_TEAM, data.team);
         this.team = JSON.parse(data.team)
+      } else {
+        this.team = JSON.parse(localStorage.getItem(Types.SELECTED_TEAM));
       }
     })
   }

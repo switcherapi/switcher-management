@@ -1,0 +1,62 @@
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>New Role</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+    <section class="header activated">
+        <div class="header-container">
+            <div class="description">
+                <form [formGroup]="elementCreationFormGroup">
+                    <div>
+                        <mat-form-field class="strategy-style">
+                            <mat-select placeholder="Component" [formControl]="routerFormControl">
+                                <mat-option *ngFor="let router of routers" [value]="router" [disabled]="data.role">
+                                    {{router}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="strategy-style">
+                            <mat-select placeholder="Permission" [formControl]="actionFormControl">
+                                <mat-option *ngFor="let action of actions" [value]="action" [disabled]="data.role">
+                                    {{action}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="description-values">
+                        <mat-card>
+                            <mat-card-header>
+                            <mat-card-subtitle>Component specification</mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content style="overflow-y: scroll; height: 100px;">
+                                <mat-selection-list #componentValueSelection>
+                                    <mat-list-option *ngFor="let value of data.values" [value]="value">
+                                        {{value}}
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </mat-card-content>
+                            <mat-form-field>
+                                <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl" autocomplete="off">
+                            </mat-form-field>
+                            <div class="strategy-values-control">
+                                <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
+                                    [disabled]="inputValue.value.length === 0 || !validKeyOnly">Add</button>
+                                <button mat-button class="btn-element" (click)="removeValue(componentValueSelection.selectedOptions.selected[0]?.value)" 
+                                    [disabled]="!componentValueSelection.selectedOptions.selected[0]?.value">Remove</button>
+                            </div>
+                        </mat-card>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+<div mat-dialog-actions style="float: right;">
+    <button class="btn-save" mat-button (click)="onSave(data)" cdkFocusInitial>Save</button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
+</div>

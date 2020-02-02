@@ -1,0 +1,25 @@
+<div style="padding-top: 20px;">
+    <section class="{{ team.active ? 'header activated' : 'header deactivated' }}">
+        <div class="header-container">
+            <div class="description" style="width: 350px;">
+                <mat-form-field>
+                    <input matInput placeholder="Name" [value]="team.name" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+    </section>
+    <section style="padding-top: 20px;">
+        <ngb-tabset [activeId]="1">
+            <ngb-tab title="Members" id="1">
+                <ng-template ngbTabContent>
+                    <app-team-members [team]="team"></app-team-members>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Roles" id="2">
+                <ng-template ngbTabContent>
+                    <app-team-roles [team]="team"></app-team-roles>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </section>
+</div>

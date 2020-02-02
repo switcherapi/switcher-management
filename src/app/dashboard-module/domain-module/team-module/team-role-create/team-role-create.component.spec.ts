@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TeamEditComponent } from './team-edit.component';
+import { TeamRoleCreateComponent } from './team-role-create.component';
 
-describe('TeamEditComponent', () => {
-  let component: TeamEditComponent;
-  let fixture: ComponentFixture<TeamEditComponent>;
+describe('TeamRoleCreateComponent', () => {
+  let component: TeamRoleCreateComponent;
+  let fixture: ComponentFixture<TeamRoleCreateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TeamEditComponent ]
+      declarations: [ TeamRoleCreateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TeamEditComponent);
+    fixture = TestBed.createComponent(TeamRoleCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

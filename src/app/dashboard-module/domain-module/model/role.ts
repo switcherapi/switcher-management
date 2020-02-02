@@ -1,8 +1,8 @@
 export class Role {
-  id: string;
+  _id: string;
   action: string;
   active: boolean;
   router: string;
-  identifiedBy: Date;
+  identifiedBy: string;
   values: string[];
 }

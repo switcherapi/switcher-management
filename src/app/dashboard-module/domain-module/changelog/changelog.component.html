@@ -1,5 +1,5 @@
 <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" autocomplete="off">
 </mat-form-field>
 
 <div class="mat-elevation-z8">
@@ -18,7 +18,7 @@
                         <mat-list role="list" *ngFor="let key of getElementKeys(element.oldValue)">
                             <mat-form-field style="width: 100%;">
                                 <input matInput placeholder="{{key}}" [value]="getElementValue(key, element.oldValue)"
-                                    readonly>
+                                    readonly autocomplete="off">
                             </mat-form-field>
                         </mat-list>
                     </div>
@@ -27,7 +27,7 @@
                         <mat-list role="list" *ngFor="let key of getElementKeys(element.newValue)">
                             <mat-form-field style="width: 100%;">
                                 <input matInput placeholder="{{key}}" [value]="getElementValue(key, element.newValue)"
-                                    readonly>
+                                    readonly autocomplete="off">
                             </mat-form-field>
                         </mat-list>
                     </div>
