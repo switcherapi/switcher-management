@@ -1,7 +1,6 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MetricsComponent } from './metrics/metrics.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';
 import { EnvironmentsComponent } from './environments/environments.component';
@@ -41,7 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'metrics',
-        component: MetricsComponent, canActivate: [AuthGuard],
+        loadChildren: () => import('./metric-module/metric-module.module').then(mod => mod.MetricModuleModule),
         data: {
           title: 'Metrics',
           icon: 1
@@ -82,6 +81,8 @@ const routes: Routes = [
     ]
   }
 ];
+
+RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
 
 @NgModule({
   imports: [

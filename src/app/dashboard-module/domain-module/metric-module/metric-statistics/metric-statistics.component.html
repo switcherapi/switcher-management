@@ -1,0 +1,41 @@
+<div #tabmetrics id="tabmetrics_id">
+    <mat-tab-group *ngIf="!loading" (selectedTabChange)="scrollToElement(tabmetrics)" dynamicHeight>
+        <mat-tab label="Switchers View"  >
+            <div style="display: block">
+                <canvas baseChart 
+                    [datasets]="getSwitcherStats().barChartData" 
+                    [labels]="getSwitcherStats().barChartLabels" 
+                    [options]="getSwitcherStats().barChartOptions"
+                    [plugins]="getSwitcherStats().barChartPlugins" 
+                    [legend]="getSwitcherStats().barChartLegend" 
+                    [chartType]="getSwitcherStats().barChartType">
+                </canvas>
+            </div>
+        </mat-tab>
+        <mat-tab label="Components View">
+            <div style="display: block">
+                <canvas baseChart 
+                    [datasets]="getComponentsStats().barChartData" 
+                    [labels]="getComponentsStats().barChartLabels" 
+                    [options]="getComponentsStats().barChartOptions"
+                    [plugins]="getComponentsStats().barChartPlugins" 
+                    [legend]="getComponentsStats().barChartLegend" 
+                    [chartType]="getComponentsStats().barChartType">
+                </canvas>
+            </div>
+        </mat-tab>
+        <mat-tab label="Reasons View">
+            <div style="display: block">
+                <canvas baseChart
+                [data]="getReasonsStats().chartData"
+                [labels]="getReasonsStats().chartLabels"
+                [chartType]="getReasonsStats().chartType"
+                [options]="getReasonsStats().chartOptions"
+                [plugins]="getReasonsStats().chartPlugins"
+                [colors]="getReasonsStats().chartColors"
+                [legend]="getReasonsStats().chartLegend">
+                </canvas>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

@@ -1,0 +1,46 @@
+.header-filter {
+  display: grid;
+}
+
+.body-filter.show {
+  margin: inherit;
+}
+
+.body-filter.hide {
+  display: none;
+}
+
+.date-picker {
+  padding-left: 20px;
+}
+
+.body-filter-btns {
+  display: block ruby;
+}
+
+.filter-env-selector {
+  width: 180px;
+  margin-right: 20px;
+}
+
+.filter-key-selector {
+  margin-right: 20px;
+}
+
+.filter-date-selector {
+  margin-right: 20px;
+}
+
+@media only screen and (max-width: 540px) {
+  .filter-env-selector {
+    width: 100%;
+  }
+
+  .filter-key-selector {
+    width: 100%;
+  }
+
+  .filter-date-selector {
+    width: 100%;
+  }
+}

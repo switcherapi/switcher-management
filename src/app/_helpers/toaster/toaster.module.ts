@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ToastsContainer } from '../toasts-container.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-
-
 @NgModule({
   declarations: [
     ToastsContainer

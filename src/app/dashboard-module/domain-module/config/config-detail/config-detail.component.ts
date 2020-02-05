@@ -118,6 +118,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
+  
+  scrollToElement($element): void {
+    setTimeout(() => {
+      $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    }, 500);
+  }
 
   getConfig(): Config {
     return this.pathRoute.element;

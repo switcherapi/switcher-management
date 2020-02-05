@@ -167,9 +167,6 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   formatExpandedData(element: any): string {
     if (element instanceof Object) {
-      const data: Map<string, any> = element;
-
-
       return element != undefined ? JSON.stringify(element) : '';
     }
     return element;

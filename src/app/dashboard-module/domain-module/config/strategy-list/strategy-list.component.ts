@@ -14,8 +14,10 @@ export class StrategyListComponent implements OnInit {
 
   ngOnInit() { }
 
-  scrollToBottom(): void {
-    window.scrollTo(0, document.querySelector('#strategy-section').scrollHeight);
+  scrollToElement($element): void {
+    setTimeout(() => {
+      $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    }, 200);
   }
 
   reloadStrategies(strategy: Strategy) {

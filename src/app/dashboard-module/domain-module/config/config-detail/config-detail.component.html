@@ -84,21 +84,25 @@
             </button>
         </div>
     </section>
-    <section id="strategy-section" style="padding-top: 6px;">
+    <section #strategysection id="strategy-section" style="padding-top: 6px;">
         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-        <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [orientation]="horizontal">
-            <ngb-tab *ngIf="hasStrategies" title="Strategies" id="1">
+        <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [orientation]="horizontal" [destroyOnHide]="false">
+            <ngb-tab *ngIf="hasStrategies" id="1">
+                <ng-template ngbTabTitle>
+                    <div (click)="scrollToElement(strategysection)">Strategies</div>
+                </ng-template>
                 <ng-template ngbTabContent>
                     <div class="strategy-section">
                         <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" style="width: 100%; display: grid;"></app-strategy-list>
                     </div>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Metrics" id="2">
+            <ngb-tab id="2">
+                <ng-template ngbTabTitle>
+                    <div (click)="scrollToElement(strategysection)">Metrics</div>
+                </ng-template>
                 <ng-template ngbTabContent>
-                    <div class="strategy-section" style="margin-top: 40px;">
-                        Metrics works!
-                    </div>
+                    <app-metric [switcher]="getConfig().key"></app-metric>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

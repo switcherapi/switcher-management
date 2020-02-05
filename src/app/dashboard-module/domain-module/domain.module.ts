@@ -4,7 +4,6 @@ import { DomainComponent } from './domain/domain.component';
 
 import { DomainRoutingModule } from './domain-routing.module';
 import { DomainDetailComponent } from './domain-detail/domain-detail.component';
-import { MetricsComponent } from './metrics/metrics.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent, ComponentEditDialog } from './components/components.component';
 import { EnvironmentsComponent } from './environments/environments.component';
@@ -30,12 +29,13 @@ import { ToasterModule } from 'src/app/_helpers/toaster/toaster.module';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
+import { ChartsModule } from 'ng2-charts';
+import { MetricModuleModule } from './metric-module/metric-module.module';
 
 @NgModule({
   declarations: [
     DomainComponent, 
-    DomainDetailComponent, 
-    MetricsComponent, 
+    DomainDetailComponent,
     ChangelogComponent, 
     ComponentsComponent, 
     EnvironmentsComponent, 
@@ -91,7 +91,9 @@ import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.c
     MatPaginatorModule,
     MatExpansionModule,
     MatToolbarModule,
-    ToasterModule
+    ToasterModule,
+    ChartsModule,
+    MetricModuleModule
   ],
   providers: [ 
     DomainRouteService, 
