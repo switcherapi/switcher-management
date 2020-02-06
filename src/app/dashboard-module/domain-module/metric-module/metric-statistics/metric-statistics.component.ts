@@ -13,8 +13,10 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   @Input() data: Metric;
+  @Input() switcher: string;
   loading = true;
 
+  switcherDateTimeGroupTab: SwitcherDateTimeGroupedTab;
   switchersTab: SwitchersStatisticsTab;
   componentsTab: ComponentsStatisticsTab;
   reasonsTab: ReasonsStatisticsTab;
@@ -23,6 +25,9 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
+
+    this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data);
+    this.switcherDateTimeGroupTab.loadSwitcherDateTimeGroupView();
 
     this.switchersTab = new SwitchersStatisticsTab(this.data);
     this.switchersTab.loadSwitchersView();
@@ -42,10 +47,15 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   }
 
   scrollToElement($element): void {
-    window.document.getElementById($element.id).scrollIntoView();
-    setTimeout(() => {
-      $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    }, 200);
+    // if (this.switcher) {
+    //   setTimeout(() => {
+    //     $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    //   }, 200);
+    // }
+  }
+
+  getSwitcherDateTimeGroupStats(): SwitcherDateTimeGroupedTab {
+    return this.switcherDateTimeGroupTab;
   }
   
   getSwitcherStats(): SwitchersStatisticsTab {
@@ -71,10 +81,27 @@ export class SwitchersStatisticsTab {
   public barChartLabels: Label[] = [];
   public barChartData: ChartDataSets[] = [];
 
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      yAxes: [{
+          ticks: {
+            min: 0
+          }
+      }]
+    },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+
   public loadSwitchersView(): void {
     const switcherStatistics = this.data.statistics.switchers;
-    let negative = { data: [], label: 'Failed' };
-    let positive = { data: [], label: 'Passed' };
+    let negative = { data: [], label: 'Negative' };
+    let positive = { data: [], label: 'Positive' };
 
     switcherStatistics.forEach(switcherStats => {
       this.barChartLabels.push(switcherStats.switcher);
@@ -85,17 +112,6 @@ export class SwitchersStatisticsTab {
     this.barChartData.push(negative);
     this.barChartData.push(positive);
   }
-
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
 }
 
 export class ComponentsStatisticsTab {
@@ -107,10 +123,27 @@ export class ComponentsStatisticsTab {
   public barChartLabels: Label[] = [];
   public barChartData: ChartDataSets[] = [];
 
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      yAxes: [{
+          ticks: {
+            min: 0
+          }
+      }]
+    },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+
   public loadComponentsView(): void {
     const componentsStatistics = this.data.statistics.components;
-    let negative = { data: [], label: 'Failed' };
-    let positive = { data: [], label: 'Passed' };
+    let negative = { data: [], label: 'Negative' };
+    let positive = { data: [], label: 'Positive' };
 
     componentsStatistics.forEach(componentStats => {
       this.barChartLabels.push(componentStats.component);
@@ -121,17 +154,6 @@ export class ComponentsStatisticsTab {
     this.barChartData.push(negative);
     this.barChartData.push(positive);
   }
-
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
 }
 
 export class ReasonsStatisticsTab {
@@ -149,6 +171,23 @@ export class ReasonsStatisticsTab {
     },
   ];
 
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      yAxes: [{
+          ticks: {
+            min: 0
+          }
+      }]
+    },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+
   public loadReasonsView(): void {
     const reasonsStatistics = this.data.statistics.reasons;
 
@@ -157,15 +196,49 @@ export class ReasonsStatisticsTab {
       this.chartData.push(reasonStats.total);
     });
   }
+}
 
-  public chartOptions: ChartOptions = {
-    responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
+export class SwitcherDateTimeGroupedTab {
+  constructor(private data: Metric) {}
+
+  public chartType: string = 'line';
+  public chartLegend = true;
+
+  public chartDatasets: Array<any> = [];
+  public chartLabels: Array<any> = [];
+
+  public chartColors: Array<any> = [
+    {
+      backgroundColor: 'rgba(105, 0, 132, .2)',
+      borderColor: 'rgba(200, 99, 132, .7)',
+      borderWidth: 2,
+    },
+    {
+      backgroundColor: 'rgba(0, 137, 132, .2)',
+      borderColor: 'rgba(0, 10, 130, .7)',
+      borderWidth: 2,
     }
+  ];
+
+  public loadSwitcherDateTimeGroupView(): void {
+    const switcherStatistics = this.data.statistics.switchers;
+    let negative = { data: [], label: 'Negative' };
+    let positive = { data: [], label: 'Positive' };
+
+    switcherStatistics.forEach(switcherStats => {
+      switcherStats.dateTimeStatistics.forEach(dateTimeStats => {
+        this.chartLabels.push(dateTimeStats.date);
+        negative.data.push(dateTimeStats.negative);
+        positive.data.push(dateTimeStats.positive);
+      });
+    });
+
+    this.chartDatasets.push(negative);
+    this.chartDatasets.push(positive);
+  }
+
+  public chartOptions: any = {
+    responsive: true
   };
+
 }

@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 export class MetricComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() switcher: string;
+  @Input() dateGroupPattern: string;
 
   filterClass = 'body-filter show';
   loading = true;
@@ -60,7 +61,7 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
     this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : 'default', switcher, null, dateBefore, dateAfter)
+      environment ? environment : 'default', switcher, this.dateGroupPattern, dateBefore, dateAfter)
       .pipe(takeUntil(this.unsubscribe)).subscribe(metrics => {
         this.loading = false;
         this.metrics = metrics;
@@ -84,10 +85,6 @@ export class MetricComponent implements OnInit, OnDestroy {
     const dateBefore = this.datepipe.transform(this.dateBeforeFormControl.value, 'yyyy-MM-dd HH:mm:ss');
     
     this.loadMetrics(this.switcherKeyFormControl.value, this.environmentSelection.value, dateBefore, dateAfter);
-
-    setTimeout(() => {
-      window.document.querySelector('#data-section').scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    }, 500);
   }
 
   toggleFilter() {
@@ -99,9 +96,9 @@ export class MetricComponent implements OnInit, OnDestroy {
   }
 
   scrollToElement($element): void {
-    setTimeout(() => {
-      $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    }, 500);
+    // setTimeout(() => {
+    //   $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    // }, 500);
   }
 
 }

@@ -1,12 +1,23 @@
-<div #tabmetrics id="tabmetrics_id">
-    <mat-tab-group *ngIf="!loading" (selectedTabChange)="scrollToElement(tabmetrics)" dynamicHeight>
-        <mat-tab label="Switchers View"  >
+<div *ngIf="!loading" #tabmetrics id="tabmetrics_id">
+    <mat-tab-group [(selectedIndex)]="tabSelection" (selectedTabChange)="scrollToElement(tabmetrics)" dynamicHeight>
+        <mat-tab *ngIf="switcher != null" label="Switchers Date/Time View">
+            <div style="display: block">
+                <canvas baseChart
+                    [chartType]="getSwitcherDateTimeGroupStats().chartType"
+                    [datasets]="getSwitcherDateTimeGroupStats().chartDatasets"
+                    [labels]="getSwitcherDateTimeGroupStats().chartLabels"
+                    [colors]="getSwitcherDateTimeGroupStats().chartColors"
+                    [options]="getSwitcherDateTimeGroupStats().chartOptions"
+                    [legend]="true">
+                </canvas>
+            </div>
+        </mat-tab>
+        <mat-tab label="Switchers View">
             <div style="display: block">
                 <canvas baseChart 
                     [datasets]="getSwitcherStats().barChartData" 
                     [labels]="getSwitcherStats().barChartLabels" 
                     [options]="getSwitcherStats().barChartOptions"
-                    [plugins]="getSwitcherStats().barChartPlugins" 
                     [legend]="getSwitcherStats().barChartLegend" 
                     [chartType]="getSwitcherStats().barChartType">
                 </canvas>
@@ -18,7 +29,6 @@
                     [datasets]="getComponentsStats().barChartData" 
                     [labels]="getComponentsStats().barChartLabels" 
                     [options]="getComponentsStats().barChartOptions"
-                    [plugins]="getComponentsStats().barChartPlugins" 
                     [legend]="getComponentsStats().barChartLegend" 
                     [chartType]="getComponentsStats().barChartType">
                 </canvas>
@@ -27,13 +37,12 @@
         <mat-tab label="Reasons View">
             <div style="display: block">
                 <canvas baseChart
-                [data]="getReasonsStats().chartData"
-                [labels]="getReasonsStats().chartLabels"
-                [chartType]="getReasonsStats().chartType"
-                [options]="getReasonsStats().chartOptions"
-                [plugins]="getReasonsStats().chartPlugins"
-                [colors]="getReasonsStats().chartColors"
-                [legend]="getReasonsStats().chartLegend">
+					[data]="getReasonsStats().chartData"
+					[labels]="getReasonsStats().chartLabels"
+					[chartType]="getReasonsStats().chartType"
+					[options]="getReasonsStats().chartOptions"
+					[colors]="getReasonsStats().chartColors"
+					[legend]="getReasonsStats().chartLegend">
                 </canvas>
             </div>
         </mat-tab>

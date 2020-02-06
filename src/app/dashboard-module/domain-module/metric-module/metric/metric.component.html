@@ -9,7 +9,15 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field class="filter-key-selector">
-                <input matInput placeholder="Switcher Key" [formControl]="switcherKeyFormControl">
+                <input #switcherInput matInput placeholder="Switcher Key" [formControl]="switcherKeyFormControl">
+            </mat-form-field>
+            <mat-form-field *ngIf="switcher != null" class="filter-env-selector">
+                <mat-select placeholder="Group By" [(ngModel)]="dateGroupPattern">
+                    <mat-option value="YYYY-MM">Month</mat-option>
+                    <mat-option value="YYYY-MM-DD">Day</mat-option>
+                    <mat-option value="YYYY-MM-DD HH">Hour</mat-option>
+                    <mat-option value="YYYY-MM-DD HH:mm">Minute</mat-option>
+                </mat-select>
             </mat-form-field>
             <mat-form-field class="filter-date-selector">
                 <input matInput [ngxMatDatetimePicker]="fromPicker" placeholder="From" [formControl]="dateAfterFormControl">
@@ -44,7 +52,7 @@
                         <div (click)="scrollToElement(tabmetrics)">Overall Statistics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
-                        <app-metric-statistics [data]="metrics"></app-metric-statistics>
+                        <app-metric-statistics [data]="metrics" [switcher]="switcher"></app-metric-statistics>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab id="2">

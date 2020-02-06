@@ -26,6 +26,7 @@ export class MetricSwitcher {
     total: number;
     positive: number;
     negative: number;
+    dateTimeStatistics: DateTimeStatistics[];
 }
 
 export class MetricComponent {
@@ -45,6 +46,12 @@ export class MetricData {
     date: Date;
 }
 
+class DateTimeStatistics {
+    date: string;
+    positive: number;
+    negative: number;
+}
+
 class StrategyDataEntry {
     strategy: string;
     input: string;
@@ -53,11 +60,11 @@ class StrategyDataEntry {
 /*
 {
     "statistics": {
-        "total": 7,
-        "positive": 3,
-        "negative": 4,
+        "total": 4,
+        "positive": 1,
+        "negative": 3,
         "date_from": "2020-02-04T04:15:04.591Z",
-        "date_to": "2020-02-04T04:48:28.443Z",
+        "date_to": "2020-02-04T04:17:01.830Z",
         "reasons": [
             {
                 "reason": "Strategy 'NETWORK_VALIDATION' does not agree",
@@ -65,10 +72,6 @@ class StrategyDataEntry {
             },
             {
                 "reason": "Success",
-                "total": 3
-            },
-            {
-                "reason": "Strategy 'VALUE_VALIDATION' does not agree",
                 "total": 1
             }
         ],
@@ -77,27 +80,29 @@ class StrategyDataEntry {
                 "switcher": "FEATURE2020",
                 "total": 4,
                 "positive": 1,
-                "negative": 3
-            },
-            {
-                "switcher": "FEATURE02",
-                "total": 3,
-                "positive": 2,
-                "negative": 1
+                "negative": 3,
+                "dateTimeStatistics": [
+                    {
+                        "date": "2020-02-03 20:15",
+                        "total": 1
+                    },
+                    {
+                        "date": "2020-02-03 20:16",
+                        "total": 2
+                    },
+                    {
+                        "date": "2020-02-03 20:17",
+                        "total": 1
+                    }
+                ]
             }
         ],
         "components": [
             {
                 "component": "Android",
-                "total": 5,
-                "positive": 2,
-                "negative": 3
-            },
-            {
-                "component": "Windows",
-                "total": 2,
+                "total": 4,
                 "positive": 1,
-                "negative": 1
+                "negative": 3
             }
         ]
     },

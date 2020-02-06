@@ -16,25 +16,14 @@ export class MetricService extends ApiService {
     super();
   }
 
-  public getMetrics(domainId: string, env: string, key?: string, result?: boolean, dateBefore?: string, dateAfter?: string): Observable<Metric> {
+  public getMetrics(domainId: string, env: string, key?: string, dateGroupPattern?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
     let params: any = {}
 
     params.environment = env;
-    if (key) {
-      params.key = key;
-    }
-
-    if (result != undefined) {
-      params.result = result ? 'true' : 'false';
-    }
-    
-    if (dateBefore) {
-      params.dateBefore = dateBefore;
-    }
-
-    if (dateAfter) {
-      params.dateAfter = dateAfter;
-    }
+    if (key) { params.key = key; }
+    if (dateGroupPattern) { params.dateGroupPattern = dateGroupPattern; }
+    if (dateBefore) { params.dateBefore = dateBefore; }
+    if (dateAfter) { params.dateAfter = dateAfter; }
 
     return this.http.get<Metric>(`${environment.apiUrl}/metric/${domainId}`, { params }).pipe(catchError(super.handleError));
   }
