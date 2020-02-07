@@ -55,7 +55,6 @@ export class MetricComponent implements OnInit, OnDestroy {
   loadMetrics(switcher?: string, environment?: string, dateBefore?: string, dateAfter?: string): void {
     if (this.switcher) {
       this.switcherKeyFormControl.setValue(switcher);
-      this.switcherKeyFormControl.disable({ onlySelf: true })
     }
 
     this.loading = true;
@@ -64,7 +63,11 @@ export class MetricComponent implements OnInit, OnDestroy {
       environment ? environment : 'default', switcher, this.dateGroupPattern, dateBefore, dateAfter)
       .pipe(takeUntil(this.unsubscribe)).subscribe(metrics => {
         this.loading = false;
-        this.metrics = metrics;
+        if (metrics) {
+          this.metrics = metrics;
+        } else {
+          this.metrics = new Metric();
+        }
       }, error => {
         console.log(error);
         this.error = 'Unable to load metrics';
@@ -81,10 +84,15 @@ export class MetricComponent implements OnInit, OnDestroy {
   }
 
   applyFilter() {
+    if (this.switcherKeyFormControl.value.length) {
+      this.switcher = this.switcherKeyFormControl.value;
+    } else {
+      this.switcher = null;
+    }
     const dateAfter = this.datepipe.transform(this.dateAfterFormControl.value, 'yyyy-MM-dd HH:mm:ss');
     const dateBefore = this.datepipe.transform(this.dateBeforeFormControl.value, 'yyyy-MM-dd HH:mm:ss');
     
-    this.loadMetrics(this.switcherKeyFormControl.value, this.environmentSelection.value, dateBefore, dateAfter);
+    this.loadMetrics(this.switcher, this.environmentSelection.value, dateBefore, dateAfter);
   }
 
   toggleFilter() {
@@ -94,11 +102,4 @@ export class MetricComponent implements OnInit, OnDestroy {
       this.filterClass = 'body-filter show';
     }
   }
-
-  scrollToElement($element): void {
-    // setTimeout(() => {
-    //   $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    // }, 500);
-  }
-
 }

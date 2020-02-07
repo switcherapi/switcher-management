@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MetricComponent } from './metric/metric.component';
-import { MetricStatisticsComponent } from './metric-statistics/metric-statistics.component';
+import { MetricStatisticsComponent, SwitcherDataStatsDialog } from './metric-statistics/metric-statistics.component';
 import { MetricDataComponent } from './metric-data/metric-data.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -15,12 +15,16 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from 'ngx-mat-date
   declarations: [
     MetricComponent, 
     MetricStatisticsComponent, 
-    MetricDataComponent
+    MetricDataComponent,
+    SwitcherDataStatsDialog
   ],
   exports: [
     MetricComponent, 
     MetricStatisticsComponent, 
     MetricDataComponent
+  ],
+  entryComponents: [
+    SwitcherDataStatsDialog
   ],
   imports: [
     MetricRoutingModule,

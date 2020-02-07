@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Metric } from '../../model/metric';
+import { Metric, MetricData } from '../../model/metric';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-metric-statistics',
@@ -21,12 +22,17 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   componentsTab: ComponentsStatisticsTab;
   reasonsTab: ReasonsStatisticsTab;
 
-  constructor() {}
+  constructor(
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
+    if(!this.data || !this.data.statistics)
+      return;
+
     this.loading = true;
 
-    this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data);
+    this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data, this.dialog);
     this.switcherDateTimeGroupTab.loadSwitcherDateTimeGroupView();
 
     this.switchersTab = new SwitchersStatisticsTab(this.data);
@@ -44,14 +50,6 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  scrollToElement($element): void {
-    // if (this.switcher) {
-    //   setTimeout(() => {
-    //     $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    //   }, 200);
-    // }
   }
 
   getSwitcherDateTimeGroupStats(): SwitcherDateTimeGroupedTab {
@@ -199,11 +197,14 @@ export class ReasonsStatisticsTab {
 }
 
 export class SwitcherDateTimeGroupedTab {
-  constructor(private data: Metric) {}
+  constructor(
+    private data: Metric,
+    private dialog: MatDialog) {}
 
   public chartType: string = 'line';
   public chartLegend = true;
 
+  public selectedData: MetricData[][] = [];
   public chartDatasets: Array<any> = [];
   public chartLabels: Array<any> = [];
 
@@ -227,6 +228,7 @@ export class SwitcherDateTimeGroupedTab {
 
     switcherStatistics.forEach(switcherStats => {
       switcherStats.dateTimeStatistics.forEach(dateTimeStats => {
+        this.pushMetric(switcherStats.switcher, dateTimeStats.date);
         this.chartLabels.push(dateTimeStats.date);
         negative.data.push(dateTimeStats.negative);
         positive.data.push(dateTimeStats.positive);
@@ -237,8 +239,63 @@ export class SwitcherDateTimeGroupedTab {
     this.chartDatasets.push(positive);
   }
 
+  pushMetric(swither: string, date: string) {
+    const dataFound = this.data.data.filter(data => data.config.key === swither && data.date.toString().indexOf(date) >= 0);
+    this.selectedData.push(dataFound);
+  }
+
   public chartOptions: any = {
-    responsive: true
+    responsive: true,
+    onClick : (evt, array) => {
+      if (array.length)
+        this.expandSelectedData(array[0]._index);
+  }
   };
+
+  expandSelectedData(index: number) {
+    this.dialog.open(SwitcherDataStatsDialog, {
+      width: '1200px',
+      data: {
+        stats: this.selectedData[index],
+        date: this.chartLabels[index]
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'metric-statistics-data-dialog',
+  templateUrl: 'metric-statistics-data-dialog.html',
+  styleUrls: [
+    '../../common/css/create.component.css'
+  ],
+  styles: [`
+    .btn-cancel {
+      float: right;
+      margin-right: 10px;
+      background: #8e8e8e;
+    }
+    
+    .mat-dialog-content {
+      padding-bottom: 20px;
+    }
+
+    .header-log {
+      background: linear-gradient(to right, #549bfb 0, #549bfb, #5298ff 10px, #fff 100%) no-repeat;
+      color: white;
+      padding: 10px;
+      border-radius: 20px;
+    }
+  `]
+})
+export class SwitcherDataStatsDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<SwitcherDataStatsDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: MetricData[]) { }
+
+  onClose() {
+    this.dialogRef.close();
+  }
 
 }

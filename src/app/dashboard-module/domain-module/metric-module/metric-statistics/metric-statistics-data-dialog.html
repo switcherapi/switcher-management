@@ -1,6 +1,6 @@
 <h4 mat-dialog-title>
     <mat-toolbar role="toolbar" class="dialog-header">
-        <span>Strategy Change Log</span>
+        <span>Switcher Date Statistics: {{ data.date }}</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onClose()">
             <mat-icon mat-list-icon>close</mat-icon>
@@ -8,7 +8,7 @@
     </mat-toolbar>
 </h4>
 <div mat-dialog-content>
-    <app-changelog [strategy]="data.strategy"></app-changelog>
+    <app-metric-data [data]="data.stats"></app-metric-data>
 </div>
 <div>
     <button class="btn-cancel" mat-button (click)="onClose()" cdkFocusInitial>Close</button>

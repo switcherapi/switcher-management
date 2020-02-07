@@ -49,7 +49,7 @@
             <ngb-tabset [activeId]="1" [destroyOnHide]="false">
                 <ngb-tab id="1">
                     <ng-template ngbTabTitle>
-                        <div (click)="scrollToElement(tabmetrics)">Overall Statistics</div>
+                        <div>Overall Statistics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <app-metric-statistics [data]="metrics" [switcher]="switcher"></app-metric-statistics>
@@ -57,7 +57,7 @@
                 </ngb-tab>
                 <ngb-tab id="2">
                     <ng-template ngbTabTitle>
-                        <div (click)="scrollToElement(tabmetrics)">Data</div>
+                        <div>Data</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <app-metric-data [data]="metrics.data"></app-metric-data>

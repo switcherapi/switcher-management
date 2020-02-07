@@ -1,5 +1,5 @@
 <div *ngIf="!loading" #tabmetrics id="tabmetrics_id">
-    <mat-tab-group [(selectedIndex)]="tabSelection" (selectedTabChange)="scrollToElement(tabmetrics)" dynamicHeight>
+    <mat-tab-group [(selectedIndex)]="tabSelection" dynamicHeight>
         <mat-tab *ngIf="switcher != null" label="Switchers Date/Time View">
             <div style="display: block">
                 <canvas baseChart
