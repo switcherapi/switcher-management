@@ -4,6 +4,7 @@ import { Metric, MetricData } from '../../model/metric';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MetricComponent } from '../metric/metric.component';
 
 @Component({
   selector: 'app-metric-statistics',
@@ -15,6 +16,7 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
 
   @Input() data: Metric;
   @Input() switcher: string;
+  @Input() parent: MetricComponent;
   loading = true;
 
   switcherDateTimeGroupTab: SwitcherDateTimeGroupedTab;
@@ -35,7 +37,7 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
     this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data, this.dialog);
     this.switcherDateTimeGroupTab.loadSwitcherDateTimeGroupView();
 
-    this.switchersTab = new SwitchersStatisticsTab(this.data);
+    this.switchersTab = new SwitchersStatisticsTab(this.data, this.parent);
     this.switchersTab.loadSwitchersView();
 
     this.componentsTab = new ComponentsStatisticsTab(this.data);
@@ -71,7 +73,10 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
 }
 
 export class SwitchersStatisticsTab {
-  constructor(private data: Metric) {}
+  constructor(
+    private data: Metric,
+    private parent: MetricComponent
+  ) {}
 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
@@ -93,8 +98,16 @@ export class SwitchersStatisticsTab {
         anchor: 'end',
         align: 'end',
       }
+    },
+    onClick : (evt, array: any) => {
+      if (array.length)
+        this.selectSwitcherKey(array[0]._index);
     }
   };
+
+  selectSwitcherKey(index: number) {
+    this.parent.setSwitcherKeyInput(this.barChartLabels[index].toString());
+  }
 
   public loadSwitchersView(): void {
     const switcherStatistics = this.data.statistics.switchers;
@@ -249,7 +262,7 @@ export class SwitcherDateTimeGroupedTab {
     onClick : (evt, array) => {
       if (array.length)
         this.expandSelectedData(array[0]._index);
-  }
+    }
   };
 
   expandSelectedData(index: number) {

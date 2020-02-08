@@ -52,7 +52,7 @@
                         <div>Overall Statistics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
-                        <app-metric-statistics [data]="metrics" [switcher]="switcher"></app-metric-statistics>
+                        <app-metric-statistics [data]="metrics" [switcher]="switcher" [parent]="this"></app-metric-statistics>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab id="2">

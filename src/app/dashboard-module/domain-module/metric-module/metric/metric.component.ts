@@ -102,4 +102,8 @@ export class MetricComponent implements OnInit, OnDestroy {
       this.filterClass = 'body-filter show';
     }
   }
+
+  setSwitcherKeyInput(key: string) {
+    this.switcherKeyFormControl.setValue(key);
+  }
 }

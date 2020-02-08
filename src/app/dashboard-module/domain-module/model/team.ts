@@ -6,4 +6,5 @@ export class Team {
   active: boolean;
   roles: Role[];
   members: any[];
+  domain: string;
 }

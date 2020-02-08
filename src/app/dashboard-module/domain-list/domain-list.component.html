@@ -18,11 +18,26 @@
                 </button>
             </mat-menu>
         </div>
-        </h4>
+    </h4>
     <div class="card-body">
         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-        <div *ngFor="let domain of domains$">
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+        <div *ngFor="let domain of domains">
+            <app-domain-preview [domain]="domain"></app-domain-preview>
+        </div>
+    </div>
+</div>
+<div *ngIf="collabDomains.length" class="card mt-4">
+    <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+    <h4 class="card-header">
+        <div>
+            Collaboration
+        </div>
+    </h4>
+    <div class="card-body">
+        <span *ngIf="loadingCollab" class="spinner-border spinner-border-sm mr-1"></span>
+        <div *ngIf="errorCollab" class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
+        <div *ngFor="let domain of collabDomains">
             <app-domain-preview [domain]="domain"></app-domain-preview>
         </div>
     </div>

@@ -3,8 +3,13 @@
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
-                    <input matInput placeholder="Name" [value]="team.name" readonly>
+                    <input matInput placeholder="Team Name" [value]="team.name" readonly>
                 </mat-form-field>
+                <div class="description" style="width: 350px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Domain Name" [value]="domain?.name" readonly>
+                    </mat-form-field>
+                </div>
             </div>
         </div>
     </section>

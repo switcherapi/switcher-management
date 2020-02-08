@@ -10,10 +10,16 @@
 
 .options-section-label {
   vertical-align: baseline !important;
+  display: contents;
 }
 
 .options-section {
   display: block ruby;
+}
+
+.toggle-section {
+  margin: auto;
+  display: contents;
 }
 
 .detail-body {
