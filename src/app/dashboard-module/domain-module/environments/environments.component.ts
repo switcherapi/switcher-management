@@ -9,6 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-environments',
@@ -29,7 +30,12 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     Validators.minLength(2)
   ]);
 
+  updatable: boolean = true;
+  removable: boolean = true;
+  creatable: boolean = true;
+
   constructor(
+    private adminService: AdminService,
     private envService: EnvironmentService,
     private domainRouteService: DomainRouteService,
     private toastService: ToastService,
@@ -38,6 +44,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadEnvironments();
+    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -50,6 +57,24 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
         this.environments = env.filter(e => e.name != 'default');
+    });
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
     });
   }
 

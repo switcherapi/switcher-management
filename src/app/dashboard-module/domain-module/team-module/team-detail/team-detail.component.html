@@ -17,12 +17,12 @@
         <ngb-tabset [activeId]="1">
             <ngb-tab title="Members" id="1">
                 <ng-template ngbTabContent>
-                    <app-team-members [team]="team"></app-team-members>
+                    <app-team-members [team]="team" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-members>
                 </ng-template>
             </ngb-tab>
             <ngb-tab title="Roles" id="2">
                 <ng-template ngbTabContent>
-                    <app-team-roles [team]="team"></app-team-roles>
+                    <app-team-roles [team]="team" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-roles>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

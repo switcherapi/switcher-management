@@ -20,6 +20,8 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
 
   @Input() team: Team;
   @Input() teamListComponent: TeamComponent;
+  @Input() updatable: boolean = true;
+  @Input() removable: boolean = true;
 
   editing: boolean;
 

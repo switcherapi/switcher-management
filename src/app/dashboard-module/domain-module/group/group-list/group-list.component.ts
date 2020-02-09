@@ -13,6 +13,7 @@ import { ListComponent } from '../../common/list-component';
 import { GroupCreateComponent } from '../group-create/group-create.component';
 import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-group-list',
@@ -29,9 +30,12 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   loading = false;
   error = '';
 
+  creatable: boolean = true;
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private adminService: AdminService,
     private groupService: GroupService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
@@ -44,6 +48,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   ngOnInit() {
     this.loading = true;
     this.error = '';
+    this.readPermissionToObject();
     this.groupService.getGroupsByDomain(
       this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
@@ -52,7 +57,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
       }
       this.loading = false;
     }, error => {
-      this.error = this.errorHandler.doError(error);
+      // this.error = this.errorHandler.doError(error);
       this.loading = false;
     });
 
@@ -89,6 +94,20 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
         }, error => {
           this.toastService.showError('Unable to create a new group.');
           console.log(error);
+        });
+      }
+    });
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE'], 'GROUP', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok' ? true : false;
+          }
         });
       }
     });

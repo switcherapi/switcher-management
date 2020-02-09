@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject, Type } from '@angular/core';
 import { Strategy } from '../../model/strategy';
 import { MatSelectionList, MatSelectionListChange, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
@@ -14,6 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyListComponent } from '../strategy-list/strategy-list.component';
 import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.component';
+import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
+import { Types } from '../../model/path-route';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -48,6 +50,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   strategyOperations: string[] = [];
 
   constructor(
+    private domainRouteService: DomainRouteService,
     private strategyService: StrategyService,
     private adminService: AdminService,
     private toastService: ToastService,
@@ -73,6 +76,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     });
 
     super.loadAdmin(this.strategy.owner);
+    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -103,6 +107,23 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         Validators.required,
         valueInputValidator(this.strategyReq.operationsAvailable.validator)
       ]);
+    });
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'STRATEGY', 'strategy', this.strategy.strategy)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
     });
   }
 

@@ -6,6 +6,9 @@ export class DetailComponent {
     editing: boolean;
     currentStatus: boolean;
 
+    updatable: boolean = true;
+    removable: boolean = true;
+
     constructor(
         private service: AdminService,
       ) { }

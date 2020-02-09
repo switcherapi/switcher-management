@@ -10,6 +10,7 @@ import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ComponentService } from '../../services/component.service';
 import { SwitcherComponent } from '../model/switcher-component';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-components',
@@ -30,7 +31,12 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     Validators.minLength(2)
   ]);
 
+  updatable: boolean = true;
+  removable: boolean = true;
+  creatable: boolean = true;
+
   constructor(
+    private adminService: AdminService,
     private compService: ComponentService,
     private domainRouteService: DomainRouteService,
     private toastService: ToastService,
@@ -40,6 +46,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadComponents();
+    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -52,6 +59,24 @@ export class ComponentsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(components => {
         this.components = components;
+    });
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'COMPONENT', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
     });
   }
 

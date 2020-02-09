@@ -13,6 +13,7 @@ import { ListComponent } from '../../common/list-component';
 import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-config-list',
@@ -29,9 +30,12 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   loading = false;
   error = '';
 
+  creatable: boolean = true;
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private adminService: AdminService,
     private configService: ConfigService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
@@ -44,6 +48,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   ngOnInit() {
     this.loading = true;
     this.error = '';
+    this.readPermissionToObject();
     this.configService.getConfigsByGroup(
       this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         
@@ -53,7 +58,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
       }
       this.loading = false;
     }, error => {
-      this.error = this.errorHandler.doError(error);
+      // this.error = this.errorHandler.doError(error);
       this.loading = false;
     });
 
@@ -91,6 +96,20 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
         }, error => {
           this.toastService.showError('Unable to create a new switcher.');
           console.log(error);
+        });
+      }
+    });
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE'], 'SWITCHER', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok' ? true : false;
+          }
         });
       }
     });

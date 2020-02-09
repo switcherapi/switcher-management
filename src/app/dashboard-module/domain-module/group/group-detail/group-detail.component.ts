@@ -93,6 +93,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
     this.nameFormControl.setValue(group.name);
     this.domainRouteService.updatePath(this.pathRoute, true);
+    this.readPermissionToObject();
   }
 
   updateEnvironmentStatus(env : any): void {
@@ -130,6 +131,23 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   getGroup() {
     return this.pathRoute.element;
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'GROUP', 'name', this.getGroup().name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
+    });
   }
 
   edit() {

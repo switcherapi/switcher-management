@@ -1,15 +1,16 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Group } from '../../model/group';
 import { Router } from '@angular/router';
 import { GroupListComponent } from '../group-list/group-list.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material';
 import { GroupService } from 'src/app/dashboard-module/services/group.service';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-group-preview',
@@ -32,9 +33,13 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   classStatus: string;
   classBtnStatus: string;
 
+  updatable: boolean = true;
+  removable: boolean = true;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private adminService: AdminService,
     private domainRouteService: DomainRouteService,
     private groupService: GroupService,
     private toastService: ToastService
@@ -45,6 +50,8 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     this.groupListComponent.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
       this.selectEnvironment(envName);
     });
+
+    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -76,6 +83,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     };
 
     this.domainRouteService.updatePath(pathRoute, false);
+    this.readPermissionToObject();
   }
 
   selectGroup() {
@@ -104,6 +112,25 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
+    });
+  }
+
+  readPermissionToObject(): void {
+    this.adminService.readCollabPermission(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+      ['UPDATE', 'DELETE'], 'GROUP', 'name', this.getGroup().name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+            
+            if (!this.updatable)
+              this.environmentStatusSelection.disable({ onlySelf: true });
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
     });
   }
 

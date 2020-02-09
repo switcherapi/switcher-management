@@ -24,8 +24,13 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
+  roles: Role[];
   dataSource: MatTableDataSource<Role>;
   dataColumns = ['remove', 'edit', 'router', 'action'];
+
+  @Input() updatable: boolean = true;
+  @Input() creatable: boolean = true;
+  @Input() removable: boolean = true;
 
   constructor(
     private teamService: TeamService,
@@ -46,15 +51,16 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   loadRoles(): void {
     this.roleService.getRolesByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(roles => {
       if (roles) {
-        this.loadDataSource(roles)
+        this.roles = roles;
+        this.loadDataSource()
       }
     }, error => {
       console.log(error);
     });
   }
 
-  loadDataSource(data: Role[]): void {
-    this.dataSource = new MatTableDataSource(data);
+  loadDataSource(): void {
+    this.dataSource = new MatTableDataSource(this.roles);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -68,25 +74,30 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   }
 
   editRole(role: Role) {
+    const roleCopy = JSON.parse(JSON.stringify(role));
     const dialogRef = this.dialog.open(TeamRoleCreateComponent, {
       width: '400px',
       data: { 
         roles: this.dataSource.data,
-        router: role.router,
-        action: role.action,
-        values: role.values,
-        identifiedBy: role.identifiedBy,
-        role
+        router: roleCopy.router,
+        action: roleCopy.action,
+        values: roleCopy.values,
+        identifiedBy: roleCopy.identifiedBy,
+        role: roleCopy
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.roleService.updateRole(this.team._id, result.action, result.router, result.identifiedBy)
+        this.roleService.updateRole(role._id, result.action, result.router, result.identifiedBy)
           .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
             if (role) {
-              this.loadRoles();
-              this.toastService.showSuccess('Role updated with success');
+              this.roleService.updateRoleValues(role._id, result.values).pipe(takeUntil(this.unsubscribe)).subscribe(role => {
+                if (role) {
+                  this.loadRoles();
+                  this.toastService.showSuccess('Role updated with success');
+                }
+              });
             }
           });
       }
@@ -94,9 +105,10 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   }
 
   removeRole(role: Role) {
-    this.roleService.deleteRole(role._id).pipe(takeUntil(this.unsubscribe)).subscribe(role => {
-      if (role) {
-        this.loadRoles();
+    this.roleService.deleteRole(role._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.roles.splice(this.roles.indexOf(role), 1);
+        this.loadDataSource();
         this.toastService.showSuccess('Role removed with success');
       }
     }, error => {

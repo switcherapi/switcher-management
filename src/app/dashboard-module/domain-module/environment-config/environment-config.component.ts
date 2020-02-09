@@ -3,7 +3,7 @@ import { EnvironmentService } from '../../services/environment.service';
 import { Subject } from 'rxjs';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Environment } from '../model/environment';
-import { MatSelectionListChange, MatSelect, MatSlideToggleChange } from '@angular/material';
+import { MatSelectionListChange, MatSelect, MatSlideToggleChange, MatSlideToggle } from '@angular/material';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { Types } from '../model/path-route';
 import { takeUntil } from 'rxjs/operators';
@@ -26,6 +26,9 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSelect, { static: true })
   private envSelectionChange: MatSelect;
+
+  @ViewChild(MatSlideToggle, { static: true })
+  private toggleEnv: MatSlideToggle;
 
   environmentSelection: FormGroup;
   environmentStatusSelection: FormGroup;
@@ -102,6 +105,10 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
     this.selectedEnvName = this.environments[0].name; 
     return this.environments[0].name;
+  }
+
+  disableEnvChange(modifiable: boolean): void {
+    this.toggleEnv.disabled = modifiable;
   }
 
   changeStatus(event: MatSlideToggleChange) {

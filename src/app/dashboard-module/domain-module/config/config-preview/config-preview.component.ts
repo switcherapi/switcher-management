@@ -10,6 +10,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-config-preview',
@@ -32,9 +33,13 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   classStatus: string;
   classBtnStatus: string;
 
+  updatable: boolean = true;
+  removable: boolean = true;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private adminService: AdminService,
     private domainRouteService: DomainRouteService,
     private configService: ConfigService,
     private toastService: ToastService
@@ -45,6 +50,8 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     this.configListComponent.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
       this.selectEnvironment(envName);
     });
+
+    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -104,6 +111,25 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
+    });
+  }
+
+  readPermissionToObject(): void {
+    this.adminService.readCollabPermission(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+      ['UPDATE', 'DELETE'], 'SWITCHER', 'name', this.getConfig().name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+            
+            if (!this.updatable)
+              this.environmentStatusSelection.disable({ onlySelf: true });
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
     });
   }
 

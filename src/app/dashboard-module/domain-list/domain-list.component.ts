@@ -60,7 +60,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
       }
       this.loading = false;
     }, error => {
-      this.error = this.errorHandler.doError(error);
+      // this.error = this.errorHandler.doError(error);
       this.loading = false;
     });
   }

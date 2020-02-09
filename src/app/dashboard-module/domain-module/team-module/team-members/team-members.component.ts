@@ -17,6 +17,9 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 export class TeamMembersComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() team: Team;
+  @Input() updatable: boolean = true;
+  @Input() creatable: boolean = true;
+  @Input() removable: boolean = true;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

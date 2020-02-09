@@ -92,12 +92,13 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
     this.domainDescription = domain.description;
     this.domainRouteService.updatePath(this.pathRoute, true);
+    this.readPermissionToObject();
   }
 
   updateEnvironmentStatus(env : any): void {
-    this.selectEnvironment(env.status);
     this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
+        this.selectEnvironment(env.status);
         this.updatePathRoute(data);
         this.toastService.showSuccess(`Environment updated with success`);
       }
@@ -130,6 +131,22 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   getDomain() {
     return this.pathRoute.element;
+  }
+
+  readPermissionToObject(): void {
+    this.adminService.readCollabPermission(this.getDomain().id, ['UPDATE', 'DELETE'], 'DOMAIN', 'name', this.getDomain().name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
+    });
   }
 
   edit() {

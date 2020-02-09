@@ -6,6 +6,8 @@ import { map, takeUntil } from 'rxjs/operators';
 import { Types } from '../../model/path-route';
 import { DomainService } from 'src/app/dashboard-module/services/domain.service';
 import { Domain } from '../../model/domain';
+import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-team-detail',
@@ -20,7 +22,13 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
 
   domain: Domain;
 
+  updatable: boolean = true;
+  removable: boolean = true;
+  creatable: boolean = true;
+
   constructor(
+    private domainRouteService: DomainRouteService,
+    private adminService: AdminService,
     private route: ActivatedRoute,
     private team: Team,
     private domainService: DomainService
@@ -30,10 +38,10 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.team) {
         localStorage.setItem(Types.SELECTED_TEAM, data.team);
-        this.team = JSON.parse(data.team);
+        this.readPermissionToObject(JSON.parse(data.team));
         this.loadDomain(this.team.domain);
       } else {
-        this.team = JSON.parse(localStorage.getItem(Types.SELECTED_TEAM));
+        this.readPermissionToObject(JSON.parse(localStorage.getItem(Types.SELECTED_TEAM)));
         this.loadDomain(this.team.domain);
       }
     })
@@ -50,6 +58,28 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  readPermissionToObject(team: Team): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
+    });
+
+    if (team) {
+      this.team = team;
+    }
   }
 
 }

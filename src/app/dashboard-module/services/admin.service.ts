@@ -27,4 +27,17 @@ export class AdminService extends ApiService {
     return this.http.get<string[]>(`${environment.apiUrl}/admin/collaboration`).pipe(catchError(super.handleError));
   }
 
+  public readCollabPermission(domain: string, actions: string[], router: string, elementKey: string, elementValue: string): Observable<any> {
+    const body = {
+      domain,
+      action: actions,
+      router,
+      element: {
+        [`${elementKey}`]: elementValue
+      }
+    };
+
+    return this.http.post<any>(`${environment.apiUrl}/admin/collaboration/permission`, body).pipe(catchError(super.handleError));
+  }
+
 }

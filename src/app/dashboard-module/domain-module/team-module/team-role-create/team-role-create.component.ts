@@ -112,8 +112,12 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
 
   addValue(newValue: string) {
     const { valid } = this.valueSelectionFormControl;
-    if (valid && !this.data.values.includes(newValue)) {
-      this.data.values.push(newValue);
+    if (valid) {
+      if (this.data.values && !this.data.values.includes(newValue)) {
+        this.data.values.push(newValue);
+      } else {
+        this.data.values = [newValue];
+      }
     }
   }
 
@@ -135,6 +139,11 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
   }
 
   validateData(data: any): boolean {
+    // When editing
+    if (this.data.role) {
+      return true;
+    }
+
     const foundRole = this.data.roles.filter((role: Role) => 
       role.router === data.router || role.router === 'ALL' || data.router === 'ALL');
     const foundRoleAction = foundRole.filter((role: Role) => role.action === data.action || role.action === 'ALL');
@@ -150,6 +159,9 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
   loadIdentifiedBy(): void {
     if (this.data.values.length) {
       this.data.identifiedBy = this.key;
+    } else {
+      this.data.identifiedBy = '';
+      this.data.values = [];
     }
   }
 

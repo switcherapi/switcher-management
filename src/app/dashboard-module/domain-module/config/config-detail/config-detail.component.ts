@@ -170,6 +170,24 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     };
 
     this.domainRouteService.updatePath(this.pathRoute, true);
+    this.readPermissionToObject();
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.getConfig().key)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
+    });
   }
 
   updateEnvironmentStatus(env : any): void {
@@ -316,7 +334,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
       this.loading = false;
     }, error => {
-      this.error = this.errorHandler.doError(error);
+      // this.error = this.errorHandler.doError(error);
       this.loading = false;
     });
 

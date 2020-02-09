@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 
 @Component({
   selector: 'app-team',
@@ -30,7 +31,12 @@ export class TeamComponent implements OnInit, OnDestroy {
   loading = false;
   error = '';
 
+  updatable: boolean = true;
+  removable: boolean = true;
+  creatable: boolean = true;
+
   constructor(
+    private adminService: AdminService,
     private teamService: TeamService,
     private domainRouteService : DomainRouteService,
     private errorHandler: RouterErrorHandler,
@@ -46,13 +52,10 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.error = '';
     this.teamService.getTeamsByDomain(
       this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-
-      if (data) {
-        this.teams = data;
-      }
+      this.readPermissionToObject(data);
       this.loading = false;
     }, error => {
-      this.error = this.errorHandler.doError(error);
+      // this.error = this.errorHandler.doError(error);
       this.loading = false;
     });
 
@@ -67,6 +70,28 @@ export class TeamComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  readPermissionToObject(teams: Team[]): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok' ? true : false;
+          }
+        });
+
+        if (teams) {
+          this.teams = teams;
+        }
+      }
+    });
   }
 
   createTeam() {
