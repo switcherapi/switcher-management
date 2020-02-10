@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainService } from '../services/domain.service';
 import { Domain } from '../domain-module/model/domain';
 import { environment } from 'src/environments/environment';
-import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
@@ -11,6 +10,7 @@ import { DomainCreateComponent } from '../domain-create/domain-create.component'
 import { AdminService } from '../services/admin.service';
 import { TeamService } from '../services/team.service';
 import { Team } from '../domain-module/model/team';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-domain-list',
@@ -32,7 +32,6 @@ export class DomainListComponent implements OnInit, OnDestroy {
     private adminService: AdminService,
     private teamService: TeamService,
     private domainService: DomainService,
-    private errorHandler: RouterErrorHandler,
     private toastService: ToastService
   ) { }
 
@@ -60,7 +59,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
       }
       this.loading = false;
     }, error => {
-      // this.error = this.errorHandler.doError(error);
+      ConsoleLogger.printError(error);
       this.loading = false;
     });
   }
@@ -106,7 +105,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
           }
         }, error => {
           this.toastService.showError('Unable to create a new domain.');
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });

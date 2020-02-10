@@ -9,6 +9,7 @@ import { EnvironmentService } from 'src/app/dashboard-module/services/environmen
 import { Environment } from '../../model/environment';
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-metric',
@@ -69,7 +70,7 @@ export class MetricComponent implements OnInit, OnDestroy {
           this.metrics = new Metric();
         }
       }, error => {
-        console.log(error);
+        ConsoleLogger.printError(error);
         this.error = 'Unable to load metrics';
         this.loading = false;
       });

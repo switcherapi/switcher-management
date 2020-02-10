@@ -22,6 +22,11 @@
   padding: 5px;
 }
 
+.btn-element.create {
+  height: fit-content;
+  margin-top: 10px;
+}
+
 .btn-element.remove {
   margin-right: 10px; 
   background:#fb5454; 

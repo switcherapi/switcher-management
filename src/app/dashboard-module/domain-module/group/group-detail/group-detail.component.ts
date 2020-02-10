@@ -13,6 +13,7 @@ import { GroupService } from 'src/app/dashboard-module/services/group.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-group-detail',
@@ -172,7 +173,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
             this.editing = false;
           }
         }, error => {
-          console.log(error)
+          ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update group`);
           this.classStatus = 'header editing';
           this.editing = true;
@@ -193,7 +194,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           this.toastService.showSuccess(`Group removed with success`);
         }, error => {
           this.toastService.showError(`Unable to remove this group`);
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });

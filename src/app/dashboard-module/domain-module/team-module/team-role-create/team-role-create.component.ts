@@ -6,6 +6,7 @@ import { RoleService } from 'src/app/dashboard-module/services/role.service';
 import { takeUntil } from 'rxjs/operators';
 import { Role } from '../../model/role';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-team-role-create',
@@ -93,7 +94,7 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
         }
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
     });
   }
 
@@ -106,7 +107,7 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
         }
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
     });
   }
 

@@ -12,6 +12,7 @@ import { GroupService } from '../../services/group.service';
 import { ConfigService } from '../../services/config.service';
 import { StrategyService } from '../../services/strategy.service';
 import { Strategy } from '../model/strategy';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-changelog',
@@ -88,7 +89,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         this.loadDataSource(data);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to load Domain Change Log`);
     });
   }
@@ -99,7 +100,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         this.loadDataSource(data);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to load Group Change Log`);
     });
   }
@@ -110,7 +111,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         this.loadDataSource(data);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to load Switcher Change Log`);
     });
   }
@@ -121,7 +122,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         this.loadDataSource(data);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to load Strategy Change Log`);
     });
   }

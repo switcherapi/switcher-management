@@ -3,7 +3,6 @@ import { Config } from 'protractor';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { Types } from '../../model/path-route';
 import { environment } from 'src/environments/environment';
-import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
@@ -14,6 +13,7 @@ import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-config-list',
@@ -39,7 +39,6 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     private configService: ConfigService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
-    private errorHandler: RouterErrorHandler,
     private toastService: ToastService
   ) { 
     super(fb, environmentService, domainRouteService);
@@ -58,7 +57,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
       }
       this.loading = false;
     }, error => {
-      // this.error = this.errorHandler.doError(error);
+      ConsoleLogger.printError(error);
       this.loading = false;
     });
 
@@ -95,7 +94,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
           }
         }, error => {
           this.toastService.showError('Unable to create a new switcher.');
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });

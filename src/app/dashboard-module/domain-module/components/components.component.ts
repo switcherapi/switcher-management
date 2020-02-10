@@ -11,6 +11,7 @@ import { ComponentService } from '../../services/component.service';
 import { SwitcherComponent } from '../model/switcher-component';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AdminService } from '../../services/admin.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-components',
@@ -116,7 +117,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Component removed with success');
           }
         }, error => {
-          console.log(error);
+          ConsoleLogger.printError(error);
           this.toastService.showError('Unable to remove this Component');
         });
       }
@@ -144,7 +145,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess(`Component updated with success`);
           }
         }, error => {
-          console.log(error)
+          ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update component`);
         });
       }

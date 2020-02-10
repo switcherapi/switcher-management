@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, mapTo, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
 import { Tokens } from '../models/tokens';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +75,7 @@ export class AuthService {
         } else if (error.status === 422) {
             errorMessage = 'Invalid email format';
         } else {
-            console.log(error);
+            ConsoleLogger.printError(error);
             errorMessage = `Switcher API is offline`;
         }
     }

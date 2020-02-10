@@ -22,6 +22,7 @@ import { MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputE
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ComponentService } from 'src/app/dashboard-module/services/component.service';
 import { SwitcherComponent } from '../../model/switcher-component';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-config-detail',
@@ -155,7 +156,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.keyFormControl.setValue(config.key);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to load this Switcher`);
     });
   }
@@ -198,7 +199,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
     });
   }
@@ -210,7 +211,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.toastService.showSuccess(`Environment removed with success`);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
@@ -247,7 +248,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             this.editing = false
           }
         }, error => {
-          console.log(error)
+          ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update switcher`);
           this.classStatus = 'header editing';
           this.editing = true;
@@ -268,7 +269,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.toastService.showSuccess(`Switcher removed with success`);
         }, error => {
           this.toastService.showError(`Unable to remove this switcher`);
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });
@@ -296,7 +297,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
               this.toastService.showSuccess(`Strategy created with success`);
             }, error => {
               this.toastService.showError(error ? error.error : 'Unable to add strategy');
-              console.log(error);
+              ConsoleLogger.printError(error);
             });
       }
     });
@@ -317,7 +318,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         }
       }, error => {
         this.toastService.showError(error ? error.error : 'Something went wront when updating components');
-        console.log(error)
+        ConsoleLogger.printError(error);
       });
     } else {
       this.loadConfig(config);

@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Admin } from '../../model/admin';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-team-members',
@@ -47,7 +48,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
         this.loadDataSource(team.members)
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
     })
   }
 
@@ -72,7 +73,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
         this.toastService.showSuccess('User invited with success');
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to invite ${email} - ${error.error}`)
     })
   }
@@ -83,7 +84,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
         this.loadTeam();
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
     })
   }

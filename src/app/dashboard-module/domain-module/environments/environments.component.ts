@@ -10,6 +10,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { AdminService } from '../../services/admin.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-environments',
@@ -113,7 +114,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Environment removed with success');
           }
         }, error => {
-          console.log(error);
+          ConsoleLogger.printError(error);
           this.toastService.showError('Unable to remove this Environment');
         });
       }
@@ -134,7 +135,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Environment reseted with success');
           }
         }, error => {
-          console.log(error);
+          ConsoleLogger.printError(error);
           this.toastService.showError('Unable to reset this Environment');
         });
       }

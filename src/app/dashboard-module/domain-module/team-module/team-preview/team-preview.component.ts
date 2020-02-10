@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { TeamComponent } from '../team/team.component';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-team-preview',
@@ -58,7 +59,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
           this.toastService.showSuccess(`Team removed with success`);
         }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove team: '${this.team.name}'`);
     })
   }
@@ -80,7 +81,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
           this.toastService.showSuccess(`Team updated with success`);
         }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update team: '${this.team.name}'`);
     })
   }

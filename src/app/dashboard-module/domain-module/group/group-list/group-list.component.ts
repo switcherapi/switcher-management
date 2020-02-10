@@ -3,7 +3,6 @@ import { Group } from '../../model/group';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { Types } from '../../model/path-route';
 import { environment } from 'src/environments/environment';
-import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GroupService } from 'src/app/dashboard-module/services/group.service';
@@ -14,6 +13,7 @@ import { GroupCreateComponent } from '../group-create/group-create.component';
 import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-group-list',
@@ -39,7 +39,6 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     private groupService: GroupService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
-    private errorHandler: RouterErrorHandler,
     private toastService: ToastService
   ) {
     super(fb, environmentService, domainRouteService);
@@ -57,7 +56,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
       }
       this.loading = false;
     }, error => {
-      // this.error = this.errorHandler.doError(error);
+      ConsoleLogger.printError(error);
       this.loading = false;
     });
 
@@ -93,7 +92,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
           }
         }, error => {
           this.toastService.showError('Unable to create a new group.');
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });

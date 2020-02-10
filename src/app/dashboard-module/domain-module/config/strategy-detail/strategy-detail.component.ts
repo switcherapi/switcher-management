@@ -16,6 +16,7 @@ import { StrategyListComponent } from '../strategy-list/strategy-list.component'
 import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.component';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -168,7 +169,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.editing = false;
         }
       }, error => {
-        console.log(error)
+        ConsoleLogger.printError(error);
         this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
         this.editing = false;
       });
@@ -186,7 +187,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy removed with success`);
         }, error => {
           this.toastService.showError(`Unable to remove this strategy`);
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });
@@ -214,12 +215,12 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
                 this.toastService.showSuccess(`Strategy cloned with success`);
               }, error => {
                 this.toastService.showError(error.error);
-                console.log(error);
+                ConsoleLogger.printError(error);
               });
           }
         }, error => {
           this.toastService.showError(error.error);
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });

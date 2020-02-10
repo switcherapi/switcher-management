@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material';
 import { DomainCreateComponent } from '../../domain-create/domain-create.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-domain-detail',
@@ -114,7 +115,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         this.toastService.showSuccess(`Environment removed with success`);
       }
     }, error => {
-      console.log(error);
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
@@ -184,7 +185,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           }
         }, error => {
           this.toastService.showError(`Unable to generate an API Key`);
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     })
@@ -202,7 +203,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           this.toastService.showSuccess(`Domain removed with success`);
         }, error => {
           this.toastService.showError(`Unable to remove this domain`);
-          console.log(error);
+          ConsoleLogger.printError(error);
         });
       }
     });
