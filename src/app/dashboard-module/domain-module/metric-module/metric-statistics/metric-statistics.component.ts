@@ -9,7 +9,10 @@ import { MetricComponent } from '../metric/metric.component';
 @Component({
   selector: 'app-metric-statistics',
   templateUrl: './metric-statistics.component.html',
-  styleUrls: ['./metric-statistics.component.css']
+  styleUrls: [
+    '../../common/css/detail.component.css',
+    './metric-statistics.component.css'
+  ]
 })
 export class MetricStatisticsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
@@ -34,8 +37,10 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
 
     this.loading = true;
 
-    this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data, this.dialog);
-    this.switcherDateTimeGroupTab.loadSwitcherDateTimeGroupView();
+    if (this.switcher) {
+      this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data, this.dialog);
+      this.switcherDateTimeGroupTab.loadSwitcherDateTimeGroupView();
+    }
 
     this.switchersTab = new SwitchersStatisticsTab(this.data, this.parent);
     this.switchersTab.loadSwitchersView();
@@ -212,7 +217,11 @@ export class ReasonsStatisticsTab {
 export class SwitcherDateTimeGroupedTab {
   constructor(
     private data: Metric,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog) {
+      this.MAX_CONTENT = 5;
+      this.content_index = -1;
+      this.total_content = 0;
+    }
 
   public chartType: string = 'line';
   public chartLegend = true;
@@ -220,6 +229,7 @@ export class SwitcherDateTimeGroupedTab {
   public selectedData: MetricData[][] = [];
   public chartDatasets: Array<any> = [];
   public chartLabels: Array<any> = [];
+  public chartShortLabels: Array<any> = [];
 
   public chartColors: Array<any> = [
     {
@@ -234,29 +244,6 @@ export class SwitcherDateTimeGroupedTab {
     }
   ];
 
-  public loadSwitcherDateTimeGroupView(): void {
-    const switcherStatistics = this.data.statistics.switchers;
-    let negative = { data: [], label: 'Negative' };
-    let positive = { data: [], label: 'Positive' };
-
-    switcherStatistics.forEach(switcherStats => {
-      switcherStats.dateTimeStatistics.forEach(dateTimeStats => {
-        this.pushMetric(switcherStats.switcher, dateTimeStats.date);
-        this.chartLabels.push(dateTimeStats.date);
-        negative.data.push(dateTimeStats.negative);
-        positive.data.push(dateTimeStats.positive);
-      });
-    });
-
-    this.chartDatasets.push(negative);
-    this.chartDatasets.push(positive);
-  }
-
-  pushMetric(swither: string, date: string) {
-    const dataFound = this.data.data.filter(data => data.config.key === swither && data.date.toString().indexOf(date) >= 0);
-    this.selectedData.push(dataFound);
-  }
-
   public chartOptions: any = {
     responsive: true,
     onClick : (evt, array) => {
@@ -264,6 +251,61 @@ export class SwitcherDateTimeGroupedTab {
         this.expandSelectedData(array[0]._index);
     }
   };
+
+  private MAX_CONTENT: number;
+  private content_index: number;
+  private total_content: number;
+
+  public loadSwitcherDateTimeGroupView(): void {
+    this.chartDatasets = [];
+    this.selectedData = [];
+    this.chartLabels = [];
+    this.chartShortLabels = [];
+    
+    const switcherStatistics = this.data.statistics.switchers;
+    let negative = { data: [], label: 'Negative' };
+    let positive = { data: [], label: 'Positive' };
+
+    switcherStatistics.forEach(switcherStats => {
+      this.total_content = switcherStats.dateTimeStatistics.length;
+
+      const stats = switcherStats.dateTimeStatistics;
+      for (let index = 0; index < stats.length && index < this.MAX_CONTENT; index++) {
+        this.content_index++;
+        if (stats[this.content_index]) {
+          this.pushMetric(switcherStats.switcher, stats[this.content_index].date);
+          this.chartLabels.push(stats[this.content_index].date);
+          this.chartShortLabels.push(stats[this.content_index].date
+            .substring(stats[this.content_index].date.length - 2));
+          negative.data.push(stats[this.content_index].negative);
+          positive.data.push(stats[this.content_index].positive);
+        } else
+          break;
+
+      }
+    });
+
+    this.chartDatasets.push(negative);
+    this.chartDatasets.push(positive);
+  }
+
+  hasNext(): boolean {
+    return this.content_index < this.total_content - 1;
+  }
+
+  hasPrevious(): boolean {
+    return (this.content_index - this.MAX_CONTENT) > 0;
+  }
+
+  onPrevious(): void {
+    this.content_index -= this.MAX_CONTENT * 2;
+    this.loadSwitcherDateTimeGroupView();
+  }
+
+  pushMetric(swither: string, date: string) {
+    const dataFound = this.data.data.filter(data => data.config.key === swither && data.date.toString().indexOf(date) >= 0);
+    this.selectedData.push(dataFound);
+  }
 
   expandSelectedData(index: number) {
     this.dialog.open(SwitcherDataStatsDialog, {
@@ -273,6 +315,10 @@ export class SwitcherDateTimeGroupedTab {
         date: this.chartLabels[index]
       }
     });
+  }
+
+  showLabel(): boolean {
+    return window.screen.width > 750;
   }
 }
 

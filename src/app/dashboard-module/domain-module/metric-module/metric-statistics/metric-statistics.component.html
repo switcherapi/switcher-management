@@ -1,11 +1,26 @@
 <div *ngIf="!loading" #tabmetrics id="tabmetrics_id">
     <mat-tab-group [(selectedIndex)]="tabSelection" dynamicHeight>
         <mat-tab *ngIf="switcher != null" label="Switchers Date/Time View">
+            <div style="display: flex;">
+                <button mat-button class="btn-element" 
+                    (click)="getSwitcherDateTimeGroupStats().onPrevious()" 
+                    [disabled]="!getSwitcherDateTimeGroupStats().hasPrevious()">
+                    <mat-icon style="font-size: larger;">navigate_before</mat-icon>
+                    Previous
+                </button>
+                <button mat-button class="btn-element" 
+                    (click)="getSwitcherDateTimeGroupStats().loadSwitcherDateTimeGroupView()" 
+                    [disabled]="!getSwitcherDateTimeGroupStats().hasNext()">
+                    <mat-icon style="font-size: larger;">navigate_next</mat-icon>
+                    Next
+                </button>
+            </div>
             <div style="display: block">
                 <canvas baseChart
                     [chartType]="getSwitcherDateTimeGroupStats().chartType"
                     [datasets]="getSwitcherDateTimeGroupStats().chartDatasets"
-                    [labels]="getSwitcherDateTimeGroupStats().chartLabels"
+                    [labels]="getSwitcherDateTimeGroupStats().showLabel() ? 
+                        getSwitcherDateTimeGroupStats().chartLabels : getSwitcherDateTimeGroupStats().chartShortLabels"
                     [colors]="getSwitcherDateTimeGroupStats().chartColors"
                     [options]="getSwitcherDateTimeGroupStats().chartOptions"
                     [legend]="true">

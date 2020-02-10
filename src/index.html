@@ -27,14 +27,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 
-<body onclick="pageContainerFix()">
+<body onclick="pageContainerAdjust()">
     <script>
-        function pageContainerFix() {
-            if (window.location.href.indexOf('dashboard/domain/metrics') > 0 ||
-                window.location.href.indexOf('domain/group/switcher/detail') > 0 ) {
-                document.getElementById('content-wrap').style.height = '1900px';
-                document.getElementById('footer').style.display = 'none';
+        function pageContainerAdjust() {
+            if (window.location.href.indexOf('dashboard/domain/metrics') > 0) {
+                document.getElementById('content-wrap').style.minHeight = '1200px';
+            } else if (window.location.href.indexOf('domain/group/switcher/detail') > 0) {
+                document.getElementById('content-wrap').style.minHeight = '1600px';
             } else {
+                document.getElementById('content-wrap').style.minHeight = '';
                 document.getElementById('content-wrap').style.height = '100%';
             }
         }
