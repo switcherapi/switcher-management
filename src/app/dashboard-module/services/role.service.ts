@@ -43,8 +43,8 @@ export class RoleService extends ApiService {
     return this.http.post<Role>(`${environment.apiUrl}/role/create/${idTeam}`, body).pipe(catchError(super.handleError));
   }
 
-  public updateRole(id: string, action: string, router: string, identifiedBy?: string): Observable<Role> {
-    let body= { action, router, identifiedBy };
+  public updateRole(id: string, action: string, router: string, identifiedBy?: string, active: boolean = true): Observable<Role> {
+    let body = { action, router, identifiedBy, active: active ? 'true' : 'false' };
 
     return this.http.patch<Role>(`${environment.apiUrl}/role/${id}`, body).pipe(catchError(super.handleError));
   }

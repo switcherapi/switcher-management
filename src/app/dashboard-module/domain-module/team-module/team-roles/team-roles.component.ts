@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Team } from '../../model/team';
-import { MatSort, MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSlideToggleChange } from '@angular/material';
 import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   selector: 'app-team-roles',
   templateUrl: './team-roles.component.html',
   styleUrls: [
+    '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
     './team-roles.component.css'
   ]
@@ -27,7 +28,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
 
   roles: Role[];
   dataSource: MatTableDataSource<Role>;
-  dataColumns = ['remove', 'edit', 'router', 'action'];
+  dataColumns = ['remove', 'edit', 'router', 'action', 'active'];
 
   @Input() updatable: boolean = true;
   @Input() creatable: boolean = true;
@@ -78,7 +79,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     const roleCopy = JSON.parse(JSON.stringify(role));
     const dialogRef = this.dialog.open(TeamRoleCreateComponent, {
       width: '400px',
-      data: { 
+      data: {
         roles: this.dataSource.data,
         router: roleCopy.router,
         action: roleCopy.action,
@@ -120,7 +121,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   createRole() {
     const dialogRef = this.dialog.open(TeamRoleCreateComponent, {
       width: '400px',
-      data: { 
+      data: {
         roles: this.dataSource.data,
         values: []
       }
@@ -137,6 +138,22 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  updateStatus(role: Role, event: MatSlideToggleChange) {
+    this.roleService.updateRole(role._id, role.action, role.router, role.identifiedBy, event.checked)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
+        if (role) {
+          this.toastService.showSuccess('Role updated with success');
+        }
+      });
+  }
+
+  formatContent(value: string): string {
+    if (window.screen.width < 380)
+      return value.substring(0, 3);
+    else
+      return value;
   }
 
 }

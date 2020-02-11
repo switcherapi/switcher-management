@@ -20,8 +20,8 @@
         </ng-container>
 
         <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element" style="width: 5%;">
+            <th mat-header-cell *matHeaderCellDef class="table-header-resize"></th>
+            <td mat-cell *matCellDef="let element" style="width: 1px;">
                 <button mat-icon-button (click)="editRole(element)" [disabled]="!updatable">
                     Edit
                 </button>
@@ -29,13 +29,21 @@
         </ng-container>
         
         <ng-container matColumnDef="router">
-            <th mat-header-cell *matHeaderCellDef>Component</th>
-            <td mat-cell *matCellDef="let element">{{element.router}}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Component</th>
+            <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.router }}</td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>Permission</th>
-            <td mat-cell *matCellDef="let element">{{element.action}}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Permission</th>
+            <td mat-cell *matCellDef="let element">{{ formatContent(element.action) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" style="width: 1px; vertical-align: baseline;">
+                <mat-slide-toggle [checked]="element.active" class="toggle-style" (change)="updateStatus(element, $event)" [disabled]="!updatable">
+                </mat-slide-toggle>
+            </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="dataColumns"></tr>

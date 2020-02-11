@@ -1,0 +1,9 @@
+@media only screen and (max-width: 420px) {
+  .mat-elevation-z8 {
+    display: grid;
+  }
+
+  .table-header-resize {
+    width: 80px;
+  }
+}
