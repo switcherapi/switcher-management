@@ -74,4 +74,8 @@ export class DomainService extends ApiService {
     }).pipe(catchError(super.handleError));
   }
 
+  public resetHistory(id: string): Observable<Domain> {
+    return this.http.delete<Domain>(`${environment.apiUrl}/domain/history/${id}`).pipe(catchError(super.handleError));
+  }
+
 }

@@ -56,6 +56,8 @@ export class MetricComponent implements OnInit, OnDestroy {
   loadMetrics(switcher?: string, environment?: string, dateBefore?: string, dateAfter?: string): void {
     if (this.switcher) {
       this.switcherKeyFormControl.setValue(switcher);
+    } else {
+      this.switcherKeyFormControl.setValue(null);
     }
 
     this.loading = true;

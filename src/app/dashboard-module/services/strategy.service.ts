@@ -111,5 +111,9 @@ export class StrategyService extends ApiService {
       }
     }).pipe(catchError(super.handleError));
   }
+
+  public resetHistory(id: string): Observable<Strategy> {
+    return this.http.delete<Strategy>(`${environment.apiUrl}/configstrategy/history/${id}`).pipe(catchError(super.handleError));
+  }
   
 }

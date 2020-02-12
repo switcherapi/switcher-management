@@ -28,8 +28,8 @@ export class MetricService extends ApiService {
     return this.http.get<Metric>(`${environment.apiUrl}/metric/${domainId}`, { params }).pipe(catchError(super.handleError));
   }
 
-  public resetMetricsForSwitcher(switcherId: string): Observable<SwitcherComponent> {
-    return this.http.delete<SwitcherComponent>(`${environment.apiUrl}/metric/${switcherId}`).pipe(catchError(super.handleError));
+  public resetMetricsForSwitcher(switcherId: string): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/metric/${switcherId}`).pipe(catchError(super.handleError));
   }
 
 }

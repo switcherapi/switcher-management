@@ -53,8 +53,19 @@ h1 {
   font-size: x-large;
 }
 
+.tablelog-footer {
+  columns: 2;
+  background: white;
+}
+
 @media only screen and (max-width: 520px) {
   .element-detail-panel {
     display: block;
   }
+
+  .tablelog-footer {
+    display: contents;
+  }
+  
 }
+

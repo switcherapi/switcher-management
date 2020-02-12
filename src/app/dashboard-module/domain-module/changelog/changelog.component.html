@@ -6,7 +6,7 @@
     <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
         <ng-container matColumnDef="{{column}}" *ngFor="let column of dataColumns">
             <th mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{getColumnLabel(column)}}</strong></th>
-            <td mat-cell *matCellDef="let element">{{formatResumedData(element[column])}}</td>
+            <td mat-cell *matCellDef="let element">{{ column === 'date' ? formatDateContent(element[column]) : formatResumedData(element[column]) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="expandedDetail">
@@ -42,5 +42,12 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+    <div class="tablelog-footer">
+        <button mat-button class="btn-element" style="background:#fb5454;" 
+            (click)="resetHistory()" 
+            [disabled]="!dataSource?.data?.length || !removable">
+            Reset
+        </button>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+    </div>
 </div>

@@ -63,4 +63,8 @@ export class GroupService extends ApiService {
       }
     }).pipe(catchError(super.handleError));
   }
+
+  public resetHistory(id: string): Observable<Group> {
+    return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/history/${id}`).pipe(catchError(super.handleError));
+  }
 }

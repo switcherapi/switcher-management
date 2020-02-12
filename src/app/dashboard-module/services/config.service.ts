@@ -80,5 +80,9 @@ export class ConfigService extends ApiService {
       }
     }).pipe(catchError(super.handleError));
   }
+
+  public resetHistory(id: string): Observable<Config> {
+    return this.http.delete<Config>(`${environment.apiUrl}/config/history/${id}`).pipe(catchError(super.handleError));
+  }
   
 }

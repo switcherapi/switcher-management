@@ -3,11 +3,24 @@ import { MetricData } from '../../model/metric';
 import { Subject } from 'rxjs';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { trigger, state, style } from '@angular/animations';
+import { MetricService } from 'src/app/dashboard-module/services/metric.service';
+import { takeUntil } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { ToastService } from 'src/app/_helpers/toast.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
+import { Types } from '../../model/path-route';
+import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { MetricComponent } from '../metric/metric.component';
 
 @Component({
   selector: 'app-metric-data',
   templateUrl: './metric-data.component.html',
-  styleUrls: ['./metric-data.component.css'],
+  styleUrls: [
+    '../../common/css/detail.component.css',
+    './metric-data.component.css'
+  ],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -18,6 +31,8 @@ import { trigger, state, style } from '@angular/animations';
 export class MetricDataComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() data: MetricData[];
+  @Input() switcher: string;
+  @Input() parent: MetricComponent;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -27,15 +42,38 @@ export class MetricDataComponent implements OnInit, OnDestroy {
 
   expandedElement: MetricData | null;
 
-  constructor() { }
+  removable: boolean = true;
+
+  constructor(
+    private domainRouteService: DomainRouteService,
+    private adminService: AdminService,
+    private metricService: MetricService,
+    private toastService: ToastService,
+    private _modalService: NgbModal
+  ) { }
 
   ngOnInit() {
     this.loadDataSource(this.data);
+    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['DELETE'], 'ADMIN', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok' ? true : false;
+          }
+        });
+      }
+    });
   }
 
   loadDataSource(data: MetricData[]): void {
@@ -69,6 +107,27 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  resetSwitcherMetrics(): void {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Metric Reset';
+    modalConfirmation.componentInstance.question = `Are you sure you want to reset metrics for ${this.switcher}?`;
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.metricService.resetMetricsForSwitcher(this.switcher).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          if (data) {
+            this.parent.switcher = null;
+            this.parent.loadMetrics();
+            this.dataSource = new MatTableDataSource(null);
+            this.toastService.showSuccess(`Metrics reseted with success`);
+          }
+        }, error => {
+          this.toastService.showError(`Unable to reset Metrics`);
+          ConsoleLogger.printError(error);
+        });
+      }
+    });
   }
   
 }

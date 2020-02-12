@@ -11,7 +11,7 @@
             <mat-form-field class="filter-key-selector">
                 <input #switcherInput matInput placeholder="Switcher Key" [formControl]="switcherKeyFormControl">
             </mat-form-field>
-            <mat-form-field *ngIf="switcher != null" class="filter-env-selector">
+            <mat-form-field *ngIf="switcherInput.value" class="filter-env-selector">
                 <mat-select placeholder="Group By" [(ngModel)]="dateGroupPattern">
                     <mat-option value="YYYY-MM">Month</mat-option>
                     <mat-option value="YYYY-MM-DD">Day</mat-option>
@@ -60,7 +60,7 @@
                         <div>Data</div>
                     </ng-template>
                     <ng-template ngbTabContent>
-                        <app-metric-data [data]="metrics.data"></app-metric-data>
+                        <app-metric-data [data]="metrics.data" [switcher]="switcher" [parent]="this"></app-metric-data>
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
