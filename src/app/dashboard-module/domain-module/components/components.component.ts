@@ -36,6 +36,9 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   removable: boolean = true;
   creatable: boolean = true;
 
+  loading = false;
+  error = '';
+
   constructor(
     private adminService: AdminService,
     private compService: ComponentService,
@@ -56,10 +59,15 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   loadComponents(): void {
+    this.loading = true;
     this.compService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(components => {
         this.components = components;
+        this.loading = false;
+    }, error => {
+      this.error = error;
+      this.loading = false;
     });
   }
 

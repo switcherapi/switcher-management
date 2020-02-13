@@ -82,4 +82,8 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  getTeam(): Team {
+    return this.team;
+  }
+
 }

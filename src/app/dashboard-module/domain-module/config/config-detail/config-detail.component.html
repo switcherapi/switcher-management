@@ -53,7 +53,6 @@
                 [matAutocomplete]="auto"
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="addOnBlur"
                 (matChipInputTokenEnd)="addComponent($event)"
                 [readonly]="!editing">
             </mat-chip-list>
@@ -86,7 +85,7 @@
     </section>
     <section #strategysection id="strategy-section" style="padding-top: 6px;">
         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-        <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [orientation]="horizontal" [destroyOnHide]="false">
+        <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [destroyOnHide]="false">
             <ngb-tab *ngIf="hasStrategies" id="1">
                 <ng-template ngbTabTitle>
                     <div (click)="scrollToElement(strategysection)">Strategies</div>

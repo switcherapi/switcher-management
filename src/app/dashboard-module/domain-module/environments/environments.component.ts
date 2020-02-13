@@ -35,6 +35,9 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   removable: boolean = true;
   creatable: boolean = true;
 
+  loading = false;
+  error = '';
+
   constructor(
     private adminService: AdminService,
     private envService: EnvironmentService,
@@ -54,10 +57,15 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   }
 
   loadEnvironments(): void {
+    this.loading = true;
     this.envService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
         this.environments = env.filter(e => e.name != 'default');
+        this.loading = false;
+    }, error => {
+      this.error = error;
+      this.loading = false;
     });
   }
 

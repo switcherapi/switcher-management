@@ -351,7 +351,7 @@ export class SwitcherDataStatsDialog {
 
   constructor(
     public dialogRef: MatDialogRef<SwitcherDataStatsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: MetricData[]) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onClose() {
     this.dialogRef.close();

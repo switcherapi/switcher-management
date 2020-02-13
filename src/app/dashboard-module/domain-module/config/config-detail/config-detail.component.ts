@@ -335,7 +335,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
       this.loading = false;
     }, error => {
-      // this.error = this.errorHandler.doError(error);
+      ConsoleLogger.printError(error);
       this.loading = false;
     });
 
