@@ -42,7 +42,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
 
   expandedElement: MetricData | null;
 
-  removable: boolean = true;
+  removable: boolean = false;
 
   constructor(
     private domainRouteService: DomainRouteService,

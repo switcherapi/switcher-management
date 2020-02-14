@@ -1,7 +1,7 @@
 import { AdminService } from '../../services/admin.service';
 
 export class DetailComponent {
-    createdBy: string;
+    createdBy: string = '';
     classStatus: string;
     editing: boolean;
     currentStatus: boolean;

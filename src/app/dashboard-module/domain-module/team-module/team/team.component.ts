@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Team } from '../../model/team';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { Types } from '../../model/path-route';
-import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TeamService } from 'src/app/dashboard-module/services/team.service';
@@ -31,10 +30,10 @@ export class TeamComponent implements OnInit, OnDestroy {
   loading = false;
   error = '';
 
-  readable: boolean = true;
-  updatable: boolean = true;
-  removable: boolean = true;
-  creatable: boolean = true;
+  readable: boolean = false;
+  updatable: boolean = false;
+  removable: boolean = false;
+  creatable: boolean = false;
 
   constructor(
     private adminService: AdminService,
@@ -53,23 +52,19 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.readPermissionToObject();
     this.teamService.getTeamsByDomain(
       this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-
+      
       if (data) {
         this.teams = data;
       }
-
-      this.loading = false;
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
-    });
-
-    setTimeout(() => {
+    }, () => {
       if (!this.teams) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
-    }, environment.timeout);
+    });
   }
 
   ngOnDestroy() {

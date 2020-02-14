@@ -16,6 +16,7 @@ import { DomainCreateComponent } from '../../domain-create/domain-create.compone
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-domain-detail',
@@ -27,6 +28,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
@@ -53,6 +56,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   ngOnInit() {
+    this.blockUI.start('Loading...');
     this.route.paramMap
       .pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data.element) {
@@ -97,24 +101,31 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   updateEnvironmentStatus(env : any): void {
+    this.blockUI.start('Updating environment...');
     this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.selectEnvironment(env.status);
         this.updatePathRoute(data);
+        this.blockUI.stop();
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
     });
   }
 
   removeEnvironmentStatus(env : any): void {
+    this.blockUI.start('Removing environment status...');
     this.domainService.removeDomainEnvironmentStatus(this.getDomain().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
+        this.blockUI.stop();
         this.updatePathRoute(data);
         this.toastService.showSuccess(`Environment removed with success`);
       }
     }, error => {
+      this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
@@ -147,6 +158,10 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           }
         });
       }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.blockUI.stop();
     });
   }
 
@@ -155,15 +170,19 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.classStatus = 'header editing';
       this.editing = true;
     } else {
+      this.blockUI.start('Saving changes...');
       this.domainDescription = this.descElement.nativeElement.value;
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
       this.domainService.updateDomain(this.getDomain().id, this.domainDescription).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.updatePathRoute(data);
+          this.blockUI.stop();
           this.toastService.showSuccess(`Domain updated with success`);
           this.editing = false;
         }
       }, error => {
+        this.blockUI.stop();
+        ConsoleLogger.printError(error);
         this.toastService.showError(`Unable to update '${this.getDomain().name}' domain`);
         this.editing = false;
       });
@@ -176,14 +195,17 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to generate a new key for this domain?';
     modalConfirmation.result.then((result) => {
       if (result) {
+        this.blockUI.start('Generating API Key...');
         this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
+            this.blockUI.stop();
             this.dialog.open(DomainCreateComponent, {
               width: '400px',
               data: { apiKey: data.apiKey, domainName: this.getDomain().name }
             });
           }
         }, error => {
+          this.blockUI.stop();
           this.toastService.showError(`Unable to generate an API Key`);
           ConsoleLogger.printError(error);
         });
@@ -197,11 +219,14 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this domain?';
     modalConfirmation.result.then((result) => {
       if (result) {
+        this.blockUI.start('Removing domain...');
         this.domainService.deleteDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          this.blockUI.stop();
           this.domainRouteService.removePath(Types.GROUP_TYPE);
           this.router.navigate(['/dashboard/']);
           this.toastService.showSuccess(`Domain removed with success`);
         }, error => {
+          this.blockUI.stop();
           this.toastService.showError(`Unable to remove this domain`);
           ConsoleLogger.printError(error);
         });

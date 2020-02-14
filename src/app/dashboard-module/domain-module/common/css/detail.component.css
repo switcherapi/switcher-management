@@ -65,6 +65,10 @@
   color: white;
 }
 
+:host /deep/ .block-ui-wrapper {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 @media only screen and (max-width: 1200px) {
   .header-container {
     display: block;

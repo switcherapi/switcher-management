@@ -8,6 +8,7 @@ import { DomainService } from 'src/app/dashboard-module/services/domain.service'
 import { Domain } from '../../model/domain';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-team-detail',
@@ -22,9 +23,11 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
 
   domain: Domain;
 
-  updatable: boolean = true;
-  removable: boolean = true;
-  creatable: boolean = true;
+  updatable: boolean = false;
+  removable: boolean = false;
+  creatable: boolean = false;
+
+  loading: boolean = false;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -35,6 +38,7 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     this.route.paramMap.pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.team) {
         localStorage.setItem(Types.SELECTED_TEAM, data.team);
@@ -52,6 +56,10 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
       if (domain) {
         this.domain = domain;
       }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.loading = false;
     });
   }
 

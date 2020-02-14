@@ -14,17 +14,20 @@
         </div>
     </section>
     <section style="padding-top: 20px;">
-        <ngb-tabset [activeId]="1">
-            <ngb-tab title="Members" id="1">
-                <ng-template ngbTabContent>
-                    <app-team-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-members>
-                </ng-template>
-            </ngb-tab>
-            <ngb-tab title="Roles" id="2">
-                <ng-template ngbTabContent>
-                    <app-team-roles [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-roles>
-                </ng-template>
-            </ngb-tab>
-        </ngb-tabset>
+        <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+        <div *ngIf="!loading">
+            <ngb-tabset [activeId]="1">
+                <ngb-tab title="Members" id="1">
+                    <ng-template ngbTabContent>
+                        <app-team-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-members>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Roles" id="2">
+                    <ng-template ngbTabContent>
+                        <app-team-roles [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-roles>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
     </section>
 </div>

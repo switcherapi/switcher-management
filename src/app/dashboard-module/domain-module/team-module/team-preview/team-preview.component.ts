@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { TeamComponent } from '../team/team.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-team-preview',
@@ -18,6 +19,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class TeamPreviewComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @BlockUI() blockUI: NgBlockUI;
 
   @Input() team: Team;
   @Input() teamListComponent: TeamComponent;
@@ -53,12 +56,15 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   }
 
   removeTeam() {
+    this.blockUI.start('Removing team...');
     this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
         if (team) {
           this.teamListComponent.removeTeamFromList(team);
+          this.blockUI.stop();
           this.toastService.showSuccess(`Team removed with success`);
         }
     }, error => {
+      this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove team: '${this.team.name}'`);
     })
@@ -69,18 +75,20 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
       this.editing = true;
     } else {
       this.editing = false;
-
     }
   }
 
   changeStatus(event: MatSlideToggleChange) {
+    this.blockUI.start('Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
       .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
         if (team) {
           this.team = team;
+          this.blockUI.stop();
           this.toastService.showSuccess(`Team updated with success`);
         }
     }, error => {
+      this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update team: '${this.team.name}'`);
     })

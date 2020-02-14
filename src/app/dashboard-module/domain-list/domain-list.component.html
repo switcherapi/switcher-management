@@ -20,10 +20,12 @@
         </div>
     </h4>
     <div class="card-body">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
         <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
-        <div *ngFor="let domain of domains">
-            <app-domain-preview [domain]="domain"></app-domain-preview>
+        <div *ngIf="!loading">
+            <div *ngFor="let domain of domains">
+                <app-domain-preview [domain]="domain"></app-domain-preview>
+            </div>
         </div>
     </div>
 </div>
@@ -35,10 +37,12 @@
         </div>
     </h4>
     <div class="card-body">
-        <span *ngIf="loadingCollab" class="spinner-border spinner-border-sm mr-1"></span>
+        <div style="text-align: center;"><span *ngIf="loadingCollab" class="spinner-border spinner-border-sm mr-1"></span></div>
         <div *ngIf="errorCollab" class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
-        <div *ngFor="let domain of collabDomains">
-            <app-domain-preview [domain]="domain"></app-domain-preview>
+        <div *ngIf="!loadingCollab">
+            <div *ngFor="let domain of collabDomains">
+                <app-domain-preview [domain]="domain"></app-domain-preview>
+            </div>
         </div>
     </div>
 </div>

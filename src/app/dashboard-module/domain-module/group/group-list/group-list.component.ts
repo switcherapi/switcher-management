@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Group } from '../../model/group';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { Types } from '../../model/path-route';
-import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GroupService } from 'src/app/dashboard-module/services/group.service';
@@ -30,7 +29,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   loading = false;
   error = '';
 
-  creatable: boolean = true;
+  creatable: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -54,18 +53,15 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
         this.groups = data;
         super.loadEnvironments();
       }
-      this.loading = false;
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
-    });
-
-    setTimeout(() => {
+    }, () => {
       if (!this.groups) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
-    }, environment.timeout);
+    });
   }
 
   ngAfterViewInit() {

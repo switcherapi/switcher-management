@@ -11,6 +11,8 @@ import { ConfigService } from 'src/app/dashboard-module/services/config.service'
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-config-preview',
@@ -23,6 +25,8 @@ import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 export class ConfigPreviewComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
+  @BlockUI() blockUI: NgBlockUI;
+
   @Input() config: Config;
   @Input() configListComponent: ConfigListComponent;
 
@@ -33,8 +37,8 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   classStatus: string;
   classBtnStatus: string;
 
-  updatable: boolean = true;
-  removable: boolean = true;
+  updatable: boolean = false;
+  removable: boolean = false;
 
   constructor(
     private router: Router,
@@ -101,15 +105,19 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
+    this.blockUI.start('Updating environment...');
     this.config.activated[this.selectedEnv] = event.checked;
     this.selectEnvironment(this.selectedEnv);
 
     this.configService.setConfigEnvironmentStatus(this.getConfig().id, this.selectedEnv, event.checked).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
+        this.blockUI.stop();
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
     });
   }

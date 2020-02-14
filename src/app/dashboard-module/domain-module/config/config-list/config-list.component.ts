@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Config } from 'protractor';
 import { DomainRouteService } from '../../../services/domain-route.service';
 import { Types } from '../../model/path-route';
-import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
@@ -26,11 +25,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  configs$: Config[];
+  configs: Config[];
   loading = false;
   error = '';
 
-  creatable: boolean = true;
+  creatable: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -50,23 +49,19 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     this.readPermissionToObject();
     this.configService.getConfigsByGroup(
       this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        
       if (data) {
-        this.configs$ = data;
+        this.configs = data;
         super.loadEnvironments();
       }
-      this.loading = false;
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
-    });
-
-    setTimeout(() => {
-      if (!this.configs$) {
+    }, () => {
+      if (!this.configs) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
-    }, environment.timeout);
+    });
   }
 
   ngAfterViewInit() {

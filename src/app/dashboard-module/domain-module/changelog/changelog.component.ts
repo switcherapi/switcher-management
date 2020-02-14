@@ -37,7 +37,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   @Input() strategy: Strategy;
   currentPathRoute: PathRoute;
-  removable: boolean = true;
+  removable: boolean = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

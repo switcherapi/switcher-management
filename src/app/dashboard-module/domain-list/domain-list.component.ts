@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainService } from '../services/domain.service';
 import { Domain } from '../domain-module/model/domain';
-import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { DomainCreateComponent } from '../domain-create/domain-create.component';
 import { AdminService } from '../services/admin.service';
-import { TeamService } from '../services/team.service';
 import { Team } from '../domain-module/model/team';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
@@ -30,7 +28,6 @@ export class DomainListComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private adminService: AdminService,
-    private teamService: TeamService,
     private domainService: DomainService,
     private toastService: ToastService
   ) { }
@@ -42,14 +39,6 @@ export class DomainListComponent implements OnInit, OnDestroy {
     this.errorCollab = '';
     this.loadDomain();
     this.loadCollabDomain();
-
-    setTimeout(() => {
-      if (!this.domains) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loading = false;
-      this.loadingCollab = false;
-    }, environment.timeout);
   }
 
   loadDomain(): void {
@@ -57,9 +46,13 @@ export class DomainListComponent implements OnInit, OnDestroy {
       if (data) {
         this.domains = data;
       }
-      this.loading = false;
     }, error => {
       ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      if (!this.domains) {
+        this.error = 'Failed to connect to Switcher API';
+      }
       this.loading = false;
     });
   }
@@ -72,8 +65,10 @@ export class DomainListComponent implements OnInit, OnDestroy {
             if (data) {
               this.collabDomains.push(data);
             }
-            this.loadingCollab = false;
           }, error => {
+            ConsoleLogger.printError(error);
+            this.loadingCollab = false;
+          }, () => {
             this.loadingCollab = false;
           });
         });

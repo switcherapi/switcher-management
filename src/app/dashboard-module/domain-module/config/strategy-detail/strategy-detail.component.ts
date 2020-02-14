@@ -17,6 +17,7 @@ import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.compone
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -28,6 +29,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @BlockUI() blockUI: NgBlockUI;
 
   @Input() strategy: Strategy;
   @Input() strategyList: StrategyListComponent;
@@ -182,10 +185,13 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this strategy?';
     modalConfirmation.result.then((result) => {
       if (result) {
+        this.blockUI.start('Removing strategy...');
         this.strategyService.deleteStrategy(this.strategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.strategyList.reloadStrategies(this.strategy);
+          this.blockUI.stop();
           this.toastService.showSuccess(`Strategy removed with success`);
         }, error => {
+          this.blockUI.stop();
           this.toastService.showError(`Unable to remove this strategy`);
           ConsoleLogger.printError(error);
         });
@@ -201,6 +207,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.blockUI.start('Cloning strategy...');
         this.strategyService.getStrategiesByConfig(this.strategy.config, result.environment).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data.length) {
             this.toastService.showError(`Strategy already exist in ${result.environment}`);
@@ -219,8 +226,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
               });
           }
         }, error => {
+          this.blockUI.stop();
           this.toastService.showError(error.error);
           ConsoleLogger.printError(error);
+        }, () => {
+          this.blockUI.stop();
         });
       }
     });

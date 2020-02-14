@@ -31,6 +31,7 @@ import { StrategyCreateComponent } from './config/strategy-create/strategy-creat
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
 import { ChartsModule } from 'ng2-charts';
 import { MetricModuleModule } from './metric-module/metric-module.module';
+import { BlockUIModule } from 'ng-block-ui';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { MetricModuleModule } from './metric-module/metric-module.module';
     MatToolbarModule,
     ToasterModule,
     ChartsModule,
-    MetricModuleModule
+    MetricModuleModule,
+    BlockUIModule.forRoot()
   ],
   providers: [ 
     DomainRouteService, 

@@ -11,6 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TeamMembersComponent } from './team-members/team-members.component';
 import { TeamRolesComponent } from './team-roles/team-roles.component';
 import { TeamRoleCreateComponent } from './team-role-create/team-role-create.component';
+import { BlockUIModule } from 'ng-block-ui';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { TeamRoleCreateComponent } from './team-role-create/team-role-create.com
     MatSortModule,
     MatPaginatorModule,
     MatExpansionModule,
-    MatToolbarModule
+    MatToolbarModule,
+    BlockUIModule.forRoot()
   ],
   entryComponents: [
     TeamRoleCreateComponent

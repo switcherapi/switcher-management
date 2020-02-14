@@ -32,9 +32,9 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     Validators.minLength(2)
   ]);
 
-  updatable: boolean = true;
-  removable: boolean = true;
-  creatable: boolean = true;
+  updatable: boolean = false;
+  removable: boolean = false;
+  creatable: boolean = false;
 
   loading = false;
   error = '';

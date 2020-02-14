@@ -20,3 +20,7 @@ h4 {
   background: #42474d;
   color: white;
 }
+
+:host /deep/ .mat-button-wrapper {
+  color: white;
+}

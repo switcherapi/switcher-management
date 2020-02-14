@@ -14,6 +14,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { NgBlockUI, BlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-group-detail',
@@ -25,6 +26,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
@@ -54,14 +57,15 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   ngOnInit() {
+    this.blockUI.start('Loading...');
     this.route.paramMap
-    .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
-      if (data.element) {
-        this.updatePathRoute(JSON.parse(data.element));
-      } else {
-        this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).element);
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
+        if (data.element) {
+          this.updatePathRoute(JSON.parse(data.element));
+        } else {
+          this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).element);
+        }
+      });
 
     this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
       this.selectEnvironment(status);
@@ -98,24 +102,33 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   updateEnvironmentStatus(env : any): void {
+    this.blockUI.start('Updating environment...');
     this.selectEnvironment(env.status);
     this.groupService.setGroupEnvironmentStatus(this.getGroup().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
+        this.selectEnvironment(env.status);
         this.updatePathRoute(data);
+        this.blockUI.stop();
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
     });
   }
 
   removeEnvironmentStatus(env : any): void {
+    this.blockUI.start('Removing environment status...');
     this.groupService.removeDomainEnvironmentStatus(this.getGroup().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
+        this.blockUI.stop();
         this.updatePathRoute(data);
         this.toastService.showSuccess(`Environment removed with success`);
       }
     }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
@@ -148,6 +161,10 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           }
         });
       }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.blockUI.stop();
     });
   }
 
@@ -159,6 +176,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       const { valid } = this.nameFormControl;
 
       if (valid) {
+        this.blockUI.start('Saving changes...');
         this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
         const body = {
@@ -169,10 +187,12 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         this.groupService.updateGroup(this.getGroup().id, body.name, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updatePathRoute(data);
+            this.blockUI.stop();
             this.toastService.showSuccess(`Group updated with success`);
             this.editing = false;
           }
         }, error => {
+          this.blockUI.stop();
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update group`);
           this.classStatus = 'header editing';
@@ -188,11 +208,14 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this group?';
     modalConfirmation.result.then((result) => {
       if (result) {
+        this.blockUI.start('Removing group...');
         this.groupService.deleteGroup(this.getGroup().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          this.blockUI.stop();
           this.domainRouteService.removePath(Types.GROUP_TYPE);
           this.router.navigate(['/dashboard/domain/groups']);
           this.toastService.showSuccess(`Group removed with success`);
         }, error => {
+          this.blockUI.stop();
           this.toastService.showError(`Unable to remove this group`);
           ConsoleLogger.printError(error);
         });

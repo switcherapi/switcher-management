@@ -84,7 +84,7 @@
         </div>
     </section>
     <section #strategysection id="strategy-section" style="padding-top: 6px;">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
         <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [destroyOnHide]="false">
             <ngb-tab *ngIf="hasStrategies" id="1">
                 <ng-template ngbTabTitle>
@@ -92,7 +92,7 @@
                 </ng-template>
                 <ng-template ngbTabContent>
                     <div class="strategy-section">
-                        <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" style="width: 100%; display: grid;"></app-strategy-list>
+                        <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" [parent]="this" style="width: 100%; display: grid;"></app-strategy-list>
                     </div>
                 </ng-template>
             </ngb-tab>

@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Team } from '../../model/team';
 import { MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSlideToggleChange } from '@angular/material';
-import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
 import { Role } from '../../model/role';
 import { RoleService } from 'src/app/dashboard-module/services/role.service';
 import { TeamRoleCreateComponent } from '../team-role-create/team-role-create.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-team-roles',
@@ -23,6 +23,8 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() team: Team;
 
+  @BlockUI() blockUI: NgBlockUI;
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -30,12 +32,13 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Role>;
   dataColumns = ['remove', 'edit', 'router', 'action', 'active'];
 
-  @Input() updatable: boolean = true;
-  @Input() creatable: boolean = true;
-  @Input() removable: boolean = true;
+  @Input() updatable: boolean = false;
+  @Input() creatable: boolean = false;
+  @Input() removable: boolean = false;
+
+  loading: boolean = false;
 
   constructor(
-    private teamService: TeamService,
     private roleService: RoleService,
     private toastService: ToastService,
     private dialog: MatDialog
@@ -51,6 +54,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   }
 
   loadRoles(): void {
+    this.loading = true;
     this.roleService.getRolesByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(roles => {
       if (roles) {
         this.roles = roles;
@@ -58,7 +62,10 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-    });
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    })
   }
 
   loadDataSource(): void {
@@ -107,13 +114,16 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   }
 
   removeRole(role: Role) {
+    this.blockUI.start('Removing role...');
     this.roleService.deleteRole(role._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.roles.splice(this.roles.indexOf(role), 1);
         this.loadDataSource();
+        this.blockUI.stop();
         this.toastService.showSuccess('Role removed with success');
       }
     }, error => {
+      this.blockUI.stop();
       ConsoleLogger.printError(error);
     });
   }
@@ -141,9 +151,11 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(role: Role, event: MatSlideToggleChange) {
+    this.blockUI.start('Updating status...');
     this.roleService.updateRole(role._id, role.action, role.router, role.identifiedBy, event.checked)
       .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
         if (role) {
+          this.blockUI.stop();
           this.toastService.showSuccess('Role updated with success');
         }
       });

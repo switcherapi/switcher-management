@@ -7,7 +7,6 @@ import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Strategy } from '../../model/strategy';
 import { Subject, Observable } from 'rxjs';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
-import { environment } from 'src/environments/environment';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
@@ -23,6 +22,7 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ComponentService } from 'src/app/dashboard-module/services/component.service';
 import { SwitcherComponent } from '../../model/switcher-component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-config-detail',
@@ -34,6 +34,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild('envSelectionChange', { static: true })
   private envSelectionChange: EnvironmentConfigComponent;
@@ -90,6 +92,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   ngOnInit() {
+    this.blockUI.start('Loading...');
     this.hasNewStrategy = false;
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
@@ -143,6 +146,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.filteredComponents = this.componentForm.valueChanges.pipe(
           startWith(null),
           map((component: string | null) => component ? this._filter(component) : this.listComponents.slice()));
+
+        this.blockUI.stop();
       });
   }
 
@@ -188,29 +193,39 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           }
         });
       }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.blockUI.stop();
     });
   }
 
   updateEnvironmentStatus(env : any): void {
+    this.blockUI.start('Updating environment...');
     this.selectEnvironment(env.status);
     this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.loadConfig(data);
+        this.blockUI.stop();
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       ConsoleLogger.printError(error);
+      this.blockUI.stop();
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
     });
   }
 
   removeEnvironmentStatus(env : any): void {
+    this.blockUI.start('Removing environment status...');
     this.configService.removeDomainEnvironmentStatus(this.config.id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
+        this.blockUI.stop();
         this.toastService.showSuccess(`Environment removed with success`);
       }
     }, error => {
+      this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
@@ -234,6 +249,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       const { valid } = this.keyFormControl;
 
       if (valid) {
+        this.blockUI.start('Saving changes...');
         this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
         const body = {
@@ -244,10 +260,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.configService.updateConfig(this.config.id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updateConfig(data);
+            this.blockUI.stop();
             this.toastService.showSuccess(`Switcher updated with success`);
             this.editing = false
           }
         }, error => {
+          this.blockUI.stop();
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update switcher`);
           this.classStatus = 'header editing';
@@ -263,11 +281,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this switcher?';
     modalConfirmation.result.then((result) => {
       if (result) {
+        this.blockUI.start('Removing switcher...');
         this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.domainRouteService.removePath(Types.CONFIG_TYPE);
+          this.blockUI.stop();
           this.router.navigate(['/dashboard/domain/group/switchers']);
           this.toastService.showSuccess(`Switcher removed with success`);
         }, error => {
+          this.blockUI.stop();
           this.toastService.showError(`Unable to remove this switcher`);
           ConsoleLogger.printError(error);
         });
@@ -310,6 +331,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       return u != currentConfigComponents[i];
     })
     ) {
+      this.blockUI.start('Updating switcher...');
       const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
       this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
@@ -317,6 +339,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.loadConfig(data);
         }
       }, error => {
+        this.blockUI.stop();
         this.toastService.showError(error ? error.error : 'Something went wront when updating components');
         ConsoleLogger.printError(error);
       });
@@ -333,18 +356,15 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.hasStrategies = data.length > 0;
         this.strategies = data;
       }
-      this.loading = false;
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
-    });
-
-    setTimeout(() => {
+    }, () => {
       if (!this.strategies) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
-    }, environment.timeout);
+    });
   }
 
   addComponent(event: MatChipInputEvent): void {

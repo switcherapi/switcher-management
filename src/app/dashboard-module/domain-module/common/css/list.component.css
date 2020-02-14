@@ -22,6 +22,10 @@
   margin-top: -10px;
 }
 
+:host /deep/ .block-ui-wrapper {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 @media only screen and (max-width: 600px) {
   .header-style {
     display: grid;

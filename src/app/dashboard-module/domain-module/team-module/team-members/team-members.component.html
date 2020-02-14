@@ -8,7 +8,8 @@
         </svg>Invite
     </button>
 </div>
-<div class="mat-elevation-z8">
+<div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+<div *ngIf="!loading" class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort style="width: 100%;">
         <ng-container matColumnDef="remove">
             <th mat-header-cell *matHeaderCellDef></th>

@@ -18,15 +18,17 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 export class TeamMembersComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() team: Team;
-  @Input() updatable: boolean = true;
-  @Input() creatable: boolean = true;
-  @Input() removable: boolean = true;
+  @Input() updatable: boolean = false;
+  @Input() creatable: boolean = false;
+  @Input() removable: boolean = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Admin>;
   dataColumns = ['remove', 'name', 'email'];
+
+  loading: boolean = false;
 
   constructor(
     private teamService: TeamService,
@@ -43,12 +45,16 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   }
 
   loadTeam(): void {
+    this.loading = true;
     this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
       if (team) {
         this.loadDataSource(team.members)
       }
     }, error => {
       ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      this.loading = false;
     })
   }
 
