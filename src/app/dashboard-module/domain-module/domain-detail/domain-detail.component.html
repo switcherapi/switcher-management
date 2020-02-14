@@ -15,10 +15,10 @@
                 </div>
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
-                        <input matInput placeholder="Created At" [value]="getDomain()?.createdAt" readonly>
+                        <input matInput placeholder="Created At" [value]="getDomain()?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput placeholder="Last Update" [value]="getDomain()?.updatedAt" readonly>
+                        <input matInput placeholder="Last Update" [value]="getDomain()?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <input matInput placeholder="Created By" [value]="createdBy" readonly>

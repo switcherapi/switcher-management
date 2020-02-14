@@ -22,10 +22,10 @@
                 </div>
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
-                        <input matInput placeholder="Created At" [value]="config?.createdAt" readonly>
+                        <input matInput placeholder="Created At" [value]="config?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput placeholder="Last Update" [value]="config?.updatedAt" readonly>
+                        <input matInput placeholder="Last Update" [value]="config?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <input matInput placeholder="Created By" [value]="createdBy" readonly>

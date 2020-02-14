@@ -18,10 +18,10 @@
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="readonly-fields" placeholder="Created At" [value]="strategy.createdAt" readonly>
+                        <input matInput class="readonly-fields" placeholder="Created At" [value]="strategy.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="readonly-fields" placeholder="Last Update" [value]="strategy.updatedAt" readonly>
+                        <input matInput class="readonly-fields" placeholder="Last Update" [value]="strategy.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <input matInput class="readonly-fields" placeholder="Created By" [value]="createdBy" readonly>
@@ -40,7 +40,7 @@
                                     </mat-list-option>
                                 </mat-selection-list>
                             </mat-card-content>
-                            <mat-form-field>
+                            <mat-form-field style="width: 100%;">
                                 <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl">
                                 <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
                                     Please, check the value format
@@ -48,11 +48,20 @@
                             </mat-form-field>
                             <div class="strategy-values-control">
                                 <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
-                                    [disabled]="inputValue.value.length === 0 || !updatable">Add</button>
+                                    [disabled]="inputValue.value.length === 0 || !updatable">
+                                    <mat-icon style="vertical-align: text-bottom;">add_to_queue</mat-icon>
+                                    <div class="options-section-label"> Add</div>
+                                </button>
                                 <button mat-button class="btn-element" (click)="editValue(strategyValueSelection.selectedOptions.selected[0]?.value, inputValue.value)" 
-                                    [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">Update</button>
+                                    [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
+                                    <mat-icon style="vertical-align: text-bottom;">sync</mat-icon>
+                                    <div class="options-section-label"> Update</div>
+                                </button>
                                 <button mat-button class="btn-element" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
-                                    [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">Remove</button>
+                                    [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
+                                    <mat-icon style="vertical-align: text-bottom;">remove_from_queue</mat-icon>
+                                    <div class="options-section-label"> Remove</div>
+                                </button>
                             </div>
                         </mat-card>
                     </div>

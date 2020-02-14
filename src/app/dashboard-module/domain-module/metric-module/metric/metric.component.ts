@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MetricService } from 'src/app/dashboard-module/services/metric.service';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
@@ -36,7 +36,6 @@ export class MetricComponent implements OnInit, OnDestroy {
   dateBeforeFormControl = new FormControl('');
 
   constructor(
-    private _elRef: ElementRef,
     private metricService: MetricService,
     private environmentService: EnvironmentService,
     private domainRouteService: DomainRouteService,
