@@ -301,7 +301,7 @@ export class SwitcherDateTimeGroupedTab {
     this.content_index -= this.MAX_CONTENT * 2;
     if (this.content_index < 0) 
       this.content_index = -1;
-      
+
     this.loadSwitcherDateTimeGroupView();
   }
 
@@ -347,6 +347,12 @@ export class SwitcherDateTimeGroupedTab {
       color: white;
       padding: 10px;
       border-radius: 20px;
+    }
+
+    @media only screen and (max-width: 510px) {
+      :host /deep/ .mat-elevation-z8 {
+        display: inline-table;
+      }
     }
   `]
 })
