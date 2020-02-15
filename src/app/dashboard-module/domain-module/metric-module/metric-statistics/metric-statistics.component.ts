@@ -299,6 +299,9 @@ export class SwitcherDateTimeGroupedTab {
 
   onPrevious(): void {
     this.content_index -= this.MAX_CONTENT * 2;
+    if (this.content_index < 0) 
+      this.content_index = -1;
+      
     this.loadSwitcherDateTimeGroupView();
   }
 
