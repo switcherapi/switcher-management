@@ -12,6 +12,7 @@ import { SwitcherComponent } from '../model/switcher-component';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AdminService } from '../../services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-components',
@@ -42,6 +43,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   constructor(
     private adminService: AdminService,
     private compService: ComponentService,
+    private errorHandler: RouterErrorHandler,
     private domainRouteService: DomainRouteService,
     private toastService: ToastService,
     private _modalService: NgbModal,
@@ -68,6 +70,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     }, error => {
       this.error = error;
       this.loading = false;
+      this.error = this.errorHandler.doError(error);
     });
   }
 

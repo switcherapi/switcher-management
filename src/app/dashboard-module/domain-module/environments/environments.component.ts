@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { AdminService } from '../../services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-environments',
@@ -43,7 +44,8 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     private envService: EnvironmentService,
     private domainRouteService: DomainRouteService,
     private toastService: ToastService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private errorHandler: RouterErrorHandler
   ) { }
 
   ngOnInit() {
@@ -66,6 +68,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     }, error => {
       this.error = error;
       this.loading = false;
+      this.error = this.errorHandler.doError(error);
     });
   }
 

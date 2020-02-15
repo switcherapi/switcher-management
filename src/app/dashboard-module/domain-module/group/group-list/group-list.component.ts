@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-group-list',
@@ -38,7 +39,8 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     private groupService: GroupService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private errorHandler: RouterErrorHandler
   ) {
     super(fb, environmentService, domainRouteService);
   }
@@ -56,6 +58,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
+      this.error = this.errorHandler.doError(error);
     }, () => {
       if (!this.groups) {
         this.error = 'Failed to connect to Switcher API';

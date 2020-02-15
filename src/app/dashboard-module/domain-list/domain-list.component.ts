@@ -9,6 +9,7 @@ import { DomainCreateComponent } from '../domain-create/domain-create.component'
 import { AdminService } from '../services/admin.service';
 import { Team } from '../domain-module/model/team';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-domain-list',
@@ -29,7 +30,8 @@ export class DomainListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private adminService: AdminService,
     private domainService: DomainService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private errorHandler: RouterErrorHandler
   ) { }
 
   ngOnInit() {
@@ -49,6 +51,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
+      this.error = this.errorHandler.doError(error);
     }, () => {
       if (!this.domains) {
         this.error = 'Failed to connect to Switcher API';
@@ -68,6 +71,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
           }, error => {
             ConsoleLogger.printError(error);
             this.loadingCollab = false;
+            this.error = this.errorHandler.doError(error);
           }, () => {
             this.loadingCollab = false;
           });

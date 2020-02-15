@@ -10,6 +10,7 @@ import { Environment } from '../../model/environment';
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-metric',
@@ -39,7 +40,8 @@ export class MetricComponent implements OnInit, OnDestroy {
     private metricService: MetricService,
     private environmentService: EnvironmentService,
     private domainRouteService: DomainRouteService,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private errorHandler: RouterErrorHandler
   ) { }
 
   ngOnInit() {
@@ -72,7 +74,7 @@ export class MetricComponent implements OnInit, OnDestroy {
         }
       }, error => {
         ConsoleLogger.printError(error);
-        this.error = 'Unable to load metrics';
+        this.errorHandler.doError(error);
         this.loading = false;
       });
   }

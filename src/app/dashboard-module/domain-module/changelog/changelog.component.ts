@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { AdminService } from '../../services/admin.service';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-changelog',
@@ -69,7 +70,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     private strategyService: StrategyService,
     private toastService: ToastService,
     private _modalService: NgbModal,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private errorHandler: RouterErrorHandler
   ) { }
 
   ngOnInit() {
@@ -117,7 +119,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load Domain Change Log`);
+      this.errorHandler.doError(error);
     });
   }
 
@@ -128,7 +130,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load Group Change Log`);
+      this.errorHandler.doError(error);
     });
   }
 
@@ -139,7 +141,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load Switcher Change Log`);
+      this.errorHandler.doError(error);
     });
   }
 
@@ -150,7 +152,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load Strategy Change Log`);
+      this.errorHandler.doError(error);
     });
   }
 

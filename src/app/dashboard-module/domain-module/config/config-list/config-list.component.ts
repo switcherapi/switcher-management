@@ -13,6 +13,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 
 @Component({
   selector: 'app-config-list',
@@ -38,7 +39,8 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     private configService: ConfigService,
     private domainRouteService : DomainRouteService,
     private environmentService: EnvironmentService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private errorHandler: RouterErrorHandler
   ) { 
     super(fb, environmentService, domainRouteService);
   }
@@ -56,6 +58,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
+      this.error = this.errorHandler.doError(error);
     }, () => {
       if (!this.configs) {
         this.error = 'Failed to connect to Switcher API';
