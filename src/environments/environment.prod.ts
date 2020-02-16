@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://switcher-api.herokuapp.com',
+  apiUrl: 'https://switcher-load-balance.herokuapp.com',
   timeout: 5000
 };
