@@ -61,6 +61,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
   }
 
   loadCollabDomain(): void {
+    this.collabDomains = [];
     this.adminService.getAdminCollab().pipe(takeUntil(this.unsubscribe)).subscribe(domains => {
       if (domains.length) {
         domains.forEach(domain => {
