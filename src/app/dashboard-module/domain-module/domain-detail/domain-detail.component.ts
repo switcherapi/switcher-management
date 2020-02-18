@@ -162,6 +162,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       ConsoleLogger.printError(error);
     }, () => {
       this.blockUI.stop();
+      this.detailBodyStyle = 'detail-body ready';
     });
   }
 

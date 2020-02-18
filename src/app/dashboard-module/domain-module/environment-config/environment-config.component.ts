@@ -30,6 +30,8 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   @ViewChild(MatSlideToggle, { static: true })
   private toggleEnv: MatSlideToggle;
 
+  toggleClass: string = 'toggle-style deactivated';
+
   environmentSelection: FormGroup;
   environmentStatusSelection: FormGroup;
   environments: Environment[];
@@ -107,8 +109,13 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     return this.environments[0].name;
   }
 
-  disableEnvChange(modifiable: boolean): void {
-    this.toggleEnv.disabled = modifiable;
+  disableEnvChange(disable: boolean): void {
+    this.toggleEnv.disabled = disable;
+    if (disable) {
+      this.toggleClass = 'toggle-style deactivated';
+    } else {
+      this.toggleClass = 'toggle-style';
+    }
   }
 
   changeStatus(event: MatSlideToggleChange) {

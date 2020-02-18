@@ -1,6 +1,8 @@
 import { AdminService } from '../../services/admin.service';
 
 export class DetailComponent {
+    detailBodyStyle: string = 'detail-body loading';
+
     createdBy: string = '';
     classStatus: string;
     editing: boolean;

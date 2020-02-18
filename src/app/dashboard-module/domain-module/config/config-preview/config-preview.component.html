@@ -8,7 +8,7 @@
                 </svg>{{getConfig().key}}
             </button>
         </div>
-        <div class="toggle-section">
+        <div [ngClass]="toggleSectionStyle">
             <form [formGroup]="environmentStatusSelection">
                 <mat-slide-toggle [checked]="selectedEnvStatus" class="toggle-style" (change)="updateEnvironmentStatus($event)" formControlName="environmentStatusSelection">
                 </mat-slide-toggle>

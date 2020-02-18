@@ -17,6 +17,8 @@ export class ListComponent {
     environments: Environment[];
     @Output() environmentSelectionChange: EventEmitter<string> = new EventEmitter();
 
+    cardListContainerStyle: string = 'card mt-4 loading';
+
     constructor(
         private formBuilder: FormBuilder,
         private envService: EnvironmentService,
@@ -36,6 +38,7 @@ export class ListComponent {
             this.environments = env;
             this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
             this.environmentSelectionChange.emit(this.setProductionFirst());
+            this.cardListContainerStyle = 'card mt-4 ready';
         });
     }
 

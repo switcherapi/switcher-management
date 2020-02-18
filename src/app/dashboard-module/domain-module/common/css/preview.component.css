@@ -10,6 +10,10 @@
   text-align: center;
 }
 
+.toggle-section.deactivated {
+  display: none;
+}
+
 .grid-container.activated {
   display: grid;
   grid-template-areas:

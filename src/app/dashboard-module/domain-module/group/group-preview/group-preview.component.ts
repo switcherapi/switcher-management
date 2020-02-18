@@ -40,6 +40,8 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   updatable: boolean = false;
   removable: boolean = false;
 
+  toggleSectionStyle: string = 'toggle-section deactivated';
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -132,8 +134,11 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
           if (element.action === 'UPDATE') {
             this.updatable = element.result === 'ok' ? true : false;
             
-            if (!this.updatable)
+            if (!this.updatable) {
               this.environmentStatusSelection.disable({ onlySelf: true });
+            } else {
+              this.toggleSectionStyle = 'toggle-section';
+            }
           } else if (element.action === 'DELETE') {
             this.removable = element.result === 'ok' ? true : false;
           }

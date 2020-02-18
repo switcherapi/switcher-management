@@ -165,6 +165,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       ConsoleLogger.printError(error);
     }, () => {
       this.blockUI.stop();
+      this.detailBodyStyle = 'detail-body ready';
     });
   }
 

@@ -29,6 +29,14 @@
   padding-top: 20px;
 }
 
+.detail-body.loading {
+  opacity: 0.0;
+}
+
+.detail-body.ready {
+  opacity: 100;
+}
+
 .description {
   display: grid;
   align-self: start;
