@@ -40,10 +40,22 @@
     </section>
 </div>
 <div *ngIf="!data.apiKey" mat-dialog-actions style="float: right;">
-    <button class="btn-save" mat-button (click)="onSave(data)">Save</button>
-    <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
+    <button class="btn-save" mat-button (click)="onSave(data)">
+        <mat-icon>save</mat-icon>
+        <div class="options-section-label"> Save</div>
+    </button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+        <div class="options-section-label"> Close</div>
+    </button>
 </div>
 <div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
-    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)" value="click to copy">Copy</button>
-    <button class="btn-save" mat-button (click)="onCancel()">Ok</button>
+    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)">
+        <mat-icon>file_copy</mat-icon>
+        <div class="options-section-label"> Copy to clipboard</div>
+    </button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+        <div class="options-section-label"> Close</div>
+    </button>
 </div>

@@ -5,6 +5,8 @@ import { PathRoute } from '../model/path-route';
 import { delay, takeUntil } from 'rxjs/operators';
 import { Types } from '../model/path-route'
 import { Subject } from 'rxjs';
+import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-domain',
@@ -23,6 +25,7 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   constructor(
     private domainRouteService: DomainRouteService,
+    private dialog: MatDialog,
     private router: Router,
     private activeRoute: ActivatedRoute
   ) { }
@@ -48,6 +51,13 @@ export class DomainComponent implements OnInit, OnDestroy {
     this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
     this.getTitle();
+  }
+
+  onDownloadSnapshot() {
+    const dialogRef = this.dialog.open(DomainSnapshotComponent, {
+      width: '450px',
+      data: { }
+    });
   }
 
   getLabelListChildren() {

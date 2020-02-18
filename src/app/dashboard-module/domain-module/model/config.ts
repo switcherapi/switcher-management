@@ -1,5 +1,3 @@
-import { SwitcherComponent } from './switcher-component';
-
 export class Config {
   id: string;
   key: string;

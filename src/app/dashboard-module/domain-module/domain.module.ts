@@ -20,7 +20,7 @@ import { ConfigDetailComponent } from './config/config-detail/config-detail.comp
 import { StrategyDetailComponent, ChangeLogDialog } from './config/strategy-detail/strategy-detail.component';
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule, MatDialogModule, MatAutocompleteModule, MatChipsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, MatExpansionModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule, MatDialogModule, MatAutocompleteModule, MatChipsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, MatExpansionModule, MatToolbarModule, MatCheckboxModule } from '@angular/material';
 import { EnvironmentConfigComponent } from './environment-config/environment-config.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GroupCreateComponent } from './group/group-create/group-create.component';
@@ -32,6 +32,7 @@ import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.c
 import { ChartsModule } from 'ng2-charts';
 import { MetricModuleModule } from './metric-module/metric-module.module';
 import { BlockUIModule } from 'ng-block-ui';
+import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { BlockUIModule } from 'ng-block-ui';
     StrategyCreateComponent,
     StrategyCloneComponent,
     ComponentEditDialog,
-    ChangeLogDialog
+    ChangeLogDialog,
+    DomainSnapshotComponent
   ],
   entryComponents: [
     GroupCreateComponent,
@@ -64,7 +66,8 @@ import { BlockUIModule } from 'ng-block-ui';
     NgbdModalConfirm,
     StrategyCloneComponent,
     ComponentEditDialog,
-    ChangeLogDialog
+    ChangeLogDialog,
+    DomainSnapshotComponent
   ],
   imports: [
     FormsModule,
@@ -92,6 +95,7 @@ import { BlockUIModule } from 'ng-block-ui';
     MatPaginatorModule,
     MatExpansionModule,
     MatToolbarModule,
+    MatCheckboxModule,
     ToasterModule,
     ChartsModule,
     MetricModuleModule,
