@@ -11,9 +11,7 @@ const routes: Routes = [
     path: 'dashboard/domain',
     loadChildren: () => import('./domain-module/domain.module').then(mod => mod.DomainModule),
     data: { preload: true }
-  },
-
-  { path: '**', redirectTo: '/documentation' }
+  }
 
 ];
 
