@@ -6,7 +6,7 @@ import { DomainService } from '../../services/domain.service';
 import { takeUntil } from 'rxjs/operators';
 import { trigger, state, style } from '@angular/animations';
 import { History } from '../model/history';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { GroupService } from '../../services/group.service';
 import { ConfigService } from '../../services/config.service';
@@ -221,6 +221,32 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     } else {
       return Object.keys(data.newValue).filter(key => key.indexOf(filter) >= 0).length > 0;
     }
+  }
+
+  sortData(sort: Sort) {
+    let sortedData;
+
+    const data = this.dataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      sortedData = data;
+      return;
+    }
+
+    sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'newValue': return this.compare(this.formatResumedData(a.newValue), this.formatResumedData(b.newValue), isAsc);
+        case 'date': return this.compare(a.date.toString(), b.date.toString(), isAsc);
+        case 'updateBy': return this.compare(a.updatedBy, b.updatedBy, isAsc);
+        default: return 0;
+      }
+    });
+    
+    this.loadDataSource(sortedData);
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   getColumnLabel(dataColumn: string): string {

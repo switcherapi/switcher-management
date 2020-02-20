@@ -9,11 +9,13 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { TeamComponent } from '../team/team.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-team-preview',
   templateUrl: './team-preview.component.html',
   styleUrls: [
+    '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
     './team-preview.component.css']
 })
@@ -24,10 +26,17 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
 
   @Input() team: Team;
   @Input() teamListComponent: TeamComponent;
-  @Input() updatable: boolean = true;
-  @Input() removable: boolean = true;
+  @Input() updatable: boolean = false;
+  @Input() removable: boolean = false;
+
+  nameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2)
+  ]);
 
   editing: boolean;
+
+  toggleSectionStyle: string = 'toggle-style deactivated';
 
   constructor(
     private router: Router,
@@ -36,6 +45,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.nameFormControl.setValue(this.team.name);
   }
 
   ngOnDestroy() {
@@ -74,7 +84,24 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
     if (!this.editing) {
       this.editing = true;
     } else {
-      this.editing = false;
+      const { valid } = this.nameFormControl;
+
+      if (valid) {
+        this.editing = false;
+        this.blockUI.start('Updating Team...');
+        this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
+          .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
+            if (team) {
+              this.team = team;
+              this.blockUI.stop();
+              this.toastService.showSuccess(`Team updated with success`);
+            }
+        }, error => {
+          this.blockUI.stop();
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update team: '${this.team.name}'`);
+        });
+      }
     }
   }
 
@@ -91,7 +118,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update team: '${this.team.name}'`);
-    })
+    });
   }
 
 }

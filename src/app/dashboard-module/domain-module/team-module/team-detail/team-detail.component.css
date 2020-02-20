@@ -1,0 +1,31 @@
+.btn-remove {
+  background: #fb5454;
+  display: block ruby;
+  margin-right: 20px;
+}
+
+.btn-edit {
+  display: block ruby !important;
+}
+
+.options-section-label {
+  vertical-align: baseline !important;
+  display: contents;
+}
+
+.options-section {
+  display: block ruby;
+}
+
+.toggle-section {
+  margin: auto;
+  display: contents;
+}
+
+:host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: #b0d2ff;
+}
+
+:host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #549bfb;
+}

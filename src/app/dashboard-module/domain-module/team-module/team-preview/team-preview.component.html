@@ -4,12 +4,22 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
-                        <input matInput placeholder="Name" [value]="getTeam().name" readonly="{{!editing}}" [ngStyle]="editing ? {'color': 'black'} : ''" autocomplete="off">
+                        <input matInput placeholder="Name" readonly="{{!editing}}" 
+                            [ngStyle]="editing ? {'color': 'black'} : ''" 
+                            [formControl]="nameFormControl"
+                            autocomplete="off">
                     </mat-form-field>
+                    <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                        Name must contains at least 2 characters
+                    </mat-error>
+                    <mat-error *ngIf="nameFormControl.hasError('required')">
+                        Name is <strong>required</strong>
+                    </mat-error>
                 </div>
                 <div class="options-section">
                     <div class="toggle-section">
-                        <mat-slide-toggle [checked]="getTeam().active" class="toggle-style" (change)="changeStatus($event)" [disabled]="!updatable">
+                        <mat-slide-toggle [checked]="getTeam().active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
+                            (change)="changeStatus($event)" [disabled]="!updatable">
                         </mat-slide-toggle>
                     </div>
                     <button mat-button class="btn-element btn-edit" (click)="selectTeam()">

@@ -7,3 +7,8 @@
   align-self: start;
   padding-bottom: 20px;
 }
+
+.options-section-label {
+  vertical-align: baseline !important;
+  display: contents;
+}

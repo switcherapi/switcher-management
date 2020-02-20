@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Team } from '../../model/team';
-import { MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSlideToggleChange } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSlideToggleChange, Sort } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
 import { Role } from '../../model/role';
@@ -58,7 +58,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     this.roleService.getRolesByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(roles => {
       if (roles) {
         this.roles = roles;
-        this.loadDataSource()
+        this.loadDataSource(this.roles);
       }
     }, error => {
       ConsoleLogger.printError(error);
@@ -68,8 +68,8 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     })
   }
 
-  loadDataSource(): void {
-    this.dataSource = new MatTableDataSource(this.roles);
+  loadDataSource(data: any): void {
+    this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -118,7 +118,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     this.roleService.deleteRole(role._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.roles.splice(this.roles.indexOf(role), 1);
-        this.loadDataSource();
+        this.loadDataSource(this.roles);
         this.blockUI.stop();
         this.toastService.showSuccess('Role removed with success');
       }
@@ -166,6 +166,32 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
       return value.substring(0, 3);
     else
       return value;
+  }
+
+  sortData(sort: Sort) {
+    let sortedData;
+
+    const data = this.roles.slice();
+    if (!sort.active || sort.direction === '') {
+      sortedData = data;
+      return;
+    }
+
+    sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'router': return this.compare(a.router, b.router, isAsc);
+        case 'action': return this.compare(a.action, b.action, isAsc);
+        case 'active': return this.compare(a.active ? 'true' : 'false', b.active ? 'true' : 'false', isAsc);
+        default: return 0;
+      }
+    });
+
+    this.loadDataSource(sortedData);
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
 }

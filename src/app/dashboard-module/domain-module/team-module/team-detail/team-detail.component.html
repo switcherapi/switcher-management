@@ -1,33 +1,62 @@
-<div style="padding-top: 20px;">
-    <section class="{{ getTeam().active ? 'header activated' : 'header deactivated' }}">
-        <div class="header-container">
-            <div class="description" style="width: 350px;">
-                <mat-form-field>
-                    <input matInput placeholder="Team Name" [value]="getTeam().name" readonly>
-                </mat-form-field>
+<block-ui>
+    <div style="padding-top: 20px;">
+        <section [ngClass]="classStatus">
+            <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
-                        <input matInput placeholder="Domain Name" [value]="domain?.name" readonly>
+                        <input matInput placeholder="Name" readonly="{{!editing}}" 
+                            [ngStyle]="editing ? {'color': 'black'} : ''" 
+                            [formControl]="nameFormControl"
+                            autocomplete="off">
                     </mat-form-field>
+                    <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                        Name must contains at least 2 characters
+                    </mat-error>
+                    <mat-error *ngIf="nameFormControl.hasError('required')">
+                        Name is <strong>required</strong>
+                    </mat-error>
+                    <div class="description" style="width: 350px;">
+                        <mat-form-field>
+                            <input matInput placeholder="Domain Name" [value]="domain?.name" readonly>
+                        </mat-form-field>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <section style="padding-top: 20px;">
-        <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
-        <div *ngIf="!loading">
-            <ngb-tabset [activeId]="1">
-                <ngb-tab title="Members" id="1">
-                    <ng-template ngbTabContent>
-                        <app-team-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-members>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Roles" id="2">
-                    <ng-template ngbTabContent>
-                        <app-team-roles [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-roles>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
-        </div>
-    </section>
-</div>
+        </section>
+        <section class="options-section">
+            <div class="toggle-section">
+                <mat-slide-toggle [checked]="getTeam().active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
+                    (change)="changeStatus($event)" [disabled]="!updatable">
+                </mat-slide-toggle>
+            </div>
+            <button mat-button [ngClass]="editing ? 'btn-element save btn-edit' : 'btn-element btn-edit'" (click)="edit()" [disabled]="!updatable">
+                <svg class="bi bi-wrench" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2.102 4.223A3.004 3.004 0 005 8c.27 0 .532-.036.78-.103l6.342 6.252A3.003 3.003 0 0015 18a3 3 0 10-.851-5.878L7.897 5.781A3.004 3.004 0 004.223 2.1l2.141 2.142L6 6l-1.757.364-2.141-2.141zm13.37 9.019L15 13l-.471.242-.529.026-.287.445-.445.287-.026.529L13 15l.242.471.026.529.445.287.287.445.529.026L15 17l.471-.242.529-.026.287-.445.445-.287.026-.529L17 15l-.242-.471-.026-.529-.445-.287-.287-.445-.529-.026z" clip-rule="evenodd"></path>
+                </svg><div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+            </button>
+            <button mat-button class="btn-element btn-remove" (click)="removeTeam()" [disabled]="!removable">
+                <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.5 7.5A.5.5 0 018 8v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V8z"></path>
+                    <path fill-rule="evenodd" d="M16.5 5a1 1 0 01-1 1H15v9a2 2 0 01-2 2H7a2 2 0 01-2-2V6h-.5a1 1 0 01-1-1V4a1 1 0 011-1H8a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM6.118 6L6 6.059V15a1 1 0 001 1h6a1 1 0 001-1V6.059L13.882 6H6.118zM4.5 5V4h11v1h-11z" clip-rule="evenodd"></path>
+                </svg><div class="options-section-label">Remove</div>
+            </button>
+        </section>
+        <section style="padding-top: 20px;">
+            <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+            <div *ngIf="!loading">
+                <ngb-tabset [activeId]="1">
+                    <ngb-tab title="Members" id="1">
+                        <ng-template ngbTabContent>
+                            <app-team-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-members>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="Roles" id="2">
+                        <ng-template ngbTabContent>
+                            <app-team-roles [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-roles>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+        </section>
+    </div>
+</block-ui>

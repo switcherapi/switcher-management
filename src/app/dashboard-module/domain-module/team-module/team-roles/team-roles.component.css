@@ -1,3 +1,9 @@
+.filter-role-style {
+  white-space: nowrap;
+  display: block ruby;
+  padding-top: 10px;
+}
+
 @media only screen and (max-width: 420px) {
   .mat-elevation-z8 {
     display: grid;

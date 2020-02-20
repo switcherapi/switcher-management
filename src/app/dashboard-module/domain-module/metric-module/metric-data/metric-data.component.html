@@ -2,9 +2,9 @@
     <mat-form-field style="margin-left: 20px; margin-top: 10px;">
         <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
-    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort style="width: 100%;">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)" style="width: 100%;">
         <ng-container matColumnDef="switcher">
-            <th mat-header-cell *matHeaderCellDef>Switcher</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Switcher</th>
             <td mat-cell *matCellDef="let element">{{element.config.key}}</td>
         </ng-container>
 

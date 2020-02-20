@@ -3,7 +3,7 @@
 </mat-form-field>
 
 <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
         <ng-container matColumnDef="{{column}}" *ngFor="let column of dataColumns">
             <th mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{getColumnLabel(column)}}</strong></th>
             <td mat-cell *matCellDef="let element">{{ column === 'date' ? formatDateContent(element[column]) : formatResumedData(element[column]) }}</td>

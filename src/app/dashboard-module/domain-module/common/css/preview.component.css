@@ -14,6 +14,14 @@
   display: none;
 }
 
+.toggle-style {
+  margin-top: 14px;
+}
+
+.toggle-style.deactivated {
+  display: none;
+}
+
 .grid-container.activated {
   display: grid;
   grid-template-areas:
@@ -60,10 +68,6 @@
   margin-bottom: 10px;
   margin-left: 20px;
   color: #595959;
-}
-
-.toggle-style {
-  margin-top: 14px;
 }
 
 .svg-style {

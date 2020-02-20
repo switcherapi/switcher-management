@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MetricData } from '../../model/metric';
 import { Subject } from 'rxjs';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, Sort } from '@angular/material';
 import { trigger, state, style } from '@angular/animations';
 import { MetricService } from 'src/app/dashboard-module/services/metric.service';
 import { takeUntil } from 'rxjs/operators';
@@ -128,6 +128,33 @@ export class MetricDataComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  sortData(sort: Sort) {
+    let sortedData;
+
+    const data = this.dataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      sortedData = data;
+      return;
+    }
+
+    sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'switcher': return this.compare(a.config.key, b.config.key, isAsc);
+        case 'component': return this.compare(a.component, b.component, isAsc);
+        case 'result': return this.compare(a.result ? 'true' : 'false', b.result ? 'true' : 'false', isAsc);
+        case 'date': return this.compare(a.date.toString(), b.date.toString(), isAsc);
+        default: return 0;
+      }
+    });
+
+    this.loadDataSource(sortedData);
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   
 }
