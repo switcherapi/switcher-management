@@ -46,7 +46,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   ngOnInit() {
-    super.cardListContainerStyle = 'card mt-4 loading';
+    this.cardListContainerStyle = 'card mt-4 loading';
     this.loading = true;
     this.error = '';
     this.readPermissionToObject();

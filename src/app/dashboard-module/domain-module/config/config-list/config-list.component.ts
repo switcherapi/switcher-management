@@ -46,7 +46,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   }
 
   ngOnInit() {
-    super.cardListContainerStyle = 'card mt-4 loading';
+    this.cardListContainerStyle = 'card mt-4 loading';
     this.loading = true;
     this.error = '';
     this.readPermissionToObject();

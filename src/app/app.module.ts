@@ -9,7 +9,6 @@ import { appRoutingModule } from './app.routing';
 import { LoginComponent } from './login';
 import { DashboardModule } from './dashboard-module/dashboard.module';
 import { DocumentationComponent } from './documentation/documentation.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AuthService } from './auth/services/auth.service';
 import { TokenInterceptor } from './auth/token.interceptor';
@@ -25,7 +24,6 @@ import { AppMaterialModule } from './shared/app-material.module';
         appRoutingModule,
         GraphQLModule,
         DashboardModule,
-        NoopAnimationsModule,
         AppMaterialModule
     ],
     declarations: [

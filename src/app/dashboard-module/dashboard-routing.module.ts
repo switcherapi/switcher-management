@@ -7,11 +7,13 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 const routes: Routes = [
   { path: 'dashboard', component: DomainListComponent, canActivate: [AuthGuard] },
 
-  {
+  { 
     path: 'dashboard/domain',
     loadChildren: () => import('./domain-module/domain.module').then(mod => mod.DomainModule),
     data: { preload: true }
-  }
+  },
+
+  { path: '**', redirectTo: '/documentation' }
 
 ];
 

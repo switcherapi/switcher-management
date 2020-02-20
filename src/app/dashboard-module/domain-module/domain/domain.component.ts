@@ -74,10 +74,10 @@ export class DomainComponent implements OnInit, OnDestroy {
   gotoListChildren() {
     if (this.currentPathRoute) {
       if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-        this.router.navigate(['/dashboard/domain/groups']);
+        this.router.navigate(['/dashboard/domain/group']);
       } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
         this.currentPathRoute.type === Types.CONFIG_TYPE) {
-        this.router.navigate(['/dashboard/domain/group/switchers']);
+        this.router.navigate(['/dashboard/domain/group/switcher']);
       }
     }
   }

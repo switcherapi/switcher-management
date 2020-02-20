@@ -286,7 +286,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.domainRouteService.removePath(Types.CONFIG_TYPE);
           this.blockUI.stop();
-          this.router.navigate(['/dashboard/domain/group/switchers']);
+          this.router.navigate(['/dashboard/domain/group/switcher']);
           this.toastService.showSuccess(`Switcher removed with success`);
         }, error => {
           this.blockUI.stop();

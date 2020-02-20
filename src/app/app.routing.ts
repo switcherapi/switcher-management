@@ -17,7 +17,7 @@ const routes: Routes = [
 
     { path: 'documentation', component: DocumentationComponent, canActivate: [AuthGuard] },
 
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: '/dashboard' }
 ];
 
 export const appRoutingModule = RouterModule.forRoot(routes);

@@ -23,7 +23,7 @@ const routes: Routes = [
         component: DomainDetailComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'groups',
+        path: 'group',
         component: GroupListComponent, canActivate: [AuthGuard]
       },
       {
@@ -31,7 +31,7 @@ const routes: Routes = [
         component: GroupDetailComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group/switchers',
+        path: 'group/switcher',
         component: ConfigListComponent, canActivate: [AuthGuard]
       },
       {
@@ -77,7 +77,9 @@ const routes: Routes = [
           title: 'Teams',
           icon: 6
         }
-      }
+      },
+
+      { path: '**', redirectTo: '/dashboard/domain' }
     ]
   }
 ];
