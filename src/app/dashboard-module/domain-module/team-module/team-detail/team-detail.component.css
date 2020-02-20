@@ -14,12 +14,12 @@
 }
 
 .options-section {
-  display: block ruby;
+  display: flex;
 }
 
 .toggle-section {
   margin: auto;
-  display: contents;
+  display: block;
 }
 
 :host /deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
