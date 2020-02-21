@@ -19,6 +19,7 @@ import { FormControl, Validators } from '@angular/forms';
   selector: 'app-team-detail',
   templateUrl: './team-detail.component.html',
   styleUrls: [
+    '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
     './team-detail.component.css'
   ]

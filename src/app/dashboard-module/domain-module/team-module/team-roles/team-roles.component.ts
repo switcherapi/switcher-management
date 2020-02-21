@@ -155,9 +155,14 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     this.roleService.updateRole(role._id, role.action, role.router, role.identifiedBy, event.checked)
       .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
         if (role) {
-          this.blockUI.stop();
           this.toastService.showSuccess('Role updated with success');
         }
+      }, error => {
+        this.toastService.showError('Permission denied');
+        ConsoleLogger.printError(error);
+        this.blockUI.stop();
+      }, () => {
+        this.blockUI.stop();
       });
   }
 
