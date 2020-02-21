@@ -5,6 +5,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { environment } from 'src/environments/environment';
+import { DefaultOptions } from 'apollo-client';
 
 const uri = `${environment.apiUrl}/adm-graphql`;
 
@@ -25,9 +26,21 @@ export function provideApollo(httpLink: HttpLink) {
     const link = ApolloLink.from([basic, auth, httpLink.create({ uri })]);
     const cache = new InMemoryCache();
 
+    const defaultOptions: DefaultOptions = {
+        watchQuery: {
+          fetchPolicy: 'no-cache',
+          errorPolicy: 'ignore',
+        },
+        query: {
+          fetchPolicy: 'no-cache',
+          errorPolicy: 'all',
+        },
+    }
+
     return {
         link,
-        cache
+        cache,
+        defaultOptions
     }
 }
 

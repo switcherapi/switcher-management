@@ -71,7 +71,15 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
       .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.environments = env;
-      this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
+
+      if (!this.notSelectableEnvironments)
+        this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
+      else {
+        this.selectedEnvName = Object.keys(this.currentEnvironment)[0];
+        this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
+      }
+
+
       this.selectedEnvStatus = this.currentEnvironment[this.environmentSelection.get('environmentSelection').value];
       this.outputEnvChanged.emit(this.selectedEnvStatus);
     });
