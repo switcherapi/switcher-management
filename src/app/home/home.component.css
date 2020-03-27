@@ -1,6 +1,6 @@
 .home-content {
   text-align: center;
-  padding-top: 100px;
+  padding-top: 30px;
 }
 
 .home-section .home-container {
@@ -65,6 +65,10 @@
 
   .home-content {
     padding-top: 0px;
+  }
+
+  .home-text h1 {
+    font-size: 30px;
   }
 
   .vertical {
