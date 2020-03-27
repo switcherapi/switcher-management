@@ -15,6 +15,7 @@ import { TokenInterceptor } from './auth/token.interceptor';
 
 import { GraphQLModule } from './graphql.module';
 import { AppMaterialModule } from './shared/app-material.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { AppMaterialModule } from './shared/app-material.module';
     declarations: [
         AppComponent,
         LoginComponent,
-        DocumentationComponent
+        DocumentationComponent,
+        HomeComponent
     ],
     providers: [
         AuthGuard,

@@ -1,10 +1,12 @@
-<nav id="main-menu" class="navbar navbar-expand navbar-dark bg-dark backgroud-style" *ngIf="currentToken">
+<nav id="main-menu" class="navbar navbar-expand navbar-dark bg-dark backgroud-style" >
     <img src="assets\switcherapi_management_white.png" style="width: 180px; margin-bottom: 16px; margin-top: 16px;"/>
     <mat-divider class="divider-style"></mat-divider>
     <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/dashboard">Dashboard</a>
+        <a class="nav-item nav-link" routerLink="/">Home</a>
+        <a class="nav-item nav-link" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
         <a class="nav-item nav-link" routerLink="/documentation">Documentation</a>
-        <a class="nav-item nav-link" (click)="logout()">Logout</a>
+        <a class="nav-item nav-link" (click)="logout()" *ngIf="currentToken">Logout</a>
+        <a class="nav-item nav-link" routerLink="/login"  *ngIf="!currentToken">Sign in</a>
     </div>
 </nav>
 
