@@ -22,9 +22,53 @@
             </div>
         </div>
     </section>
-    <section class="home-section section">
-        <div >
-            <img src="assets\home_showcase.png" style="width: 60%;" />
-        </div>
+    <section class="home-section section" style="margin-top: 50px;">
+        <ngb-carousel [interval]="10000" [pauseOnHover]="pauseOnHover">
+            <ng-template ngbSlide>
+                <div>
+                    <img src="assets\home_showcase.png" style="width: 80%;" />
+                </div>
+                <div class="home-carousel-caption">
+                    <h3>Control & Metrics</h3>
+                    <p>Simple and straightforward tools which allows you to control and monitor every aspect of your business.</p>
+                </div>
+            </ng-template>
+            <ng-template ngbSlide>
+                <div>
+                    <img src="assets\home_showcase_collab.png" style="width: 80%;" />
+                </div>
+                <div class="home-carousel-caption">
+                    <h3>Collaborate</h3>
+                    <p>Create teams to collaborate while manage all different accesses for each one.</p>
+                </div>
+            </ng-template>
+            <ng-template ngbSlide>
+                <div>
+                    <img src="assets\home_showcase_tracking.png" style="width: 80%;" />
+                </div>
+                <div class="home-carousel-caption">
+                    <h3>Tracking</h3>
+                    <p>Allows you to connect and identify applications that are using switchers.</p>
+                </div>
+            </ng-template>
+            <ng-template ngbSlide>
+                <div>
+                    <img src="assets\home_showcase_environment.png" style="width: 80%;" />
+                </div>
+                <div class="home-carousel-caption">
+                    <h3>Multi-environment</h3>
+                    <p>Run multiple environments with just a few settings and enable your team work freely on your next feature.</p>
+                </div>
+            </ng-template>
+            <ng-template ngbSlide>
+                <div>
+                    <img src="assets\home_showcase.png" style="width: 80%;" />
+                </div>
+                <div class="home-carousel-caption">
+                    <h3>Libraries & Integrations</h3>
+                    <p>Integrate Switcher Client libraries into your application to guide your workflow either on production or during automated tests.</p>
+                </div>
+            </ng-template>
+        </ngb-carousel>
     </section>
 </div>

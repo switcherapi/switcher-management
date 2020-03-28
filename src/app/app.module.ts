@@ -16,6 +16,7 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { GraphQLModule } from './graphql.module';
 import { AppMaterialModule } from './shared/app-material.module';
 import { HomeComponent } from './home/home.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import { HomeComponent } from './home/home.component';
         appRoutingModule,
         GraphQLModule,
         DashboardModule,
-        AppMaterialModule
+        AppMaterialModule,
+        NgbModule
     ],
     declarations: [
         AppComponent,
