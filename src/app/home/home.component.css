@@ -1,6 +1,5 @@
 .home-content {
   text-align: center;
-  padding-top: 30px;
 }
 
 .home-section .home-container {
@@ -20,14 +19,13 @@
   margin-top: 1em;
   margin-bottom: 36px;
   text-align: initial;
-  text-shadow: 2px 2px 5px white;
 }
 
 .home-text p {
   font-size: 20px;
   font-weight: 300;
   line-height: 1.5em;
-  color: #666;
+  color: #dbdbdb;
   text-align: initial;
 }
 
@@ -35,6 +33,10 @@
   margin: auto;
   width: 500px;
   padding-left: 20px;
+}
+
+.carousel-images {
+  width: 50%;
 }
 
 .vertical {
@@ -59,15 +61,23 @@
   text-align: center;
 }
 
+.home-carousel-caption p {
+  font-size: 20px;
+}
+
+.home-carousel-caption h3 {
+  font-size: 30px;
+}
+
 @media only screen and (max-width: 1200px) {
   .spacer {
     display: inherit;
     width: 80%;
     height: 2px;
     margin: 0 auto;
-    margin-bottom: 0px;
+    margin-bottom: 40px;
+    margin-top: 40px;
     background-color: #5298ff;
-    margin-bottom: 10px;
   }
 
   .home-section .home-container {
@@ -87,6 +97,10 @@
   }
 
   .home-image {
-    width: 100%;
+    width: 80%;
+  }
+
+  .carousel-images {
+    width: 80%;
   }
 }
