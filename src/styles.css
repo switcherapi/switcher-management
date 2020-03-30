@@ -67,10 +67,6 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-  #main-menu.navbar-expand {
-    display: block;
-  }
-
   .divider-style {
     display: contents !important;
   }

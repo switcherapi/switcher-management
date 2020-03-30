@@ -1,8 +1,9 @@
-<nav id="main-menu" class="navbar navbar-expand navbar-dark bg-dark backgroud-style" style="box-shadow: 0px 0px 10px 10px #262b31;">
-    <img src="assets\switcherapi_management_white.png" style="width: 180px; margin-bottom: 16px; margin-top: 16px;"/>
+<nav id="main-menu" class="navbar navbar-expand navbar-dark bg-dark backgroud-style" style="box-shadow: 0px 0px 10px 10px #262b31; justify-content: center;">
+    <a routerLink="/">
+        <img src="assets\switcherapi_mark_white.png" style="width: 40px; margin-bottom: 16px; margin-top: 16px;"/>
+    </a>
     <mat-divider class="divider-style"></mat-divider>
     <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/">Home</a>
         <a class="nav-item nav-link" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
         <a class="nav-item nav-link" routerLink="/documentation">Documentation</a>
         <a class="nav-item nav-link" (click)="logout()" *ngIf="currentToken">Logout</a>
