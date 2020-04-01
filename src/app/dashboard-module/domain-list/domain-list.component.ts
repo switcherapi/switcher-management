@@ -3,13 +3,13 @@ import { DomainService } from '../services/domain.service';
 import { Domain } from '../domain-module/model/domain';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { DomainCreateComponent } from '../domain-create/domain-create.component';
 import { AdminService } from '../services/admin.service';
 import { Team } from '../domain-module/model/team';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-domain-list',

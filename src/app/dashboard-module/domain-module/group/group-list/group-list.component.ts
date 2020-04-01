@@ -9,11 +9,11 @@ import { EnvironmentService } from 'src/app/dashboard-module/services/environmen
 import { FormBuilder } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
 import { GroupCreateComponent } from '../group-create/group-create.component';
-import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-group-list',

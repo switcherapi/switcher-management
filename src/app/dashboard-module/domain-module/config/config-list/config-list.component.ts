@@ -8,12 +8,12 @@ import { ConfigService } from 'src/app/dashboard-module/services/config.service'
 import { FormBuilder } from '@angular/forms';
 import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { ListComponent } from '../../common/list-component';
-import { MatDialog } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-config-list',

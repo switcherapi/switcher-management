@@ -1,12 +1,14 @@
-import { ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
-import { MatSelect, MatSelectionListChange } from '@angular/material';
+import { ViewChildren, QueryList, Output, EventEmitter, Directive } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Environment } from '../model/environment';
 
 import { EnvironmentService } from '../../services/environment.service';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { Types } from '../model/path-route';
+import { MatSelect } from '@angular/material/select';
+import { MatSelectionListChange } from '@angular/material/list';
 
+@Directive()
 export class ListComponent {
     @ViewChildren("envSelectionChange")
     public component: QueryList<MatSelect>

@@ -4,9 +4,11 @@ import { Team } from '../../model/team';
 import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { takeUntil } from 'rxjs/operators';
 import { Admin } from '../../model/admin';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-team-members',

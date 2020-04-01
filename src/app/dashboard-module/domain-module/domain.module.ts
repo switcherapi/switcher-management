@@ -20,7 +20,6 @@ import { ConfigDetailComponent } from './config/config-detail/config-detail.comp
 import { StrategyDetailComponent, ChangeLogDialog } from './config/strategy-detail/strategy-detail.component';
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatButtonModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatMenuModule, MatListModule, MatCardModule, MatOptionModule, MatDialogModule, MatAutocompleteModule, MatChipsModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, MatExpansionModule, MatToolbarModule, MatCheckboxModule } from '@angular/material';
 import { EnvironmentConfigComponent } from './environment-config/environment-config.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GroupCreateComponent } from './group/group-create/group-create.component';
@@ -33,6 +32,25 @@ import { ChartsModule } from 'ng2-charts';
 import { MetricModuleModule } from './metric-module/metric-module.module';
 import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject, Type } from '@angular/core';
 import { Strategy } from '../../model/strategy';
-import { MatSelectionList, MatSelectionListChange, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
@@ -18,6 +17,8 @@ import { DomainRouteService } from 'src/app/dashboard-module/services/domain-rou
 import { Types } from '../../model/path-route';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-strategy-detail',

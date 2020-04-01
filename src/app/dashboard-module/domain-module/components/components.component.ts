@@ -9,10 +9,10 @@ import { takeUntil } from 'rxjs/operators';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ComponentService } from '../../services/component.service';
 import { SwitcherComponent } from '../model/switcher-component';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AdminService } from '../../services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-components',

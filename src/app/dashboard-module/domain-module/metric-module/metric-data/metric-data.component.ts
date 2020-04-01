@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MetricData } from '../../model/metric';
 import { Subject } from 'rxjs';
-import { MatSort, MatPaginator, MatTableDataSource, Sort } from '@angular/material';
 import { trigger, state, style } from '@angular/animations';
 import { MetricService } from 'src/app/dashboard-module/services/metric.service';
 import { takeUntil } from 'rxjs/operators';
@@ -13,6 +12,9 @@ import { DomainRouteService } from 'src/app/dashboard-module/services/domain-rou
 import { Types } from '../../model/path-route';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { MetricComponent } from '../metric/metric.component';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-metric-data',

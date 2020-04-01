@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 import { Metric, MetricData } from '../../model/metric';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { MetricComponent } from '../metric/metric.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-metric-statistics',

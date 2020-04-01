@@ -9,11 +9,11 @@ import { Domain } from '../../model/domain';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSlideToggleChange } from '@angular/material';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-team-detail',

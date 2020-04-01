@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { ConfigListComponent } from '../config-list/config-list.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import { MatSlideToggleChange } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigService } from 'src/app/dashboard-module/services/config.service';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
@@ -13,6 +12,7 @@ import { Types } from '../../model/path-route';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-config-preview',

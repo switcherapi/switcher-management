@@ -5,7 +5,6 @@ import { GroupListComponent } from '../group-list/group-list.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material';
 import { GroupService } from 'src/app/dashboard-module/services/group.service';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
@@ -13,6 +12,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-group-preview',

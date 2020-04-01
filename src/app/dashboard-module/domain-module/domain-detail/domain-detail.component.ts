@@ -11,12 +11,12 @@ import { EnvironmentConfigComponent } from '../environment-config/environment-co
 import { DomainService } from '../../services/domain.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material';
 import { DomainCreateComponent } from '../../domain-create/domain-create.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-domain-detail',

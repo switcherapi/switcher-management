@@ -6,7 +6,6 @@ import { DomainService } from '../../services/domain.service';
 import { takeUntil } from 'rxjs/operators';
 import { trigger, state, style } from '@angular/animations';
 import { History } from '../model/history';
-import { MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { GroupService } from '../../services/group.service';
 import { ConfigService } from '../../services/config.service';
@@ -18,6 +17,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { AdminService } from '../../services/admin.service';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-changelog',

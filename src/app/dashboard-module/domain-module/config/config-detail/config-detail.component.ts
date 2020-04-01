@@ -17,12 +17,14 @@ import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
-import { MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ComponentService } from 'src/app/dashboard-module/services/component.service';
 import { SwitcherComponent } from '../../model/switcher-component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-config-detail',
@@ -46,10 +48,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   @ViewChild('keyElement', { static: true }) 
   keyElement: ElementRef;
   
-  @ViewChild('componentInput', { static: false }) 
+  @ViewChild('componentInput') 
   componentInput: ElementRef<HTMLInputElement>;
   
-  @ViewChild('auto', { static: false }) 
+  @ViewChild('auto') 
   matAutocomplete: MatAutocomplete;
 
   keyFormControl = new FormControl('', [

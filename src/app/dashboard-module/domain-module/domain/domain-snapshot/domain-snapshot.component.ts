@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { Environment } from '../../model/environment';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Types } from '../../model/path-route';
@@ -10,10 +9,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Apollo, QueryRef } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { JsonPipe } from '@angular/common';
-import { error } from 'protractor';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 const STATUS_BY_ENV = `
   statusByEnv {

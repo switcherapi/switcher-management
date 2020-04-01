@@ -10,6 +10,12 @@
  - **JavaScript lib**: (https://github.com/petruki/switcher-client-master)
  - **Java lib**: (https://github.com/petruki/switcher-client)
 
+# Demo environment
+Join us on Slack to get your access to this demo environment. [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
+
+ - https://petruki.github.io/switcher-management/
+
+
 ## Donation
 Donations for cookies and pizza are extremely welcomed.
 

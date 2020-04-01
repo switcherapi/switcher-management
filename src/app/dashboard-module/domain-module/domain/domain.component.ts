@@ -6,7 +6,7 @@ import { delay, takeUntil } from 'rxjs/operators';
 import { Types } from '../model/path-route'
 import { Subject } from 'rxjs';
 import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-domain',

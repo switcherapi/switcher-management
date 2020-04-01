@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl, ValidatorFn } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSelectionList } from '@angular/material';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -8,6 +7,8 @@ import { Strategy } from '../../model/strategy';
 import { StrategyReq } from '../../model/strategy_req';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatSelectionList } from '@angular/material/list';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-strategy-create',
