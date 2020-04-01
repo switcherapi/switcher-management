@@ -20,14 +20,14 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field class="filter-date-selector">
-                <input matInput [ngxMatDatetimePicker]="fromPicker" placeholder="From" [formControl]="dateAfterFormControl">
+                <input matInput [matDatepicker]="fromPicker" placeholder="From" [formControl]="dateAfterFormControl">
                 <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
-                <ngx-mat-datetime-picker #fromPicker></ngx-mat-datetime-picker>
+                <mat-datepicker #fromPicker></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="filter-date-selector">
-                <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="To" [formControl]="dateBeforeFormControl">
+                <input matInput [matDatepicker]="toPicker" placeholder="To" [formControl]="dateBeforeFormControl">
                 <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-                <ngx-mat-datetime-picker #toPicker></ngx-mat-datetime-picker>
+                <mat-datepicker #toPicker></mat-datepicker>
             </mat-form-field>
         </div>
         <div class="body-filter-btns">

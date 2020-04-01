@@ -9,7 +9,6 @@ import { MatTabsModule, MatButtonModule, MatSlideToggleModule, MatFormFieldModul
 import { Metric } from '../model/metric';
 import { ChartsModule } from 'ng2-charts';
 import { MetricRoutingModule } from './metric-routing.module';
-import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from 'ngx-mat-datetime-picker';
 
 @NgModule({
   declarations: [
@@ -54,8 +53,6 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from 'ngx-mat-date
     MatToolbarModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
     ChartsModule
   ],
   providers: [Metric],
