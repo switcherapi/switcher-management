@@ -12,12 +12,14 @@ import { MetricsComponent } from './docs/metrics.component';
 import { StrategiesComponent } from './docs/strategies.component';
 import { LibJavaComponent } from './docs/lib-java.component';
 import { LibJavaScriptComponent } from './docs/lib-javascript.component';
+import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
 
   { path: '', component: DocumentationComponent,
     children: [
       { path: '', component: HomeComponent },
+      { path: 'search/:query', component: SearchComponent },
       { path: 'setup', component: SetupComponent },
       { path: 'environment', component: EnvironmentComponent },
       { path: 'components', component: ComponentsComponent },

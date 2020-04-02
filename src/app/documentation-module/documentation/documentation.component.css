@@ -80,6 +80,12 @@ a[aria-expanded="true"] {
   background: #24292E;
 }
 
+.floatSidebar {
+  position: fixed;
+  top: 0;
+  width: 250px;
+}
+
 a[data-toggle="collapse"] {
   position: relative;
 }
@@ -90,6 +96,12 @@ a[data-toggle="collapse"] {
   top: 50%;
   right: 20px;
   transform: translateY(-50%);
+}
+
+#searchBox {
+  width: 220px;
+
+  margin: auto;
 }
 
 #content {

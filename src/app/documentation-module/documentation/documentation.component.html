@@ -1,56 +1,66 @@
 <div class="container">
-    <div class="wrapper">
+    <div class="wrapper" (scroll)="onScroll($event)">
         <nav id="sidebar">
-            <div class="sidebar-header">
-                <a routerLink="/documentation">
-                    <img src="assets\switcherapi_management_white.png" style="width: 200px;" />
-                </a>
+            <div id="floatingSidebar">
+                <div class="sidebar-header">
+                    <a routerLink="/documentation">
+                        <img src="assets\switcherapi_management_white.png" style="width: 200px;" />
+                    </a>
+                </div>
+                <div class="spacer"></div>
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#quickstartSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quickstart</a>
+                        <ul class="collapse list-unstyled" id="quickstartSubmenu">
+                            <li>
+                                <a routerLink="/documentation/setup">- Setup</a>
+                            </li>
+                            <li>
+                                <a routerLink="/documentation/environment">- Environment</a>
+                            </li>
+                            <li>
+                                <a routerLink="/documentation/components">- Components</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="active">
+                        <a href="#collaborationSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Collaboration</a>
+                        <ul class="collapse list-unstyled" id="collaborationSubmenu">
+                            <li>
+                                <a routerLink="/documentation/team">- Team</a>
+                            </li>
+                            <li>
+                                <a routerLink="/documentation/permissions">- Permissions</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a routerLink="/documentation/metrics">Metrics</a>
+                    </li>
+                    <li>
+                        <a routerLink="/documentation/strategies">Strategies</a>
+                    </li>
+                    <li class="active">
+                        <a href="#librariesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Libraries</a>
+                        <ul class="collapse list-unstyled" id="librariesSubmenu">
+                            <li>
+                                <a routerLink="/documentation/lib_java">- Java</a>
+                            </li>
+                            <li>
+                                <a routerLink="/documentation/lib_javascript">- JavaScript</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div id="searchBox" class="input-group md-form form-sm form-2 pl-0">
+                    <input #searchQuery class="form-control" type="text" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="input-group-text red lighten-3" (click)="onSearch(searchQuery.value)">
+                            <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="spacer"></div>
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#quickstartSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quickstart</a>
-                    <ul class="collapse list-unstyled" id="quickstartSubmenu">
-                        <li>
-                            <a routerLink="/documentation/setup">- Setup</a>
-                        </li>
-                        <li>
-                            <a routerLink="/documentation/environment">- Environment</a>
-                        </li>
-                        <li>
-                            <a routerLink="/documentation/components">- Components</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="active">
-                    <a href="#collaborationSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Collaboration</a>
-                    <ul class="collapse list-unstyled" id="collaborationSubmenu">
-                        <li>
-                            <a routerLink="/documentation/team">- Team</a>
-                        </li>
-                        <li>
-                            <a routerLink="/documentation/permissions">- Permissions</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a routerLink="/documentation/metrics">Metrics</a>
-                </li>
-                <li>
-                    <a routerLink="/documentation/strategies">Strategies</a>
-                </li>
-                <li class="active">
-                    <a href="#librariesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Libraries</a>
-                    <ul class="collapse list-unstyled" id="librariesSubmenu">
-                        <li>
-                            <a routerLink="/documentation/lib_java">- Java</a>
-                        </li>
-                        <li>
-                            <a routerLink="/documentation/lib_javascript">- JavaScript</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         </nav>
 
         <div id="content">
