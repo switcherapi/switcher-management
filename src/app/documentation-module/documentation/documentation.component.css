@@ -41,6 +41,8 @@ a:focus {
   color: #fff;
   transition: all 0.3s;
   box-shadow: 0px 0px 10px 0px #000;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 #sidebar.active {
@@ -95,6 +97,14 @@ a[data-toggle="collapse"] {
   padding-left: 20px;
   padding-right: 20px;
   transition: all 0.3s;
+}
+
+#docContainer {
+  background: white;
+  border: 2px solid #a8a8a8;
+  padding: 30px;
+  min-height: 800px;
+  margin-bottom: 10px;
 }
 
 .spacer {
@@ -160,6 +170,6 @@ a[data-toggle="collapse"] {
   }
 
   .doc-icon {
-    width:30px;
+    width: 30px;
   }
 }
