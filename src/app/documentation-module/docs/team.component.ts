@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-team',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
       <h3 class="doc-title">Team</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
     </div>
-    <markdown [src]="'assets/documentation/team.md'"></markdown>
+    <markdown [src]="'${environment.docsUrl}documentation/team.md'"></markdown>
   `,
   styleUrls: ['../documentation/documentation.component.css']
 })

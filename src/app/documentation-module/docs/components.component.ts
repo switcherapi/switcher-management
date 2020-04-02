@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-components',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
       <h3 class="doc-title">Components</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
     </div>
-    <markdown [src]="'assets/documentation/components.md'"></markdown>
+    <markdown [src]="'${environment.docsUrl}documentation/components.md'"></markdown>
   `,
   styleUrls: ['../documentation/documentation.component.css']
 })

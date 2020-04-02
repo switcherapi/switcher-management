@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-libjavascript',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
       <h3 class="doc-title">JavaScript Client</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
     </div>
-    <markdown [src]="'assets/documentation/libjavascript.md'"></markdown>
+    <markdown [src]="'${environment.docsUrl}documentation/libjavascript.md'"></markdown>
   `,
   styleUrls: ['../documentation/documentation.component.css']
 })
