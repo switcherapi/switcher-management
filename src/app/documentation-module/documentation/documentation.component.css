@@ -31,6 +31,7 @@ a:focus {
   width: 100%;
   align-items: stretch;
   padding-top: 40px;
+  overflow-y: hidden;
 }
 
 #sidebar {
@@ -129,7 +130,7 @@ a[data-toggle="collapse"] {
   width: 50px;
 }
 
-@media (max-width: 990px) {
+@media only screen and (max-width: 990px) {
   #sidebar {
     margin-left: -250px;
   }
@@ -150,5 +151,15 @@ a[data-toggle="collapse"] {
     max-width: 1200px;
     padding-right: 0px;
     padding-left: 0px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .doc-title {
+    font-size: medium;
+  }
+
+  .doc-icon {
+    width:30px;
   }
 }
