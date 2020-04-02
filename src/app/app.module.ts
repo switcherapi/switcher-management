@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -8,7 +8,6 @@ import { appRoutingModule } from './app.routing';
 
 import { LoginComponent } from './login';
 import { DashboardModule } from './dashboard-module/dashboard.module';
-import { DocumentationComponent } from './documentation/documentation.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AuthService } from './auth/services/auth.service';
 import { TokenInterceptor } from './auth/token.interceptor';
@@ -34,7 +33,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     declarations: [
         AppComponent,
         LoginComponent,
-        DocumentationComponent,
         HomeComponent
     ],
     providers: [

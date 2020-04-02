@@ -1,7 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login';
-import { DocumentationComponent } from './documentation/documentation.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
@@ -15,7 +14,11 @@ const routes: Routes = [
         data: { preload: true }
     },
 
-    { path: 'documentation', component: DocumentationComponent },
+    {
+        path: 'documentation',
+        loadChildren: () => import('./documentation-module/documentation-module.module').then(mod => mod.DocumentationModuleModule),
+        data: { preload: true }
+    },
 
     { path: '**', redirectTo: '/dashboard' }
 ];

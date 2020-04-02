@@ -1,0 +1,154 @@
+/* Style based on: https://bootstrapious.com/p/bootstrap-sidebar */
+.container {
+  max-width: 1440px;
+}
+
+a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.navbar {
+  padding: 15px 10px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 40px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+  box-shadow: none;
+  outline: none !important;
+  border: none;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  padding-top: 40px;
+}
+
+#sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  background: #24292E;
+  color: #fff;
+  transition: all 0.3s;
+  box-shadow: 0px 0px 10px 0px #000;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: #24292e;
+}
+
+#sidebar ul.components {
+  padding: 20px 0;
+}
+
+#sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  display: block;
+  font-size: medium;
+}
+
+#sidebar ul li a:hover {
+  color: #24292E;
+  background: #fff;
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+  color: #fff;
+  background: #24292E;
+}
+
+a[data-toggle="collapse"] {
+  position: relative;
+}
+
+.dropdown-toggle::after {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+#content {
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  transition: all 0.3s;
+}
+
+.spacer {
+  display: inherit;
+  width: 80%;
+  height: 1px;
+  margin: 0 auto;
+  background-color: #5298ff;
+}
+
+#sidebarCollapse {
+  display: none;
+}
+
+.doc-header {
+  background: #a6a6a6;
+  box-shadow: 0px 0px 10px 0px #cacaca;
+  padding: 10px;
+  border-radius: 1rem;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.doc-title {
+  font-size: xx-large;
+  margin: auto;
+  float: right;
+  color: white;
+  display: block;
+}
+
+.doc-icon {
+  width: 50px;
+}
+
+@media (max-width: 990px) {
+  #sidebar {
+    margin-left: -250px;
+  }
+
+  #sidebar.active {
+    margin-left: 0;
+  }
+
+  #sidebarCollapse span {
+    display: none;
+  }
+
+  #sidebarCollapse {
+    display: inherit;
+  }
+
+  .container {
+    max-width: 1200px;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}

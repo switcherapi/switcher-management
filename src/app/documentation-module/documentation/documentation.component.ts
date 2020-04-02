@@ -12,4 +12,11 @@ export class DocumentationComponent implements OnInit {
   ngOnInit() {
   }
 
+  toggleMenu(): void {
+    if (document.getElementById('sidebar').className == 'active')
+      document.getElementById('sidebar').className = "";
+    else
+      document.getElementById('sidebar').className = "active";
+  }
+
 }
