@@ -100,7 +100,6 @@ a[data-toggle="collapse"] {
 
 #searchBox {
   width: 220px;
-
   margin: auto;
 }
 
@@ -183,5 +182,9 @@ a[data-toggle="collapse"] {
 
   .doc-icon {
     width: 30px;
+  }
+
+  .floatSidebar {
+    position: relative;
   }
 }

@@ -38,7 +38,8 @@ export class DocumentationComponent implements OnInit {
   }
 
   onSearch(query: string): void {
-    this.router.navigate(['/documentation/search', query]);
+    if (query)
+      this.router.navigate(['/documentation/search', query]);
   }
 
 }
