@@ -1,7 +1,7 @@
 <div class="container">
     <div class="wrapper">
         <nav id="sidebar">
-            <div id="floatingSidebar">
+            <div class="sticky">
                 <div class="sidebar-header">
                     <a routerLink="/documentation">
                         <img src="assets\switcherapi_management_white.png" style="width: 200px;" />
@@ -64,7 +64,7 @@
         </nav>
 
         <div id="content">
-            <div id="sidebarCollapse" class="container-fluid" style="padding-bottom: 20px;">
+            <div id="sidebarCollapse" class="container-fluid sticky">
                 <button type="button" id="sidebarCollapseBtn" class="btn btn-info" (click)="toggleMenu()">
                     <i class="fas fa-align-left"></i>
                 </button>

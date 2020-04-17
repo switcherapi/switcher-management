@@ -23,20 +23,6 @@ export class DocumentationComponent implements OnInit {
       document.getElementById('sidebar').className = "active";
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    const floatingSidebar = document.getElementById("floatingSidebar");
-
-    if (!this.sideBarTopPos)
-      this.sideBarTopPos = floatingSidebar.offsetTop;
-
-    if (window.pageYOffset >= this.sideBarTopPos) {
-      floatingSidebar.classList.add("floatSidebar");
-    } else {
-      floatingSidebar.classList.remove("floatSidebar");
-    }
-  }
-
   onSearch(query: string): void {
     if (query)
       this.router.navigate(['/documentation/search', query]);

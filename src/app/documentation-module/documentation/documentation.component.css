@@ -31,7 +31,6 @@ a:focus {
   width: 100%;
   align-items: stretch;
   padding-top: 40px;
-  overflow-y: hidden;
 }
 
 #sidebar {
@@ -80,10 +79,11 @@ a[aria-expanded="true"] {
   background: #24292E;
 }
 
-.floatSidebar {
-  position: fixed;
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
   top: 0;
-  width: 250px;
+  margin-bottom: 20px;
 }
 
 a[data-toggle="collapse"] {
@@ -151,6 +151,12 @@ a[data-toggle="collapse"] {
   width: 50px;
 }
 
+.container-fluid.sticky {
+  padding-bottom: 20px;
+  position: sticky;
+  top: 10px;
+}
+
 @media only screen and (max-width: 990px) {
   #sidebar {
     margin-left: -250px;
@@ -182,9 +188,5 @@ a[data-toggle="collapse"] {
 
   .doc-icon {
     width: 30px;
-  }
-
-  .floatSidebar {
-    position: relative;
   }
 }
