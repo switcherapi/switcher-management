@@ -3,7 +3,7 @@
         <nav id="sidebar">
             <div class="sticky">
                 <div class="sidebar-header">
-                    <a routerLink="/documentation">
+                    <a routerLink="/documentation" (click)="toggleMenu()">
                         <img src="assets\switcherapi_management_white.png" style="width: 200px;" />
                     </a>
                 </div>
@@ -13,13 +13,13 @@
                         <a href="#quickstartSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quickstart</a>
                         <ul class="collapse list-unstyled" id="quickstartSubmenu">
                             <li>
-                                <a routerLink="/documentation/setup">- Setup</a>
+                                <a routerLink="/documentation/setup" (click)="toggleMenu()">- Setup</a>
                             </li>
                             <li>
-                                <a routerLink="/documentation/environment">- Environment</a>
+                                <a routerLink="/documentation/environment" (click)="toggleMenu()">- Environment</a>
                             </li>
                             <li>
-                                <a routerLink="/documentation/components">- Components</a>
+                                <a routerLink="/documentation/components" (click)="toggleMenu()">- Components</a>
                             </li>
                         </ul>
                     </li>
@@ -27,27 +27,27 @@
                         <a href="#collaborationSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Collaboration</a>
                         <ul class="collapse list-unstyled" id="collaborationSubmenu">
                             <li>
-                                <a routerLink="/documentation/team">- Team</a>
+                                <a routerLink="/documentation/team" (click)="toggleMenu()">- Team</a>
                             </li>
                             <li>
-                                <a routerLink="/documentation/permissions">- Permissions</a>
+                                <a routerLink="/documentation/permissions" (click)="toggleMenu()">- Permissions</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a routerLink="/documentation/metrics">Metrics</a>
+                        <a routerLink="/documentation/metrics" (click)="toggleMenu()">Metrics</a>
                     </li>
                     <li>
-                        <a routerLink="/documentation/strategies">Strategies</a>
+                        <a routerLink="/documentation/strategies" (click)="toggleMenu()">Strategies</a>
                     </li>
                     <li class="active">
                         <a href="#librariesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Libraries</a>
                         <ul class="collapse list-unstyled" id="librariesSubmenu">
                             <li>
-                                <a routerLink="/documentation/lib_java">- Java</a>
+                                <a routerLink="/documentation/lib_java" (click)="toggleMenu()">- Java</a>
                             </li>
                             <li>
-                                <a routerLink="/documentation/lib_javascript">- JavaScript</a>
+                                <a routerLink="/documentation/lib_javascript" (click)="toggleMenu()">- JavaScript</a>
                             </li>
                         </ul>
                     </li>

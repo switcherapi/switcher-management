@@ -17,10 +17,14 @@ export class DocumentationComponent implements OnInit {
   ngOnInit() {}
 
   toggleMenu(): void {
-    if (document.getElementById('sidebar').className == 'active')
+    if (document.getElementById('sidebar').className == 'active') {
       document.getElementById('sidebar').className = "";
-    else
+      document.getElementById('content').className = "";
+    }
+    else {
       document.getElementById('sidebar').className = "active";
+      document.getElementById('content').className = "hide";
+    }
   }
 
   onSearch(query: string): void {
