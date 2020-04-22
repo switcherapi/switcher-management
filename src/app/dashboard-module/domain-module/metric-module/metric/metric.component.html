@@ -1,4 +1,4 @@
-<div style="padding-top: 20px;">
+<div [ngClass]="metricViewClass">
     <div class="header-filter">
         <button mat-button class="btn-element" (click)="onFilter()">
             <mat-icon style="font-size: larger;">filter_list</mat-icon>
@@ -11,7 +11,7 @@
             <ngb-tabset [activeId]="1" [destroyOnHide]="false">
                 <ngb-tab id="1">
                     <ng-template ngbTabTitle>
-                        <div>Overall Statistics</div>
+                        <div (click)="showGraphics()">Overall Statistics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <app-metric-statistics [data]="metrics" [switcher]="switcher" [parent]="this"></app-metric-statistics>
@@ -19,7 +19,7 @@
                 </ngb-tab>
                 <ngb-tab id="2">
                     <ng-template ngbTabTitle>
-                        <div>Data</div>
+                        <div (click)="showData()">Data</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <app-metric-data [data]="metrics.data" [switcher]="switcher" [parent]="this"></app-metric-data>

@@ -58,6 +58,7 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
       data.switcher = null;
     }
 
+    data.dateGroupPattern = this.dateGroupPattern;
     data.dateAfter = this.datepipe.transform(this.dateAfterFormControl.value, 'yyyy-MM-dd HH:mm:ss');
     data.dateBefore = this.datepipe.transform(this.dateBeforeFormControl.value, 'yyyy-MM-dd HH:mm:ss');
     data.environment = this.environmentSelection.value;

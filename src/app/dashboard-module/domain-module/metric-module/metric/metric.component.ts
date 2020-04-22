@@ -22,6 +22,7 @@ export class MetricComponent implements OnInit, OnDestroy {
   @Input() switcher: string;
   dateGroupPattern: string;
 
+  metricViewClass = 'metrics-view graphics';
   filterClass = 'body-filter show';
   loading = true;
   error = '';
@@ -70,6 +71,7 @@ export class MetricComponent implements OnInit, OnDestroy {
         switcher: key,
         dateAfter: '',
         dateBefore: '',
+        dateGroupPattern: '',
         environment: ''
       }
     });
@@ -82,6 +84,7 @@ export class MetricComponent implements OnInit, OnDestroy {
           this.switcher = null;
         }
         
+        this.dateGroupPattern = data.dateGroupPattern;
         this.loadMetrics(this.switcher, data.environment, data.dateBefore, data.dateAfter);
       }
     });
@@ -89,5 +92,13 @@ export class MetricComponent implements OnInit, OnDestroy {
 
   setSwitcherKeyInput(key: string) {
     this.onFilter(key);
+  }
+
+  showData() {
+    this.metricViewClass = 'metrics-view data';
+  }
+
+  showGraphics() {
+    this.metricViewClass = 'metrics-view graphics';
   }
 }
