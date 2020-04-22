@@ -28,13 +28,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MetricFilterComponent } from './metric-filter/metric-filter.component';
 
 @NgModule({
   declarations: [
     MetricComponent, 
     MetricStatisticsComponent, 
     MetricDataComponent,
-    SwitcherDataStatsDialog
+    SwitcherDataStatsDialog,
+    MetricFilterComponent
   ],
   exports: [
     MetricComponent, 

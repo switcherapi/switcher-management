@@ -1,47 +1,9 @@
 <div style="padding-top: 20px;">
-    <section class="header-filter">
-        <div [ngClass]="filterClass">
-            <mat-form-field class="filter-env-selector">
-                <mat-select placeholder="Environment selection" [formControl]="environmentSelection">
-                    <mat-option *ngFor="let environment of environments" [value]="environment.name">
-                        {{environment.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="filter-key-selector">
-                <input #switcherInput matInput placeholder="Switcher Key" [formControl]="switcherKeyFormControl">
-            </mat-form-field>
-            <mat-form-field *ngIf="switcherInput.value" class="filter-env-selector">
-                <mat-select placeholder="Group By" [(ngModel)]="dateGroupPattern">
-                    <mat-option value="YYYY-MM">Month</mat-option>
-                    <mat-option value="YYYY-MM-DD">Day</mat-option>
-                    <mat-option value="YYYY-MM-DD HH">Hour</mat-option>
-                    <mat-option value="YYYY-MM-DD HH:mm">Minute</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="filter-date-selector">
-                <input matInput [matDatepicker]="fromPicker" placeholder="From" [formControl]="dateAfterFormControl">
-                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
-                <mat-datepicker #fromPicker></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field class="filter-date-selector">
-                <input matInput [matDatepicker]="toPicker" placeholder="To" [formControl]="dateBeforeFormControl">
-                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-                <mat-datepicker #toPicker></mat-datepicker>
-            </mat-form-field>
-        </div>
-        <div class="body-filter-btns">
-            <button mat-button class="btn-element" (click)="applyFilter()">
-                <mat-icon style="font-size: larger;">gps_fixed</mat-icon>
-                Filter
-            </button>
-            <button mat-button class="btn-element" (click)="toggleFilter()">
-                <mat-icon *ngIf="filterClass === 'body-filter show'" style="font-size: larger;">location_disabled</mat-icon>
-                <mat-icon *ngIf="filterClass === 'body-filter hide'" style="font-size: larger;">gps_not_fixed</mat-icon>
-                Toggle Filter
-            </button>
-        </div>
-    </section>
+    <div class="header-filter">
+        <button mat-button class="btn-element" (click)="onFilter()">
+            <mat-icon style="font-size: larger;">filter_list</mat-icon>
+        </button>
+    </div>
     <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     <section id="data-section" *ngIf="!loading" style="margin-top: 20px;">
