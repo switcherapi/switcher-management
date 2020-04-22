@@ -335,6 +335,7 @@ export class SwitcherDateTimeGroupedTab {
     .btn-cancel {
       float: right;
       margin-right: 10px;
+      margin-top: 10px;
       background: #8e8e8e;
     }
     

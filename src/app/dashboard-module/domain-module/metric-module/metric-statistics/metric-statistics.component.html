@@ -1,20 +1,6 @@
 <div *ngIf="!loading" #tabmetrics id="tabmetrics_id">
     <mat-tab-group dynamicHeight>
         <mat-tab *ngIf="switcher != null" label="Switchers Date/Time View">
-            <div style="display: flex;">
-                <button mat-button class="btn-element" 
-                    (click)="getSwitcherDateTimeGroupStats().onPrevious()" 
-                    [disabled]="!getSwitcherDateTimeGroupStats().hasPrevious()">
-                    <mat-icon style="font-size: larger;">navigate_before</mat-icon>
-                    Previous
-                </button>
-                <button mat-button class="btn-element" 
-                    (click)="getSwitcherDateTimeGroupStats().loadSwitcherDateTimeGroupView()" 
-                    [disabled]="!getSwitcherDateTimeGroupStats().hasNext()">
-                    <mat-icon style="font-size: larger;">navigate_next</mat-icon>
-                    Next
-                </button>
-            </div>
             <div style="display: block">
                 <canvas baseChart
                     [chartType]="getSwitcherDateTimeGroupStats().chartType"
@@ -25,6 +11,18 @@
                     [options]="getSwitcherDateTimeGroupStats().chartOptions"
                     [legend]="true">
                 </canvas>
+            </div>
+            <div style="display: flex;">
+                <button mat-button class="btn-element" 
+                    (click)="getSwitcherDateTimeGroupStats().onPrevious()" 
+                    [disabled]="!getSwitcherDateTimeGroupStats().hasPrevious()">
+                    <mat-icon style="font-size: larger;">arrow_back</mat-icon>
+                </button>
+                <button mat-button class="btn-element" 
+                    (click)="getSwitcherDateTimeGroupStats().loadSwitcherDateTimeGroupView()" 
+                    [disabled]="!getSwitcherDateTimeGroupStats().hasNext()">
+                    <mat-icon style="font-size: larger;">arrow_forward</mat-icon>
+                </button>
             </div>
         </mat-tab>
         <mat-tab label="Switchers View">

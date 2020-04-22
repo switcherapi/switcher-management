@@ -54,7 +54,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   onDownloadSnapshot() {
-    const dialogRef = this.dialog.open(DomainSnapshotComponent, {
+    this.dialog.open(DomainSnapshotComponent, {
       width: '450px',
       data: { }
     });

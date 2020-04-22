@@ -42,15 +42,15 @@ tr.element-row:not(.expanded-row):active {
   background: #549bfb94;
 }
 
+.mat-elevation-z8 {
+  border: 1px solid #cccccc80;
+  box-shadow: none;
+}
+
 .mat-header-cell {
   color: white;
   font-size: unset;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-}
-
-h1 {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  font-size: x-large;
 }
 
 .tablelog-footer {
