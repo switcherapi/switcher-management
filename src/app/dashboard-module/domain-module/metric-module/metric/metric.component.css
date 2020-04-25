@@ -17,3 +17,27 @@
   padding-top: 20px; 
   display: block;
 }
+
+@media only screen and (max-width: 1200px) {
+  .metrics-view.graphics {
+    height: 600px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .metrics-view.graphics {
+    height: 500px;
+  }
+}
+
+@media only screen and (max-width: 760px) {
+  .metrics-view.graphics {
+    height: 400px;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .metrics-view.graphics {
+    height: 100%;
+  }
+}

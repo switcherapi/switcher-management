@@ -28,43 +28,41 @@
                     </mat-form-field>
                 </div>
                 <div id="srategyValueSection" class="values-section">
-                    <div class="description-values">
-                        <mat-card style="margin-top: 10px;">
-                            <mat-card-header>
-                            <mat-card-subtitle>Values</mat-card-subtitle>
-                            </mat-card-header>
-                            <mat-card-content style="overflow-y: scroll; height: 180px;">
-                                <mat-selection-list #strategyValueSelection>
-                                    <mat-list-option *ngFor="let value of strategy.values" [value]="value">
-                                        {{value}}
-                                    </mat-list-option>
-                                </mat-selection-list>
-                            </mat-card-content>
-                            <mat-form-field style="width: 100%;">
-                                <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl">
-                                <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
-                                    Please, check the value format
-                                </mat-error>
-                            </mat-form-field>
-                            <div class="strategy-values-control">
-                                <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
-                                    [disabled]="inputValue.value.length === 0 || !updatable">
-                                    <mat-icon style="vertical-align: text-bottom;">add_to_queue</mat-icon>
-                                    <div class="options-section-label"> Add</div>
-                                </button>
-                                <button mat-button class="btn-element" (click)="editValue(strategyValueSelection.selectedOptions.selected[0]?.value, inputValue.value)" 
-                                    [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
-                                    <mat-icon style="vertical-align: text-bottom;">sync</mat-icon>
-                                    <div class="options-section-label"> Update</div>
-                                </button>
-                                <button mat-button class="btn-element" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
-                                    [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
-                                    <mat-icon style="vertical-align: text-bottom;">remove_from_queue</mat-icon>
-                                    <div class="options-section-label"> Remove</div>
-                                </button>
-                            </div>
-                        </mat-card>
-                    </div>
+                    <mat-card style="margin-top: 10px;">
+                        <mat-card-header>
+                        <mat-card-subtitle>Values</mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content style="overflow-y: scroll; height: 180px;">
+                            <mat-selection-list #strategyValueSelection>
+                                <mat-list-option *ngFor="let value of strategy.values" [value]="value">
+                                    {{value}}
+                                </mat-list-option>
+                            </mat-selection-list>
+                        </mat-card-content>
+                        <mat-form-field style="width: 100%;">
+                            <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl">
+                            <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
+                                Please, check the value format
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="strategy-values-control">
+                            <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
+                                [disabled]="inputValue.value.length === 0 || !updatable">
+                                <mat-icon style="vertical-align: text-bottom;">add_to_queue</mat-icon>
+                                <div class="options-section-label"> Add</div>
+                            </button>
+                            <button mat-button class="btn-element" (click)="editValue(strategyValueSelection.selectedOptions.selected[0]?.value, inputValue.value)" 
+                                [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
+                                <mat-icon style="vertical-align: text-bottom;">sync</mat-icon>
+                                <div class="options-section-label"> Update</div>
+                            </button>
+                            <button mat-button class="btn-element" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
+                                [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
+                                <mat-icon style="vertical-align: text-bottom;">remove_from_queue</mat-icon>
+                                <div class="options-section-label"> Remove</div>
+                            </button>
+                        </div>
+                    </mat-card>
                 </div>
                 <div class="description">
                     <app-environment-config #envSelectionChange [currentEnvironment]="strategy?.activated"
