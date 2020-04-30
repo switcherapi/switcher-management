@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Strategy } from '../domain-module/model/strategy';
 import { ApiService } from './api.service';
-import { StrategyReq, OperationReq } from '../domain-module/model/strategy_req';
+import { StrategyReq } from '../domain-module/model/strategy_req';
 import { History } from '../domain-module/model/history';
 
 @Injectable({

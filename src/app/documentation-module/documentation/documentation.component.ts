@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./documentation.component.css']
 })
 export class DocumentationComponent implements OnInit {
-
   sideBarTopPos: number;
 
   constructor(
@@ -28,8 +27,7 @@ export class DocumentationComponent implements OnInit {
   }
 
   onSearch(query: string): void {
-    if (query)
-      this.router.navigate(['/documentation/search', query]);
+    this.router.navigate(['/documentation/search', query]);
   }
 
 }

@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3000',
+  skimmingApi: 'https://dance-0m7.begin.app',
   docsUrl: 'assets/',
   timeout: 5000
 };

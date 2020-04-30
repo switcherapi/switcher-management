@@ -15,6 +15,7 @@ import { PermissionsComponent } from './docs/permissions.component';
 import { StrategiesComponent } from './docs/strategies.component';
 import { TeamComponent } from './docs/team.component';
 import { SearchComponent } from './search/search.component';
+import { SearchItemComponent } from './search-item/search-item.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SearchComponent } from './search/search.component';
     PermissionsComponent,
     StrategiesComponent,
     TeamComponent,
-    SearchComponent
+    SearchComponent,
+    SearchItemComponent
   ],
   imports: [
     CommonModule,

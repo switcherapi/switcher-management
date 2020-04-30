@@ -3,4 +3,10 @@
     <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
 </div>
 
-<p><strong>Results for:</strong> {{query}}</p>
+<div *ngIf="loading" style="text-align: center;">
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+</div>
+<label *ngIf="!loading && skimmingResponse?.result.length === 0">No results found for <strong>{{ query }}</strong></label>
+<div *ngFor="let skimmmingResult of skimmingResponse?.result">
+    <app-search-item [skimmmingResult]="skimmmingResult"></app-search-item>
+</div>

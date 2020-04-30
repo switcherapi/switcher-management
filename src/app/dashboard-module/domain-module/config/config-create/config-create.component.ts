@@ -41,11 +41,11 @@ export class ConfigCreateComponent implements OnInit, OnDestroy {
 
     this.keyFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.key = value;
-    })
+    });
 
     this.descFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.description = value;
-    })
+    });
   }
 
   ngOnDestroy() {

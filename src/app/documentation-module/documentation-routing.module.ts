@@ -27,8 +27,8 @@ const routes: Routes = [
       { path: 'permissions', component: PermissionsComponent },
       { path: 'metrics', component: MetricsComponent },
       { path: 'strategies', component: StrategiesComponent },
-      { path: 'lib_java', component: LibJavaComponent },
-      { path: 'lib_javascript', component: LibJavaScriptComponent },
+      { path: 'libjava', component: LibJavaComponent },
+      { path: 'libjavascript', component: LibJavaScriptComponent },
     ]  
   }
   
@@ -42,4 +42,4 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class DocumentationRoutingModule { }
+export class DocumentationRoutingModule {}

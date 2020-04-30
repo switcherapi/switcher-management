@@ -1,0 +1,10 @@
+<div class="header activated skimming-item">
+    <h3 class="doc-title"><strong>File: </strong>
+        - <a (click)="gotoDocument(skimmmingResult.file)">{{ skimmmingResult.file }}</a> -
+        <strong>Found: </strong>{{ skimmmingResult.found }}</h3>
+    <div class="spacer"></div>
+    <div class="segment-list" *ngFor="let segment of skimmmingResult?.segment; let i = index">
+        <markdown>{{segment}}</markdown>
+        <div *ngIf="i < skimmmingResult?.segment.length - 1" class="spacer-segment"></div>
+    </div>
+</div>

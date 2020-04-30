@@ -1,0 +1,31 @@
+.spacer {
+  height: 2px;
+  margin: 0 auto;
+  background-color: #5298ff;
+}
+
+.spacer-segment {
+  height: 1px;
+  margin: 0 auto;
+  background: linear-gradient(to left, #006cff00 0, #549bfb00 10px, #f7f7f700 10px, #549bfb 100%) no-repeat;
+  width: 100%;
+  float: left;
+  margin-left: -1rem;
+}
+
+.doc-title {
+  font-size: unset;
+  margin: auto;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.segment-list {
+  padding-left: 1rem;
+  padding-top: 1rem;
+}
+
+.skimming-item {
+  margin: 10px;
+}
