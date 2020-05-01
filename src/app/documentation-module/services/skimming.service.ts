@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -12,8 +12,11 @@ import { SkimmingRequest } from '../model/skimming-request';
 })
 export class SkimmingService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  private http: HttpClient;
+
+  constructor(handler: HttpBackend) {
     super();
+    this.http = new HttpClient(handler);
   }
 
   public skim(query: string): Observable<SkimmingResponse> {
@@ -28,7 +31,7 @@ export class SkimmingService extends ApiService {
       ignoreCase: `${request.ignoreCase}`,
       trimContent: `${request.trimContent}`
     }
-    
+
     return this.http.get<SkimmingResponse>(`${environment.skimmingApi}/skim`, { params }).pipe(catchError(super.handleError));
   }
 

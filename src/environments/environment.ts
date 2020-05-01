@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
-  skimmingApi: 'https://dance-0m7.begin.app',
+  // apiUrl: 'http://localhost:3000',
+  apiUrl: 'https://switcher-api-staging.herokuapp.com',
+  // skimmingApi: 'https://dance-0m7.begin.app',
+  skimmingApi: 'https://dance-0m7-staging.begin.app',
   docsUrl: 'assets/',
   timeout: 5000
 };
