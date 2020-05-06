@@ -139,6 +139,7 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
       query domain($id: String!, $environment: String!) {
         domain(_id: $id, environment: $environment) {
           name
+          version
           ${includeDescription ? 'description' : ''}
           ${includeStatusByEnv ? STATUS_BY_ENV : ''}
           activated
