@@ -160,6 +160,7 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
                 operation
                 values
               }
+              components
             }
           }
         }
