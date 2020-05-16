@@ -25,6 +25,8 @@ export class MetricService extends ApiService {
     if (dateBefore) { params.dateBefore = dateBefore; }
     if (dateAfter) { params.dateAfter = dateAfter; }
 
+    params.sortBy = '-date';
+
     return this.http.get<Metric>(`${environment.apiUrl}/metric/${domainId}`, { params }).pipe(catchError(super.handleError));
   }
 
