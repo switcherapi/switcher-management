@@ -1,13 +1,16 @@
-import { Component, OnInit, OnDestroy, Inject, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { Types } from '../../model/path-route';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, startWith, map } from 'rxjs/operators';
 import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
 import { Environment } from '../../model/environment';
 import { DatePipe } from '@angular/common';
+import gql from 'graphql-tag';
+import { QueryRef, Apollo } from 'apollo-angular';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-metric-filter',
@@ -29,8 +32,12 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
   dateBeforeFormControl = new FormControl('');
 
   environments: Environment[];
+  switchersKey: string[] = [];
+  filteredKeys: Observable<string[]>;
+  private query: QueryRef<any>;
 
   constructor(
+    private apollo: Apollo,
     private environmentService: EnvironmentService,
     private domainRouteService: DomainRouteService,
     private datepipe: DatePipe,
@@ -40,6 +47,7 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.switcherKeyFormControl.setValue(this.data.switcher || '');
     this.loadEnvironments();
+    this.loadKeys();
   }
 
   ngOnDestroy() {
@@ -72,5 +80,50 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
       this.environments = env;
       this.environmentSelection.setValue('default');
     });
+  }
+
+  loadKeys() {
+    this.query = this.apollo.watchQuery({
+      query: this.generateGql(),
+      variables: { 
+        id: this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id,
+        environment: this.environmentSelection.value
+      }
+    });
+
+    this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
+      if (result) {
+        const groupKeys = result.data.domain.group.map(
+          group => group.config.map(config => config.key));
+
+        this.switchersKey = ([] as string[]).concat(...groupKeys);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+
+    this.filteredKeys = this.switcherKeyFormControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.switchersKey.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  generateGql(): any {
+    return gql`
+      query domain($id: String!, $environment: String!) {
+        domain(_id: $id, environment: $environment) {
+          group {
+            config {
+              key
+            }
+          }
+        }
+      }
+  `;
   }
 }

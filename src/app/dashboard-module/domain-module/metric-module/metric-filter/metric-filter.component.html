@@ -19,7 +19,14 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="filter-key-selector">
-                    <input #switcherInput matInput placeholder="Switcher Key" [formControl]="switcherKeyFormControl">
+                    <input #switcherInput matInput type="text" placeholder="Switcher Key" aria-label="Switcher Key"
+                        [formControl]="switcherKeyFormControl"
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let key of filteredKeys | async" [value]="key">
+                            {{key}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field *ngIf="switcherInput.value" class="filter-env-selector">
                     <mat-select placeholder="Group By" [(ngModel)]="dateGroupPattern">

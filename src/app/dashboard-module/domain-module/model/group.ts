@@ -1,3 +1,5 @@
+import { Config } from './config';
+
 export class Group {
   id: string;
   name: string;
@@ -6,4 +8,5 @@ export class Group {
   createdAt: Date;
   updatedAt: Date;
   activated: Map<string, boolean>;
+  config: Config[];
 }
