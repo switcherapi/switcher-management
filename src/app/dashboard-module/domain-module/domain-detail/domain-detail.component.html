@@ -7,10 +7,7 @@
                         <input matInput placeholder="Name" [value]="getDomain()?.name" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <!-- <textarea #descElement matInput placeholder="Description" [value]="domainDescription" maxlength="256"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
-                        </textarea> -->
-                        <textarea #descElement matInput placeholder="Description" [value]="getAPI()" maxlength="256"
+                        <textarea #descElement matInput placeholder="Description" [value]="domainDescription" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>

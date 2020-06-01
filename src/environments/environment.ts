@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  gitClientId: 'undefined',
+  githubApiClientId: '5745650fe81a1f1f3486',
   apiUrl: 'http://localhost:3000',
   // apiUrl: 'https://switcher-api-staging.herokuapp.com',
   // skimmingApi: 'https://dance-0m7.begin.app',

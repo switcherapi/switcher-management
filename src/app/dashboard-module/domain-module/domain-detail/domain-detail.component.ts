@@ -17,7 +17,6 @@ import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatDialog } from '@angular/material/dialog';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-domain-detail',
@@ -234,9 +233,5 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         });
       }
     });
-  }
-
-  getAPI() {
-    return environment.gitClientId;
   }
 }
