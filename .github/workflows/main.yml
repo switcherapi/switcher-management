@@ -11,6 +11,7 @@ jobs:
 
       - name: Install and Build
         run: |
+          sudo npm install -g @angular/cli
           npm install
           ng build --prod --base-href="/switcher-management/"
       - name: Deploy
