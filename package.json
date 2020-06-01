@@ -8,12 +8,14 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
+    "config": "ts-node set-env.ts",
+    "start": "npm run config && node server",
+    "build": "npm run config && ng build",
+    "test": "npm run config && ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ngcc"
+    "postinstall": "npm run build",
+    "server": "npm run config && ng serve --port $PORT"
   },
   "keywords": [
     "feature",
@@ -71,7 +73,7 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.5.1",
     "protractor": "~5.4.0",
-    "ts-node": "~7.0.0",
+    "ts-node": "^7.0.1",
     "tslint": "~5.15.0",
     "typescript": "~3.6.5"
   },
