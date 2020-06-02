@@ -13,7 +13,7 @@ jobs:
         run: |
           sudo npm install -g @angular/cli
           npm install
-          ng build --prod --base-href="/switcher-management/"
+          ng build --prod --base-href https://petruki.github.io/switcher-management/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v2
         env:
