@@ -1,5 +1,8 @@
 name: Build and Deploy
-on: [push]
+on:
+  push:
+    branches:
+      - master
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -12,12 +15,11 @@ jobs:
       - name: Install and Build
         run: |
           sudo npm install -g @angular/cli
-          npm install
+          # npm install
           ng build --prod --base-href https://petruki.github.io/switcher-management/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         env:
           ACCESS_TOKEN: ${{ secrets.TOKEN }}
-          BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: dist/switcher-management
