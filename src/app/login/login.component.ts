@@ -17,7 +17,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     loginForm: FormGroup;
     loading = false;
-    submitted = false;
     returnUrl: string;
     error = '';
 
@@ -41,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
         this.loginForm = this.formBuilder.group({
-            username: ['', Validators.required],
+            email: ['', Validators.required],
             password: ['', Validators.required]
         });
 
@@ -50,7 +49,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     private loginWithGitHub(code: string) {
-        this.submitted = true;
         this.loading = true;
 
         this.authService.loginWithGitHub(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
@@ -68,17 +66,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        this.submitted = true;
-
         if (this.loginForm.invalid) {
             return;
         }
 
         this.loading = true;
 
-        this.authService.login(
-            {
-                email: this.f.username.value,
+        this.authService.login({
+                email: this.f.email.value,
                 password: this.f.password.value
             }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
                 if (success) {
@@ -89,7 +84,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             }, error => {
                 this.error = error;
                 this.loading = false;
-            });
+            }
+        );
     }
 
     onGitHubLogin() {

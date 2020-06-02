@@ -17,6 +17,9 @@ import { AppMaterialModule } from './shared/app-material.module';
 import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SignupComponent } from './signup/signup.component';
+
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 @NgModule({
     imports: [
@@ -28,12 +31,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         DashboardModule,
         AppMaterialModule,
         NgbModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        RecaptchaModule,
+        RecaptchaFormsModule
     ],
     declarations: [
         AppComponent,
         LoginComponent,
-        HomeComponent
+        HomeComponent,
+        SignupComponent
     ],
     providers: [
         AuthGuard,

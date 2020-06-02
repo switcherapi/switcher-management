@@ -32,6 +32,55 @@ h4 {
   margin-left: 10px;
 }
 
+.new-feature {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%,-50%);
+  padding-left: .5rem;
+  padding-right: .5rem;
+  background-color: #5298ff;
+  border-radius: 20px;
+}
+
+.new-feature-text {
+  margin: 3px 0px 3px; 
+  font-size: 12px; 
+  font-weight: lighter; 
+  line-height: initial;
+}
+
+.loader {
+  margin: auto;
+  border-radius: 100%;
+  border-top: 5px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+.loader-div {
+  margin-top: 40px;
+  animation: 10s ease-out 0s 1 fadeIn;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 :host /deep/ .mat-button-wrapper {
   color: white;
 }

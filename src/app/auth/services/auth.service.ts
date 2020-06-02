@@ -49,6 +49,17 @@ export class AuthService {
         catchError(this.handleError));
   }
 
+  signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/admin/signup`, user)
+      .pipe(
+        tap(auth => {
+          this.doLoginUser(auth.admin.email, auth.jwt);
+          this.currentTokenSubject.next(auth.jwt.token);
+        }),
+        mapTo(true),
+        catchError(this.handleError));
+  }
+
   cleanSession() {
     this.currentTokenSubject.next(null);
     this.doLogoutUser();

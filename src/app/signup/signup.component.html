@@ -8,6 +8,11 @@
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <mat-form-field>
+                            <input matInput type="text" id="name" (keyup)="onKey($event)" placeholder="Name" autocomplete="off" formControlName="name" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
                             <input matInput type="text" id="email" (keyup)="onKey($event)" placeholder="E-mail" autocomplete="off" formControlName="email" required>
                         </mat-form-field>
                     </div>
@@ -16,16 +21,22 @@
                             <input matInput type="password" id="password" (keyup)="onKey($event)" placeholder="Password" formControlName="password" required>
                         </mat-form-field>
                     </div>
-                    <button mat-button class="btn-element" [disabled]="loading">
-                        Login
-                    </button>
-                    <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
-                        <img src="assets\github.svg" style="width: 20px;"/>
-                        <span style="color: black; padding-left: 5px;">GitHub</span>
-                        <div class="new-feature">
-                            <p class="new-feature-text">New</p>
-                        </div>
-                    </button>
+                    <re-captcha style="display: inline-block; margin: auto;" (resolved)="resolved($event)" 
+                        formControlName="captcha"
+                        siteKey="6Lc3p_8UAAAAAJoO3Rlb1rGVIR5CqRsnTXlKJwI3">  
+                    </re-captcha>
+                    <div style="padding-top: 20px;">
+                        <button mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
+                            Create
+                        </button>
+                        <button type="button" mat-button class="btn-element white" [disabled]="loading || !recaptcha_token" (click)="onGitHubLogin()">
+                            <img src="assets\github.svg" style="width: 20px;"/>
+                            <span style="color: black; padding-left: 5px;">GitHub</span>
+                            <div class="new-feature">
+                                <p class="new-feature-text">New</p>
+                            </div>
+                        </button>
+                    </div>
                     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
                 </form>
             </div>
