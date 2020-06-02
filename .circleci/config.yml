@@ -26,7 +26,7 @@ jobs:
 
       - run:
           name: Generate Build
-        command: ng build --prod --base-href https://petruki.github.io/switcher-management/
+          command: ng build --prod --base-href https://petruki.github.io/switcher-management/
 
       - run:
           command: |
