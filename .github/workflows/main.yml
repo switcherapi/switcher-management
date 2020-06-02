@@ -19,7 +19,7 @@ jobs:
           ng build --prod --base-href https://petruki.github.io/switcher-management/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
-        env:
+        with:
           ACCESS_TOKEN: ${{ secrets.TOKEN }}
           BRANCH: gh-pages
           FOLDER: dist/switcher-management
