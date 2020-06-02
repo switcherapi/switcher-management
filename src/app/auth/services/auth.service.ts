@@ -30,9 +30,20 @@ export class AuthService {
   login(user: { email: string, password: string }): Observable<boolean> {
     return this.http.post<any>(`${environment.apiUrl}/admin/login`, user)
       .pipe(
-        tap(tokens => {
-          this.doLoginUser(user.email, tokens.jwt);
-          this.currentTokenSubject.next(tokens.jwt.token);
+        tap(auth => {
+          this.doLoginUser(user.email, auth.jwt);
+          this.currentTokenSubject.next(auth.jwt.token);
+        }),
+        mapTo(true),
+        catchError(this.handleError));
+  }
+
+  loginWithGitHub(code: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/admin/github/auth`, null, { params: { code } })
+      .pipe(
+        tap(auth => {
+          this.doLoginUser(auth.admin.email, auth.jwt);
+          this.currentTokenSubject.next(auth.jwt.token);
         }),
         mapTo(true),
         catchError(this.handleError));

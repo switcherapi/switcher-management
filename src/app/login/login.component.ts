@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-login',
@@ -32,6 +33,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            const githubcode =  params['code'];
+            if (githubcode) {
+                this.loginWithGitHub(githubcode);
+            }
+        });
+
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
@@ -39,6 +47,22 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
         this.returnUrl = '/dashboard';
+    }
+
+    private loginWithGitHub(code: string) {
+        this.submitted = true;
+        this.loading = true;
+
+        this.authService.loginWithGitHub(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
+                if (success) {
+                    this.router.navigate([this.returnUrl]);
+                    this.authService.releaseOldSessions.emit(true);
+                }
+                this.loading = false;
+            }, error => {
+                this.error = error;
+                this.loading = false;
+            });
     }
 
     get f() { return this.loginForm.controls; }
@@ -66,6 +90,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.error = error;
                 this.loading = false;
             });
+    }
+
+    onGitHubLogin() {
+        this.loading = true;
+        window.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
     }
 
     ngOnDestroy() {

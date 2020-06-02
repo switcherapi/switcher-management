@@ -20,6 +20,11 @@
                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         Login
                     </button>
+                    <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" style="color: black;"></span>
+                        <img *ngIf="!loading" src="assets\github.svg" style="width: 20px;"/>
+                        <span style="color: black; padding-left: 5px;">Sign In with GitHub</span>
+                    </button>
                     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
                 </form>
             </div>

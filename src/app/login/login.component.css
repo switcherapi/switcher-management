@@ -18,8 +18,31 @@ h4 {
   font-size: 16px;
   background: #42474d;
   color: white;
+  transition: all .5s;
+}
+
+.btn-element:hover {
+  background: #82878d;
+}
+
+.btn-element.white {
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 
 :host /deep/ .mat-button-wrapper {
   color: white;
+}
+
+@media only screen and (max-width: 990px) {
+  .btn-element {
+    width: 100%;
+  }
+
+  .btn-element.white {
+    margin-top: 10px;
+    margin-left: 0px;
+  }
 }
