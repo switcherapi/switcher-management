@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Team } from '../domain-module/model/team';
 import { ApiService } from './api.service';
+import { TeamInvite } from '../domain-module/model/team-invite';
 
 @Injectable({
   providedIn: 'root'
@@ -41,20 +42,12 @@ export class TeamService extends ApiService {
     return this.http.patch<Team>(`${environment.apiUrl}/team/${id}`, body).pipe(catchError(super.handleError));
   }
 
-  public addTeamMember(id: string, member: string): Observable<Team> {
-    let body = {
-      member
-    };
-
-    return this.http.patch<Team>(`${environment.apiUrl}/team/member/add/${id}`, body).pipe(catchError(super.handleError));
-  }
-
-  public inviteTeamMember(id: string, email: string): Observable<Team> {
+  public inviteTeamMember(id: string, email: string): Observable<TeamInvite> {
     let body = {
       email
     };
 
-    return this.http.patch<Team>(`${environment.apiUrl}/team/member/invite/${id}`, body).pipe(catchError(super.handleError));
+    return this.http.post<TeamInvite>(`${environment.apiUrl}/team/member/invite/${id}`, body).pipe(catchError(super.handleError));
   }
 
   public removeTeamMember(id: string, member: string): Observable<Team> {

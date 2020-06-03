@@ -1,0 +1,24 @@
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>Team invite</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+    <mat-form-field>
+        <input matInput [(ngModel)]="data.team.name" placeholder="Team" readonly="true">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [(ngModel)]="data.email" placeholder="For" readonly="true">
+    </mat-form-field>
+</div>
+<div>
+    <button class="btn-save" mat-button (click)="onCopy()" cdkFocusInitial>
+        <mat-icon>file_copy</mat-icon>
+        <div class="options-section-label"> Copy request</div>
+    </button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">Close</button>
+</div>

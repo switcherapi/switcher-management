@@ -6,6 +6,7 @@ import { DomainRoutingModule } from './domain-routing.module';
 import { DomainDetailComponent } from './domain-detail/domain-detail.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent, ComponentEditDialog } from './components/components.component';
+import { TeamInviteDialog } from './team-module/team-members/team-members.component';
 import { EnvironmentsComponent } from './environments/environments.component';
 import { GroupListComponent } from './group/group-list/group-list.component';
 import { GroupPreviewComponent } from './group/group-preview/group-preview.component';
@@ -74,6 +75,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     StrategyCreateComponent,
     StrategyCloneComponent,
     ComponentEditDialog,
+    TeamInviteDialog,
     ChangeLogDialog,
     DomainSnapshotComponent
   ],
@@ -84,6 +86,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     NgbdModalConfirm,
     StrategyCloneComponent,
     ComponentEditDialog,
+    TeamInviteDialog,
     ChangeLogDialog,
     DomainSnapshotComponent
   ],

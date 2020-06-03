@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   githubApiClientId: '5745650fe81a1f1f3486',
+  teamInviteLink: 'http://localhost:3000/collab/join',
   apiUrl: 'http://localhost:3000',
   // apiUrl: 'https://switcher-api-staging.herokuapp.com',
   // skimmingApi: 'https://dance-0m7.begin.app',
