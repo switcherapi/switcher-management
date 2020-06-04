@@ -173,7 +173,16 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     } else {
       this.blockUI.start('Saving changes...');
       this.domainDescription = this.descElement.nativeElement.value;
+
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      if (super.validateEdition(
+          { description: this.pathRoute.element.description }, 
+          { description: this.domainDescription})) {
+        this.blockUI.stop();
+        this.editing = false;
+        return;
+      }
+
       this.domainService.updateDomain(this.getDomain().id, this.domainDescription).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.updatePathRoute(data);

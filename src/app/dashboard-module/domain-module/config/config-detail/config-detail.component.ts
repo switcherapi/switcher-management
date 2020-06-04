@@ -260,9 +260,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           description: this.descElement.nativeElement.value
         };
 
-        if (super.validateEdition(
-          { key: body.key, description: body.description }, 
-          { key: this.pathRoute.name, description: this.pathRoute.element.description })) {
+      if (super.validateEdition(
+          { key: this.pathRoute.name, description: this.pathRoute.element.description },
+          { key: body.key, description: body.description })) {
         this.blockUI.stop();
         this.editing = false;
         return;

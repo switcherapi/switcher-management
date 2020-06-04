@@ -3,10 +3,6 @@
   margin-top: 10px;
 }
 
-.values-section {
-  width: 350px;
-}
-
 .readonly-fields {
   color: #666;
 }
@@ -39,6 +35,7 @@
 
 .btn-element {
   display: block ruby;
+  padding-left: 10px;
 }
 
 @media only screen and (max-width: 430px) {
@@ -92,15 +89,15 @@
   .description-values {
     display: flex;
   }
-
-  :host /deep/ .mat-card {
-    width: 75% !important;
-  }
 }
 
 @media only screen and (max-width: 770px) {
   .options-section-label {
     display: none;
+  }
+
+  .btn-element {
+    padding-right: 0;
   }
 }
 

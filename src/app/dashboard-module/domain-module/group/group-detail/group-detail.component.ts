@@ -186,8 +186,8 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         };
 
         if (super.validateEdition(
-            { name: body.name, description: body.description }, 
-            { name: this.pathRoute.name, description: this.pathRoute.element.description })) {
+            { name: this.pathRoute.name, description: this.pathRoute.element.description },
+            { name: body.name, description: body.description })) {
           this.blockUI.stop();
           this.editing = false;
           return;

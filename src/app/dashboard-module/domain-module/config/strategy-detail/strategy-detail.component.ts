@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject, Type } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { Strategy } from '../../model/strategy';
 import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
@@ -165,6 +165,14 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         operation: this.operationCategoryFormControl.value,
         description: this.descElement.nativeElement.value
       };
+
+      if (super.validateEdition(
+          { operation: this.strategy.operation, description: this.strategy.description }, 
+          { operation: body.operation, description: body.description})) {
+        this.blockUI.stop();
+        this.editing = false;
+        return;
+      }
 
       this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {

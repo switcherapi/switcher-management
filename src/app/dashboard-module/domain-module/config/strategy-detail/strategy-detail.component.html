@@ -1,6 +1,6 @@
 <block-ui>
     <div class="detail-body">
-        <section [ngClass]="classStatus">
+        <section [ngClass]="classStatus" style="width: 100%;">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
@@ -27,7 +27,7 @@
                         <input matInput class="readonly-fields" placeholder="Created By" [value]="createdBy" readonly>
                     </mat-form-field>
                 </div>
-                <div id="srategyValueSection" class="values-section">
+                <div id="srategyValueSection">
                     <mat-card style="margin-top: 10px;">
                         <mat-card-header>
                         <mat-card-subtitle>Values</mat-card-subtitle>
