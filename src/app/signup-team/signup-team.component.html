@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="col-md-6 offset-md-3 mt-5">
+        <div class="card">
+            <h4 class="card-header">
+                <img src="assets\switcherapi_management_white.png" style="width: 220px;"/>
+            </h4>
+            <div *ngIf="!loading" class="card-body">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="Domain" value="{{ domain }}" readonly="true">
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="Team" value="{{ team }}" readonly="true">
+                    </mat-form-field>
+                </div>
+                <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">Accept</button>
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+            </div>
+            <div *ngIf="loading" class="card-body loader-div">
+                <div class="loader"></div>
+                <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);"/>
+            </div>
+        </div>
+    </div>
+</div>

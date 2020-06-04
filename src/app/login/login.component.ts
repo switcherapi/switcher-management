@@ -6,6 +6,7 @@ import { AuthService } from '../auth/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { ConsoleLogger } from '../_helpers/console-logger';
 
 @Component({
     selector: 'app-login',
@@ -44,8 +45,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: ['', Validators.required]
         });
 
-        // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
         this.returnUrl = '/dashboard';
+        this.inviteLink();
     }
 
     private loginWithGitHub(code: string) {
@@ -53,14 +54,22 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.authService.loginWithGitHub(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
                 if (success) {
-                    this.router.navigate([this.returnUrl]);
+                    this.router.navigateByUrl(this.returnUrl);
                     this.authService.releaseOldSessions.emit(true);
                 }
                 this.loading = false;
             }, error => {
+                ConsoleLogger.printError(error);
                 this.error = error;
                 this.loading = false;
             });
+    }
+
+    private inviteLink() {
+        const queryUrl: string = this.route.snapshot.queryParams['returnUrl'];
+        if (queryUrl && queryUrl.includes('/collab/join?request')) {
+            this.returnUrl = queryUrl;
+        }
     }
 
     get f() { return this.loginForm.controls; }
@@ -77,11 +86,12 @@ export class LoginComponent implements OnInit, OnDestroy {
                 password: this.f.password.value
             }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
                 if (success) {
-                    this.router.navigate([this.returnUrl]);
+                    this.router.navigateByUrl(this.returnUrl);
                     this.authService.releaseOldSessions.emit(true);
                 }
                 this.loading = false;
             }, error => {
+                ConsoleLogger.printError(error);
                 this.error = error;
                 this.loading = false;
             }

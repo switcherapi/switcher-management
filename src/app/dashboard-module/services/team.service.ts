@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { Team } from '../domain-module/model/team';
 import { ApiService } from './api.service';
 import { TeamInvite } from '../domain-module/model/team-invite';
+import { Admin } from '../domain-module/model/admin';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,14 @@ export class TeamService extends ApiService {
     };
 
     return this.http.post<TeamInvite>(`${environment.apiUrl}/team/member/invite/${id}`, body).pipe(catchError(super.handleError));
+  }
+
+  public getInvitation(request: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/team/member/invite/${request}`).pipe(catchError(super.handleError));
+  }
+
+  public acceptInvitation(request: string): Observable<Admin> {
+    return this.http.post<Admin>(`${environment.apiUrl}/team/member/invite/accept/${request}`, null).pipe(catchError(super.handleError));
   }
 
   public removeTeamMember(id: string, member: string): Observable<Team> {

@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './signup/signup.component';
 
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 @NgModule({
     imports: [
@@ -39,7 +40,8 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
         AppComponent,
         LoginComponent,
         HomeComponent,
-        SignupComponent
+        SignupComponent,
+        SignupTeamComponent
     ],
     providers: [
         AuthGuard,
