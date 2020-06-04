@@ -21,7 +21,10 @@
             </div>
         </h4>
         <div class="card-body">
-            <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+            <div *ngIf="loading" class="card-body loader-div">
+                <div class="loader"></div>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+            </div>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
             <div *ngIf="!loading">
                 <div *ngFor="let domain of domains">
@@ -38,7 +41,10 @@
             </div>
         </h4>
         <div class="card-body">
-            <div style="text-align: center;"><span *ngIf="loadingCollab" class="spinner-border spinner-border-sm mr-1"></span></div>
+            <div *ngIf="loading" class="card-body loader-div">
+                <div class="loader"></div>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+            </div>
             <div *ngIf="errorCollab" class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
             <div *ngIf="!loadingCollab">
                 <div *ngFor="let domain of collabDomains">

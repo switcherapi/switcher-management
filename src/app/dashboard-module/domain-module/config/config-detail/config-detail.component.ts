@@ -260,7 +260,17 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           description: this.descElement.nativeElement.value
         };
 
-        this.configService.updateConfig(this.config.id, body.key, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (super.validateEdition(
+          { key: body.key, description: body.description }, 
+          { key: this.pathRoute.name, description: this.pathRoute.element.description })) {
+        this.blockUI.stop();
+        this.editing = false;
+        return;
+      }
+
+        this.configService.updateConfig(this.config.id, 
+          body.key != this.pathRoute.name ? body.key : undefined, 
+          body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updateConfig(data);
             this.blockUI.stop();

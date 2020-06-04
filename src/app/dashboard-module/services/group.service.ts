@@ -34,11 +34,12 @@ export class GroupService extends ApiService {
     return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/removeStatus/${id}`), body).pipe(catchError(super.handleError));
   }
 
-  public updateGroup(id: string, name: string, description: string): Observable<Group> {
-    const body = {
-      name,
-      description
-    }
+  public updateGroup(id: string, name?: string, description?: string): Observable<Group> {
+    const body: any = {}
+
+    if (name) body.name = name;
+    if (description) body.description = description;
+
     return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/` + id), body).pipe(catchError(super.handleError));
   }
 

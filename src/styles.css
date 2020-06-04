@@ -29,6 +29,11 @@ body {
   padding: 20px;
 }
 
+.link:hover {
+  filter: invert(100%);
+  text-decoration: none;
+}
+
 .menu-border-left {
   margin-left: auto; 
   border: 1px solid;
@@ -69,6 +74,14 @@ body {
   color: #ffffff;
   margin: 0 0 10px;
   padding: 0;
+}
+
+.switcher-logo:hover {
+  transform: scale(1.2, 1.2);
+}
+
+.switcher-logo.transition {
+  transition: all .2s cubic-bezier(0.100, 0.50, 0.30, 1);
 }
 
 @media only screen and (max-width: 600px) {

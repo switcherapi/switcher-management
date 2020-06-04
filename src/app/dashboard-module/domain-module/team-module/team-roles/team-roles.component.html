@@ -9,7 +9,10 @@
             </svg>Create
         </button>
     </div>
-    <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+    <div *ngIf="loading" class="card-body loader-div">
+        <div class="loader"></div>
+        <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+    </div>
     <div *ngIf="!loading" class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort style="width: 100%;" (matSortChange)="sortData($event)">
             <ng-container matColumnDef="remove">

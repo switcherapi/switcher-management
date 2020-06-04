@@ -42,7 +42,10 @@
             </button>
         </section>
         <section style="padding-top: 20px;">
-            <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+            <div *ngIf="loading" class="card-body loader-div">
+                <div class="loader"></div>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+            </div>
             <div *ngIf="!loading">
                 <ngb-tabset [activeId]="1">
                     <ngb-tab title="Members" id="1">

@@ -85,13 +85,17 @@
             </div>
         </section>
         <section #strategysection id="strategy-section" style="padding-top: 6px;">
-            <div style="text-align: center;"><span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span></div>
+            <div *ngIf="loading" class="card-body loader-div">
+                <div class="loader"></div>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+            </div>
             <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [destroyOnHide]="false">
                 <ngb-tab *ngIf="hasStrategies" id="1">
                     <ng-template ngbTabTitle>
                         <div (click)="scrollToElement(strategysection)">Strategies</div>
                     </ng-template>
                     <ng-template ngbTabContent>
+                        <hr>
                         <div class="strategy-section">
                             <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" [parent]="this" style="width: 100%; display: grid;"></app-strategy-list>
                         </div>
@@ -102,6 +106,7 @@
                         <div (click)="scrollToElement(strategysection)">Metrics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
+                        <hr>
                         <app-metric [switcher]="getConfig().key"></app-metric>
                     </ng-template>
                 </ngb-tab>

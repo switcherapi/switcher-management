@@ -14,7 +14,10 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-domain-list',
   templateUrl: './domain-list.component.html',
-  styleUrls: ['./domain-list.component.css']
+  styleUrls: [
+    './domain-list.component.css',
+    '../domain-module/common/css/list.component.css'
+  ]
 })
 export class DomainListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

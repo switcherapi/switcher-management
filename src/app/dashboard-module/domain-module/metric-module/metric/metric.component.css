@@ -3,8 +3,8 @@
 }
 
 .header-filter {
-  margin-top: -50px;
-  margin-bottom: 50px;
+  float: inline-end;
+  margin-top: 15px;
 }
 
 .metrics-view.graphics {

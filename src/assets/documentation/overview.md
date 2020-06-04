@@ -1,26 +1,23 @@
-[![Build Status](https://travis-ci.com/petruki/switcher-api.svg?branch=master)](https://travis-ci.com/petruki/switcher-api)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcher-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcher-api)
-[![Coverage Status](https://coveralls.io/repos/github/petruki/switcher-api/badge.svg?branch=master)](https://coveralls.io/github/petruki/switcher-api?branch=master)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
-
-<img src="https://raw.githubusercontent.com/petruki/switcherapi-assets/master/logo/switcherapi_management_grey.png" alt="drawing" width="90%"/>
-<p>
+<img src="https://raw.githubusercontent.com/petruki/switcherapi-assets/master/logo/switcherapi_management_grey.png" 
+    width="80%"
+    style="display: block; margin: auto;"/>
+<hr>
 
 # About  
-**Switcher API Management** is a complete GUI written in Angular to interact with the Switcher API
+**Switcher API** is a *Feature Flag* API with the main focus on decreasing the friction caused by changes while keeping control of what really matters.
 
- - **Switcher API**: (https://github.com/petruki/switcher-api)
- - **JavaScript lib**: (https://github.com/petruki/switcher-client-master)
- - **Java lib**: (https://github.com/petruki/switcher-client)
-
-# Demo environment
-Join us on Slack to get your access to this demo environment. [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
-
- - https://petruki.github.io/switcher-management/
-
-
-## Donation
-Donations for cookies and pizza are extremely welcomed.
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9FKW64V67RKXW&source=url)
+Main features:
+- Control more using little effort by sharing switchers among application components.
+- Cross environment. Generate zero impact when manipulating switchers.
+- Customizable environment strategies. Setup switchers using variables per environment.
+- Create manageable teams to collaborate.
+- Keep track of every configuration change.
+- Detailed metrics.
+- Client endpoints exposed in **REST** and **GraphQL**.
+- Zero-latency mode also enables your applications to work with no latency.
+ 
+# Source
+- **Switcher API**: (https://github.com/petruki/switcher-api)
+- **Switcher Management**: (https://github.com/petruki/switcher-management)
+- **Library: JavaScript**: (https://github.com/petruki/switcher-client-master)
+- **Library: Java**: (https://github.com/petruki/switcher-client)

@@ -185,7 +185,17 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           description: this.descElement.nativeElement.value
         };
 
-        this.groupService.updateGroup(this.getGroup().id, body.name, body.description).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (super.validateEdition(
+            { name: body.name, description: body.description }, 
+            { name: this.pathRoute.name, description: this.pathRoute.element.description })) {
+          this.blockUI.stop();
+          this.editing = false;
+          return;
+        }
+
+        this.groupService.updateGroup(this.getGroup().id, 
+          body.name != this.pathRoute.name ? body.name : undefined, 
+          body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updatePathRoute(data);
             this.blockUI.stop();
