@@ -15,11 +15,19 @@ export class SearchItemComponent implements OnInit {
   @Input()
   skimmmingResult: SkimmingResult;
 
+  @Input()
+  query: string;
+
   constructor(
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    for (let index = 0; index < this.skimmmingResult.segment.length; index++) {
+      this.skimmmingResult.segment[index] = 
+        this.skimmmingResult.segment[index].replace(this.query.trim(), `<u><b>${this.query.trim()}</b></u>`)
+        .replace(this.query.trim().toLocaleLowerCase(), `<u><b>${this.query.trim().toLocaleLowerCase()}</b></u>`);
+    }
   }
   
   gotoDocument(file: string) {
