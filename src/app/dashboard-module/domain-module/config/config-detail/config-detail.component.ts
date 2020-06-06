@@ -259,20 +259,28 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           key: this.keyElement.nativeElement.value,
           description: this.descElement.nativeElement.value
         };
-
-      if (super.validateEdition(
-          { key: this.pathRoute.name, description: this.pathRoute.element.description },
-          { key: body.key, description: body.description })) {
-        this.blockUI.stop();
-        this.editing = false;
-        return;
-      }
+        
+        if (super.validateEdition(
+            { 
+              key: this.pathRoute.name, 
+              description: this.pathRoute.element.description,
+              components: this.config.components.length
+            },
+            { 
+              key: body.key, 
+              description: body.description,
+              components: this.components.length
+            })) {
+          this.blockUI.stop();
+          this.editing = false;
+          return;
+        }
 
         this.configService.updateConfig(this.config.id, 
           body.key != this.pathRoute.name ? body.key : undefined, 
           body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
-            this.updateConfig(data);
+            this.updateConfigComponents(data);
             this.blockUI.stop();
             this.toastService.showSuccess(`Switcher updated with success`);
             this.editing = false
@@ -337,25 +345,27 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updateConfig(config: Config): void {
+  private updateConfigComponents(config: Config): void {
     const currentConfigComponents = this.config.components.map(component => component.name);
 
-    if (this.components.length != currentConfigComponents.length || this.components.every(function (u, i) {
-      return u != currentConfigComponents[i];
-    })
+    if (this.components.length != currentConfigComponents.length || 
+      this.components.every((u, i) => u != currentConfigComponents[i])
     ) {
       this.blockUI.start('Updating switcher...');
       const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
-      this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.config = data;
-          this.loadConfig(data);
-        }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(error ? error.error : 'Something went wront when updating components');
-        ConsoleLogger.printError(error);
-      });
+      
+      if (componentsToUpdate.length) {
+        this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          if (data) {
+            this.config = data;
+            this.loadConfig(data);
+          }
+        }, error => {
+          this.blockUI.stop();
+          this.toastService.showError(error ? error.error : 'Something went wront when updating components');
+          ConsoleLogger.printError(error);
+        });
+      }
     } else {
       this.loadConfig(config);
     }
