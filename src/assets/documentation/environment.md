@@ -14,7 +14,7 @@ You can benefit from working with different environments when using Switcher API
 - Set up exclusive variables (strategies) that will be used to run the switcher criteria.
 
 <img src="assets/documentation/images/environment/environment.jpg" 
-  class="image-style"/><p>
+  class="image-style" alt=""/><p>
 
 <hr>
 
@@ -27,7 +27,7 @@ After registering a new environment, it will become available as an option for:
 - Snapshot download (for zero-latency library usage)
 
 <img src="assets/documentation/images/environment/env_selection.jpg" 
-  class="image-style" style="box-shadow: none;"/>
+  class="image-style" style="box-shadow: none;" alt=""/>
 
 **default** is your productive environment
 
@@ -36,11 +36,11 @@ Environment settings can be also be reset using two different options.
 1. Removing the environment setting inside your Domain, Group, Switcher, or Strategy, by selecting the trach icon.
 In case your application uses the removed environment, then it will automatically use the default environment settings.
 
-  <img src="assets/documentation/images/environment/env_remove.jpg" class="image-style"/><p>
+  <img src="assets/documentation/images/environment/env_remove.jpg" class="image-style" alt=""/><p>
 
 2. Resetting the entire environment to use the default settings. This action will also remove strategies since they are created per environment.
 
-   <img src="assets/documentation/images/environment/env_reset.jpg" class="image-style"/><p>
+   <img src="assets/documentation/images/environment/env_reset.jpg" class="image-style" alt=""/><p>
 </br>
 
 #### Environment Snapshot file

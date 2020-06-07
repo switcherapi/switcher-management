@@ -7,7 +7,7 @@
 </style>
 
 <img src="assets/documentation/images/setup/5steps.jpg" 
-  class="image-style" style="opacity: 0.9;"/><p>
+  class="image-style" style="opacity: 0.9;" alt=""/><p>
 
 Find here a quickstart in how to set up your first switcher.
 <br/>The 5 steps show the minimum configuration necessary to start using Switcher API on your projects.
@@ -28,14 +28,14 @@ This is going to be your workspace which will contain:
 
 After creating your domain, you'll be given an API Key that will be used for all the applications. For security purposes, this key cannot be reclaimed, so keep it in a secure place.
 
-<img src="assets/documentation/images/setup/domain_create.jpg" class="image-style"/><p>
+<img src="assets/documentation/images/setup/domain_create.jpg" class="image-style" alt=""/><p>
 <br/>
 
 #### 3. Component
 Configure here all your projects/applications that will make use of switchers. This step is required for you to keep track of everything.
 <br>After registering your component, it will be available for you to link with any switcher.
 
-<img src="assets/documentation/images/setup/components.jpg" class="image-style"/><p>
+<img src="assets/documentation/images/setup/components.jpg" class="image-style" alt=""/><p>
 <br/>
 
 #### 4. Group
@@ -56,4 +56,4 @@ Finally, define your switcher by giving a key value and a brief description.
 - No spaces
 - All caps
 
-<img src="assets/documentation/images/setup/switchers.jpg" class="image-style"/>
+<img src="assets/documentation/images/setup/switchers.jpg" class="image-style" alt=""/>
