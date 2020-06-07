@@ -8,5 +8,5 @@
 </div>
 <label *ngIf="!loading && skimmingResponse?.result.length === 0">No results found for <strong>{{ query }}</strong></label>
 <div *ngFor="let skimmmingResult of skimmingResponse?.result">
-    <app-search-item [skimmmingResult]="skimmmingResult" [query]="query"></app-search-item>
+    <app-search-item [skimmmingResult]="skimmmingResult"></app-search-item>
 </div>

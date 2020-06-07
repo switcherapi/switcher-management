@@ -28,6 +28,7 @@ export class DocumentationComponent implements OnInit {
 
   onSearch(query: string): void {
     this.router.navigate(['/documentation/search', query]);
+    this.toggleMenu();
   }
 
 }
