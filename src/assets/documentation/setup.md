@@ -10,7 +10,7 @@
   class="image-style" style="opacity: 0.9;"/><p>
 
 Find here a quickstart in how to set up your first switcher.
-<br/>The 5 steps shows the minimum cofiguration necessary to start using Switcher API on your projects.
+<br/>The 5 steps show the minimum configuration necessary to start using Switcher API on your projects.
 
 <hr>
 
@@ -19,14 +19,14 @@ Connect to Switcher Management signing up using either email or a GitHub account
 <p><br/>
 
 #### 2. Domain
-This is going to be your workspace which will contains:
+This is going to be your workspace which will contain:
 - All your projects
 - Switchers to toggle features
 - Metrics
 - Environment and application settings
 - Team management
 
-After creating your domain, you'll be given a API Key that will be used for all the applications. For security purpose, this key cannot be reclaimed, so keep it in a secure place.
+After creating your domain, you'll be given an API Key that will be used for all the applications. For security purposes, this key cannot be reclaimed, so keep it in a secure place.
 
 <img src="assets/documentation/images/setup/domain_create.jpg" class="image-style"/><p>
 <br/>
@@ -40,7 +40,7 @@ Configure here all your projects/applications that will make use of switchers. T
 
 #### 4. Group
 Let's now create a group for all your features. This place is great for you to define projects and releases.
-<br>With group you can easily manage and change multiple switchers at once.
+<br>With groups you can easily manage and change multiple switchers at once.
 
 Examples of usage:
 
