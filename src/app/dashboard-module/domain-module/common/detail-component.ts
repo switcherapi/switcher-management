@@ -8,12 +8,11 @@ export class DetailComponent {
     editing: boolean;
     currentStatus: boolean;
 
-    updatable: boolean = true;
-    removable: boolean = true;
+    updatable: boolean = false;
+    removable: boolean = false;
+    creatable: boolean = false;
 
-    constructor(
-        private service: AdminService,
-      ) { }
+    constructor(private service: AdminService) { }
 
     loadAdmin(id: string): void {
         this.service.getAdminById(id).subscribe(adm => {

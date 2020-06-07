@@ -14,6 +14,7 @@ import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { DetailComponent } from '../../common/detail-component';
 
 @Component({
   selector: 'app-team-detail',
@@ -24,7 +25,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
     './team-detail.component.css'
   ]
 })
-export class TeamDetailComponent implements OnInit, OnDestroy {
+export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   @BlockUI() blockUI: NgBlockUI;
@@ -35,15 +36,8 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
   ]);
 
   domain: Domain;
-
-  updatable: boolean = false;
-  removable: boolean = false;
-  creatable: boolean = false;
-
   loading: boolean = false;
 
-  editing: boolean = false;
-  classStatus: string;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -54,7 +48,9 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
     private teamService: TeamService,
     private toastService: ToastService,
     private router: Router
-  ) { }
+  ) {
+    super(adminService);
+   }
 
   ngOnInit() {
     this.loading = true;
@@ -121,6 +117,14 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
       this.setHeaderStyle();
     } else {
       const { valid } = this.nameFormControl;
+
+      if (super.validateEdition(
+          { name: this.team.name }, 
+          { name: this.nameFormControl.value })) {
+        this.editing = false;
+        this.setHeaderStyle();
+        return;
+      }
 
       if (valid) {
         this.editing = false;

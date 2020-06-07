@@ -86,6 +86,13 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
     } else {
       const { valid } = this.nameFormControl;
 
+      if (this.validateEdition(
+          { name: this.team.name }, 
+          { name: this.nameFormControl.value })) {
+        this.editing = false;
+        return;
+      }
+
       if (valid) {
         this.editing = false;
         this.blockUI.start('Updating Team...');
@@ -120,5 +127,11 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
       this.toastService.showError(`Unable to update team: '${this.team.name}'`);
     });
   }
+
+  validateEdition(oldObject: any, newObject: any): boolean {
+    const fields = Object.keys(oldObject);
+    const changed = fields.filter(field => oldObject[`${field}`] != newObject[`${field}`]);
+    return !changed.length;
+}
 
 }
