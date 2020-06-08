@@ -22,7 +22,7 @@ export class SearchItemComponent implements OnInit {
   ngOnInit(): void {
     for (let index = 0; index < this.skimmmingResult.segment.length; index++) {
       if (this.skimmmingResult.segment[index].indexOf('<img src=')) {
-        this.skimmmingResult.segment[index] += `
+        this.skimmmingResult.segment[index] = `
         <style>
           .image-style {
             width: 100%;
@@ -30,7 +30,7 @@ export class SearchItemComponent implements OnInit {
             box-shadow: 0px 0px 10px black;
           }
         </style>
-        `
+        ${this.skimmmingResult.segment[index]}`
       }
     }
   }
