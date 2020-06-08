@@ -7,7 +7,6 @@ import { EnvironmentComponent } from './docs/environment.component';
 import { HomeComponent } from './docs/home.component';
 import { ComponentsComponent } from './docs/components.component';
 import { TeamComponent } from './docs/team.component';
-import { PermissionsComponent } from './docs/permissions.component';
 import { MetricsComponent } from './docs/metrics.component';
 import { StrategiesComponent } from './docs/strategies.component';
 import { LibJavaComponent } from './docs/lib-java.component';
@@ -24,7 +23,6 @@ const routes: Routes = [
       { path: 'environment', component: EnvironmentComponent },
       { path: 'components', component: ComponentsComponent },
       { path: 'team', component: TeamComponent },
-      { path: 'permissions', component: PermissionsComponent },
       { path: 'metrics', component: MetricsComponent },
       { path: 'strategies', component: StrategiesComponent },
       { path: 'libjava', component: LibJavaComponent },

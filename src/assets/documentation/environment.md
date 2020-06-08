@@ -13,8 +13,7 @@ You can benefit from working with different environments when using Switcher API
 - Decrease the impact of your either productive or other sensitive environments when switching features.
 - Set up exclusive variables (strategies) that will be used to run the switcher criteria.
 
-<img src="assets/documentation/images/environment/environment.jpg" 
-  class="image-style" alt=""/><p>
+<img src="assets/documentation/images/environment/environment.jpg" class="image-style" alt=""/><p>
 
 <hr>
 
@@ -26,8 +25,7 @@ After registering a new environment, it will become available as an option for:
 - Strategies
 - Snapshot download (for zero-latency library usage)
 
-<img src="assets/documentation/images/environment/env_selection.jpg" 
-  class="image-style" style="box-shadow: none;" alt=""/>
+<img src="assets/documentation/images/environment/env_selection.jpg" class="image-style" style="box-shadow: none;" alt=""/>
 
 **default** is your productive environment
 

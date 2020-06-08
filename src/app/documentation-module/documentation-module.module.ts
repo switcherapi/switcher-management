@@ -11,7 +11,6 @@ import { ComponentsComponent } from './docs/components.component';
 import { LibJavaComponent } from './docs/lib-java.component';
 import { LibJavaScriptComponent } from './docs/lib-javascript.component';
 import { MetricsComponent } from './docs/metrics.component';
-import { PermissionsComponent } from './docs/permissions.component';
 import { StrategiesComponent } from './docs/strategies.component';
 import { TeamComponent } from './docs/team.component';
 import { SearchComponent } from './search/search.component';
@@ -27,7 +26,6 @@ import { SearchItemComponent } from './search-item/search-item.component';
     LibJavaComponent,
     LibJavaScriptComponent,
     MetricsComponent,
-    PermissionsComponent,
     StrategiesComponent,
     TeamComponent,
     SearchComponent,

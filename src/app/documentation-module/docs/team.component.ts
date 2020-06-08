@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-team',
   template: `
     <div class="doc-header">
-      <h3 class="doc-title">Team</h3>
+      <h3 class="doc-title">Teams</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
     </div>
     <markdown [src]="'${environment.docsUrl}documentation/team.md'"></markdown>
