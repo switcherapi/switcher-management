@@ -6,11 +6,10 @@
   }
 </style>
 
-<img src="assets/documentation/images/setup/5steps.jpg" 
-  class="image-style" style="opacity: 0.9;" alt=""/><p>
+The 5 steps show the minimum configuration necessary to start using Switcher API on your projects.
+</br>As you complete all these steps, take a look at the Java or JavaScript modules to start setting up your application to communicate with the Switcher API.
 
-Find here a quickstart in how to set up your first switcher.
-<br/>The 5 steps show the minimum configuration necessary to start using Switcher API on your projects.
+<img src="assets/documentation/images/setup/5steps.jpg" class="image-style" alt=""/><p>
 
 <hr>
 
