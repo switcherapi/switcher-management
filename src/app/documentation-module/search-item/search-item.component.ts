@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SkimmingResult } from '../model/skimming-response';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
     './search-item.component.css'
   ]
 })
-export class SearchItemComponent {
+export class SearchItemComponent implements OnInit {
 
   @Input()
   skimmmingResult: SkimmingResult;
@@ -18,6 +18,22 @@ export class SearchItemComponent {
   constructor(
     private router: Router
   ) { }
+
+  ngOnInit(): void {
+    for (let index = 0; index < this.skimmmingResult.segment.length; index++) {
+      if (this.skimmmingResult.segment[index].indexOf('<img src=')) {
+        this.skimmmingResult.segment[index] += `
+        <style>
+          .image-style {
+            width: 100%;
+            max-width: max-content;
+            box-shadow: 0px 0px 10px black;
+          }
+        </style>
+        `
+      }
+    }
+  }
   
   gotoDocument(file: string) {
     if (file === 'overview.md') {

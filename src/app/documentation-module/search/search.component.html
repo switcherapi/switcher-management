@@ -4,7 +4,8 @@
 </div>
 
 <div *ngIf="loading" style="text-align: center;">
-    <span class="spinner-border spinner-border-sm mr-1"></span>
+    <div class="loader"></div>
+    <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);"/>
 </div>
 <label *ngIf="!loading && skimmingResponse?.result.length === 0">No results found for <strong>{{ query }}</strong></label>
 <div *ngFor="let skimmmingResult of skimmingResponse?.result">

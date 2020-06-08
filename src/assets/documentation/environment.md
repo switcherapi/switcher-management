@@ -38,7 +38,7 @@ In case your application uses the removed environment, then it will automaticall
 
 2. Resetting the entire environment to use the default settings. This action will also remove strategies since they are created per environment.
 
-   <img src="assets/documentation/images/environment/env_reset.jpg" class="image-style" alt=""/><p>
+  <img src="assets/documentation/images/environment/env_reset.jpg" class="image-style" alt=""/><p>
 </br>
 
 #### Environment Snapshot file
@@ -46,10 +46,10 @@ When using the provided modules to connect to the Switcher API, it is also possi
 
 <img src="assets/documentation/images/environment/snapshot_location.jpg" class="image-style"/><p>
 
-   Snapshots can be downloaded by selecting the environment and one of the optional configurations.
-   </br>It is also possible to configure the module to auto-update this snapshot locally. This setting is useful when working with critical services that cannot depend on network latency.
+  Snapshots can be downloaded by selecting the environment and one of the optional configurations.
+  </br>It is also possible to configure the module to auto-update this snapshot locally. This setting is useful when working with critical services that cannot depend on network latency.
 
-   Snapshots as Domain are internally versioned, it means that every modification generates a new version that will be used to identify when a local snapshot file must be updated.
+  Snapshots as Domain are internally versioned, it means that every modification generates a new version that will be used to identify when a local snapshot file must be updated.
 
 ```json
 {
