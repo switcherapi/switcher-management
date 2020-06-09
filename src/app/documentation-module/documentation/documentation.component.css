@@ -109,7 +109,7 @@ a[data-toggle="collapse"] {
 #docContainer {
   background: white;
   border: 2px solid #a8a8a8;
-  padding: 10px;
+  padding: 30px;
   min-height: 800px;
   margin-bottom: 10px;
 }
@@ -193,8 +193,12 @@ a[data-toggle="collapse"] {
 }
 
 @media only screen and (max-width: 450px) {
+  #docContainer {
+    padding: 10px;
+  }
+
   .doc-title {
-    font-size: medium;
+    font-size: 1.4rem;
   }
 
   .doc-icon {
