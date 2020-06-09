@@ -1,11 +1,3 @@
-<style>
-  .image-style {
-    width: 100%;
-    max-width: max-content;
-    box-shadow: 0px 0px 10px black;
-  }
-</style>
-
 #### Overview
 Components are registered applications that will be making use of switchers.
 </br>The idea behind this configuration is to track every call from the module API so we can elaborate on a more detailed analysis about switchers usage.
@@ -13,10 +5,9 @@ Components are registered applications that will be making use of switchers.
 Regarding security, all registered applications must be linked to a switcher, otherwise, the call will return an unauthorized access.
 </br>This new layer of security was created to prevent other applications to use not related switchers.
 
-<img src="assets/documentation/images/components/component.jpg" 
-  class="image-style" alt=""/><p>
+<img src="assets/documentation/images/components/component.jpg" class="image-style" alt=""/><p>
 
-<hr>
+* * *
 
 #### Usage
 Creating a components is very simple and after doing it, you just have to link it with one or more switchers you have already created and add to your application module context.

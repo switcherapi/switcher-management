@@ -1,7 +1,6 @@
-<img src="https://raw.githubusercontent.com/petruki/switcherapi-assets/master/logo/switcherapi_management_grey.png" 
-    width="80%"
-    style="display: block; margin: auto;"/>
-<hr>
+<img src="https://raw.githubusercontent.com/petruki/switcherapi-assets/master/logo/switcherapi_management_grey.png" width="80%" style="display: block; margin: auto;"/>
+
+* * *
 
 # About  
 **Switcher API** is a *Feature Flag* API with the main focus on decreasing the friction caused by changes while keeping control of what really matters.

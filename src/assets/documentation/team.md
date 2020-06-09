@@ -1,11 +1,3 @@
-<style>
-  .image-style {
-    width: 100%;
-    max-width: max-content;
-    box-shadow: 0px 0px 10px black;
-  }
-</style>
-
 #### Overview
 Collaborate creating teams to work on the same domain. With Teams, you can invite people to have access to all settings of your domain, plus managing roles by limiting access to every aspect of it. 
 
@@ -13,10 +5,9 @@ Teams are composed of Members and Roles. In addition to roles that will group al
 
 Get extra help while keeping control of who can create, read, update, or delete.
 
-<img src="assets/documentation/images/teams/teams.jpg" 
-  class="image-style" alt=""/><p>
+<img src="assets/documentation/images/teams/teams.jpg" class="image-style" alt=""/><p>
 
-<hr>
+* * *
 
 #### Usage
 After creating a team, you can start setting up the new team either way, inviting new members or adding permissions.
