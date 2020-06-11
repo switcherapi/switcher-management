@@ -8,6 +8,8 @@ The advantages of using strategies are:
 - Prepare for a bigger change
 - Easy to monitor
 
+*Fast response to negative feedbacks without impacting the final release.*
+
 <img src="https://raw.githubusercontent.com/petruki/switcherapi-assets/master/docs/SwitcherAPI_softlaunch.jpg" class="image-style" alt=""/><p>
 
 * * *
