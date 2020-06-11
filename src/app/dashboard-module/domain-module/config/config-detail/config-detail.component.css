@@ -21,6 +21,10 @@
   display: block ruby;
 }
 
+:host /deep/ .mat-list-option {
+  height: 30px !important;
+}
+
 @media only screen and (max-width: 1200px) {
   .options-section {
     float: right;
