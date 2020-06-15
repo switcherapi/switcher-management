@@ -128,7 +128,7 @@ switcher.checkSnapshot();
 
 ### Version Log
 
-- 1.0.9: 
+- 2.0.0:
     - Improved performance when loading snapshot file.
     - Snapshot file auto load when updated.
     - Re-worked built-in mock implementation
