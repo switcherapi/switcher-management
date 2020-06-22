@@ -12,6 +12,7 @@ import { StrategiesComponent } from './docs/strategies.component';
 import { LibJavaComponent } from './docs/lib-java.component';
 import { LibJavaScriptComponent } from './docs/lib-javascript.component';
 import { SearchComponent } from './search/search.component';
+import { ApiComponent } from './docs/api.component';
 
 const routes: Routes = [
 
@@ -27,6 +28,7 @@ const routes: Routes = [
       { path: 'strategies', component: StrategiesComponent },
       { path: 'libjava', component: LibJavaComponent },
       { path: 'libjavascript', component: LibJavaScriptComponent },
+      { path: 'api', component: ApiComponent }
     ]  
   }
   
