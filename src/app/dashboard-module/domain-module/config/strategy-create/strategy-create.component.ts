@@ -25,6 +25,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
   operations: string[] = [];
   strategies: string[] = [];
 
+  strategyFormatSelected: string;
   strategySelected: string;
   strategyReq: StrategyReq;
 
@@ -90,14 +91,14 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
     currentStrategies.forEach(strategy => {
       this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1);
     })
-    this.loadOperations(this.strategies[0]);
   }
 
   loadOperations(strategySelected: string): void {
     this.strategyService.getStrategiesRequirements(strategySelected).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
       this.strategyReq = req;
       this.data.values = [];
-      this.operations = req.operationsAvailable.operations
+      this.operations = req.operationsAvailable.operations;
+      this.strategyFormatSelected = req.operationsAvailable.format;
 
       this.valueSelectionFormControl.setValidators([
         Validators.required,

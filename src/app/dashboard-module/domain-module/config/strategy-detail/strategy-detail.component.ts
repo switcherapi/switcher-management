@@ -52,6 +52,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   valueSelectionFormControl = new FormControl('');
   operationCategoryFormControl = new FormControl('');
 
+  strategyFormatSelected: string;
   strategyOperations: string[] = [];
 
   constructor(
@@ -66,6 +67,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   ngOnInit() {
+    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "1100px";
+
     if (this.strategy.values) {
       this.loadStrategySelectionComponent();
       this.loadOperationSelectionComponent();
@@ -87,6 +90,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+
+    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "";
   }
 
   loadStrategySelectionComponent(): void {
@@ -107,6 +112,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.strategyReq = req;
       this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
       this.operationCategoryFormControl.setValue(this.strategy.operation);
+      this.strategyFormatSelected = req.operationsAvailable.format;
 
       this.valueSelectionFormControl.setValidators([
         Validators.required,

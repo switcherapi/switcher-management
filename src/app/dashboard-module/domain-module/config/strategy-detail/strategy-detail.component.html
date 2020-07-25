@@ -40,7 +40,7 @@
                             </mat-selection-list>
                         </mat-card-content>
                         <mat-form-field style="width: 100%;">
-                            <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl">
+                            <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected }}">
                             <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
                                 Please, check the value format
                             </mat-error>
