@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ToastService } from 'src/app/_helpers/toast.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -24,8 +23,7 @@ export class DomainCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<DomainCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private toastService: ToastService) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.nameFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
@@ -48,22 +46,6 @@ export class DomainCreateComponent implements OnInit, OnDestroy {
     if (valid) {
         this.dialogRef.close(data);
     }      
-  }
-
-  copyKey(val: string){
-    let selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-
-    this.toastService.showSuccess(`API Key copied with success`);
   }
 
 }

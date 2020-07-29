@@ -13,6 +13,7 @@ import { AdminService } from '../../services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-components',
@@ -25,6 +26,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 })
 export class ComponentsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
+  @BlockUI() blockUI: NgBlockUI;
 
   components: SwitcherComponent[];
 
@@ -99,13 +102,14 @@ export class ComponentsComponent implements OnInit, OnDestroy {
       this.compService.createComponent(
         this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.compFormControl.value, 'Created using Switcher Manager')
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(component => {
-          if (component) {
-            this.components.push(component);
-            this.toastService.showSuccess('Component created with success');
+        .subscribe(data => {
+          if (data.component) {
+            this.components.push(data.component);
+            this.confirmKeyCreated(data.apiKey, data.component.name);
           }
         }, error => {
           this.toastService.showError(error.error);
+          ConsoleLogger.printError(error);
         });
     } else {
       this.toastService.showError('Unable to create this Component');
@@ -137,7 +141,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
   editComponent(selectedComponent: SwitcherComponent): void {
     const dialogRef = this.dialog.open(ComponentEditDialog, {
-      width: '250px',
+      width: '350px',
       data: {
         name: selectedComponent.name,
         id: selectedComponent.id
@@ -163,6 +167,34 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     });
   }
 
+  confirmKeyCreated(apiKey: string, componentName: string): void {
+    this.dialog.open(ComponentEditDialog, {
+      width: '400px',
+      data: { apiKey, componentName }
+    });
+  }
+
+  generateApiKey(selectedComponent: SwitcherComponent) {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'API Key';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to generate a new key for this component?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.blockUI.start('Generating API Key...');
+        this.compService.generateApiKey(selectedComponent.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          if (data) {
+            this.blockUI.stop();
+            this.confirmKeyCreated(data.apiKey, selectedComponent.name);
+          }
+        }, error => {
+          this.blockUI.stop();
+          this.toastService.showError(`Unable to generate an API Key`);
+          ConsoleLogger.printError(error);
+        });
+      }
+    })
+  }
+
 }
 
 @Component({
@@ -177,6 +209,7 @@ export class ComponentEditDialog {
 
   constructor(
     public dialogRef: MatDialogRef<ComponentEditDialog>,
+    private toastService: ToastService,
     @Inject(MAT_DIALOG_DATA) public data: SwitcherComponent) { }
 
   onSave(data: SwitcherComponent): void {
@@ -185,6 +218,22 @@ export class ComponentEditDialog {
 
   onCancel() {
     this.dialogRef.close();
+  }
+
+  copyKey(val: string) {
+    let selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    this.toastService.showSuccess(`API Key copied with success`);
   }
 
 }

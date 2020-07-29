@@ -11,12 +11,10 @@ import { EnvironmentConfigComponent } from '../environment-config/environment-co
 import { DomainService } from '../../services/domain.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
-import { DomainCreateComponent } from '../../domain-create/domain-create.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-domain-detail',
@@ -49,7 +47,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
-    private dialog: MatDialog,
     private _modalService: NgbModal
   ) {
     super(adminService);
@@ -197,30 +194,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         this.editing = false;
       });
     }
-  }
-
-  generateApiKey() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
-    modalConfirmation.componentInstance.title = 'API Key';
-    modalConfirmation.componentInstance.question = 'Are you sure you want to generate a new key for this domain?';
-    modalConfirmation.result.then((result) => {
-      if (result) {
-        this.blockUI.start('Generating API Key...');
-        this.domainService.generateApiKey(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.blockUI.stop();
-            this.dialog.open(DomainCreateComponent, {
-              width: '400px',
-              data: { apiKey: data.apiKey, domainName: this.getDomain().name }
-            });
-          }
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(`Unable to generate an API Key`);
-          ConsoleLogger.printError(error);
-        });
-      }
-    })
   }
 
   delete() {

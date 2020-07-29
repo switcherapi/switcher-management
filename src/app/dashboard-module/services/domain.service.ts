@@ -45,16 +45,12 @@ export class DomainService extends ApiService {
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/${id}`), body).pipe(catchError(super.handleError));
   }
 
-  public createDomain(name: string, description: string): Observable<any> {
+  public createDomain(name: string, description: string): Observable<Domain> {
     const body = {
       name,
       description
     }
     return this.http.post<Domain>((`${environment.apiUrl}/domain/create`), body).pipe(catchError(super.handleError));
-  }
-
-  public generateApiKey(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/domain/generateApiKey/${id}`).pipe(catchError(super.handleError));
   }
 
   public deleteDomain(id: string): Observable<Domain> {

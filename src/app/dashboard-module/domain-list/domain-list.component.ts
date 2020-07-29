@@ -101,10 +101,10 @@ export class DomainListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.domainService.createDomain(result.name, result.description).subscribe(data => {
-          if (data) {
-            this.confirmKeyCreated(data.apiKey, data.domain.name);
+        this.domainService.createDomain(result.name, result.description).subscribe(domain => {
+          if (domain) {
             this.ngOnInit();
+            this.toastService.showSuccess('Domain created with success');
           }
         }, error => {
           this.toastService.showError('Unable to create a new domain.');

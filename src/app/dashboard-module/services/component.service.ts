@@ -19,7 +19,7 @@ export class ComponentService extends ApiService {
     return this.http.get<SwitcherComponent[]>(`${environment.apiUrl}/component`, { params: { domain: id } }).pipe(catchError(super.handleError));
   }
 
-  public createComponent(domain: string, name: string, description: string): Observable<SwitcherComponent> {
+  public createComponent(domain: string, name: string, description: string): Observable<any> {
     const body = {
       name,
       description,
@@ -37,6 +37,10 @@ export class ComponentService extends ApiService {
       name
     }
     return this.http.patch<SwitcherComponent>(`${environment.apiUrl}/component/${id}`, body).pipe(catchError(super.handleError));
+  }
+
+  public generateApiKey(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/component/generateApiKey/${id}`).pipe(catchError(super.handleError));
   }
 
 }

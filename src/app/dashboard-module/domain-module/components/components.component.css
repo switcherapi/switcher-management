@@ -17,8 +17,8 @@
 }
 
 .toggle-section {
-  columns: 2;
-  display: inline-table;
+  /* columns: 2; */
+  /* display: inline-table; */
   padding: 5px;
 }
 
@@ -51,6 +51,10 @@
   float: right;
 }
 
+.options-section-label {
+  display: contents;
+}
+
 @media only screen and (max-width: 1200px) {
   .label-env-name {
     width: 500px;
@@ -67,6 +71,11 @@
   .label-env-name {
     width: 200px;
   }
+
+  .btn-element {
+    margin-bottom: 5px;
+    width: 100%;
+  }
 }
 
 @media only screen and (max-width: 550px) {
@@ -81,12 +90,11 @@
     margin: auto;
   }
 
-  .btn-element {
-    margin-bottom: 5px;
-    width: 100%;
-  }
-
   .grid-container {
     display: block;
+  }
+
+  .options-section-label {
+    display: none;
   }
 }

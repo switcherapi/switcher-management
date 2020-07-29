@@ -8,11 +8,36 @@
     </mat-toolbar>
 </h4>
 <div mat-dialog-content>
-    <mat-form-field>
-        <input matInput #inputName [(ngModel)]="data.name" minlength="2" maxlength="20" cdkFocusInitial autocomplete="off">
-    </mat-form-field>
+    <div *ngIf="!data.apiKey">
+        <mat-form-field>
+            <input matInput #inputName [(ngModel)]="data.name" minlength="2" maxlength="20" cdkFocusInitial autocomplete="off">
+        </mat-form-field>
+    </div>
+    <div *ngIf="data.apiKey">
+        <mat-form-field>
+            <textarea matInput placeholder="API Key" [(ngModel)]="data.apiKey" style="color: black" readonly>
+            </textarea>
+            <mat-hint align="end"><strong style="color: red;">Keep this key in a safe place</strong></mat-hint>
+        </mat-form-field>
+    </div>
 </div>
-<div>
-    <button class="btn-save" mat-button (click)="onSave(data)" [disabled]="inputName.value.length < 2">Save</button>
-    <button class="btn-cancel" mat-button (click)="onCancel()">Cancel</button>
+<div *ngIf="!data.apiKey" mat-dialog-actions style="float: right;">
+    <button class="btn-save" mat-button (click)="onSave(data)" [disabled]="data.name.length < 2">
+        <mat-icon>save</mat-icon>
+        <div class="options-section-label"> Save</div>
+    </button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+        <div class="options-section-label"> Close</div>
+    </button>
+</div>
+<div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
+    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)">
+        <mat-icon>file_copy</mat-icon>
+        <div class="options-section-label"> Copy to clipboard</div>
+    </button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+        <div class="options-section-label"> Close</div>
+    </button>
 </div>
