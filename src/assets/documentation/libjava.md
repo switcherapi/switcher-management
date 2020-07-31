@@ -1,12 +1,14 @@
 [![Build Status](https://travis-ci.com/petruki/switcher-client.svg?branch=master)](https://travis-ci.com/petruki/switcher-client)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcher-client-java&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcher-client-java)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Known Vulnerabilities](https://snyk.io/test/github/petruki/switcher-client/badge.svg)](https://snyk.io/test/github/petruki/switcher-client)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.petruki/switcher-client.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.petruki%22%20AND%20a:%22switcher-client%22)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Features
+- Flexible and robust functions that will keep your code clean and maintainable.
 - Able to work offline using a snapshot file downloaded from your remote Switcher-API Domain.
-- Silent mode automatically enables a contingent sub-process in case of connectivity issues.
-- Built-in mock implementation for automated testing.
+- Silent mode is a hybrid configuration that automatically enables a contingent sub-process in case of any connectivity issue.
+- Built-in mock implementation for clear and easy implementation of automated testing.
 - Easy to setup. Switcher Context is responsible to manage all the complexity between your application and API.
 
 * * *
@@ -19,7 +21,7 @@
 <dependency>
     <groupId>com.github.petruki</groupId>
     <artifactId>switcher-client</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 
@@ -61,7 +63,7 @@ There are a few different ways to call the API using the java library.
 
 2. **Strategy validation - preparing input**
 
-  Loading information into the switcher can be done by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
+  Loading values into the switcher can be done by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
   ```java
   List<Entry> entries = new ArrayList<>();
   entries.add(new Entry(Entry.DATE, "2019-12-10"));
@@ -77,10 +79,22 @@ There are a few different ways to call the API using the java library.
   - Entry.DATE: Date validation
   - Entry.TIME: Time validation
   - Entry.VALUE: Plain text validation
+  - Entry.NUMERIC: Numeric validation
   - Entry.NETWORK: IP/range validation
 
 
-3. **Strategy validation - all-in-one execution**
+3. **Strategy validation - chained call**
+
+  Create chained calls using 'prepareEntry' functions one by one.
+  ```java
+  Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
+        .prepareEntry(new Entry(Entry.VALUE, "My value"))
+        .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.1"));
+			
+	switcher.isItOn();
+  ```
+
+4. **Strategy validation - all-in-one execution**
 
   All-in-one method is fast and include everything you need to execute a complex call to the API. Stack inputs changing the last parameter to *true* in case you need to add more values to the strategy validator.
   ```java
@@ -116,6 +130,16 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
 </br>
 
 ### Version Log
+- 1.0.6: Updated depencencies & new features
+	- Updated dependency jersey-hk2 from 2.28 to 2.31
+	- Updated dependency commons-net from 3.3 to 3.6.
+	- Updated dependency commons-lang3 from 3.8.1 to 3.10.
+	- Updated dependency gson from 2.8.5 to 2.8.6.
+	- Added execution log to Switcher.
+	- Added bypass metrics and show detailed criteria evaluation options to Switcher objects.
+- 1.0.5: Security patch - Jersey has been updated - 2.28 to 2.31
+- 1.0.4: Added Numeric Validation
+- 1.0.3: Security patch - Log4J has been updated - 2.13.1 to 2.13.3
 - 1.0.2: 
     - Improved performance when loading snapshot file.
     - Snapshot file auto load when updated.

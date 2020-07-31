@@ -33,9 +33,6 @@ Signing up to Switcher API must be made via Switcher Management.
 }
 ```
 
-- **Generating a new API Key** - /domain/generateApiKey/DOMAIN_ID [GET]
-  <br />This operation cannot be undone.
-
 #### Component
 
 - **Create a component** - /component/create [POST]
@@ -46,6 +43,9 @@ Signing up to Switcher API must be made via Switcher Management.
     "domain": "[DOMAIN ID]"
 }
 ```
+
+- **Generating a new API Key** - /component/generateApiKey/COMPONENT_ID [GET]
+  <br />This operation cannot be undone.
 
 #### Group
 
@@ -89,6 +89,10 @@ Signing up to Switcher API must be made via Switcher Management.
     - VALUE_VALIDATION
 
       Plain text validation. No format required.
+
+    - NUMERIC_VALIDATION
+
+      Numeric type validation. It accepts positive/negative and decimal values.
 
     - NETWORK_VALIDATION
 
@@ -136,9 +140,9 @@ Bearer Token: [TOKEN]
 
 **Optional parameters**
 
-- showReason [true/false]: returns the criteria result.
+- showReason [true/false]: returns the detailed criteria result.
 - showStrategy [true/false]: returns the configured strategy.
-- bypassMetric [true'false]: bypass registering the execution result.
+- bypassMetric [true/false]: bypass registering the execution result.
 
 **REST - Strategy input**
 

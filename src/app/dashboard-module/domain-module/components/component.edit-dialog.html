@@ -1,6 +1,7 @@
 <h4 mat-dialog-title>
     <mat-toolbar role="toolbar" class="dialog-header">
-        <span>Edit Component</span>
+        <span *ngIf="!data.apiKey">Edit Component</span>
+        <span *ngIf="data.apiKey">Component API Access</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
             <mat-icon mat-list-icon>close</mat-icon>
@@ -32,7 +33,7 @@
     </button>
 </div>
 <div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
-    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)">
+    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)" cdkFocusInitial>
         <mat-icon>file_copy</mat-icon>
         <div class="options-section-label"> Copy to clipboard</div>
     </button>

@@ -46,3 +46,5 @@ Sometimes covering 100% of tests does not guarantee a successful deployment, nor
 - **Switcher Management**: (https://github.com/petruki/switcher-management)
 - **Library: JavaScript**: (https://github.com/petruki/switcher-client-master)
 - **Library: Java**: (https://github.com/petruki/switcher-client)
+- **Slack Webhook**: (https://github.com/petruki/switcher-slash-webhook)
+- **Load Balance**: (https://github.com/petruki/switcher-load-balance)
