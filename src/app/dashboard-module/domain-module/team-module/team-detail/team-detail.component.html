@@ -15,11 +15,9 @@
                     <mat-error *ngIf="nameFormControl.hasError('required')">
                         Name is <strong>required</strong>
                     </mat-error>
-                    <div class="description" style="width: 350px;">
-                        <mat-form-field>
-                            <input matInput placeholder="Domain Name" [value]="domain?.name" readonly>
-                        </mat-form-field>
-                    </div>
+                    <mat-form-field>
+                        <input matInput placeholder="Domain Name" [value]="domain?.name" readonly>
+                    </mat-form-field>
                 </div>
             </div>
         </section>

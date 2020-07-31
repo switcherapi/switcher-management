@@ -17,8 +17,8 @@
 }
 
 .toggle-section {
-  columns: 2;
-  display: inline-table;
+  /* columns: 2; */
+  /* display: inline-table; */
   padding: 5px;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .btn-element.remove {
-  background:#fb5454;
+  background: #fb5454;
   float: right;
   margin: auto;
   margin-left: 0px;
@@ -72,12 +72,15 @@
     margin: auto;
   }
 
-  .btn-element {
-    margin-bottom: 5px;
-    width: 100%;
-  }
-  
   .grid-container {
     display: block;
+  }
+
+  .options-section-label {
+    display: none;
+  }
+
+  .label-env-name {
+    font-size: unset;
   }
 }
