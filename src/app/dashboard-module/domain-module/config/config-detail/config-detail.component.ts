@@ -320,6 +320,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   addStrategy() {
     const dialogRef = this.dialog.open(StrategyCreateComponent, {
       width: '700px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
         currentStrategies: this.strategies
       }

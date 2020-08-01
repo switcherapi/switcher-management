@@ -42,6 +42,11 @@ tr.element-row:not(.expanded-row):active {
   background: #549bfb94;
 }
 
+.mat-elevation-z8 {
+  border: 1px solid #cccccc80;
+  box-shadow: none;
+}
+
 .mat-header-cell {
   color: white;
   font-size: unset;
@@ -51,6 +56,11 @@ tr.element-row:not(.expanded-row):active {
 /* fix layout issues */
 :host /deep/ .mat-paginator-container {
   min-height: auto;
+}
+
+:host /deep/ .mat-header-row {
+  height: 30px;
+  font-size: smaller;
 }
 
 h1 {

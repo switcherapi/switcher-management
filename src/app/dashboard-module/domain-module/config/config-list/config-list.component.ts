@@ -80,6 +80,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   createConfig(): void {
     const dialogRef = this.dialog.open(ConfigCreateComponent, {
       width: '400px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { key: '',  description: '' }
     });
 

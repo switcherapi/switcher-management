@@ -34,7 +34,8 @@
 }
 
 .detail-body.ready {
-  opacity: 100;
+  opacity: 1.0;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .description {
@@ -131,8 +132,9 @@
 }
 
 @media only screen and (max-width: 450px) {
-  .options-section {
+  /* .options-section {
     display: grid;
     float: none;
-  }
+  } */
+
 }

@@ -217,6 +217,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   cloneStrategy(): void {
     const dialogRef = this.dialog.open(StrategyCloneComponent, {
       width: '400px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { currentEnvironment: this.envSelectionChange.selectedEnvName }
     });
 
@@ -305,6 +306,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   showChangeLog() {
     this.dialog.open(ChangeLogDialog, {
       width: '1200px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
         strategy: this.strategy
       }
@@ -336,6 +338,8 @@ function valueInputValidator(format: string): ValidatorFn {
     
     .mat-dialog-content {
       padding-bottom: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
     }
 
     .header-log {

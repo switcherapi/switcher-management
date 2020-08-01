@@ -80,6 +80,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   createGroup(): void {
     const dialogRef = this.dialog.open(GroupCreateComponent, {
       width: '400px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { name: '',  description: '' }
     });
 

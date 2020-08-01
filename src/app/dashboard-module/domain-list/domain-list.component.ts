@@ -96,6 +96,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
   createDomain(): void {
     const dialogRef = this.dialog.open(DomainCreateComponent, {
       width: '400px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { name: '',  description: '' }
     });
 
@@ -114,10 +115,4 @@ export class DomainListComponent implements OnInit, OnDestroy {
     });
   }
 
-  confirmKeyCreated(apiKey: string, domainName: string): void {
-    this.dialog.open(DomainCreateComponent, {
-      width: '400px',
-      data: { apiKey, domainName }
-    });
-  }
 }

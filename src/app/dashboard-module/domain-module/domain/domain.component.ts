@@ -56,6 +56,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   onDownloadSnapshot() {
     this.dialog.open(DomainSnapshotComponent, {
       width: '450px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { }
     });
   }

@@ -90,6 +90,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     const roleCopy = JSON.parse(JSON.stringify(role));
     const dialogRef = this.dialog.open(TeamRoleCreateComponent, {
       width: '400px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
         roles: this.dataSource.data,
         router: roleCopy.router,

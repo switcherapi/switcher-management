@@ -92,6 +92,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   onInvite(teamInvite: TeamInvite): void {
     this.dialog.open(TeamInviteDialog, {
       width: '450px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
         request_id: teamInvite._id,
         email: teamInvite.email,

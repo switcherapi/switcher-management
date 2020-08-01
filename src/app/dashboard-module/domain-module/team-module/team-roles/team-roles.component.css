@@ -4,6 +4,11 @@
   padding-top: 10px;
 }
 
+.mat-elevation-z8 {
+  border: 1px solid #cccccc80;
+  box-shadow: none;
+}
+
 @media only screen and (max-width: 420px) {
   .mat-elevation-z8 {
     display: grid;

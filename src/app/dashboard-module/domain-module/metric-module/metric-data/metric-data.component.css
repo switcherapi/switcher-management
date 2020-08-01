@@ -58,6 +58,11 @@ tr.element-row:not(.expanded-row):active {
   min-height: auto;
 }
 
+:host /deep/ .mat-header-row {
+  height: 30px;
+  font-size: smaller;
+}
+
 .tablelog-footer {
   columns: 2;
   background: white;
@@ -70,5 +75,9 @@ tr.element-row:not(.expanded-row):active {
 
   .tablelog-footer {
     display: contents;
+  }
+
+  :host /deep/ .cdk-overlay-pane {
+    max-width: 95vw;
   }
 }

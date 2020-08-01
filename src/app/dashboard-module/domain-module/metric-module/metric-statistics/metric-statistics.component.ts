@@ -313,6 +313,7 @@ export class SwitcherDateTimeGroupedTab {
   expandSelectedData(index: number) {
     this.dialog.open(SwitcherDataStatsDialog, {
       width: '1200px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
         stats: this.selectedData[index],
         date: this.chartLabels[index]
