@@ -5,7 +5,7 @@
 ![Switcher API Management: Cloud-based Feature Flag API](https://github.com/switcherapi/switcherapi-assets/blob/master/logo/switcherapi_management_grey.png)
 
 # About  
-**Switcher API Management** is a complete GUI written in Angular to interact with the Switcher API
+**Switcher Management** is a complete GUI written in Angular to interact with the Switcher API
 
  - **Switcher API**: (https://github.com/switcherapi/switcher-api)
  - **JavaScript lib**: (https://github.com/switcherapi/switcher-client-master)
