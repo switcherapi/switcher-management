@@ -1,25 +1,23 @@
-name: Build and Deploy
-on:
-  push:
-    branches:
-      - master
+name: Deploy to GitHub Pages via angular-cli-ghpages
+
+on: [push]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
 
-      - name: Install and Build
-        run: |
-          sudo npm install -g @angular/cli
-          npm install
-          ng build --prod --base-href https://petruki.github.io/switcher-management/
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          ACCESS_TOKEN: ${{ secrets.TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: dist/switcher-management
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    - name: Prepare and deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        npm install
+        npm run ng -- deploy --base-href=/switcher-management/ --name="switcherapi" --email="switcher.project@gmail.com" --no-silent

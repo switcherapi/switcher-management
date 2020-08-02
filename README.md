@@ -2,19 +2,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
-![Switcher API Management: Cloud-based Feature Flag API](https://github.com/petruki/switcherapi-assets/blob/master/logo/switcherapi_management_grey.png)
+![Switcher API Management: Cloud-based Feature Flag API](https://github.com/switcherapi/switcherapi-assets/blob/master/logo/switcherapi_management_grey.png)
 
 # About  
 **Switcher API Management** is a complete GUI written in Angular to interact with the Switcher API
 
- - **Switcher API**: (https://github.com/petruki/switcher-api)
- - **JavaScript lib**: (https://github.com/petruki/switcher-client-master)
- - **Java lib**: (https://github.com/petruki/switcher-client)
+ - **Switcher API**: (https://github.com/switcherapi/switcher-api)
+ - **JavaScript lib**: (https://github.com/switcherapi/switcher-client-master)
+ - **Java lib**: (https://github.com/switcherapi/switcher-client)
 
 # Demo environment
 Join us on Slack to get your access to this demo environment. [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
- - https://petruki.github.io/switcher-management/
+ - https://switcherapi.github.io/switcher-management/
 
 
 ## Donation
