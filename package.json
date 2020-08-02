@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "GUI to interact with Switcher API",
   "author": {
-    "name": "Rogerio Petruki",
+    "name": "Roger Floriano (petruki)",
     "email": "switcher.project@gmail.com"
   },
   "scripts": {
