@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.com/petruki/switcher-client-master.svg?branch=master)](https://travis-ci.com/petruki/switcher-client-master)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcher-client-master&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcher-client-master)
-[![Coverage Status](https://coveralls.io/repos/github/petruki/switcher-client-master/badge.svg?branch=master)](https://coveralls.io/github/petruki/switcher-client-master?branch=master)
-[![Known Vulnerabilities](https://snyk.io/test/npm/switcher-client/2.0.2/badge.svg)](https://snyk.io/test/npm/switcher-client/2.0.2)
+[![Build Status](https://travis-ci.com/switcherapi/switcher-client-master.svg?branch=master)](https://travis-ci.com/github/switcherapi/switcher-client-master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-client-master&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-client-master)
+[![Coverage Status](https://coveralls.io/repos/github/switcherapi/switcher-client-master/badge.svg?branch=master)](https://coveralls.io/github/switcherapi/switcher-client-master?branch=master)
 [![npm version](https://badge.fury.io/js/switcher-client.svg)](https://badge.fury.io/js/switcher-client)
+[![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-client-master/badge.svg?targetFile=package.json)](https://snyk.io/test/github/switcherapi/switcher-client-master?targetFile=package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Features

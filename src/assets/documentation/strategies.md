@@ -10,7 +10,7 @@ The advantages of using strategies are:
 
 *Fast response to negative feedbacks without impacting the final release.*
 
-<img src="https://raw.githubusercontent.com/petruki/switcherapi-assets/master/docs/SwitcherAPI_softlaunch.jpg" class="image-style" alt=""/><p>
+<img src="https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/docs/SwitcherAPI_softlaunch.jpg" class="image-style" alt=""/><p>
 
 * * *
 
