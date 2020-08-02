@@ -1,4 +1,3 @@
-![Build and Deploy](https://github.com/petruki/switcher-management/workflows/Build%20and%20Deploy/badge.svg?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
