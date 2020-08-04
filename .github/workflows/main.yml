@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages via angular-cli-ghpages
+name: Deployment
 
 on: [push]
 
