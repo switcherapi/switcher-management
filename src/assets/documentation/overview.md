@@ -45,6 +45,6 @@ Sometimes covering 100% of tests does not guarantee a successful deployment, nor
 - **Switcher API**: (https://github.com/switcherapi/switcher-api)
 - **Switcher Management**: (https://github.com/switcherapi/switcher-management)
 - **Library: JavaScript**: (https://github.com/switcherapi/switcher-client-master)
-- **Library: Java**: (https://github.com/petruki/switcher-client)
+- **Library: Java**: (https://github.com/switcherapi/switcher-client)
 - **Slack Webhook**: (https://github.com/switcherapi/switcher-slash-webhook)
 - **Load Balance**: (https://github.com/switcherapi/switcher-load-balance)
