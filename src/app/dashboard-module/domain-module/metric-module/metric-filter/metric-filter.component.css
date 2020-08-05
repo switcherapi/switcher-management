@@ -2,3 +2,9 @@
   vertical-align: baseline !important;
   display: contents;
 }
+
+@media only screen and (max-width: 430px) {
+  .options-section-label {
+    display: none;
+  }
+}

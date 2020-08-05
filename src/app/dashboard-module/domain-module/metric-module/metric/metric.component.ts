@@ -65,6 +65,9 @@ export class MetricComponent implements OnInit, OnDestroy {
   }
 
   onFilter(key?: string) {
+    if (!key) {
+      key = this.switcher;
+    }
     const dialogRef = this.dialog.open(MetricFilterComponent, {
       width: '450px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',

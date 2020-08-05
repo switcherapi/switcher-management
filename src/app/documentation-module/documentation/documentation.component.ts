@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   templateUrl: './documentation.component.html',
   styleUrls: ['./documentation.component.css']
 })
-export class DocumentationComponent implements OnInit {
+export class DocumentationComponent implements OnInit, OnDestroy {
   sideBarTopPos: number;
   prevScrollpos = window.pageYOffset;
 
@@ -16,6 +16,10 @@ export class DocumentationComponent implements OnInit {
 
   ngOnInit() {
     this.scrollMenuHandler();
+  }
+
+  ngOnDestroy() {
+    window.onscroll = function () {};
   }
 
   toggleMenu(): void {

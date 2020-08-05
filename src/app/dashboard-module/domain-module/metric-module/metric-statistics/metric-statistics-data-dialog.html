@@ -9,7 +9,7 @@
 </h4>
 <div mat-dialog-content>
     <mat-form-field>
-        <input matInput placeholder="Date" [value]="data.date | date:'medium'" readonly>
+        <input matInput placeholder="Date" [value]="data.date" readonly>
     </mat-form-field>
     <app-metric-data [data]="data.stats"></app-metric-data>
 </div>

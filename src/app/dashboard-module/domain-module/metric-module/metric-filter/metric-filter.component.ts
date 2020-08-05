@@ -59,6 +59,11 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
+  onCleanFilter(data: any) {
+    this.switcherKeyFormControl.setValue("");
+    this.onFilter(data);
+  }
+
   onFilter(data: any) {
     if (this.switcherKeyFormControl.value.length) {
       data.switcher = this.switcherKeyFormControl.value;

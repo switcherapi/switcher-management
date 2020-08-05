@@ -55,6 +55,10 @@
         <mat-icon>filter_list</mat-icon>
         <div class="options-section-label"> Filter</div>
     </button>
+    <button class="btn-save" mat-button (click)="onCleanFilter(data)">
+        <mat-icon>restore_from_trash</mat-icon>
+        <div class="options-section-label"> Clear</div>
+    </button>
     <button class="btn-cancel" mat-button (click)="onCancel()">
         <mat-icon>close</mat-icon>
         <div class="options-section-label"> Close</div>
