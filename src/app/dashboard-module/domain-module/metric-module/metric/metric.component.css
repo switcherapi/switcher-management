@@ -18,6 +18,15 @@
   display: block;
 }
 
+.loading {
+  opacity: 0;
+}
+
+.ready {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
 @media only screen and (max-width: 1200px) {
   .metrics-view.graphics {
     height: 600px;

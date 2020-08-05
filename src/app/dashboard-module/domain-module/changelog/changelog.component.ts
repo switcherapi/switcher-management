@@ -63,6 +63,9 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   ];
   expandedElement: History | null;
 
+  classStatus = "mat-elevation-z8 loading";
+  loading = true;
+
   constructor(
     private adminService: AdminService,
     private domainRouteService: DomainRouteService,
@@ -115,6 +118,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   loadDomainHistory(pathRouteSelection: PathRoute): void {
+    this.loading = true;
     this.domainService.getHistory(pathRouteSelection.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.loadDataSource(data);
@@ -122,10 +126,12 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError(error);
       this.errorHandler.doError(error);
+      this.loading = false;
     });
   }
 
   loadGroupHistory(pathRouteSelection: PathRoute): void {
+    this.loading = true;
     this.groupService.getHistory(pathRouteSelection.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.loadDataSource(data);
@@ -133,10 +139,12 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError(error);
       this.errorHandler.doError(error);
+      this.loading = false;
     });
   }
 
   loadConfigHistory(pathRouteSelection: PathRoute): void {
+    this.loading = true;
     this.configService.getHistory(pathRouteSelection.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.loadDataSource(data);
@@ -144,10 +152,12 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError(error);
       this.errorHandler.doError(error);
+      this.loading = false;
     });
   }
 
   loadStrategyHistory(selectedStrategy: Strategy): void {
+    this.loading = true;
     this.strategyService.getHistory(selectedStrategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.loadDataSource(data);
@@ -155,6 +165,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError(error);
       this.errorHandler.doError(error);
+      this.loading = false;
     });
   }
 
@@ -165,6 +176,9 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.dataSource.filterPredicate = (data: History, filter: string) => {
       return this.customFilterPredicate(data, filter);
     };
+
+    this.loading = false;
+    this.classStatus = "mat-elevation-z8 ready";
   }
 
   resetDomainChangeLog(): void {

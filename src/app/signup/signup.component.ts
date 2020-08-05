@@ -42,6 +42,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.returnUrl = '/dashboard';
     }
 
+    getRecaptchaPublicKey(): string {
+        return environment.recaptchaPublicKey;
+    }
+
     get f() { return this.loginForm.controls; }
 
     onSubmit() {

@@ -3,7 +3,7 @@
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
 </div>
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!loading && !error" class="card mt-4" style="border: 0px; margin: 0px !important;">
+<div *ngIf="!error" [ngClass]="classStatus" style="border: 0px; margin: 0px !important;">
     <div class="header-style">
         <div style="display: flex;">
             <button mat-button class="btn-element create" (click)="createComponent()" [disabled]="inputComponentName.value.length < 2 || !creatable">

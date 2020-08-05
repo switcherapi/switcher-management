@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  recaptchaPublicKey: '6Ldgj7kZAAAAACadIQ49qzkJn6LiSUB_Er643J3V',
   githubApiClientId: '5745650fe81a1f1f3486',
   teamInviteLink: 'http://localhost:4200/collab/join',
   apiUrl: 'http://localhost:3000',

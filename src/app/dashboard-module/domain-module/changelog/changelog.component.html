@@ -2,7 +2,11 @@
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" autocomplete="off">
 </mat-form-field>
 
-<div class="mat-elevation-z8">
+<div *ngIf="loading" class="card-body loader-div">
+    <div class="loader"></div>
+    <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+</div>
+<div [ngClass]="classStatus">
     <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
         <ng-container matColumnDef="{{column}}" *ngFor="let column of dataColumns">
             <th mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{getColumnLabel(column)}}</strong></th>

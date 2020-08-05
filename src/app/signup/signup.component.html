@@ -21,9 +21,9 @@
                             <input matInput type="password" id="password" (keyup)="onKey($event)" placeholder="Password" formControlName="password" required>
                         </mat-form-field>
                     </div>
-                    <re-captcha style="display: inline-block; margin: auto;" (resolved)="resolved($event)" 
+                    <re-captcha class="g-recaptcha" (resolved)="resolved($event)" 
                         formControlName="captcha"
-                        siteKey="6Ldgj7kZAAAAACadIQ49qzkJn6LiSUB_Er643J3V">  
+                        siteKey="{{getRecaptchaPublicKey()}}">  
                     </re-captcha>
                     <div style="padding-top: 20px;">
                         <button mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
