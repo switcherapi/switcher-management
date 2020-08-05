@@ -21,6 +21,9 @@ export class DomainComponent implements OnInit, OnDestroy {
   currentPathRoute: PathRoute;
   icon: number;
 
+  prevScrollpos = window.pageYOffset;
+  navControl: boolean = false;
+
   private unsubscribe: Subject<void> = new Subject();
 
   constructor(
@@ -31,6 +34,8 @@ export class DomainComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.scrollMenuHandler();
+    
     if (!this.currentPathRoute) {
       this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
         this.updateRoute();
@@ -141,6 +146,24 @@ export class DomainComponent implements OnInit, OnDestroy {
       }
     }
     return false;
+  }
+
+  scrollMenuHandler() {
+    window.onscroll = () => {
+      if (!this.navControl && window.innerWidth < 1200) {
+        var currentScrollPos = window.pageYOffset;
+        if (this.prevScrollpos > currentScrollPos) {
+            document.getElementById("navbarMenu").style.top = "0";
+        } else {
+            document.getElementById("navbarMenu").style.top = "-60px";
+        }
+        this.prevScrollpos = currentScrollPos;
+      }
+    }
+  }
+
+  navToggled() {
+    this.navControl = !this.navControl;
   }
 
 }
