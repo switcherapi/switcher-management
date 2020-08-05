@@ -55,6 +55,15 @@
   display: contents;
 }
 
+.card.mt-4.loading {
+  opacity: 0;
+}
+
+.card.mt-4.ready {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
 @media only screen and (max-width: 1200px) {
   .label-env-name {
     width: 500px;

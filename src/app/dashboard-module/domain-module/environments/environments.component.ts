@@ -36,7 +36,8 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   removable: boolean = false;
   creatable: boolean = false;
 
-  loading = false;
+  classStatus = "card mt-4 loading";
+  loading = true;
   error = '';
 
   constructor(
@@ -64,11 +65,13 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
         this.environments = env.filter(e => e.name != 'default');
-        this.loading = false;
     }, error => {
       this.error = error;
       this.loading = false;
       this.error = this.errorHandler.doError(error);
+    }, () => {
+      this.loading = false;
+      this.classStatus = "card mt-4 ready";
     });
   }
 

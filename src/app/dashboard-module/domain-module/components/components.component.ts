@@ -40,7 +40,8 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   removable: boolean = false;
   creatable: boolean = false;
 
-  loading = false;
+  classStatus = "card mt-4 loading";
+  loading = true;
   error = '';
 
   constructor(
@@ -69,11 +70,13 @@ export class ComponentsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(components => {
         this.components = components;
-        this.loading = false;
     }, error => {
       this.error = error;
       this.loading = false;
       this.error = this.errorHandler.doError(error);
+    }, () => {
+      this.loading = false;
+      this.classStatus = "card mt-4 ready";
     });
   }
 

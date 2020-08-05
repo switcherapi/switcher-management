@@ -31,7 +31,8 @@
 }
 
 :host /deep/ .card.mt-4.ready {
-  opacity: 100;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .loader-logo {

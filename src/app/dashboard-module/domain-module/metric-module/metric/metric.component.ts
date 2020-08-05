@@ -24,6 +24,8 @@ export class MetricComponent implements OnInit, OnDestroy {
 
   metricViewClass = 'metrics-view graphics';
   filterClass = 'body-filter show';
+
+  classStatus = "loading";
   loading = true;
   error = '';
 
@@ -61,6 +63,8 @@ export class MetricComponent implements OnInit, OnDestroy {
         ConsoleLogger.printError(error);
         this.errorHandler.doError(error);
         this.loading = false;
+      }, () => {
+        this.classStatus = "ready";
       });
   }
 
