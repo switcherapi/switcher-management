@@ -8,12 +8,15 @@ import { Router } from '@angular/router';
 })
 export class DocumentationComponent implements OnInit {
   sideBarTopPos: number;
+  prevScrollpos = window.pageYOffset;
 
   constructor(
     private router: Router,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.scrollMenuHandler();
+  }
 
   toggleMenu(): void {
     if (document.getElementById('sidebar').className == 'active') {
@@ -29,6 +32,18 @@ export class DocumentationComponent implements OnInit {
   onSearch(query: string): void {
     this.router.navigate(['/documentation/search', query]);
     this.toggleMenu();
+  }
+
+  scrollMenuHandler() {
+    window.onscroll = function () {
+      var currentScrollPos = window.pageYOffset;
+      if (this.prevScrollpos > currentScrollPos) {
+          document.getElementById("sidebarCollapse").style.top = "0";
+      } else {
+          document.getElementById("sidebarCollapse").style.top = "-60px";
+      }
+      this.prevScrollpos = currentScrollPos;
+    }
   }
 
 }

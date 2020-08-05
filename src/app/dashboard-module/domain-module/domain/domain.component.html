@@ -47,10 +47,13 @@
                 </mat-menu>
             </div>
         </h4>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark backgroud-style">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" 
+        <nav id="navbarMenu" class="navbar navbar-expand-lg navbar-dark bg-dark backgroud-style sticky">
+            <a (click)="gotoListChildren()">
+                <mat-icon style="color: white; margin-top: 8px;" matTooltip="{{ getLabelListChildren() }}">format_list_bulleted</mat-icon>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" (click)="navToggled()"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Domain menu">
-            <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
         
             <div class="collapse navbar-collapse" id="navbarContent">
