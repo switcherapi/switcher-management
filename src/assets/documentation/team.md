@@ -46,3 +46,10 @@ The available components are:
 The available actions are:
 - **CRUD**: Create, Read, Update and Delete.
 - **ALL**: Include all CRUD actions in just one rule.
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[team.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 

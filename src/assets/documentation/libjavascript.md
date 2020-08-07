@@ -136,3 +136,10 @@ switcher.checkSnapshot();
     - Snapshot file auto load when updated.
     - Re-worked built-in mock implementation
 - 1.0.0: Working release
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[libjavascript.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 

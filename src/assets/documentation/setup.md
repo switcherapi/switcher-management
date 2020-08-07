@@ -48,3 +48,10 @@ Finally, define your switcher by giving a key value and a brief description.
 - All caps
 
 <img src="[$ASSETS_LOCATION]/documentation/images/setup/switchers.jpg" class="image-style shadow" alt=""/>
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[setup.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 
