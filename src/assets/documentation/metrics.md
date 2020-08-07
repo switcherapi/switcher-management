@@ -46,3 +46,10 @@ The Data View displays more detailed information about the API criteria executio
 </br>This view is perfect for troubleshooting and double-check what information is being used to call the API.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/metrics/metric_data.jpg" class="image-style shadow" alt=""/><p>
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[metrics.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 

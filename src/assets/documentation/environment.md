@@ -62,3 +62,10 @@ When using the provided modules to connect to the Switcher API, it is also possi
               "InventoryWS"
 ...
 ```
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[environment.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 

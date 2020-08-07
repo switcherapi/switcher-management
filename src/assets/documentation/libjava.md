@@ -146,3 +146,10 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
     - Re-worked built-in mock implementation
 - 1.0.1: Security patch - Log4J has been updated
 - 1.0.0: Working release
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[libjava.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 

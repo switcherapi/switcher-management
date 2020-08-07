@@ -45,3 +45,10 @@ Strategies are defined per environment, adding more flexibility for you to speci
 Keep control of what is being sent as input to strategies. Under Metrics - Data tab view, besides the result of each call executed you can see what it was sent for each strategy.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_data_fail.jpg" class="image-style shadow" alt=""/><p></br>
+
+* * *
+
+*Did you find an error? Please, open an issue*
+<a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[strategies.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
+    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+</a> 
