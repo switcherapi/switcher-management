@@ -12,6 +12,7 @@ export const environment = {
   // skimmingApi: 'https://dance-0m7.begin.app',
   skimmingApi: 'https://dance-0m7-staging.begin.app',
   docsUrl: 'assets/',
+  // docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/',
   timeout: 5000
 };
 

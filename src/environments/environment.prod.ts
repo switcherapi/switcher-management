@@ -5,6 +5,6 @@ export const environment = {
   teamInviteLink: 'https://switcherapi.github.io/switcher-management/collab/join',
   apiUrl: 'https://switcher-load-balance.herokuapp.com',
   skimmingApi: 'https://dance-0m7.begin.app',
-  docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/',
+  docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/', 
   timeout: 5000
 };
