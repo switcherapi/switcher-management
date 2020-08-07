@@ -48,7 +48,12 @@
                     </li>
                 </ul>
                 <div id="searchBox" class="input-group md-form form-sm form-2 pl-0">
-                    <input #searchQuery class="form-control" type="text" placeholder="Search" aria-label="Search" (keyup.enter)="onSearch(searchQuery.value)">
+                    <input #searchQuery class="form-control" 
+                        type="text" placeholder="Search" 
+                        aria-label="Search" 
+                        (keyup.enter)="onSearch(searchQuery.value)"
+                        minlength="3"
+                        maxlength="20">
                     <div class="input-group-append">
                         <button class="input-group-text red lighten-3" (click)="onSearch(searchQuery.value)">
                             <i class="fas fa-search text-grey" aria-hidden="true"></i>

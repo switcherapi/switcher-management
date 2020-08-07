@@ -8,12 +8,14 @@
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <mat-form-field>
-                            <input matInput type="text" id="name" (keyup)="onKey($event)" placeholder="Name" autocomplete="off" formControlName="name" required>
+                            <input matInput type="text" id="name" (keyup)="onKey($event)" maxlength="50"
+                                placeholder="Name" autocomplete="off" formControlName="name" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
                         <mat-form-field>
-                            <input matInput type="text" id="email" (keyup)="onKey($event)" placeholder="E-mail" autocomplete="off" formControlName="email" required>
+                            <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50"
+                                placeholder="E-mail" autocomplete="off" formControlName="email" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
