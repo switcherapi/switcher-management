@@ -34,8 +34,10 @@ export class DocumentationComponent implements OnInit, OnDestroy {
   }
 
   onSearch(query: string): void {
-    this.router.navigate(['/documentation/search', query]);
-    this.toggleMenu();
+    if (query.length >= 3) {
+      this.router.navigate(['/documentation/search', query]);
+      this.toggleMenu();
+    }
   }
 
   scrollMenuHandler() {
