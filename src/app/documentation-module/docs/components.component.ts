@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { Component } from '@angular/core';
+import { MarkdownService } from 'ngx-markdown';
+import { MarkdownInjector } from './markdown-injector.component';
 
 @Component({
   selector: 'app-components',
@@ -8,15 +9,14 @@ import { environment } from 'src/environments/environment';
       <h3 class="doc-title">Components</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
     </div>
-    <markdown [src]="'${environment.docsUrl}documentation/components.md'"></markdown>
+    <markdown [data]="markdown"></markdown>
   `,
   styleUrls: ['../documentation/documentation.component.css']
 })
-export class ComponentsComponent implements OnInit {
+export class ComponentsComponent extends MarkdownInjector {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor(private markdownComponentService: MarkdownService) {
+    super(markdownComponentService, 'documentation/components.md');
+   }
 
 }

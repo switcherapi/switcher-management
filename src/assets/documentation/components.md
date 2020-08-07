@@ -5,7 +5,7 @@ Components are registered applications that will be making use of switchers.
 Regarding security, all registered applications must be linked to a switcher, otherwise, the call will return an unauthorized access.
 </br>This new layer of security was created to prevent other applications to use not related switchers.
 
-<img src="assets/documentation/images/components/component.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/components/component.jpg" class="image-style shadow" alt=""/><p>
 
 * * *
 
@@ -17,7 +17,7 @@ Creating a components is very simple and after doing it, you just have to link i
   Enter in the edition mode and just type the name of your registered component. 
   </br>It will try to match in an auto-complete list for you to choose afterwards.
 
-  <img src="assets/documentation/images/components/component_add.jpg" class="image-style shadow" alt=""/><p>
+  <img src="[$ASSETS_LOCATION]/documentation/images/components/component_add.jpg" class="image-style shadow" alt=""/><p>
 
 2. Including into your application module context
 

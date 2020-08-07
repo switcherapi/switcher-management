@@ -7,8 +7,13 @@
   grid-template-columns: 500px max-content;
   padding: 10px;
   padding-bottom: 50px;
-  max-width: 1124px;
+  max-width: 1024px;
   margin: auto;
+}
+
+.home-section.header {
+  background: linear-gradient(0deg, rgb(202, 202, 202) 0%, rgb(36, 41, 46) 5%, rgb(0, 0, 0) 100%); 
+  padding: 30px 0px 40px 0px;
 }
 
 .home-section.features {
@@ -20,6 +25,10 @@
   background-color: rgb(77, 77, 77);
   box-shadow: 0px 0px 10px 10px #4d4d4d;
   min-height: 600px;
+}
+
+.home-container.collab {
+  max-width: 1124px !important;
 }
 
 .home-text h1 {
@@ -116,6 +125,7 @@
   height: -webkit-min-content;
   height: -moz-min-content;
   height: min-content;
+  height: auto !important;
   margin-top: 10px;
   -o-object-fit: contain;
   object-fit: contain;

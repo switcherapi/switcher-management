@@ -33,15 +33,15 @@ For each switcher it is possible to add at least 4 different types of strategy.
   Add network conditions if you want to restrict by a unique IP address or a range of IPs using CIDR notation.
   </br>The available operations for this validator are: Exist, Not exist
 
-<img src="assets/documentation/images/strategies/strategy_create.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_create.jpg" class="image-style shadow" alt=""/><p>
 
 #### Cloning strategies
 Strategies are defined per environment, adding more flexibility for you to specify conditions that are not shared or common among environments.
 </br>To simplify, it is possible to clone a created strategy instead of starting from scratch.
 
-<img src="assets/documentation/images/strategies/strategy_clone.jpg" class="image-style shadow" alt=""/><p></br>
+<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_clone.jpg" class="image-style shadow" alt=""/><p></br>
 
 #### Monitoring
 Keep control of what is being sent as input to strategies. Under Metrics - Data tab view, besides the result of each call executed you can see what it was sent for each strategy.
 
-<img src="assets/documentation/images/strategies/strategy_data_fail.jpg" class="image-style shadow" alt=""/><p></br>
+<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_data_fail.jpg" class="image-style shadow" alt=""/><p></br>
