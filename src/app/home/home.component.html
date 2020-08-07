@@ -1,5 +1,5 @@
 <div class="home-content">
-    <section class="home-section section" 
+    <section class="home-section" 
         style="background: linear-gradient(0deg, rgb(202, 202, 202) 0%, rgb(36, 41, 46) 5%, rgb(0, 0, 0) 100%); padding: 30px 0px 40px 0px;">
         <div class="home-container">
             <div class="home-text">
@@ -7,14 +7,8 @@
                     Switching fast.<br>
                     Adapt everywhere.
                 </h1>
-                <p>
-                    Decrease the friction caused by changes while keeping control of what really matters.
-                </p>
-                <div>
-                    <p>
-                        Already have an account? <a routerLink="/login">Sign in</a>
-                    </p>
-                </div>
+                <p>Decrease the friction caused by changes while keeping control of what really matters.</p>
+                <p>Already have an account? <a routerLink="/login">Sign in</a></p>
             </div>
             <div class="vertical"></div>
             <div class="spacer"></div>
@@ -23,7 +17,7 @@
             </div>
         </div>
     </section>
-    <section class="home-section section" style="margin-top: 50px;">
+    <section class="home-section features">
         <ngb-carousel [interval]="10000" [pauseOnHover]="true">
             <ng-template ngbSlide>
                 <div>
@@ -71,5 +65,49 @@
                 </div>
             </ng-template>
         </ngb-carousel>
+    </section>
+    <section class="home-section collab">
+        <div class="home-container">
+            <div class="home-text collab-center">
+                <h1 style="font-weight: normal;">
+                    Welcome on board
+                </h1>
+            </div>
+            <div class="home-text collab-left">
+                <h1>
+                    Become a member
+                </h1>
+                <p>
+                    Our team is diverse and vital to keep this project growing.<br><br>
+                    As an open-source project, we encourage any feedback or support.
+                    Visit our Patreon page and become a member.
+                    Your support will help us to continue working hard to make it even better.
+                </p>
+                <br>
+                <p>Let's grow together. <a href="https://www.patreon.com/switcherapi" target="_blank">Support Switcher API</a></p>
+                <img class="collab-patreon" src="../../assets/patreon.png">
+            </div>
+            <div class="vertical" style="height: 450px; margin-top: 160px;"></div>
+            <div class="spacer"></div>
+            <div class="home-text collab-right">
+                <h1 class="collab-title">The crew</h1>
+                <div class="collab-panel">
+                    <div class="collab-profile">
+                        <img class="collab-image pic" src="../../assets/collab_members/roger.png">
+                        <p>
+                            <strong>Roger Floriano</strong><br>
+                            Founder/Maintainer
+                        </p>
+                    </div>
+                    <div class="collab-profile">
+                        <img class="collab-image" src="../../assets/switcherapi_mark_grey.png">
+                        <p>
+                            <strong>Collab Dude</strong><br>
+                            Maintainer
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>

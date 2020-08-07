@@ -11,6 +11,17 @@
   margin: auto;
 }
 
+.home-section.features {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.home-section.collab {
+  background-color: rgb(77, 77, 77);
+  box-shadow: 0px 0px 10px 10px #4d4d4d;
+  min-height: 600px;
+}
+
 .home-text h1 {
   font-size: 50px;
   font-weight: 300;
@@ -36,7 +47,7 @@
 }
 
 .carousel-images {
-  width: 50%;
+  width: 70%;
 }
 
 .vertical {
@@ -69,6 +80,55 @@
   font-size: 30px;
 }
 
+.home-text.collab-center {
+  margin-top: 50px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+}
+
+.home-text.collab-left {
+  margin-right: 40px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.home-text.collab-right {
+  margin-left: 100px;
+  width: 100%;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.collab-profile {
+  margin-bottom: 40px;
+}
+
+.collab-profile p {
+  margin-bottom: 100px;
+}
+
+.collab-image {
+  width: 90px;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+  margin-top: 10px;
+  -o-object-fit: contain;
+  object-fit: contain;
+  float: left;
+  margin-right: 20px;
+}
+
+.collab-image.pic {
+  border-radius: 100px;
+}
+
+.collab-patreon {
+  width: 120px;
+  float: left;
+}
+
 @media only screen and (max-width: 1200px) {
   .spacer {
     display: inherit;
@@ -90,6 +150,11 @@
 
   .home-text h1 {
     font-size: 30px;
+    text-align: center;
+  }
+
+  .home-text p {
+    text-align: center;
   }
 
   .vertical {
@@ -103,4 +168,59 @@
   .carousel-images {
     width: 80%;
   }
+
+  .carousel-control-next, .carousel-control-prev {
+    transform: translateY(-70px);
+  }
+
+  .home-text.collab-left, .home-text.collab-right {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .home-text.collab-right {
+    margin-top: 0;
+  }
+
+  .collab-profile {
+    min-width: 200px;
+    margin: auto;
+  }
+
+  .collab-profile p {
+    width: 200px;
+    margin: auto;
+  }
+
+  .collab-title {
+    margin: auto !important;
+  }
+
+  .collab-image {
+    width: 70px;
+    float: unset;
+    margin-right: 0;
+  }
+
+  .collab-panel {
+    display: inline-flex;
+    margin-top: 20px;
+  }
+
+  .collab-patreon {
+    float: unset;
+  }
+
+}
+
+@media only screen and (max-width: 450px) {
+
+  .collab-panel {
+    display: block;
+  }
+
+  .collab-profile {
+    margin-bottom: 30px;
+  }
+
 }
