@@ -281,9 +281,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updateConfigComponents(data);
-            this.blockUI.stop();
             this.toastService.showSuccess(`Switcher updated with success`);
-            this.editing = false
+            this.editing = false;
           }
         }, error => {
           this.blockUI.stop();
@@ -291,6 +290,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.toastService.showError(`Unable to update switcher`);
           this.classStatus = 'header editing';
           this.editing = true;
+        }, () => {
+          this.blockUI.stop();
         });
       }
     }
