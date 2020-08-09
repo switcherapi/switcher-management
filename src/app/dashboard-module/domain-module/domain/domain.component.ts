@@ -2,11 +2,17 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomainRouteService } from '../../services/domain-route.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PathRoute } from '../model/path-route';
-import { delay, takeUntil } from 'rxjs/operators';
+import { delay, takeUntil, startWith, map } from 'rxjs/operators';
 import { Types } from '../model/path-route'
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
 import { MatDialog } from '@angular/material/dialog';
+import { QueryRef, Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { FormControl } from '@angular/forms';
+import { ConfigService } from '../../services/config.service';
+import { GroupService } from '../../services/group.service';
 
 @Component({
   selector: 'app-domain',
@@ -24,13 +30,21 @@ export class DomainComponent implements OnInit, OnDestroy {
   prevScrollpos = window.pageYOffset;
   navControl: boolean = false;
 
+  smartSearchFormControl = new FormControl('');
+  searchListItems: any[] = [];
+  searchedValues: Observable<string[]>;
+  private query: QueryRef<any>;
+
   private unsubscribe: Subject<void> = new Subject();
 
   constructor(
     private domainRouteService: DomainRouteService,
     private dialog: MatDialog,
     private router: Router,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private apollo: Apollo,
+    private configService: ConfigService,
+    private groupService: GroupService
   ) { }
 
   ngOnInit() {
@@ -39,6 +53,7 @@ export class DomainComponent implements OnInit, OnDestroy {
     if (!this.currentPathRoute) {
       this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
         this.updateRoute();
+        this.loadKeys();
       });
     }
 
@@ -117,7 +132,6 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   getDomainElement(): string {
-    
     return this.selectedDomain ? JSON.stringify(this.selectedDomain.element) : '';
   }
 
@@ -164,6 +178,151 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   navToggled() {
     this.navControl = !this.navControl;
+  }
+
+  loadKeys() {
+    this.query = this.apollo.watchQuery({
+      query: this.generateGql(),
+      variables: { 
+        id: this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id,
+      }
+    });
+
+    this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
+      if (result) {
+        const groups = result.data.domain.group.map(group => {
+          return {
+            type: 'Group',
+            _id: group._id,
+            description: group.description,
+            parent: '',
+            name: group.name
+          }
+        });
+
+        const switchers = result.data.domain.group.map(group => group.config.map(config => {
+          return {
+            type: 'Switcher',
+            _id: config._id,
+            description: config.description,
+            parent: group,
+            name: config.key
+          }
+        }));
+
+        const components = result.data.domain.group.map(
+          group => group.config.map(config => {
+            return {
+              type: 'Component',
+              _id: config._id,
+              description: config.components.toString() || '',
+              parent: group,
+              name: config.key
+            }
+        }).filter(comp => comp.description.length));
+        
+        this.searchListItems = [];
+        this.searchListItems.push(...groups);
+        this.searchListItems.push(...switchers.flat());
+        this.searchListItems.push(...components.flat());
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+
+    this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: any): any[] {
+    let filterValue: any[] = [];
+
+    if((value as any).type) {
+      filterValue.push(value.name);
+      this.smartSearchFormControl.setValue(value.name);
+      this.redirect(value);
+      return;
+    }
+
+    filterValue = value.toLowerCase();
+    return this.searchListItems.filter(item =>
+      item.name.toLowerCase().includes(filterValue) ||
+      item.description.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private redirect(item: any) {
+    if (item.type === 'Group') {
+      this.updateGroupForRedirect(item);
+    } else if (item.type === 'Switcher' || item.type === 'Component') {
+      this.updateConfigForRedirect(item);
+    }
+  }
+
+  private updateConfigForRedirect(item: any) {
+    this.configService.getConfigById(item._id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        const pathRoute: PathRoute = {
+          id: item._id,
+          element: data,
+          name: item.name,
+          path: '/dashboard/domain/group/switcher/detail',
+          type: Types.CONFIG_TYPE
+        };
+        this.domainRouteService.updatePath(pathRoute, true);
+        this.updateGroupForRedirect(item.parent, true);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private updateGroupForRedirect(item: any, parent = false) {
+    this.groupService.getGroupById(item._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        const pathRouteGroup: PathRoute = {
+          id: data.id,
+          element: data,
+          name: data.name,
+          path: '/dashboard/domain/group/detail',
+          type: Types.GROUP_TYPE
+        };
+        this.domainRouteService.updatePath(pathRouteGroup, !parent);
+
+        if (!parent) {
+          this.router.navigate(['/dashboard/domain/group/']).then(data =>
+            this.router.navigate(['/dashboard/domain/group/detail']));
+        } else {
+          this.router.navigate(['/dashboard/domain/group/switcher']).then(data =>
+            this.router.navigate(['/dashboard/domain/group/switcher/detail']));
+        }
+      }
+    });
+  }
+
+  generateGql(): any {
+    return gql`
+      query domain($id: String!) {
+        domain(_id: $id) {
+          group {
+            _id
+            name
+            description
+            config {
+                _id
+                key
+                description
+                components
+                strategies {
+                    values
+                }
+            }
+          }
+        }
+      }
+  `;
   }
 
 }
