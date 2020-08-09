@@ -20,6 +20,10 @@ export class GroupService extends ApiService {
     return this.http.get<Group[]>(`${environment.apiUrl}/groupconfig`, { params: { domain: id } }).pipe(catchError(super.handleError));
   }
 
+  public getGroupById(id: string): Observable<Group> {
+    return this.http.get<Group>(`${environment.apiUrl}/groupconfig/${id}`).pipe(catchError(super.handleError));
+  }
+
   public setGroupEnvironmentStatus(id: string, env: string, status: boolean): Observable<Group> {
     const body = {
       [`${env}`]: status

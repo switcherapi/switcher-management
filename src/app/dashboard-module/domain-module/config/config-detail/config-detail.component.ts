@@ -282,7 +282,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           if (data) {
             this.updateConfigComponents(data);
             this.toastService.showSuccess(`Switcher updated with success`);
-            this.editing = false;
+            this.editing = false
           }
         }, error => {
           this.blockUI.stop();
