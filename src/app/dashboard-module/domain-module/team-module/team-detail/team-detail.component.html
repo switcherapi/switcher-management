@@ -56,6 +56,11 @@
                             <app-team-roles [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-roles>
                         </ng-template>
                     </ngb-tab>
+                    <ngb-tab title="Pending" id="3">
+                        <ng-template ngbTabContent>
+                            <app-team-pending-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable" [removable]="removable"></app-team-pending-members>
+                        </ng-template>
+                    </ngb-tab>
                 </ngb-tabset>
             </div>
         </section>

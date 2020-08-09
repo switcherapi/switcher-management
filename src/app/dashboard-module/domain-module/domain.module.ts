@@ -6,7 +6,6 @@ import { DomainRoutingModule } from './domain-routing.module';
 import { DomainDetailComponent } from './domain-detail/domain-detail.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent, ComponentEditDialog } from './components/components.component';
-import { TeamInviteDialog } from './team-module/team-members/team-members.component';
 import { EnvironmentsComponent } from './environments/environments.component';
 import { GroupListComponent } from './group/group-list/group-list.component';
 import { GroupPreviewComponent } from './group/group-preview/group-preview.component';
@@ -53,6 +52,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TeamInviteDialog } from './team-module/team-invite-dialog/team-invite-dialog.component';
 
 @NgModule({
   declarations: [

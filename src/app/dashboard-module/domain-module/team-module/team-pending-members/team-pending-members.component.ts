@@ -1,26 +1,24 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Team } from '../../model/team';
 import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { takeUntil } from 'rxjs/operators';
-import { Admin } from '../../model/admin';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { TeamInvite } from '../../model/team-invite';
 import { TeamInviteDialog } from '../team-invite-dialog/team-invite-dialog.component';
 
 @Component({
-  selector: 'app-team-members',
-  templateUrl: './team-members.component.html',
+  selector: 'app-team-pending-members',
+  templateUrl: './team-pending-members.component.html',
   styleUrls: [
     '../../common/css/detail.component.css',
-    './team-members.component.css']
+    './team-pending-members.component.css']
 })
-export class TeamMembersComponent implements OnInit, OnDestroy {
+export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() team: Team;
   @Input() updatable: boolean = false;
@@ -29,10 +27,9 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('inputMember', { static: true }) inputMember: ElementRef;
 
-  dataSource: MatTableDataSource<Admin>;
-  dataColumns = ['remove', 'name', 'email'];
+  dataSource: MatTableDataSource<any>;
+  dataColumns = ['remove', 'email', 'createdAt', 'request'];
 
   loading: boolean = false;
 
@@ -43,7 +40,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.loadTeam();
+    this.loadPendingInvitations();
   }
 
   ngOnDestroy() {
@@ -51,12 +48,10 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadTeam(): void {
+  loadPendingInvitations(): void {
     this.loading = true;
-    this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-      if (team) {
-        this.loadDataSource(team.members)
-      }
+    this.teamService.getPendingInvitations(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(invitations => {
+      this.loadDataSource(invitations);
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
@@ -65,7 +60,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
     })
   }
 
-  loadDataSource(data: Admin[]): void {
+  loadDataSource(data: any[]): void {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -79,39 +74,27 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
     }
   }
 
-  inviteMember(email: string) {
-    this.teamService.inviteTeamMember(this.team._id, email).pipe(takeUntil(this.unsubscribe)).subscribe(invite => {
-      if (invite) {
-        this.onInvite(invite);
+  removeInvitation(request: string) {
+    this.teamService.removeInvitation(this.team._id, request).pipe(takeUntil(this.unsubscribe)).subscribe(invitationRequest => {
+      if (invitationRequest) {
+        this.loadPendingInvitations();
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to invite ${email} - ${error.error}`)
+      this.toastService.showError(`Unable to remove invitaion request - ${error.error}`)
     })
   }
 
-  onInvite(teamInvite: TeamInvite): void {
-    this.inputMember.nativeElement.value = '';
+  onGetInviteRequest(invite: any): void {
     this.dialog.open(TeamInviteDialog, {
       width: '450px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
-        request_id: teamInvite._id,
-        email: teamInvite.email,
+        request_id: invite._id,
+        email: invite.email,
         team: this.team
       }
     });
-  }
-
-  removeMember(member: Admin) {
-    this.teamService.removeTeamMember(this.team._id, member.id).pipe(takeUntil(this.unsubscribe)).subscribe(member => {
-      if (member) {
-        this.loadTeam();
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
-    })
   }
 
 }

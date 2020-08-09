@@ -30,6 +30,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { TeamPendingMembersComponent } from './team-pending-members/team-pending-members.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     TeamDetailComponent, 
     TeamMembersComponent, 
     TeamRolesComponent, 
-    TeamRoleCreateComponent
+    TeamRoleCreateComponent, 
+    TeamPendingMembersComponent
   ],
   imports: [
     CommonModule,

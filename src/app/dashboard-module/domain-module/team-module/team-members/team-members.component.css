@@ -6,11 +6,11 @@
 
 .btn-save {
   float: right;
+  margin-right: 10px;
 }
 
 .btn-cancel {
   float: right;
-  margin-right: 10px;
 }
 
 .options-section-label {

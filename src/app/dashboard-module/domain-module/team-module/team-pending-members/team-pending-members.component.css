@@ -1,0 +1,30 @@
+.filter-member-style {
+    white-space: nowrap;
+    display: block ruby;
+    padding-top: 10px;
+  }
+  
+  .btn-save {
+    float: right;
+  }
+  
+  .btn-cancel {
+    float: right;
+    margin-right: 10px;
+  }
+  
+  .options-section-label {
+    vertical-align: baseline !important;
+    display: contents;
+  }
+  
+  .mat-elevation-z8 {
+    border: 1px solid #cccccc80;
+    box-shadow: none;
+  }
+  
+  @media only screen and (max-width: 560px) {
+    .options-section-label {
+      display: none;
+    }
+  }
