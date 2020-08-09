@@ -55,8 +55,16 @@ export class TeamService extends ApiService {
     return this.http.get<any>(`${environment.apiUrl}/team/member/invite/${request}`).pipe(catchError(super.handleError));
   }
 
+  public getPendingInvitations(teamid: string): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/team/member/invite/pending/${teamid}`).pipe(catchError(super.handleError));
+  }
+
   public acceptInvitation(request: string): Observable<Admin> {
     return this.http.post<Admin>(`${environment.apiUrl}/team/member/invite/accept/${request}`, null).pipe(catchError(super.handleError));
+  }
+
+  public removeInvitation(teamid: string, request: string): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/team/member/invite/remove/${teamid}/${request}`).pipe(catchError(super.handleError));
   }
 
   public removeTeamMember(id: string, member: string): Observable<Team> {
