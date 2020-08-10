@@ -103,6 +103,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         window.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
     }
 
+    onBitBucketLogin() {
+        this.loading = true;
+        window.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
+    }
+
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();

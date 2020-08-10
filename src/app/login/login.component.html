@@ -18,16 +18,26 @@
                                 placeholder="Password" formControlName="password" required>
                         </mat-form-field>
                     </div>
-                    <button mat-button class="btn-element" [disabled]="loading">
-                        Login
-                    </button>
-                    <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
-                        <img src="assets\github.svg" style="width: 20px;"/>
-                        <span style="color: black; padding-left: 5px;">GitHub</span>
-                        <div class="new-feature">
-                            <p class="new-feature-text">New</p>
-                        </div>
-                    </button>
+                    <div class="btn-container">
+                        <button mat-button class="btn-element" [disabled]="loading">
+                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
+                            <span style="color: white; padding-left: 5px;">Login</span>
+                        </button>
+                        <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
+                            <img src="assets\github.svg" style="width: 20px;"/>
+                            <span style="color: black; padding-left: 5px;">GitHub</span>
+                            <div class="new-feature">
+                                <p class="new-feature-text">New</p>
+                            </div>
+                        </button>
+                        <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onBitBucketLogin()">
+                            <img src="assets\bitbucket.svg" style="width: 20px;"/>
+                            <span style="color: black; padding-left: 5px;">BitBucket</span>
+                            <div class="new-feature">
+                                <p class="new-feature-text">New</p>
+                            </div>
+                        </button>
+                    </div>
                     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
                 </form>
             </div>
