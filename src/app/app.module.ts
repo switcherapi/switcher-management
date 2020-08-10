@@ -22,6 +22,8 @@ import { SignupComponent } from './signup/signup.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
+import { CookieService } from 'ngx-cookie-service';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -44,6 +46,7 @@ import { SignupTeamComponent } from './signup-team/signup-team.component';
         SignupTeamComponent
     ],
     providers: [
+        CookieService,
         AuthGuard,
         AuthService,
         {

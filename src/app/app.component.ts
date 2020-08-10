@@ -5,36 +5,32 @@ import { AuthService } from './auth/services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styles: [`
-    .backgroud-style {
-      background: #24292e !important;
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-
-    .divider-style {
-      width: 40px;
-      transform: rotate(90deg);
-      color:white;
-      background:#89847d;
-    }
-  `]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnDestroy {
 
-  currentToken: String; 
+  currentToken: String;
+  loggedUserName: String;
+  profileAvatar: String;
 
   constructor(
       private router: Router,
       private authService: AuthService
   ) {
-    this.authService.currentToken.subscribe(x => this.currentToken = x);
+    this.authService.currentToken.subscribe(x => {
+      this.currentToken = x;
+      this.loggedUserName = this.authService.getCookie('switcherapi.user');
+
+      const gitid = this.authService.getCookie('switcherapi.gitid');
+      this.profileAvatar = gitid != 'undefined'
+        ? `https://avatars2.githubusercontent.com/u/${gitid}?v=3&s=40` : "assets//switcherapi_mark_white.png";
+    });
   }
 
   ngOnInit() {
     this.authService.logoff.subscribe((currentToken: String) => {
       this.currentToken = currentToken;
-    })
+    });
   }
 
   ngOnDestroy(): void {

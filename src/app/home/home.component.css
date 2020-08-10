@@ -189,6 +189,7 @@
   .home-text.collab-left, .home-text.collab-right {
     margin-right: 0;
     margin-left: 0;
+    margin-bottom: 0;
   }
 
   .home-text.collab-right {
