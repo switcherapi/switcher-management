@@ -6,9 +6,19 @@
     <div class="navbar-nav" style="width: 100%;">
         <a class="nav-item nav-link" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
         <a class="nav-item nav-link" routerLink="/documentation">Documentation</a>
-        <a class="nav-item nav-link" (click)="logout()" *ngIf="currentToken">Logout</a>
         <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
         <a class="nav-item nav-link menu-border-left" routerLink="/signup"  *ngIf="!currentToken">Sign up</a>
+        <div id="menuProfile" *ngIf="currentToken" class="profile-btn menu-border-left">
+            <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="">
+            <mat-icon style="color: white; transform: translateY(6px);">keyboard_arrow_down</mat-icon>
+        </div>
+        <ul id="profileMenu" *ngIf="currentToken" class="navigation-nested">
+            <li class="username navigation-nested__header">
+                <div>{{ loggedUserName }}</div>
+            </li>
+            <li><a class="topbar-menu-item" routerLink="/login" title="Profile Panel">Settings</a></li>
+            <li><a class="topbar-menu-item" (click)="logout()" title="Sign Out">Sign Out</a></li>
+        </ul>
     </div>
 </nav>
 

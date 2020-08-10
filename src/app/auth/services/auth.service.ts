@@ -5,6 +5,7 @@ import { catchError, mapTo, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
 import { Tokens } from '../models/tokens';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,9 @@ export class AuthService {
   private currentTokenSubject: BehaviorSubject<String>;
   public currentToken: Observable<String>;
 
-  private loggedUser: string;
+  loggedUser: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cookieService: CookieService) {
     this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(this.JWT_TOKEN));
     this.currentToken = this.currentTokenSubject.asObservable();
   }
@@ -31,7 +32,7 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/admin/login`, user)
       .pipe(
         tap(auth => {
-          this.doLoginUser(user.email, auth.jwt);
+          this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
         }),
         mapTo(true),
@@ -42,7 +43,7 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/admin/github/auth`, null, { params: { code } })
       .pipe(
         tap(auth => {
-          this.doLoginUser(auth.admin.email, auth.jwt);
+          this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
         }),
         mapTo(true),
@@ -53,7 +54,7 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/admin/signup`, user)
       .pipe(
         tap(auth => {
-          this.doLoginUser(auth.admin.email, auth.jwt);
+          this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
         }),
         mapTo(true),
@@ -87,6 +88,14 @@ export class AuthService {
     return localStorage.getItem(this.JWT_TOKEN);
   }
 
+  getCookie(key: string) {
+    return this.cookieService.get(key);
+  }
+
+  setCookie(key: string, value: any) {
+    return this.cookieService.set(key, value);
+  }
+
   handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
@@ -104,12 +113,16 @@ export class AuthService {
     return throwError(errorMessage);
   }
 
-  private doLoginUser(username: string, tokens: Tokens) {
-    this.loggedUser = username;
+  private doLoginUser(user: any, tokens: Tokens) {
+    this.cookieService.set('switcherapi.user', user.name);
+    this.cookieService.set('switcherapi.sessionid', user.id);
+    this.cookieService.set('switcherapi.gitid', user._gitid);
+    this.loggedUser = user.email;
     this.storeTokens(tokens);
   }
 
   private doLogoutUser() {
+    this.cookieService.deleteAll('/');
     this.loggedUser = null;
     this.removeTokens();
   }
