@@ -21,9 +21,8 @@ export class AppComponent implements OnDestroy {
       this.currentToken = x;
       this.loggedUserName = this.authService.getCookie('switcherapi.user');
 
-      const gitid = this.authService.getCookie('switcherapi.gitid');
-      this.profileAvatar = gitid != 'undefined'
-        ? `https://avatars2.githubusercontent.com/u/${gitid}?v=3&s=40` : "assets//switcherapi_mark_white.png";
+      const avatar = this.authService.getCookie('switcherapi.avatar');
+      this.profileAvatar = avatar != 'undefined' ? avatar : "assets//switcherapi_mark_white.png";
     });
   }
 

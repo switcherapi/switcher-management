@@ -19,5 +19,6 @@ Join us on Slack to get your access to this demo environment. [![Slack: Switcher
 
 ## Donation
 Donations for cookies and pizza are extremely welcomed.
+[![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/switcherapi)
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9FKW64V67RKXW&source=url)

@@ -116,7 +116,7 @@ export class AuthService {
   private doLoginUser(user: any, tokens: Tokens) {
     this.cookieService.set('switcherapi.user', user.name);
     this.cookieService.set('switcherapi.sessionid', user.id);
-    this.cookieService.set('switcherapi.gitid', user._gitid);
+    this.cookieService.set('switcherapi.avatar', user._avatar);
     this.loggedUser = user.email;
     this.storeTokens(tokens);
   }
