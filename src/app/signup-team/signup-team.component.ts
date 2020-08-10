@@ -39,7 +39,6 @@ export class SignupTeamComponent implements OnInit, OnDestroy {
 
   private loadInvite(): void {
     this.teamService.getInvitation(this.request).pipe(takeUntil(this.unsubscribe)).subscribe(invite => {
-      console.log(invite)
       if (invite) {
         this.team = invite.team;
         this.domain = invite.domain;

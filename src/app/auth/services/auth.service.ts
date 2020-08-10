@@ -50,6 +50,17 @@ export class AuthService {
         catchError(this.handleError));
   }
 
+  loginWithBitBucket(code: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/admin/bitbucket/auth`, null, { params: { code } })
+      .pipe(
+        tap(auth => {
+          this.doLoginUser(auth.admin, auth.jwt);
+          this.currentTokenSubject.next(auth.jwt.token);
+        }),
+        mapTo(true),
+        catchError(this.handleError));
+  }
+
   signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
     return this.http.post<any>(`${environment.apiUrl}/admin/signup`, user)
       .pipe(

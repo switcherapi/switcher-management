@@ -34,9 +34,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
-            const githubcode =  params['code'];
-            if (githubcode) {
-                this.loginWithGitHub(githubcode);
+            const platform =  params['platform'];
+            const code =  params['code'];
+            
+            if (code) {
+                if (platform === 'github') {
+                    this.loginWithGitHub(code);
+                } else if (platform === 'bitbucket') {
+                    this.loginWithBitBucket(code);
+                } else {
+                    this.router.navigate(['/']);
+                }
             }
         });
 
@@ -53,6 +61,22 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loading = true;
 
         this.authService.loginWithGitHub(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
+                if (success) {
+                    this.router.navigateByUrl(this.returnUrl);
+                    this.authService.releaseOldSessions.emit(true);
+                }
+                this.loading = false;
+            }, error => {
+                ConsoleLogger.printError(error);
+                this.error = error;
+                this.loading = false;
+            });
+    }
+
+    private loginWithBitBucket(code: string) {
+        this.loading = true;
+
+        this.authService.loginWithBitBucket(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
                 if (success) {
                     this.router.navigateByUrl(this.returnUrl);
                     this.authService.releaseOldSessions.emit(true);
