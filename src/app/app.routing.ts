@@ -31,4 +31,4 @@ const routes: Routes = [
     { path: '**', redirectTo: '/dashboard' }
 ];
 
-export const appRoutingModule = RouterModule.forRoot(routes, { useHash: true });
+export const appRoutingModule = RouterModule.forRoot(routes);
