@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+import { appRoutingModule } from './app.routing';
 
 import { LoginComponent } from './login';
 import { DashboardModule } from './dashboard-module/dashboard.module';
@@ -22,14 +23,13 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 import { CookieService } from 'ngx-cookie-service';
-import { AppRoutingModule } from './app.routing';
 
 @NgModule({
     imports: [
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
-        AppRoutingModule,
+        appRoutingModule,
         GraphQLModule,
         DashboardModule,
         AppMaterialModule,
