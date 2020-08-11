@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { NgModule } from '@angular/core';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -30,4 +31,8 @@ const routes: Routes = [
     { path: '**', redirectTo: '/dashboard' }
 ];
 
-export const appRoutingModule = RouterModule.forRoot(routes);
+@NgModule({
+    imports: [RouterModule.forRoot(routes, { useHash: true })],
+    exports: [RouterModule]
+})
+export class AppRoutingModule { }
