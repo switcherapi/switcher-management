@@ -21,4 +21,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         npm install
-        npm run ng -- deploy --base-href=https://switcherapi.github.io/switcher-management/ --name="switcherapi" --email="switcher.project@gmail.com" --no-silent
+        npm run ng -- deploy --base-href=/switcher-management/ --name="switcherapi" --email="switcher.project@gmail.com" --no-silent

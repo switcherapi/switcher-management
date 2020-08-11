@@ -31,4 +31,4 @@ const routes: Routes = [
     { path: '**', redirectTo: '/dashboard' }
 ];
 
-export const appRoutingModule = RouterModule.forRoot(routes);
+export const appRoutingModule = RouterModule.forRoot(routes, { scrollPositionRestoration: 'top', useHash: false });
