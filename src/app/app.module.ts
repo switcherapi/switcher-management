@@ -23,38 +23,40 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 import { CookieService } from 'ngx-cookie-service';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 @NgModule({
     imports: [
-        BrowserModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        appRoutingModule,
-        GraphQLModule,
-        DashboardModule,
-        AppMaterialModule,
-        NgbModule,
-        BrowserAnimationsModule,
-        RecaptchaModule,
-        RecaptchaFormsModule
+      BrowserModule,
+      ReactiveFormsModule,
+      HttpClientModule,
+      appRoutingModule,
+      GraphQLModule,
+      DashboardModule,
+      AppMaterialModule,
+      NgbModule,
+      BrowserAnimationsModule,
+      RecaptchaModule,
+      RecaptchaFormsModule
     ],
     declarations: [
-        AppComponent,
-        LoginComponent,
-        HomeComponent,
-        SignupComponent,
-        SignupTeamComponent
+      AppComponent,
+      LoginComponent,
+      HomeComponent,
+      SignupComponent,
+      SignupTeamComponent
     ],
     providers: [
-        CookieService,
-        AuthGuard,
-        AuthService,
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: TokenInterceptor,
-          multi: true
-        }
-      ],
+      CookieService,
+      AuthGuard,
+      AuthService,
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: TokenInterceptor,
+        multi: true
+      },
+      { provide: LocationStrategy, useClass: PathLocationStrategy }
+    ],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
