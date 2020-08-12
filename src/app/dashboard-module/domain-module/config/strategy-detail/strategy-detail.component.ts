@@ -1,24 +1,24 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
-import { Strategy } from '../../model/strategy';
 import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
-import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { StrategyReq } from '../../model/strategy_req';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyListComponent } from '../strategy-list/strategy-list.component';
 import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.component';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { Types } from '../../model/path-route';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Strategy } from 'src/app/model/strategy';
+import { StrategyReq } from 'src/app/model/strategy_req';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { StrategyService } from 'src/app/services/strategy.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-strategy-detail',

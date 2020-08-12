@@ -1,6 +1,6 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { PathRoute, Types } from '../model/path-route';
 
-import { PathRoute, Types } from '../domain-module/model/path-route';
 
 @Injectable()
 export class DomainRouteService {

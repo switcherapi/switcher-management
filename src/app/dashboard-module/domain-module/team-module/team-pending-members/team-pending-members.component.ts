@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Team } from '../../model/team';
-import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -10,6 +8,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamInviteDialog } from '../team-invite-dialog/team-invite-dialog.component';
+import { Team } from 'src/app/model/team';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-team-pending-members',

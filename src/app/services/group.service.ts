@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { Group } from '../domain-module/model/group';
+import { Group } from '../model/group';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { History } from '../domain-module/model/history';
+import { History } from '../model/history';
 
 @Injectable({
   providedIn: 'root'

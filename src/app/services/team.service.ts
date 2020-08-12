@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Team } from '../domain-module/model/team';
+import { Team } from '../model/team';
 import { ApiService } from './api.service';
-import { TeamInvite } from '../domain-module/model/team-invite';
-import { Admin } from '../domain-module/model/admin';
+import { TeamInvite } from '../model/team-invite';
+import { Admin } from '../model/admin';
 
 @Injectable({
   providedIn: 'root'

@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DomainService } from '../services/domain.service';
-import { Domain } from '../domain-module/model/domain';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { DomainCreateComponent } from '../domain-create/domain-create.component';
-import { AdminService } from '../services/admin.service';
-import { Team } from '../domain-module/model/team';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
+import { AdminService } from 'src/app/services/admin.service';
+import { DomainService } from 'src/app/services/domain.service';
+import { Team } from 'src/app/model/team';
+import { Domain } from 'src/app/model/domain';
 
 @Component({
   selector: 'app-domain-list',

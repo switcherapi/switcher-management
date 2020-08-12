@@ -1,20 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Team } from '../../model/team';
 import { map, takeUntil } from 'rxjs/operators';
-import { Types } from '../../model/path-route';
-import { DomainService } from 'src/app/dashboard-module/services/domain.service';
-import { Domain } from '../../model/domain';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DetailComponent } from '../../common/detail-component';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { Team } from 'src/app/model/team';
+import { DomainService } from 'src/app/services/domain.service';
+import { TeamService } from 'src/app/services/team.service';
+import { Types } from 'src/app/model/path-route';
+import { Domain } from 'src/app/model/domain';
 
 @Component({
   selector: 'app-team-detail',

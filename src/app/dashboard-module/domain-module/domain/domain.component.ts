@@ -1,9 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DomainRouteService } from '../../services/domain-route.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PathRoute } from '../model/path-route';
 import { delay, takeUntil, startWith, map } from 'rxjs/operators';
-import { Types } from '../model/path-route'
 import { Subject, Observable } from 'rxjs';
 import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,8 +8,10 @@ import { QueryRef, Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
-import { ConfigService } from '../../services/config.service';
-import { GroupService } from '../../services/group.service';
+import { PathRoute, Types } from 'src/app/model/path-route';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { ConfigService } from 'src/app/services/config.service';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-domain',

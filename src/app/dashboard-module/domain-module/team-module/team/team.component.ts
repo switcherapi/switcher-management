@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Team } from '../../model/team';
-import { DomainRouteService } from '../../../services/domain-route.service';
-import { Types } from '../../model/path-route';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { Team } from 'src/app/model/team';
+import { AdminService } from 'src/app/services/admin.service';
+import { TeamService } from 'src/app/services/team.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-team',

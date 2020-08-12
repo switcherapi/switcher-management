@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Team } from '../../model/team';
 import { Router } from '@angular/router';
-import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -10,6 +8,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Team } from 'src/app/model/team';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-team-preview',

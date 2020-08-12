@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Team } from '../../model/team';
-import { TeamService } from 'src/app/dashboard-module/services/team.service';
 import { takeUntil } from 'rxjs/operators';
-import { Admin } from '../../model/admin';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { TeamInvite } from '../../model/team-invite';
 import { TeamInviteDialog } from '../team-invite-dialog/team-invite-dialog.component';
+import { Team } from 'src/app/model/team';
+import { Admin } from 'src/app/model/admin';
+import { TeamService } from 'src/app/services/team.service';
+import { TeamInvite } from 'src/app/model/team-invite';
 
 @Component({
   selector: 'app-team-members',

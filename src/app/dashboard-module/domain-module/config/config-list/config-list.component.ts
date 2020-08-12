@@ -1,19 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Config } from 'protractor';
-import { DomainRouteService } from '../../../services/domain-route.service';
-import { Types } from '../../model/path-route';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ConfigService } from 'src/app/dashboard-module/services/config.service';
 import { FormBuilder } from '@angular/forms';
-import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { ListComponent } from '../../common/list-component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
+import { AdminService } from 'src/app/services/admin.service';
+import { ConfigService } from 'src/app/services/config.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { EnvironmentService } from 'src/app/services/environment.service';
+import { Types } from 'src/app/model/path-route';
+import { Config } from 'src/app/model/config';
 
 @Component({
   selector: 'app-config-list',

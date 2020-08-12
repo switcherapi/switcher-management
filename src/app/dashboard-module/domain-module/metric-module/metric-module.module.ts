@@ -5,9 +5,8 @@ import { MetricStatisticsComponent, SwitcherDataStatsDialog } from './metric-sta
 import { MetricDataComponent } from './metric-data/metric-data.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Metric } from '../model/metric';
 import { ChartsModule } from 'ng2-charts';
-import { MetricRoutingModule } from './metric-routing.module';
+import { MetricRoutingModule } from './metric.routing';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -29,6 +28,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MetricFilterComponent } from './metric-filter/metric-filter.component';
+import { Metric } from 'src/app/model/metric';
 
 @NgModule({
   declarations: [

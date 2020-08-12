@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { EnvironmentService } from '../../services/environment.service';
 import { Subject } from 'rxjs';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Environment } from '../model/environment';
-import { DomainRouteService } from '../../services/domain-route.service';
-import { Types } from '../model/path-route';
 import { takeUntil } from 'rxjs/operators';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSelectionListChange } from '@angular/material/list';
+import { Environment } from 'src/app/model/environment';
+import { EnvironmentService } from 'src/app/services/environment.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-environment-config',

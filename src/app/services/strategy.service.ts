@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Strategy } from '../domain-module/model/strategy';
+import { Strategy } from '../model/strategy';
 import { ApiService } from './api.service';
-import { StrategyReq } from '../domain-module/model/strategy_req';
-import { History } from '../domain-module/model/history';
+import { StrategyReq } from '../model/strategy_req';
+import { History } from '../model/history';
 
 @Injectable({
   providedIn: 'root'

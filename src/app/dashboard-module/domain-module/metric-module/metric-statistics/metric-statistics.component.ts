@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Metric, MetricData } from '../../model/metric';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { MetricComponent } from '../metric/metric.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Metric, MetricData } from 'src/app/model/metric';
 
 @Component({
   selector: 'app-metric-statistics',

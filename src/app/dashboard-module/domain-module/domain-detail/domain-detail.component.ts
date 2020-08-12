@@ -1,20 +1,20 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { DomainRouteService } from '../../services/domain-route.service';
-import { PathRoute, Types } from '../model/path-route';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Domain } from '../model/domain';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailComponent } from '../common/detail-component';
-import { AdminService } from '../../services/admin.service';
 import { EnvironmentConfigComponent } from '../environment-config/environment-config.component';
-import { DomainService } from '../../services/domain.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { DomainService } from 'src/app/services/domain.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { PathRoute, Types } from 'src/app/model/path-route';
+import { Domain } from 'src/app/model/domain';
 
 @Component({
   selector: 'app-domain-detail',

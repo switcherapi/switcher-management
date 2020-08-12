@@ -1,15 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { DomainRouteService } from '../../../services/domain-route.service';
-import { PathRoute, Types } from '../../model/path-route';
-import { Config } from '../../model/config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
-import { Strategy } from '../../model/strategy';
 import { Subject, Observable } from 'rxjs';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
-import { ConfigService } from 'src/app/dashboard-module/services/config.service';
-import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -18,13 +11,20 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { ComponentService } from 'src/app/dashboard-module/services/component.service';
-import { SwitcherComponent } from '../../model/switcher-component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { Strategy } from 'src/app/model/strategy';
+import { SwitcherComponent } from 'src/app/model/switcher-component';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { PathRoute, Types } from 'src/app/model/path-route';
+import { ConfigService } from 'src/app/services/config.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { StrategyService } from 'src/app/services/strategy.service';
+import { ComponentService } from 'src/app/services/component.service';
+import { Config } from 'src/app/model/config';
 
 @Component({
   selector: 'app-config-detail',
