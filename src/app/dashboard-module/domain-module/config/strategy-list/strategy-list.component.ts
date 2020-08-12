@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Strategy } from '../../model/strategy';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
+import { Strategy } from 'src/app/model/strategy';
 
 @Component({
   selector: 'app-strategy-list',

@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EnvironmentService } from '../../services/environment.service';
-import { DomainRouteService } from '../../services/domain-route.service';
-import { Types } from '../model/path-route';
-import { Environment } from '../model/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
-import { AdminService } from '../../services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
+import { Environment } from 'src/app/model/environment';
+import { AdminService } from 'src/app/services/admin.service';
+import { EnvironmentService } from 'src/app/services/environment.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-environments',

@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Team } from '../../model/team';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
-import { Role } from '../../model/role';
-import { RoleService } from 'src/app/dashboard-module/services/role.service';
 import { TeamRoleCreateComponent } from '../team-role-create/team-role-create.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -13,6 +10,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Team } from 'src/app/model/team';
+import { Role } from 'src/app/model/role';
+import { RoleService } from 'src/app/services/role.service';
 
 @Component({
   selector: 'app-team-roles',

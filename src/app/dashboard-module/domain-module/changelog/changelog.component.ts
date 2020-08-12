@@ -1,25 +1,25 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
-import { DomainRouteService } from '../../services/domain-route.service';
 import { Subject } from 'rxjs';
-import { Types, PathRoute } from '../model/path-route';
-import { DomainService } from '../../services/domain.service';
 import { takeUntil } from 'rxjs/operators';
 import { trigger, state, style } from '@angular/animations';
-import { History } from '../model/history';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { GroupService } from '../../services/group.service';
-import { ConfigService } from '../../services/config.service';
-import { StrategyService } from '../../services/strategy.service';
-import { Strategy } from '../model/strategy';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
-import { AdminService } from '../../services/admin.service';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Strategy } from 'src/app/model/strategy';
+import { History } from 'src/app/model/history';
+import { PathRoute, Types } from 'src/app/model/path-route';
+import { AdminService } from 'src/app/services/admin.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { DomainService } from 'src/app/services/domain.service';
+import { GroupService } from 'src/app/services/group.service';
+import { ConfigService } from 'src/app/services/config.service';
+import { StrategyService } from 'src/app/services/strategy.service';
 
 @Component({
   selector: 'app-changelog',

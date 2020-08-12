@@ -1,14 +1,14 @@
 import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
-import { StrategyService } from 'src/app/dashboard-module/services/strategy.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { Strategy } from '../../model/strategy';
-import { StrategyReq } from '../../model/strategy_req';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatSelectionList } from '@angular/material/list';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { StrategyReq } from 'src/app/model/strategy_req';
+import { StrategyService } from 'src/app/services/strategy.service';
+import { Strategy } from 'src/app/model/strategy';
 
 @Component({
   selector: 'app-strategy-create',

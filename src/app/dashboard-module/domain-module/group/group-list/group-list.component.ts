@@ -1,19 +1,19 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { Group } from '../../model/group';
-import { DomainRouteService } from '../../../services/domain-route.service';
-import { Types } from '../../model/path-route';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { GroupService } from 'src/app/dashboard-module/services/group.service';
-import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
 import { FormBuilder } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
 import { GroupCreateComponent } from '../group-create/group-create.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
+import { Group } from 'src/app/model/group';
+import { AdminService } from 'src/app/services/admin.service';
+import { GroupService } from 'src/app/services/group.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { EnvironmentService } from 'src/app/services/environment.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-group-list',

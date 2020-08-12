@@ -1,4 +1,4 @@
-import { AdminService } from '../../services/admin.service';
+import { AdminService } from 'src/app/services/admin.service';
 
 export class DetailComponent {
     detailBodyStyle: string = 'detail-body loading';

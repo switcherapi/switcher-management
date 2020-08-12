@@ -1,19 +1,19 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
-import { DomainRouteService } from '../../services/domain-route.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Types } from '../model/path-route';
 import { takeUntil } from 'rxjs/operators';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
-import { ComponentService } from '../../services/component.service';
-import { SwitcherComponent } from '../model/switcher-component';
-import { AdminService } from '../../services/admin.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { SwitcherComponent } from 'src/app/model/switcher-component';
+import { AdminService } from 'src/app/services/admin.service';
+import { ComponentService } from 'src/app/services/component.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-components',

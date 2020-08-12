@@ -5,7 +5,6 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { NgModule } from '@angular/core';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -15,6 +14,12 @@ const routes: Routes = [
     { path: 'signup', component: SignupComponent },
 
     {
+        path: 'settings',
+        loadChildren: () => import('./settings-module/settings.module').then(mod => mod.SettingsModule),
+        data: { preload: true }
+    },
+
+    {
         path: 'dashboard',
         loadChildren: () => import('./dashboard-module/dashboard.module').then(mod => mod.DashboardModule),
         data: { preload: true }
@@ -22,7 +27,7 @@ const routes: Routes = [
 
     {
         path: 'documentation',
-        loadChildren: () => import('./documentation-module/documentation-module.module').then(mod => mod.DocumentationModuleModule),
+        loadChildren: () => import('./documentation-module/documentation.module').then(mod => mod.DocumentationModuleModule),
         data: { preload: true }
     },
 

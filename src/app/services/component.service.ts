@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { SwitcherComponent } from '../domain-module/model/switcher-component';
+import { SwitcherComponent } from '../model/switcher-component';
 
 @Injectable({
   providedIn: 'root'

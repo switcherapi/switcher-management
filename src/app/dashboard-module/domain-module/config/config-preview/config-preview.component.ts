@@ -1,18 +1,18 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Config } from 'protractor';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ConfigListComponent } from '../config-list/config-list.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { ConfigService } from 'src/app/dashboard-module/services/config.service';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { Types } from '../../model/path-route';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { AdminService } from 'src/app/services/admin.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { ConfigService } from 'src/app/services/config.service';
+import { Types } from 'src/app/model/path-route';
+import { Config } from 'protractor';
 
 @Component({
   selector: 'app-config-preview',

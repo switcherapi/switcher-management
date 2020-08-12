@@ -2,15 +2,15 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EnvironmentService } from 'src/app/dashboard-module/services/environment.service';
-import { Types } from '../../model/path-route';
 import { takeUntil, startWith, map } from 'rxjs/operators';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { Environment } from '../../model/environment';
 import { DatePipe } from '@angular/common';
 import gql from 'graphql-tag';
 import { QueryRef, Apollo } from 'apollo-angular';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { Environment } from 'src/app/model/environment';
+import { EnvironmentService } from 'src/app/services/environment.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-metric-filter',

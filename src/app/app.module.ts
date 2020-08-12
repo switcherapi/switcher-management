@@ -24,6 +24,7 @@ import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { SettingsModule } from './settings-module/settings.module';
 
 @NgModule({
     imports: [
@@ -37,7 +38,8 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
       NgbModule,
       BrowserAnimationsModule,
       RecaptchaModule,
-      RecaptchaFormsModule
+      RecaptchaFormsModule,
+      SettingsModule
     ],
     declarations: [
       AppComponent,

@@ -1,20 +1,20 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { MetricData } from '../../model/metric';
 import { Subject } from 'rxjs';
 import { trigger, state, style } from '@angular/animations';
-import { MetricService } from 'src/app/dashboard-module/services/metric.service';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { Types } from '../../model/path-route';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { MetricComponent } from '../metric/metric.component';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MetricData } from 'src/app/model/metric';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { MetricService } from 'src/app/services/metric.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-metric-data',

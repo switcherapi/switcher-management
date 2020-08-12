@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { TeamService } from '../dashboard-module/services/team.service';
 import { ToastService } from '../_helpers/toast.service';
 import { ConsoleLogger } from '../_helpers/console-logger';
+import { TeamService } from '../services/team.service';
 
 @Component({
   selector: 'app-signup-team',

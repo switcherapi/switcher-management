@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
-import { MetricService } from 'src/app/dashboard-module/services/metric.service';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { Types } from '../../model/path-route';
 import { takeUntil } from 'rxjs/operators';
-import { Metric } from '../../model/metric';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
 import { MetricFilterComponent } from '../metric-filter/metric-filter.component';
+import { Metric } from 'src/app/model/metric';
+import { MetricService } from 'src/app/services/metric.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-metric',

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
-import { DocumentationRoutingModule } from './documentation-routing.module';
+import { DocumentationRoutingModule } from './documentation.routing';
 import { SetupComponent } from './docs/setup.component';
 import { EnvironmentComponent } from './docs/environment.component';
 import { HomeComponent } from './docs/home.component';

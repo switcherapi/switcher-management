@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Domain } from '../domain-module/model/domain';
 import { Router } from '@angular/router';
+import { Domain } from 'src/app/model/domain';
 
 @Component({
   selector: 'app-domain-preview',

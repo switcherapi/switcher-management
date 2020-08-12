@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { Config } from '../domain-module/model/config';
 import { catchError } from 'rxjs/operators';
-import { Strategy } from '../domain-module/model/strategy';
 import { ApiService } from './api.service';
-import { History } from '../domain-module/model/history';
+import { Strategy } from '../model/strategy';
+import { Config } from '../model/config';
+import { History } from '../model/history';
 
 @Injectable({
   providedIn: 'root'

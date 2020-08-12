@@ -1,20 +1,20 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { DomainRouteService } from '../../../services/domain-route.service';
-import { PathRoute, Types } from '../../model/path-route';
-import { Group } from '../../model/group';
 import { map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { GroupService } from 'src/app/dashboard-module/services/group.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { GroupService } from 'src/app/services/group.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { PathRoute, Types } from 'src/app/model/path-route';
+import { Group } from 'src/app/model/group';
 
 @Component({
   selector: 'app-group-detail',

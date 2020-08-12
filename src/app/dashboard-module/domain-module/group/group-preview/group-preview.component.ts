@@ -1,18 +1,18 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Group } from '../../model/group';
 import { Router } from '@angular/router';
 import { GroupListComponent } from '../group-list/group-list.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GroupService } from 'src/app/dashboard-module/services/group.service';
-import { DomainRouteService } from 'src/app/dashboard-module/services/domain-route.service';
-import { Types } from '../../model/path-route';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { AdminService } from 'src/app/dashboard-module/services/admin.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Group } from 'src/app/model/group';
+import { AdminService } from 'src/app/services/admin.service';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { GroupService } from 'src/app/services/group.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-group-preview',

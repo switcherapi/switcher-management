@@ -3,9 +3,9 @@ import { HttpClient, HttpBackend } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ApiService } from 'src/app/dashboard-module/services/api.service';
 import { SkimmingResponse } from '../model/skimming-response';
 import { SkimmingRequest } from '../model/skimming-request';
+import { ApiService } from 'src/app/services/api.service';
 
 @Injectable({
   providedIn: 'root'

@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TeamComponent } from './team/team.component';
 import { TeamPreviewComponent } from './team-preview/team-preview.component';
-import { TeamRoutingModule } from './team-routing.module';
-import { Team } from '../model/team';
+import { TeamRoutingModule } from './team.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TeamDetailComponent } from './team-detail/team-detail.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -31,6 +30,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TeamPendingMembersComponent } from './team-pending-members/team-pending-members.component';
+import { Team } from 'src/app/model/team';
 
 
 @NgModule({
