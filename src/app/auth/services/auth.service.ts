@@ -64,12 +64,18 @@ export class AuthService {
   signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
     return this.http.post<any>(`${environment.apiUrl}/admin/signup`, user)
       .pipe(
+        tap(signup => signup != undefined),
+        mapTo(true),
+        catchError(this.handleError));
+  }
+
+  authorize(code: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/admin/signup/authorization`, null, { params: { code } })
+      .pipe(
         tap(auth => {
           this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
-        }),
-        mapTo(true),
-        catchError(this.handleError));
+        }));
   }
 
   cleanSession() {

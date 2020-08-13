@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  recaptchaPublicKey: '6Ldgj7kZAAAAACadIQ49qzkJn6LiSUB_Er643J3V',
+  recaptchaPublicKey: '6Lc3p_8UAAAAAJoO3Rlb1rGVIR5CqRsnTXlKJwI3',
   githubApiClientId: '5745650fe81a1f1f3486',
   bitbucketApiClientId: 'JNfFteJqcjcDytFAh5',
   teamInviteLink: 'http://localhost:4200/collab/join',

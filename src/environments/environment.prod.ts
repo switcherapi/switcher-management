@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  recaptchaPublicKey: '6Ldgj7kZAAAAACadIQ49qzkJn6LiSUB_Er643J3V',
+  recaptchaPublicKey: '6LcpJ74ZAAAAAGY88BXVyk1qwjPhb2PmKXeoh5yT',
   githubApiClientId: '5745650fe81a1f1f3486',
   bitbucketApiClientId: 'JNfFteJqcjcDytFAh5',
   teamInviteLink: 'https://switcherapi.github.io/switcher-management/collab/join',

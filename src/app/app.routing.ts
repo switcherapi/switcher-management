@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -12,6 +13,8 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
 
     { path: 'signup', component: SignupComponent },
+
+    { path: 'signup/confirmation', component: SignupAuthComponent },
 
     {
         path: 'settings',

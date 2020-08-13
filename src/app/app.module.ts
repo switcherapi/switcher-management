@@ -25,6 +25,7 @@ import { SignupTeamComponent } from './signup-team/signup-team.component';
 import { CookieService } from 'ngx-cookie-service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { SettingsModule } from './settings-module/settings.module';
+import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 
 @NgModule({
     imports: [
@@ -46,6 +47,7 @@ import { SettingsModule } from './settings-module/settings.module';
       LoginComponent,
       HomeComponent,
       SignupComponent,
+      SignupAuthComponent,
       SignupTeamComponent
     ],
     providers: [
