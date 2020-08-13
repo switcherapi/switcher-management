@@ -15,7 +15,10 @@
                         <input matInput type="text" placeholder="Team" value="{{ team }}" readonly="true">
                     </mat-form-field>
                 </div>
-                <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">Accept</button>
+                <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">
+                    <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
+                    <span style="color: white; padding-left: 5px;">Accept</span>
+                </button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
             </div>
             <div *ngIf="loading" class="card-body loader-div">
