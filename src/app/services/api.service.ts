@@ -11,6 +11,8 @@ export class ApiService {
                 return throwError(error);
             } else if (error.status === 422) {
                 errorMessage = 'Invalid arguments';
+            } else if (error.status === 404) {
+                errorMessage = 'Value not found';
             } else if (error.status === 0) {
                 errorMessage = 'Switcher API is offline';
             } else {
