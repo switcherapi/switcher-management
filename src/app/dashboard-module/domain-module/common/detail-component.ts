@@ -17,6 +17,8 @@ export class DetailComponent {
     loadAdmin(id: string): void {
         this.service.getAdminById(id).subscribe(adm => {
             this.createdBy = adm.name;
+        }, () => {
+            this.createdBy = '';
         })
     }
 
