@@ -22,7 +22,6 @@ import { SignupComponent } from './signup/signup.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
-import { CookieService } from 'ngx-cookie-service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { SettingsModule } from './settings-module/settings.module';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
@@ -53,7 +52,6 @@ import { LoginResetComponent } from './login-reset/login-reset.component';
       SignupTeamComponent
     ],
     providers: [
-      CookieService,
       AuthGuard,
       AuthService,
       {

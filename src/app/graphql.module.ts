@@ -6,6 +6,7 @@ import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { environment } from 'src/environments/environment';
 import { DefaultOptions } from 'apollo-client';
+import { AuthService } from './auth/services/auth.service';
 
 const uri = `${environment.apiUrl}/adm-graphql`;
 
@@ -16,7 +17,7 @@ export function provideApollo(httpLink: HttpLink) {
         }
     }));
 
-    const token = localStorage.getItem('JWT_TOKEN');
+    const token = localStorage.getItem(AuthService.JWT_TOKEN);
     const auth = setContext((operation, context) => ({
         headers: {
             Authorization: `Bearer ${token}`

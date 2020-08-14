@@ -5,7 +5,6 @@ import { catchError, mapTo, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
 import { Tokens } from '../models/tokens';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,8 @@ export class AuthService {
   @Output() logoff: EventEmitter<String> = new EventEmitter();
   @Output() releaseOldSessions: EventEmitter<any> = new EventEmitter();
 
-  private readonly JWT_TOKEN = 'JWT_TOKEN';
+  public static readonly USER_INFO = 'USER_INFO';
+  public static readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
   private currentTokenSubject: BehaviorSubject<String>;
@@ -23,8 +23,8 @@ export class AuthService {
 
   loggedUser: string;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {
-    this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(this.JWT_TOKEN));
+  constructor(private http: HttpClient) {
+    this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(AuthService.JWT_TOKEN));
     this.currentToken = this.currentTokenSubject.asObservable();
   }
 
@@ -112,15 +112,13 @@ export class AuthService {
   }
 
   getJwtToken() {
-    return localStorage.getItem(this.JWT_TOKEN);
+    return localStorage.getItem(AuthService.JWT_TOKEN);
   }
 
-  getCookie(key: string) {
-    return this.cookieService.get(key);
-  }
-
-  setCookie(key: string, value: any) {
-    return this.cookieService.set(key, value);
+  getUserInfo(key: string) {
+    if (localStorage.getItem(AuthService.USER_INFO)) {
+      return JSON.parse(localStorage.getItem(AuthService.USER_INFO))[`${key}`];
+    }
   }
 
   handleError(error) {
@@ -143,15 +141,17 @@ export class AuthService {
   }
 
   private doLoginUser(user: any, tokens: Tokens) {
-    this.cookieService.set('switcherapi.user', user.name);
-    this.cookieService.set('switcherapi.sessionid', user.id);
-    this.cookieService.set('switcherapi.avatar', user._avatar);
+    localStorage.setItem(AuthService.USER_INFO, 
+      JSON.stringify({ 
+        name: user.name,
+        sessionid: user.id,
+        avatar: user._avatar
+      }));
     this.loggedUser = user.email;
     this.storeTokens(tokens);
   }
 
   private doLogoutUser() {
-    this.cookieService.deleteAll('/');
     this.loggedUser = null;
     this.removeTokens();
   }
@@ -161,12 +161,12 @@ export class AuthService {
   }
 
   private storeJwtToken(tokens: Tokens) {
-    localStorage.setItem(this.JWT_TOKEN, tokens.token);
+    localStorage.setItem(AuthService.JWT_TOKEN, tokens.token);
     localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
   }
 
   private storeTokens(tokens: Tokens) {
-    localStorage.setItem(this.JWT_TOKEN, tokens.token);
+    localStorage.setItem(AuthService.JWT_TOKEN, tokens.token);
     localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
   }
 
