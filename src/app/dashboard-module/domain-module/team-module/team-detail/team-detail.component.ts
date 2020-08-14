@@ -56,11 +56,11 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.loading = true;
     this.route.paramMap.pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.team) {
-        localStorage.setItem(Types.SELECTED_TEAM, data.team);
+        sessionStorage.setItem(Types.SELECTED_TEAM, data.team);
         this.readPermissionToObject(JSON.parse(data.team));
         this.loadDomain(this.team.domain);
       } else {
-        this.readPermissionToObject(JSON.parse(localStorage.getItem(Types.SELECTED_TEAM)));
+        this.readPermissionToObject(JSON.parse(sessionStorage.getItem(Types.SELECTED_TEAM)));
         this.loadDomain(this.team.domain);
       }
     })
@@ -75,6 +75,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
       }
     }, error => {
       ConsoleLogger.printError(error);
+      this.loading = false;
     }, () => {
       this.loading = false;
     });

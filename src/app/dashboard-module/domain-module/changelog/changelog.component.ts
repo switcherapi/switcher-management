@@ -104,7 +104,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   loadChangeLog(): void {
-    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
+    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE) || 
+      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
 
     if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
       this.loadDomainHistory(this.currentPathRoute);

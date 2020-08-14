@@ -88,6 +88,8 @@ export class DomainComponent implements OnInit, OnDestroy {
         this.currentPathRoute.type === Types.CONFIG_TYPE) {
         return 'Switchers';
       }
+    } else {
+      return 'Groups';
     }
   }
 
@@ -99,6 +101,9 @@ export class DomainComponent implements OnInit, OnDestroy {
         this.currentPathRoute.type === Types.CONFIG_TYPE) {
         this.router.navigate(['/dashboard/domain/group/switcher']);
       }
+    } else {
+      this.currentPathRoute = this.selectedDomain;
+      this.router.navigate(['/dashboard/domain/group']);
     }
   }
 
@@ -115,15 +120,20 @@ export class DomainComponent implements OnInit, OnDestroy {
 
     if (component.length && component[0].data) {
       this.icon = component[0].data.icon;
-      return component[0].data.title.replace('$', this.currentPathRoute.name);
+
+      if (this.currentPathRoute) {
+        return component[0].data.title.replace('$', this.currentPathRoute.name);
+      } else {
+        return component[0].data.title
+      }
     }
 
     this.icon = 0;
-    return this.currentPathRoute ? this.currentPathRoute.name : '';
+    return this.currentPathRoute ? this.currentPathRoute.name : 'asd';
   }
 
   getCurrentRoute(): PathRoute {
-    return this.currentPathRoute;
+    return this.currentPathRoute || this.selectedDomain;
   }
 
   getDomain(): PathRoute {

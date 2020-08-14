@@ -19,10 +19,10 @@ export class AppComponent implements OnDestroy {
   ) {
     this.authService.currentToken.subscribe(x => {
       this.currentToken = x;
-      this.loggedUserName = this.authService.getCookie('switcherapi.user');
+      this.loggedUserName = this.authService.getUserInfo('name');
 
-      const avatar = this.authService.getCookie('switcherapi.avatar');
-      this.profileAvatar = avatar != 'undefined' ? avatar : "assets//switcherapi_mark_white.png";
+      const avatar = this.authService.getUserInfo('avatar');
+      this.profileAvatar = avatar || "assets//switcherapi_mark_white.png";
     });
   }
 
