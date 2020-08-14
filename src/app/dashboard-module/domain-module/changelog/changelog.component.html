@@ -1,4 +1,4 @@
-<mat-form-field>
+<mat-form-field *ngIf="dataSource">
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" autocomplete="off">
 </mat-form-field>
 
