@@ -26,6 +26,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { SettingsModule } from './settings-module/settings.module';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
+import { LoginResetComponent } from './login-reset/login-reset.component';
 
 @NgModule({
     imports: [
@@ -45,6 +46,7 @@ import { SignupAuthComponent } from './signup-auth/signup-auth.component';
     declarations: [
       AppComponent,
       LoginComponent,
+      LoginResetComponent,
       HomeComponent,
       SignupComponent,
       SignupAuthComponent,

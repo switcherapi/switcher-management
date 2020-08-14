@@ -5,22 +5,22 @@ import { takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { AuthService } from '../auth/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-signup-auth',
-  templateUrl: './signup-auth.component.html',
-  styleUrls: ['./signup-auth.component.css']
+  selector: 'app-login-reset',
+  templateUrl: './login-reset.component.html',
+  styleUrls: ['./login-reset.component.css']
 })
-export class SignupAuthComponent implements OnInit, OnDestroy {
+export class LoginResetComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  codeConfirmationForm: FormGroup;
+  loginForm: FormGroup;
 
   loading = false;
   error = '';
   code: string;
-  team: string;
-  domain: string;
+  recaptcha_token: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,42 +30,40 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      password: ['', Validators.required],
+      captcha: ['', Validators.required]
+    });
+
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
     
-      if (this.code) {
-        this.onConfirm(this.code);
-      } else {
-        this.codeConfirmationForm = this.formBuilder.group({
-          code: ['', Validators.required]
-        });
+      if (!this.code) {
+        this.router.navigate(['/']);
       }
     });
   }
 
-  onConfirm(code: string) {
+  onSubmit() {
+    if (this.loginForm.invalid) {
+        return;
+    }
+
     this.loading = true;
 
-    this.authService.authorize(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
+    this.authService.resetPassword(this.code, this.f.password.value, this.recaptcha_token)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(success => {
         if (success) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigateByUrl('/dashboard');
           this.authService.releaseOldSessions.emit(true);
         }
         this.loading = false;
       }, error => {
         ConsoleLogger.printError(error);
-        this.error = 'Invalid code';
+        this.error = 'Invalid password format';
         this.loading = false;
       }
     );
-  }
-
-  onSubmit() {
-    if (this.codeConfirmationForm.invalid) {
-        return;
-    }
-
-    this.onConfirm(this.f.code.value);
   }
 
   ngOnDestroy() {
@@ -77,6 +75,14 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
     this.error = '';
   }
 
-  get f() { return this.codeConfirmationForm.controls; }
+  getRecaptchaPublicKey(): string {
+    return environment.recaptchaPublicKey;
+  }
+
+  get f() { return this.loginForm.controls; }
+
+  resolved(captchaResponse: string) {
+    this.recaptcha_token = captchaResponse;
+  }
 
 }

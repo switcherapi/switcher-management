@@ -40,4 +40,9 @@ export class AdminService extends ApiService {
     return this.http.post<any>(`${environment.apiUrl}/admin/collaboration/permission`, body).pipe(catchError(super.handleError));
   }
 
+  public requestPasswordReset(email: string): Observable<any> {
+    const body = { email };
+    return this.http.post<any>(`${environment.apiUrl}/admin/login/request/recovery`, body).pipe(catchError(super.handleError));
+  }
+  
 }
