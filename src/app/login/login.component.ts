@@ -150,11 +150,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSendResetPassord() {
-        this.loading = true;
         this.f.password.setValue(' ');
         if (this.loginForm.invalid) {
             this.error = 'Please, add a valid email';
         } else {
+            this.loading = true;
             this.adminService.requestPasswordReset(this.f.email.value)
                 .pipe(takeUntil(this.unsubscribe))
                 .subscribe(data => {
