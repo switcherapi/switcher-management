@@ -6,11 +6,14 @@ import { SignupComponent } from './signup/signup.component';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
+import { LoginResetComponent } from './login-reset/login-reset.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
 
     { path: 'login', component: LoginComponent },
+
+    { path: 'login/reset', component: LoginResetComponent },
 
     { path: 'signup', component: SignupComponent },
 

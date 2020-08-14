@@ -35,7 +35,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
             name: ['', Validators.required],
-            email: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
             captcha: ['', Validators.required]
         });
@@ -57,19 +57,19 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loading = true;
 
         this.authService.signup({
-            name: this.f.name.value,
-            email: this.f.email.value,
-            password: this.f.password.value,
-            token: this.recaptcha_token
-        }).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-            if (data) {
-                this.waitingConfirmation = true;
+                name: this.f.name.value,
+                email: this.f.email.value,
+                password: this.f.password.value,
+                token: this.recaptcha_token
+            }).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+                if (data) {
+                    this.waitingConfirmation = true;
+                }
+                this.loading = false;
+            }, error => {
+                this.error = error;
+                this.loading = false;
             }
-            this.loading = false;
-        }, error => {
-            this.error = error;
-            this.loading = false;
-        }
         );
     }
 

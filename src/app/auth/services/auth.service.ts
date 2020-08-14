@@ -78,6 +78,16 @@ export class AuthService {
         }));
   }
 
+  resetPassword(code: string, password: string, token: string): Observable<boolean> {
+    const body = { code, password, token };
+    return this.http.post<any>(`${environment.apiUrl}/admin/login/recovery`, body)
+      .pipe(
+        tap(auth => {
+          this.doLoginUser(auth.admin, auth.jwt);
+          this.currentTokenSubject.next(auth.jwt.token);
+        }));
+  }
+
   cleanSession() {
     this.currentTokenSubject.next(null);
     this.doLogoutUser();
@@ -116,16 +126,18 @@ export class AuthService {
   handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-        errorMessage = `Error: ${error.error.message}`;
+      errorMessage = `Error: ${error.error.message}`;
     } else {
-        if (error.status === 401) {
-            errorMessage = 'Email or password is incorrect';
-        } else if (error.status === 422) {
-            errorMessage = 'Invalid email format';
-        } else {
-            ConsoleLogger.printError(error);
-            errorMessage = `Switcher API is offline`;
-        }
+      if (error.status === 401) {
+        errorMessage = 'Email or password is incorrect';
+      } else if (error.status === 422) {
+        errorMessage = 'Invalid email format';
+      } else if (error.status === 400) {
+        errorMessage = 'Invalid account input or account already exists';
+      } else {
+        ConsoleLogger.printError(error);
+        errorMessage = `Switcher API is offline`;
+      }
     }
     return throwError(errorMessage);
   }

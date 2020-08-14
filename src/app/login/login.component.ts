@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ConsoleLogger } from '../_helpers/console-logger';
+import { AdminService } from '../services/admin.service';
 
 @Component({
     selector: 'app-login',
@@ -18,14 +19,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     loginForm: FormGroup;
     loading = false;
+    forgotPassword = false;
     returnUrl: string;
     error = '';
+    sucess = '';
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private adminService: AdminService
     ) {
         if (this.authService.isLoggedIn()) {
             this.router.navigate(['/dashboard']);
@@ -49,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
         this.loginForm = this.formBuilder.group({
-            email: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
 
@@ -99,7 +103,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        if (this.loginForm.invalid) {
+        if (this.loginForm.invalid || this.forgotPassword) {
             return;
         }
 
@@ -139,5 +143,31 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     onKey(event: any) {
         this.error = '';
+    }
+
+    onForgotPassword() {
+        this.forgotPassword = true;
+    }
+
+    onSendResetPassord() {
+        this.loading = true;
+        this.f.password.setValue(' ');
+        if (this.loginForm.invalid) {
+            this.error = 'Please, add a valid email';
+        } else {
+            this.adminService.requestPasswordReset(this.f.email.value)
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe(data => {
+
+                if (data) {
+                    this.sucess = 'Password recovery successfully sent';
+                }
+                this.loading = false;
+                
+            }, error => {
+                this.error = error;
+                this.loading = false;
+            });
+        }
     }
 }
