@@ -120,11 +120,11 @@ export class DomainComponent implements OnInit, OnDestroy {
 
     if (component.length && component[0].data) {
       this.icon = component[0].data.icon;
-
+      
       if (this.currentPathRoute) {
         return component[0].data.title.replace('$', this.currentPathRoute.name);
       } else {
-        return component[0].data.title
+        return component[0].data.title.replace('$', this.selectedDomain.name);
       }
     }
 
