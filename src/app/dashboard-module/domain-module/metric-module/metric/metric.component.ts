@@ -9,6 +9,7 @@ import { Metric } from 'src/app/model/metric';
 import { MetricService } from 'src/app/services/metric.service';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-metric',
@@ -133,12 +134,12 @@ export class MetricComponent implements OnInit, OnDestroy {
   setSwitcherKeyInput(key: string) {
     this.onFilter(key);
   }
-
-  showData() {
-    this.metricViewClass = 'metrics-view data';
-  }
-
-  showGraphics() {
-    this.metricViewClass = 'metrics-view graphics';
+  
+  onTabChange($event: NgbTabChangeEvent) {
+    if (this.metricViewClass === 'metrics-view data') {
+      this.metricViewClass = 'metrics-view graphics';
+    } else {
+      this.metricViewClass = 'metrics-view data';
+    }
   }
 }

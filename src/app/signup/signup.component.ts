@@ -19,8 +19,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     loading = false;
     waitingConfirmation = false;
     returnUrl: string;
-    error = '';
+    error: string = '';
     recaptcha_token: string;
+    status: string = '';
 
     constructor(
         private formBuilder: FormBuilder,
@@ -41,6 +42,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
 
         this.returnUrl = '/dashboard';
+        this.isAlive();
     }
 
     getRecaptchaPublicKey(): string {
@@ -94,5 +96,11 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     resolved(captchaResponse: string) {
         this.recaptcha_token = captchaResponse;
+    }
+
+    private isAlive(): void {
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, error => {
+            this.status = 'Offline for Maintenance';
+        });
     }
 }

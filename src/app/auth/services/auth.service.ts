@@ -111,6 +111,10 @@ export class AuthService {
     }));
   }
 
+  isAlive(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/check`).pipe(catchError(this.handleError));
+  }
+
   getJwtToken() {
     return localStorage.getItem(AuthService.JWT_TOKEN);
   }

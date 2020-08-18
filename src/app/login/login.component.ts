@@ -21,8 +21,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     loading = false;
     forgotPassword = false;
     returnUrl: string;
-    error = '';
-    sucess = '';
+    error: string = '';
+    success: string = '';
+    status: string = ''; 
 
     constructor(
         private formBuilder: FormBuilder,
@@ -59,6 +60,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.returnUrl = '/dashboard';
         this.inviteLink();
+        this.isAlive();
+    }
+
+    private isAlive(): void {
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, error => {
+            this.status = 'Offline for Maintenance';
+        });
     }
 
     private loginWithGitHub(code: string) {
@@ -160,7 +168,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 .subscribe(data => {
 
                 if (data) {
-                    this.sucess = 'Password recovery successfully sent';
+                    this.success = 'Password recovery successfully sent';
                 }
                 this.loading = false;
                 

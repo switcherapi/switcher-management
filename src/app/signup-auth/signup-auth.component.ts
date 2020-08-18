@@ -17,10 +17,11 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   codeConfirmationForm: FormGroup;
 
   loading = false;
-  error = '';
+  error: string = '';
   code: string;
   team: string;
   domain: string;
+  status: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,6 +31,7 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.isAlive();
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
     
@@ -78,5 +80,11 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.codeConfirmationForm.controls; }
+
+  private isAlive(): void {
+    this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, error => {
+        this.status = 'Offline for Maintenance';
+    });
+}
 
 }

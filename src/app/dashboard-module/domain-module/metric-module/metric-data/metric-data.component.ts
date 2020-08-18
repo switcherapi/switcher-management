@@ -140,7 +140,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
         this.metricService.resetMetricsForSwitcher(domain.id, this.switcher).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.parent.switcher = null;
-            this.parent.loadMetrics(1);
+            // this.parent.loadMetrics(1);
             this.dataSource = new MatTableDataSource(null);
             this.toastService.showSuccess(`Metrics reseted with success`);
           }
