@@ -84,7 +84,11 @@ export class MetricComponent implements OnInit, OnDestroy {
         this.loading = false;
         if (metrics) {
           this.loadMetricStatistics(environment, dateBefore, dateAfter);
-          this.metrics.data = metrics.data;
+          if (this.switcher)
+            this.metrics.data = metrics.data;
+          else {
+            this.metrics.data = null;
+          }
         }
       }, error => {
         ConsoleLogger.printError(error);
