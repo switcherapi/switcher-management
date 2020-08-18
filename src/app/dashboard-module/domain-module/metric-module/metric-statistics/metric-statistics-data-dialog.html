@@ -11,7 +11,7 @@
     <mat-form-field>
         <input matInput placeholder="Date" [value]="data.date" readonly>
     </mat-form-field>
-    <app-metric-data [data]="data.stats"></app-metric-data>
+    <app-metric-data [data]="data.stats" [date]="data.date" [switcher]="data.switcher" [parent]="data.parent"></app-metric-data>
 </div>
 <div>
     <button class="btn-cancel" mat-button (click)="onClose()" cdkFocusInitial>Close</button>
