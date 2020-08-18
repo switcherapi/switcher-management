@@ -71,8 +71,9 @@ export class MetricDataComponent implements OnInit, OnDestroy {
       .filter(date => date.date == this.date)
       .map(sumResuls => sumResuls.negative + sumResuls.positive)[0] :
       //otherwise, just get the total from the statistics
-      this.parent.metrics.statistics.switchers
-      .filter(switcher => switcher.switcher === this.parent.switcher)[0].total;
+      this.parent.metrics.statistics.switchers.length ?
+        this.parent.metrics.statistics.switchers
+        .filter(switcher => switcher.switcher === this.parent.switcher)[0].total : 0;
 
     this.currentPageSize = this.pageLoaded;
   }
