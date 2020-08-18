@@ -11,10 +11,10 @@
     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     <section id="data-section" [ngClass]="classStatus" style="margin-top: 20px;">
         <div #tabmetrics *ngIf="!loading">
-            <ngb-tabset [activeId]="1" [destroyOnHide]="false">
+            <ngb-tabset [activeId]="1" [destroyOnHide]="false" (tabChange)="onTabChange($event)">
                 <ngb-tab id="1">
                     <ng-template ngbTabTitle>
-                        <div (click)="showGraphics()">Overall Statistics</div>
+                        Overall Statistics
                     </ng-template>
                     <ng-template ngbTabContent>
                         <app-metric-statistics [data]="metrics" [switcher]="switcher" [environment]="environment" [parent]="this"></app-metric-statistics>
@@ -22,7 +22,7 @@
                 </ngb-tab>
                 <ngb-tab *ngIf="metrics.data" id="2">
                     <ng-template ngbTabTitle>
-                        <div (click)="showData()">Data</div>
+                        Data
                     </ng-template>
                     <ng-template ngbTabContent>
                         <app-metric-data [data]="metrics.data" [switcher]="switcher" [parent]="this"></app-metric-data>
