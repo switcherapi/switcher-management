@@ -34,6 +34,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() data: MetricData[];
   @Input() switcher: string;
+  @Input() date: string;
   @Input() parent: MetricComponent;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -46,6 +47,11 @@ export class MetricDataComponent implements OnInit, OnDestroy {
 
   removable: boolean = false;
 
+  totalPages: number;
+  page: number = 1;
+  pageLoaded: number = 0;
+  currentPageSize: number = 0;
+
   constructor(
     private domainRouteService: DomainRouteService,
     private adminService: AdminService,
@@ -57,6 +63,18 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadDataSource(this.data);
     this.readPermissionToObject();
+
+    this.pageLoaded = this.data.length;
+    this.totalPages = this.date ? this.parent.metrics.statistics.switchers
+      //if filtered by date, get the sum of positive and negative results
+      .filter(switcher => switcher.switcher === this.parent.switcher)[0].dateTimeStatistics
+      .filter(date => date.date == this.date)
+      .map(sumResuls => sumResuls.negative + sumResuls.positive)[0] :
+      //otherwise, just get the total from the statistics
+      this.parent.metrics.statistics.switchers
+      .filter(switcher => switcher.switcher === this.parent.switcher)[0].total;
+
+    this.currentPageSize = this.pageLoaded;
   }
 
   ngOnDestroy() {
@@ -117,10 +135,11 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = `Are you sure you want to reset metrics for ${this.switcher}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.metricService.resetMetricsForSwitcher(this.switcher).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+        this.metricService.resetMetricsForSwitcher(domain.id, this.switcher).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.parent.switcher = null;
-            this.parent.loadMetrics();
+            this.parent.loadMetrics(1);
             this.dataSource = new MatTableDataSource(null);
             this.toastService.showSuccess(`Metrics reseted with success`);
           }
@@ -155,8 +174,40 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     this.loadDataSource(sortedData);
   }
 
+  onNextPage(): void {
+    this.parent.loadDataMetrics(++this.page, this.parent.environment, this.date, this.date).subscribe(metrics => {
+      if (metrics) {
+        this.loadDataSource(metrics.data);
+        this.pageLoaded += metrics.data.length;
+        this.currentPageSize = metrics.data.length;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  onPreviousPage(): void {
+    this.parent.loadDataMetrics(--this.page, this.parent.environment, this.date, this.date).subscribe(metrics => {
+      if (metrics) {
+        this.loadDataSource(metrics.data);
+        this.pageLoaded -= this.currentPageSize;
+        this.currentPageSize = metrics.data.length;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  hasPrevious(): boolean {
+    return this.page > 1;
+  }
+
+  hasNext(): boolean {
+    return this.currentPageSize === 50;
   }
   
 }

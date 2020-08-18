@@ -4,7 +4,8 @@ import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { MetricComponent } from '../metric/metric.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Metric, MetricData } from 'src/app/model/metric';
+import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-metric-statistics',
@@ -20,6 +21,7 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   @Input() data: Metric;
   @Input() switcher: string;
   @Input() parent: MetricComponent;
+  @Input() environment: string;
   loading = true;
 
   switcherDateTimeGroupTab: SwitcherDateTimeGroupedTab;
@@ -28,7 +30,7 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   reasonsTab: ReasonsStatisticsTab;
 
   constructor(
-    private dialog: MatDialog
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -38,18 +40,18 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     if (this.switcher) {
-      this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this.data, this.dialog);
+      this.switcherDateTimeGroupTab = new SwitcherDateTimeGroupedTab(this);
       this.switcherDateTimeGroupTab.loadSwitcherDateTimeGroupView();
+
+      this.reasonsTab = new ReasonsStatisticsTab(this.data.statistics);
+      this.reasonsTab.loadReasonsView();
     }
 
-    this.switchersTab = new SwitchersStatisticsTab(this.data, this.parent);
+    this.switchersTab = new SwitchersStatisticsTab(this.data.statistics, this.parent);
     this.switchersTab.loadSwitchersView();
 
-    this.componentsTab = new ComponentsStatisticsTab(this.data);
+    this.componentsTab = new ComponentsStatisticsTab(this.data.statistics);
     this.componentsTab.loadComponentsView();
-
-    this.reasonsTab = new ReasonsStatisticsTab(this.data);
-    this.reasonsTab.loadReasonsView();
 
     this.loading = false;
   }
@@ -79,7 +81,7 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
 
 export class SwitchersStatisticsTab {
   constructor(
-    private data: Metric,
+    private statistics: MetricStatistics,
     private parent: MetricComponent
   ) {}
 
@@ -115,7 +117,7 @@ export class SwitchersStatisticsTab {
   }
 
   public loadSwitchersView(): void {
-    const switcherStatistics = this.data.statistics.switchers;
+    const switcherStatistics = this.statistics.switchers;
     let negative = { data: [], label: 'Negative' };
     let positive = { data: [], label: 'Positive' };
 
@@ -131,7 +133,7 @@ export class SwitchersStatisticsTab {
 }
 
 export class ComponentsStatisticsTab {
-  constructor(private data: Metric) {}
+  constructor(private statistics: MetricStatistics) {}
 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
@@ -157,7 +159,7 @@ export class ComponentsStatisticsTab {
   };
 
   public loadComponentsView(): void {
-    const componentsStatistics = this.data.statistics.components;
+    const componentsStatistics = this.statistics.components;
     let negative = { data: [], label: 'Negative' };
     let positive = { data: [], label: 'Positive' };
 
@@ -173,7 +175,7 @@ export class ComponentsStatisticsTab {
 }
 
 export class ReasonsStatisticsTab {
-  constructor(private data: Metric) {}
+  constructor(private statistics: MetricStatistics) {}
 
   public chartType: ChartType = 'pie';
   public chartLegend = true;
@@ -205,7 +207,7 @@ export class ReasonsStatisticsTab {
   };
 
   public loadReasonsView(): void {
-    const reasonsStatistics = this.data.statistics.reasons;
+    const reasonsStatistics = this.statistics.reasons;
 
     reasonsStatistics.forEach(reasonStats => {
       this.chartLabels.push(reasonStats.reason);
@@ -215,13 +217,18 @@ export class ReasonsStatisticsTab {
 }
 
 export class SwitcherDateTimeGroupedTab {
-  constructor(
-    private data: Metric,
-    private dialog: MatDialog) {
+  constructor(private parent: MetricStatisticsComponent) {
       this.MAX_CONTENT = 5;
       this.content_index = -1;
       this.total_content = 0;
-    }
+  }
+  // constructor(
+  //   private data: Metric,
+  //   private dialog: MatDialog) {
+  //     this.MAX_CONTENT = 5;
+  //     this.content_index = -1;
+  //     this.total_content = 0;
+  // }
 
   public chartType: string = 'line';
   public chartLegend = true;
@@ -262,7 +269,7 @@ export class SwitcherDateTimeGroupedTab {
     this.chartLabels = [];
     this.chartShortLabels = [];
     
-    const switcherStatistics = this.data.statistics.switchers;
+    const switcherStatistics = this.parent.data.statistics.switchers;
     let negative = { data: [], label: 'Negative' };
     let positive = { data: [], label: 'Positive' };
 
@@ -273,7 +280,6 @@ export class SwitcherDateTimeGroupedTab {
       for (let index = 0; index < stats.length && index < this.MAX_CONTENT; index++) {
         this.content_index++;
         if (stats[this.content_index]) {
-          this.pushMetric(switcherStats.switcher, stats[this.content_index].date);
           this.chartLabels.push(stats[this.content_index].date);
           this.chartShortLabels.push(stats[this.content_index].date
             .substring(stats[this.content_index].date.length - 2));
@@ -306,18 +312,26 @@ export class SwitcherDateTimeGroupedTab {
   }
 
   pushMetric(swither: string, date: string) {
-    const dataFound = this.data.data.filter(data => data.config.key === swither && data.date.toString().indexOf(date) >= 0);
+    const dataFound = this.parent.data.data.filter(data => data.config.key === swither && data.date.toString().indexOf(date) >= 0);
     this.selectedData.push(dataFound);
   }
 
   expandSelectedData(index: number) {
-    this.dialog.open(SwitcherDataStatsDialog, {
-      width: '1200px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
-      data: {
-        stats: this.selectedData[index],
-        date: this.chartLabels[index]
+    this.parent.parent.loadDataMetrics(1, this.parent.environment, this.chartLabels[index], this.chartLabels[index]).subscribe(metrics => {
+      if (metrics) {
+        this.parent.dialog.open(SwitcherDataStatsDialog, {
+          width: '1200px',
+          minWidth: window.innerWidth < 450 ? '95vw' : '',
+          data: {
+            stats: metrics.data,
+            switcher: this.parent.switcher,
+            parent: this.parent.parent,
+            date: this.chartLabels[index]
+          }
+        });
       }
+    }, error => {
+      ConsoleLogger.printError(error);
     });
   }
 

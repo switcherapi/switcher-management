@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
@@ -30,6 +30,7 @@ export class MetricComponent implements OnInit, OnDestroy {
   error = '';
 
   metrics: Metric;
+  environment: string = 'default';
 
   constructor(
     private metricService: MetricService,
@@ -39,7 +40,11 @@ export class MetricComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.loadMetrics(this.switcher);
+    this.metrics = new Metric();
+    if (this.switcher)
+      this.loadMetrics(1);
+    else
+      this.loadMetricStatistics();
   }
 
   ngOnDestroy() {
@@ -47,17 +52,43 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadMetrics(switcher?: string, environment?: string, dateBefore?: string, dateAfter?: string): void {
+  loadMetricStatistics(environment?: string, dateBefore?: string, dateAfter?: string): void {
     this.loading = true;
     this.error = '';
-    this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : 'default', switcher, this.dateGroupPattern, dateBefore, dateAfter)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(metrics => {
+    this.metricService.getMetricStatistics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+      environment ? environment : 'default', 'all', this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(statistics => {
+        this.loading = false;
+        if (statistics) {
+          this.metrics.statistics = statistics;
+        }
+      }, error => {
+        ConsoleLogger.printError(error);
+        this.errorHandler.doError(error);
+        this.loading = false;
+      }, () => {
+        this.classStatus = "ready";
+      });
+  }
+
+  public loadDataMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
+    return this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+      environment ? environment : 'default', page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
+        .pipe(takeUntil(this.unsubscribe));
+  }
+
+  loadMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): void {
+    this.loading = true;
+    this.error = '';
+    this.loadDataMetrics(page, environment, dateBefore, dateAfter).subscribe(metrics => {
         this.loading = false;
         if (metrics) {
-          this.metrics = metrics;
-        } else {
-          this.metrics = new Metric();
+          this.loadMetricStatistics(environment, dateBefore, dateAfter);
+          if (this.switcher)
+            this.metrics.data = metrics.data;
+          else {
+            this.metrics.data = null;
+          }
         }
       }, error => {
         ConsoleLogger.printError(error);
@@ -93,7 +124,8 @@ export class MetricComponent implements OnInit, OnDestroy {
         }
         
         this.dateGroupPattern = data.dateGroupPattern;
-        this.loadMetrics(this.switcher, data.environment, data.dateBefore, data.dateAfter);
+        this.environment = data.environment;
+        this.loadMetrics(1, data.environment, data.dateBefore, data.dateAfter);
       }
     });
   }

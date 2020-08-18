@@ -50,11 +50,24 @@
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>
     <div class="tablelog-footer">
+        <p style="margin-left: 15px;">{{pageLoaded}}/{{totalPages}}</p>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+    </div>
+    <div style="display: flex; padding-bottom: 15px;">
         <button mat-button class="btn-element" style="background:#fb5454;" 
             (click)="resetSwitcherMetrics()" 
             [disabled]="!switcher || !dataSource?.data?.length || !removable">
             Reset
         </button>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+        <button mat-button class="btn-element"
+            (click)="onPreviousPage()"
+            [disabled]="!hasPrevious()">
+            <mat-icon style="font-size: larger;">arrow_back</mat-icon>
+        </button>
+        <button mat-button class="btn-element" 
+            (click)="onNextPage()" 
+            [disabled]="!hasNext()">
+            <mat-icon style="font-size: larger;">arrow_forward</mat-icon>
+        </button>
     </div>
 </div>

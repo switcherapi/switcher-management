@@ -47,7 +47,7 @@
                 </canvas>
             </div>
         </mat-tab>
-        <mat-tab label="Reasons View">
+        <mat-tab *ngIf="switcher != null" label="Reasons View">
             <div style="display: block">
                 <canvas baseChart
 					[data]="getReasonsStats().chartData"

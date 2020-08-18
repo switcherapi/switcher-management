@@ -17,10 +17,10 @@
                         <div (click)="showGraphics()">Overall Statistics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
-                        <app-metric-statistics [data]="metrics" [switcher]="switcher" [parent]="this"></app-metric-statistics>
+                        <app-metric-statistics [data]="metrics" [switcher]="switcher" [environment]="environment" [parent]="this"></app-metric-statistics>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab id="2">
+                <ngb-tab *ngIf="metrics.data" id="2">
                     <ng-template ngbTabTitle>
                         <div (click)="showData()">Data</div>
                     </ng-template>
