@@ -1,0 +1,54 @@
+<block-ui>
+    <h3 class="settings-title">
+        Account Profile
+    </h3>
+    <hr>
+    <section class="settings-content">
+        <div class="settings-left">
+            <form [formGroup]="accountForm" (ngSubmit)="onUpdate()">
+                <div class="description">
+                    <mat-form-field>
+                        <input matInput placeholder="Name" id="userName" (keyup)="onKey($event)"
+                            maxlength="50" autocomplete="off" formControlName="name" required>
+                    </mat-form-field>
+                </div>
+                <div class="description">
+                    <mat-form-field>
+                        <input style="color: gray;" matInput placeholder="Email" [value]="userEmail" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="description" style="display: block;">
+                    <fieldset>
+                        <legend style="font-size: inherit;">Connected with</legend>
+                        <img class="platform" src="{{ getPlatformIcon() }}" alt=""/>
+                        <span class="platform-name">{{ userPlatform }}</span>
+                    </fieldset>
+                </div>
+                <hr>
+                <div class="description" style="display: block;
+                    border: 1px solid #42474d70;
+                    padding: 20px;">
+                    <fieldset>
+                        <legend style="font-size: inherit; color: #fb5454;">Delete account</legend>
+                        <p>This account has Domains that must be either deleted or transfered to another account.</p>
+                    </fieldset>
+                    <button mat-button class="btn-element" style="background: #fb5454;" [disabled]="true">
+                        Delete
+                    </button>
+                </div>
+                <div class="options-section">
+                    <button mat-button class="btn-element">
+                        <svg class="bi bi-wrench" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" class="svg-style" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2.102 4.223A3.004 3.004 0 005 8c.27 0 .532-.036.78-.103l6.342 6.252A3.003 3.003 0 0015 18a3 3 0 10-.851-5.878L7.897 5.781A3.004 3.004 0 004.223 2.1l2.141 2.142L6 6l-1.757.364-2.141-2.141zm13.37 9.019L15 13l-.471.242-.529.026-.287.445-.445.287-.026.529L13 15l.242.471.026.529.445.287.287.445.529.026L15 17l.471-.242.529-.026.287-.445.445-.287.026-.529L17 15l-.242-.471-.026-.529-.445-.287-.287-.445-.529-.026z" clip-rule="evenodd"></path>
+                        </svg>Save
+                    </button>
+                </div>
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                <div *ngIf="resetSuccess" class="alert alert-success">{{resetSuccess}}</div>
+            </form>
+        </div>
+        <div class="settings-right">
+            <img class="avatar" src="{{ profileAvatar }}" alt="">
+        </div>
+    </section>
+</block-ui>

@@ -44,5 +44,10 @@ export class AdminService extends ApiService {
     const body = { email };
     return this.http.post<any>(`${environment.apiUrl}/admin/login/request/recovery`, body).pipe(catchError(super.handleError));
   }
+
+  public updateAdmin(name: string): Observable<any> {
+    const body = { name };
+    return this.http.patch<any>(`${environment.apiUrl}/admin/me`, body).pipe(catchError(super.handleError));
+  }
   
 }
