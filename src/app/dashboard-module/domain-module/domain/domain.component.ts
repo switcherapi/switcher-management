@@ -16,6 +16,7 @@ import { DomainTransferDialog } from './domain-transfer/domain-transfer-dialog.c
 import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-domain',
@@ -25,6 +26,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 export class DomainComponent implements OnInit, OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
+  @BlockUI() blockUI: NgBlockUI;
 
   selectedDomain: PathRoute;
   selectedGroup: PathRoute;
@@ -90,6 +92,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   onDomainTransfer() {
+    this.blockUI.start('Creating request...');
     this.domainService.requestDomainTransfer(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
       if (domain) {
         if (this.transferLabel === 'Transfer Domain') {
@@ -109,6 +112,9 @@ export class DomainComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
+      this.blockUI.stop();
+    }, () => {
+      this.blockUI.stop();
     });
   }
 

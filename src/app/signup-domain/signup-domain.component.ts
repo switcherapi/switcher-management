@@ -43,7 +43,7 @@ export class SignupDomainComponent implements OnInit, OnDestroy {
         this.loading = false;
       }, error => {
         ConsoleLogger.printError(error);
-        this.error = error.error;
+        this.error = `Domain cannot be transfered`;
         this.loading = false;
       }
     );
