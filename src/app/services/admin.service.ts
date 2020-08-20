@@ -49,5 +49,9 @@ export class AdminService extends ApiService {
     const body = { name };
     return this.http.patch<any>(`${environment.apiUrl}/admin/me`, body).pipe(catchError(super.handleError));
   }
+
+  public leaveDomain(domain: string): Observable<any> {
+    return this.http.patch<any>(`${environment.apiUrl}/admin/me/team/leave/${domain}`, null).pipe(catchError(super.handleError));
+  }
   
 }
