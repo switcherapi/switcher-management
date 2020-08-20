@@ -99,8 +99,10 @@ export class AuthService {
     this.doLogoutUser();
   }
 
-  logout() {
-    this.http.post<any>(`${environment.apiUrl}/admin/logout`, null).subscribe();
+  logout(deleted: boolean = false) {
+    if (!deleted) {
+      this.http.post<any>(`${environment.apiUrl}/admin/logout`, null).subscribe();
+    }
     this.currentTokenSubject.next(null);
     this.doLogoutUser();
   }

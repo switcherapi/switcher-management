@@ -53,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TeamInviteDialog } from './team-module/team-invite-dialog/team-invite-dialog.component';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { PathRoute } from 'src/app/model/path-route';
+import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-dialog.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { PathRoute } from 'src/app/model/path-route';
     ComponentEditDialog,
     TeamInviteDialog,
     ChangeLogDialog,
-    DomainSnapshotComponent
+    DomainSnapshotComponent,
+    DomainTransferDialog
   ],
   entryComponents: [
     GroupCreateComponent,
@@ -89,7 +91,8 @@ import { PathRoute } from 'src/app/model/path-route';
     ComponentEditDialog,
     TeamInviteDialog,
     ChangeLogDialog,
-    DomainSnapshotComponent
+    DomainSnapshotComponent,
+    DomainTransferDialog
   ],
   imports: [
     FormsModule,

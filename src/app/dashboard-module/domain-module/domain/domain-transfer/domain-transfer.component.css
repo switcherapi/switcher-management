@@ -1,0 +1,24 @@
+.btn-save {
+  float: right;
+  margin-right: 10px;
+}
+
+.btn-cancel {
+  float: right;
+}
+
+.options-section-label {
+  vertical-align: baseline !important;
+  display: contents;
+}
+
+.mat-elevation-z8 {
+  border: 1px solid #cccccc80;
+  box-shadow: none;
+}
+
+@media only screen and (max-width: 560px) {
+  .options-section-label {
+    display: none;
+  }
+}

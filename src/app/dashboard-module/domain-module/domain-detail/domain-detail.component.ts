@@ -15,7 +15,6 @@ import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { PathRoute, Types } from 'src/app/model/path-route';
 import { Domain } from 'src/app/model/domain';
-import { subscribe } from 'graphql';
 
 @Component({
   selector: 'app-domain-detail',

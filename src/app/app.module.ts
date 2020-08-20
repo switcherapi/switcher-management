@@ -26,6 +26,7 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { SettingsModule } from './settings-module/settings.module';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
+import { SignupDomainComponent } from './signup-domain/signup-domain.component';
 
 @NgModule({
     imports: [
@@ -49,7 +50,8 @@ import { LoginResetComponent } from './login-reset/login-reset.component';
       HomeComponent,
       SignupComponent,
       SignupAuthComponent,
-      SignupTeamComponent
+      SignupTeamComponent,
+      SignupDomainComponent
     ],
     providers: [
       AuthGuard,

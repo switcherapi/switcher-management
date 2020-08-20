@@ -5,7 +5,7 @@
     <hr>
     <section class="settings-content">
         <div class="settings-left">
-            <form [formGroup]="accountForm" (ngSubmit)="onUpdate()">
+            <form [formGroup]="accountForm">
                 <div class="description">
                     <mat-form-field>
                         <input matInput placeholder="Name" id="userName" (keyup)="onKey($event)"
@@ -30,14 +30,18 @@
                     padding: 20px;">
                     <fieldset>
                         <legend style="font-size: inherit; color: #fb5454;">Delete account</legend>
-                        <p>This account has Domains that must be either deleted or transfered to another account.</p>
+                        <p *ngIf="domains > 0">This account has {{ domains }} Domain(s) that must be either deleted or transfered to another account.</p>
+                        <p *ngIf="domains == 0">
+                            <strong>Important:</strong> This process is not reversible. 
+                            Once you delete your account you will lose all of your data, and the account will be terminated.
+                        </p>
                     </fieldset>
-                    <button mat-button class="btn-element" style="background: #fb5454;" [disabled]="true">
-                        Delete
+                    <button mat-button class="btn-element" style="background: #fb5454;" [disabled]="domains > 0" (click)="onDelete()">
+                        Delete account
                     </button>
                 </div>
                 <div class="options-section">
-                    <button mat-button class="btn-element">
+                    <button mat-button class="btn-element" (click)="onUpdate()">
                         <mat-icon style="font-size: large;">build</mat-icon>
                         Save
                     </button>

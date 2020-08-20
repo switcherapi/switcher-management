@@ -54,4 +54,8 @@ export class AdminService extends ApiService {
     return this.http.patch<any>(`${environment.apiUrl}/admin/me/team/leave/${domain}`, null).pipe(catchError(super.handleError));
   }
   
+  public deleteAdmin(): Observable<Admin> {
+    return this.http.delete<Admin>(`${environment.apiUrl}/admin/me`).pipe(catchError(super.handleError));
+  }
+
 }
