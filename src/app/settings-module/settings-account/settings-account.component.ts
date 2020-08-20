@@ -9,7 +9,6 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DomainService } from 'src/app/services/domain.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
-import { Route } from '@angular/compiler/src/core';
 import { Router } from '@angular/router';
 
 @Component({
