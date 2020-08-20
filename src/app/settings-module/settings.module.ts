@@ -6,10 +6,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { ToasterModule } from '../_helpers/toaster/toaster.module';
+import { SettingsAccountComponent } from './settings-account/settings-account.component';
+import { BlockUIModule } from 'ng-block-ui';
 
 @NgModule({
   declarations: [
-    SettingsComponent
+    SettingsComponent,
+    SettingsAccountComponent
   ],
   imports: [
     FormsModule,
@@ -18,7 +21,8 @@ import { ToasterModule } from '../_helpers/toaster/toaster.module';
     ReactiveFormsModule,
     AppMaterialModule,
     SettingsRoutingModule,
-    ToasterModule
+    ToasterModule,
+    BlockUIModule.forRoot()
   ]
 })
 export class SettingsModule { }

@@ -21,11 +21,17 @@ export class AuthService {
   private currentTokenSubject: BehaviorSubject<String>;
   public currentToken: Observable<String>;
 
+  private userInfoSubject: BehaviorSubject<any>;
+  public currentUser: Observable<any>;
+
   loggedUser: string;
 
   constructor(private http: HttpClient) {
     this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(AuthService.JWT_TOKEN));
     this.currentToken = this.currentTokenSubject.asObservable();
+
+    this.userInfoSubject = new BehaviorSubject<any>(localStorage.getItem(AuthService.USER_INFO));
+    this.currentUser = this.userInfoSubject.asObservable();
   }
 
   login(user: { email: string, password: string }): Observable<boolean> {
@@ -119,7 +125,16 @@ export class AuthService {
     return localStorage.getItem(AuthService.JWT_TOKEN);
   }
 
-  getUserInfo(key: string) {
+  setUserInfo(key: string, value: string): void {
+    if (localStorage.getItem(AuthService.USER_INFO)) {
+      const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO));
+      userData[`${key}`] = value;
+      localStorage.setItem(AuthService.USER_INFO, JSON.stringify(userData));
+      this.userInfoSubject.next(userData);
+    }
+  }
+
+  getUserInfo(key: string): string {
     if (localStorage.getItem(AuthService.USER_INFO)) {
       return JSON.parse(localStorage.getItem(AuthService.USER_INFO))[`${key}`];
     }
@@ -145,12 +160,17 @@ export class AuthService {
   }
 
   private doLoginUser(user: any, tokens: Tokens) {
-    localStorage.setItem(AuthService.USER_INFO, 
-      JSON.stringify({ 
-        name: user.name,
-        sessionid: user.id,
-        avatar: user._avatar
-      }));
+    const loggegWith = user._gitid ? 'GitHub' : user._bitbucketid ? 'BitBucket' : 'Switcher API';
+    const userData = JSON.stringify({ 
+      name: user.name,
+      email: loggegWith === 'Switcher API' ? user.email : `Logged @${loggegWith}`,
+      sessionid: user.id,
+      avatar: user._avatar,
+      platform: loggegWith
+    });
+
+    localStorage.setItem(AuthService.USER_INFO, userData);
+    this.userInfoSubject.next(userData);
     this.loggedUser = user.email;
     this.storeTokens(tokens);
   }

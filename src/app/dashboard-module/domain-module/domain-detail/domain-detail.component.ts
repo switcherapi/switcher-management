@@ -15,6 +15,7 @@ import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { PathRoute, Types } from 'src/app/model/path-route';
 import { Domain } from 'src/app/model/domain';
+import { subscribe } from 'graphql';
 
 @Component({
   selector: 'app-domain-detail',
@@ -38,6 +39,8 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   state$: Observable<object>;
   domainDescription: string;
   domainForm: FormGroup;
+
+  collabUser: boolean = false;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -95,6 +98,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.domainDescription = domain.description;
     this.domainRouteService.updatePath(this.pathRoute, true);
     this.readPermissionToObject();
+    this.checkDomainOwner();
   }
 
   updateEnvironmentStatus(env : any): void {
@@ -125,6 +129,37 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
+    });
+  }
+
+  checkDomainOwner(): void {
+    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
+      if (currentUser) {
+        this.collabUser = currentUser.id != this.getDomain().owner;
+      }
+    });
+  }
+
+  leaveDomain() {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Quit domain';
+    modalConfirmation.componentInstance.question = 'Are you sure you want to leave this domain?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.blockUI.start('Leaving...');
+        this.adminService.leaveDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(admin => {
+          this.blockUI.stop();
+          if (admin) {
+            this.toastService.showSuccess(`Left with success`);
+          }
+        }, error => {
+          this.blockUI.stop();
+          this.toastService.showError(`Unable to leave this domain`);
+          ConsoleLogger.printError(error);
+        }, () => {
+          this.router.navigate(['/dashboard']);
+        });
+      }
     });
   }
 

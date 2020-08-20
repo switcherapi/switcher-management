@@ -14,3 +14,20 @@ h4 {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+@media only screen and (max-width: 1200px) {
+  .navbar {
+    display: block;
+    transition: top 0.3s;
+  }
+
+  .navbar-toggler {
+    float: right;
+  }
+
+  .backgroud-style {
+    background: #24292e !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}

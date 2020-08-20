@@ -20,6 +20,8 @@ import { GroupService } from 'src/app/services/group.service';
 })
 export class DomainComponent implements OnInit, OnDestroy {
 
+  private unsubscribe: Subject<void> = new Subject();
+
   selectedDomain: PathRoute;
   selectedGroup: PathRoute;
   selectedConfig: PathRoute;
@@ -33,8 +35,6 @@ export class DomainComponent implements OnInit, OnDestroy {
   searchListItems: any[] = [];
   searchedValues: Observable<string[]>;
   private query: QueryRef<any>;
-
-  private unsubscribe: Subject<void> = new Subject();
 
   constructor(
     private domainRouteService: DomainRouteService,

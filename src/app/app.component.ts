@@ -19,11 +19,13 @@ export class AppComponent implements OnDestroy {
   ) {
     this.authService.currentToken.subscribe(x => {
       this.currentToken = x;
-      this.loggedUserName = this.authService.getUserInfo('name');
+    });
 
+    this.authService.currentUser.subscribe(y => {
+      this.loggedUserName = this.authService.getUserInfo('name');
       const avatar = this.authService.getUserInfo('avatar');
       this.profileAvatar = avatar || "assets//switcherapi_mark_white.png";
-    });
+    })
   }
 
   ngOnInit() {

@@ -1,0 +1,54 @@
+.settings-title {
+    margin-top: 10px;
+    font-size: 1.4rem;
+}
+
+.settings-content {
+    display: flex;
+}
+
+.settings-left {
+    width: 70%;
+}
+
+.settings-right {
+    width: 23%;
+    margin-left: auto;
+}
+
+.avatar {
+    border-radius: 100%;
+    width: 200px;
+    -webkit-filter: drop-shadow(1px 1px 5px rgba(0,0,0,0.2));
+    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+    filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+}
+
+.platform {
+    width: 40px;
+}
+
+.platform-name {
+    padding-left: 10px; 
+    font-weight: lighter;
+}
+
+@media only screen and (max-width: 1200px) {
+    .settings-right {
+        margin-left: 0;
+    }
+
+    .avatar {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .settings-left {
+        width: 100%;
+    }
+
+    .settings-right {
+        display: none;
+    }
+}
