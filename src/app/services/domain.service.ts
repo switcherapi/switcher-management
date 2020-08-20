@@ -57,6 +57,20 @@ export class DomainService extends ApiService {
     return this.http.delete<Domain>(`${environment.apiUrl}/domain/${id}`).pipe(catchError(super.handleError));
   }
 
+  public requestDomainTransfer(domain: string): Observable<Domain> {
+    const body = {
+      domain,
+    }
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/transfer/request`), body).pipe(catchError(super.handleError));
+  }
+
+  public acceptDomainTransfer(domain: string): Observable<Domain> {
+    const body = {
+      domain,
+    }
+    return this.http.patch<Domain>((`${environment.apiUrl}/domain/transfer/accept`), body).pipe(catchError(super.handleError));
+  }
+
   public getHistory(id: string): Observable<History[]> {
     return this.http.get<History[]>(`${environment.apiUrl}/domain/history/${id}`, 
       { 

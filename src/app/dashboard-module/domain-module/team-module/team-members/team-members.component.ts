@@ -86,8 +86,8 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to invite ${email} - ${error.error}`)
-    })
+      this.toastService.showError(`Unable to invite ${email} - ${error.error}`);
+    });
   }
 
   onInvite(teamInvite: TeamInvite): void {

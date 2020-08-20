@@ -12,6 +12,10 @@ import { PathRoute, Types } from 'src/app/model/path-route';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { GroupService } from 'src/app/services/group.service';
+import { DomainTransferDialog } from './domain-transfer/domain-transfer-dialog.component';
+import { DomainService } from 'src/app/services/domain.service';
+import { AdminService } from 'src/app/services/admin.service';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-domain',
@@ -30,6 +34,7 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   prevScrollpos = window.pageYOffset;
   navControl: boolean = false;
+  transferLabel: string = '';
 
   smartSearchFormControl = new FormControl('');
   searchListItems: any[] = [];
@@ -38,12 +43,15 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   constructor(
     private domainRouteService: DomainRouteService,
+    private adminService: AdminService,
     private dialog: MatDialog,
     private router: Router,
     private activeRoute: ActivatedRoute,
     private apollo: Apollo,
+    private domainService: DomainService,
     private configService: ConfigService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -53,6 +61,7 @@ export class DomainComponent implements OnInit, OnDestroy {
       this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
         this.updateRoute();
         this.loadKeys();
+        this.checkDomainOwner();
       });
     }
 
@@ -77,6 +86,38 @@ export class DomainComponent implements OnInit, OnDestroy {
       width: '450px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { }
+    });
+  }
+
+  onDomainTransfer() {
+    this.domainService.requestDomainTransfer(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
+      if (domain) {
+        if (this.transferLabel === 'Transfer Domain') {
+          this.transferLabel = 'Cancel Transfer';
+          this.dialog.open(DomainTransferDialog, {
+            width: '450px',
+            minWidth: window.innerWidth < 450 ? '95vw' : '',
+            data: {
+              request_id: domain.id,
+              domain: domain.name
+            }
+          });
+        } else {
+          this.transferLabel = 'Transfer Domain';
+          this.toastService.showSuccess(`Transfer canceled with success`);
+        }
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  checkDomainOwner() {
+    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
+      if (currentUser) {
+        this.transferLabel = currentUser.id == this.getDomain().element.owner ? 
+          this.getDomain().element.transfer ? 'Cancel Transfer' : 'Transfer Domain' : '';
+      }
     });
   }
 

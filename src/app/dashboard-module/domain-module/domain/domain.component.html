@@ -23,6 +23,10 @@
                         <mat-icon>cloud_download</mat-icon>
                         Download Snapshot
                     </button>
+                    <button *ngIf="transferLabel" mat-menu-item (click)="onDomainTransfer()">
+                        <mat-icon>next_week</mat-icon>
+                        {{ transferLabel }}
+                    </button>
                 </mat-menu>
             </div>
         </h4>

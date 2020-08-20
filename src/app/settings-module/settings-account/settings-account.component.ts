@@ -6,6 +6,10 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { DomainService } from 'src/app/services/domain.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings-account',
@@ -22,15 +26,19 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
   accountForm: FormGroup;
   resetSuccess: string;
   error: string = '';
+  domains: number = 1;
 
   userEmail: string;
   userPlatform: string;
   profileAvatar: string;
 
   constructor(
+    private router: Router,
     private adminService: AdminService,
     private authService: AuthService,
-    private formBuilder: FormBuilder) { }
+    private domainService: DomainService,
+    private formBuilder: FormBuilder,
+    private _modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.blockUI.start('Loading...');
@@ -39,6 +47,7 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
       name: ['', Validators.required]
     });
 
+    this.loadDomains();
     this.loadAdmin();
     this.blockUI.stop();
   }
@@ -54,6 +63,17 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     this.userPlatform = this.authService.getUserInfo('platform');
     const avatar = this.authService.getUserInfo('avatar');
     this.profileAvatar = avatar || "assets//switcherapi_mark_white.png";
+  }
+  
+  loadDomains(): void {
+    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.domains = data.length;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.error = 'Something went wrong when attepting to verify your profile';
+    });
   }
 
   onUpdate() {
@@ -87,6 +107,25 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError(error);
       this.error = error;
+    });
+  }
+
+  onDelete() {
+    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    modalConfirmation.componentInstance.title = 'Deleting account';
+    modalConfirmation.componentInstance.question = `Are you sure you want to delete this account?`;
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.adminService.deleteAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(admin => {
+          if (admin) {
+            this.authService.logout(true);
+            this.router.navigate(['/']);
+          }
+        }, error => {
+          ConsoleLogger.printError(error);
+          this.error = error;
+        });
+      }
     });
   }
 

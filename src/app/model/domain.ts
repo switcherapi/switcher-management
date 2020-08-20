@@ -9,4 +9,5 @@ export class Domain {
   updatedAt: Date;
   activated: Map<string, boolean>;
   group: Group[];
+  transfer: boolean;
 }
