@@ -20,12 +20,12 @@ mat-icon {
 }
 
 .header-section.activated:hover {
-  background-color: #92beff !important;
+  background-color: #9cc5fd !important;
   color: white !important;
 }
 
 .header-section.deactivated:hover {
-  background-color: #c2c2c2 !important;
+  background-color: #d0d0d0 !important;
   color: white !important;
 }
 

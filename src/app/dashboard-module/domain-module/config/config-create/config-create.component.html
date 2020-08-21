@@ -13,7 +13,9 @@
             <div class="description">
                 <form [formGroup]="elementCreationFormGroup">
                     <mat-form-field>
-                        <input #nameElement matInput cdkFocusInitial placeholder="Key" maxlength="30" style="color: black" [formControl]="keyFormControl" autocomplete="off">
+                        <input #nameElement matInput cdkFocusInitial special-chars [autoUpper]="true" [autoUnderscore]="true"
+                            placeholder="Key" maxlength="30" style="color: black" 
+                            [formControl]="keyFormControl" autocomplete="off">
                         <mat-error *ngIf="keyFormControl.hasError('minlength')">
                             Key must contains at least 3 characters
                         </mat-error>
