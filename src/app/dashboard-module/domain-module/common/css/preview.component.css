@@ -1,7 +1,32 @@
+mat-icon {
+  vertical-align: middle;
+}
+
 .header-section {
-  grid-area: header;
-  display: inline-flex;
-  width: 400px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  grid-area: header !important;
+  width: 400px !important;
+  padding: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  white-space: normal;
+  color: #5298ff;
+  transition: all .5s cubic-bezier(0.100, 0.50, 0.30, 1);
+  display: block !important;
+}
+
+.header-section.deactivated {
+  color: #595959;
+}
+
+.header-section.activated:hover {
+  background-color: #92beff !important;
+  color: white !important;
+}
+
+.header-section.deactivated:hover {
+  background-color: #c2c2c2 !important;
+  color: white !important;
 }
 
 .toggle-section {
@@ -88,10 +113,20 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 700px) {
   .header-section {
     grid-area: header;
     display: inline-flex;
-    width: 100%;
+    width: 100% !important;
+  }
+
+  .grid-container {
+    display: flex !important;
+    grid-gap: 10px !important;
+  }
+
+  .toggle-section {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }

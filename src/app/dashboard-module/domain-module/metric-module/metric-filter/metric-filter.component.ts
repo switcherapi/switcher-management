@@ -1,16 +1,14 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { takeUntil, startWith, map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
-import gql from 'graphql-tag';
-import { QueryRef, Apollo } from 'apollo-angular';
-import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { OnElementAutocomplete } from '../../common/element-autocomplete/element-autocomplete.component';
 
 @Component({
   selector: 'app-metric-filter',
@@ -21,23 +19,22 @@ import { Types } from 'src/app/model/path-route';
     './metric-filter.component.css'
   ]
 })
-export class MetricFilterComponent implements OnInit, OnDestroy {
+export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutocomplete {
   private unsubscribe: Subject<void> = new Subject();
 
   dateGroupPattern: string;
 
   environmentSelection = new FormControl('');
-  switcherKeyFormControl = new FormControl('');
   dateAfterFormControl = new FormControl('');
   dateBeforeFormControl = new FormControl('');
 
   environments: Environment[];
-  switchersKey: string[] = [];
-  filteredKeys: Observable<string[]>;
-  private query: QueryRef<any>;
+  selectedFilter: string;
+  selectedFilterType: string = 'Switcher';
+  lockFilter: boolean = false;
+  selectedDomain: string;
 
   constructor(
-    private apollo: Apollo,
     private environmentService: EnvironmentService,
     private domainRouteService: DomainRouteService,
     private datepipe: DatePipe,
@@ -45,9 +42,10 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
-    this.switcherKeyFormControl.setValue(this.data.switcher || '');
+    this.selectedFilter = this.data.filter || '';
+    this.lockFilter = this.data.lockFilter || false;
+    this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id;
     this.loadEnvironments();
-    this.loadKeys();
   }
 
   ngOnDestroy() {
@@ -60,15 +58,16 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
   }
 
   onCleanFilter(data: any) {
-    this.switcherKeyFormControl.setValue("");
+    this.selectedFilter = '';
     this.onFilter(data);
   }
 
   onFilter(data: any) {
-    if (this.switcherKeyFormControl.value.length) {
-      data.switcher = this.switcherKeyFormControl.value;
+    if (this.selectedFilter) {
+      data.filter = this.selectedFilter;
+      data.filterType = this.selectedFilterType;
     } else {
-      data.switcher = null;
+      data.filter = null;
     }
 
     data.dateGroupPattern = this.dateGroupPattern;
@@ -79,56 +78,17 @@ export class MetricFilterComponent implements OnInit, OnDestroy {
     this.dialogRef.close(data);  
   }
 
+  onSelectElementFilter(value: any): void {
+    this.selectedFilter = value.name;
+    this.selectedFilterType = value.type;
+  }
+
   loadEnvironments() {
-    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+    this.environmentService.getEnvironmentsByDomainId(this.selectedDomain)
       .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.environments = env;
       this.environmentSelection.setValue('default');
     });
   }
 
-  loadKeys() {
-    this.query = this.apollo.watchQuery({
-      query: this.generateGql(),
-      variables: { 
-        id: this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id,
-        environment: this.environmentSelection.value
-      }
-    });
-
-    this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-      if (result) {
-        const groupKeys = result.data.domain.group.map(
-          group => group.config.map(config => config.key));
-
-        this.switchersKey = ([] as string[]).concat(...groupKeys);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
-
-    this.filteredKeys = this.switcherKeyFormControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.switchersKey.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
-  generateGql(): any {
-    return gql`
-      query domain($id: String!, $environment: String!) {
-        domain(_id: $id, environment: $environment) {
-          group {
-            config {
-              key
-            }
-          }
-        }
-      }
-  `;
-  }
 }

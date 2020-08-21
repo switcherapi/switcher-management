@@ -1,0 +1,17 @@
+<mat-form-field *ngIf="domain" style="width: 100%;">
+    <input #smartSearchInput class="smart-search" matInput placeholder="Smart Search" aria-label="Smart Search"
+        readonly="{{ lockFilter }}"
+        [formControl]="smartSearchFormControl"
+        [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let item of searchedValues | async" [value]="item"  matTooltip="{{ item.description }}">
+            <div style="display: flex;">
+                <p class="smart-filter-type">{{ item.type }}</p>
+                <div style="display: flex;">
+                    <p class="smart-filter-group">{{ item.parent.name }}</p>
+                    <span class="smart-filter-name">{{ item.name }}</span>
+                </div>
+            </div>
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

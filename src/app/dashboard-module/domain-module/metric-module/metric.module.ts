@@ -29,6 +29,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MetricFilterComponent } from './metric-filter/metric-filter.component';
 import { Metric } from 'src/app/model/metric';
+import { ElementAutocompleteComponent } from '../common/element-autocomplete/element-autocomplete.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -36,12 +38,14 @@ import { Metric } from 'src/app/model/metric';
     MetricStatisticsComponent, 
     MetricDataComponent,
     SwitcherDataStatsDialog,
-    MetricFilterComponent
+    MetricFilterComponent,
+    ElementAutocompleteComponent
   ],
   exports: [
     MetricComponent, 
     MetricStatisticsComponent, 
-    MetricDataComponent
+    MetricDataComponent,
+    ElementAutocompleteComponent
   ],
   entryComponents: [
     SwitcherDataStatsDialog
@@ -57,7 +61,6 @@ import { Metric } from 'src/app/model/metric';
     MatSlideToggleModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
     MatListModule,
@@ -74,8 +77,9 @@ import { Metric } from 'src/app/model/metric';
     MatToolbarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTooltipModule,
     ChartsModule
   ],
   providers: [Metric],
 })
-export class MetricModuleModule { }
+export class MetricModule { }
