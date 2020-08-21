@@ -5,7 +5,9 @@
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
                         <input #keyElement matInput placeholder="Name" [value]="config?.key" maxlength="30"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="keyFormControl" autocomplete="off">
+                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" 
+                            special-chars [autoUpper]="true" [autoUnderscore]="true"
+                            [formControl]="keyFormControl" autocomplete="off">
                         <mat-error *ngIf="keyFormControl.hasError('minlength')">
                             Key must contains at least 3 characters
                         </mat-error>

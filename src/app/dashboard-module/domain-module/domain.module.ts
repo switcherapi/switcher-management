@@ -54,6 +54,7 @@ import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { PathRoute } from 'src/app/model/path-route';
 import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-dialog.component';
 import { MetricModule } from './metric-module/metric.module';
+import { SpecialCharacterDirective } from './common/special.char.directive';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { MetricModule } from './metric-module/metric.module';
     TeamInviteDialog,
     ChangeLogDialog,
     DomainSnapshotComponent,
-    DomainTransferDialog
+    DomainTransferDialog,
+    SpecialCharacterDirective
   ],
   entryComponents: [
     GroupCreateComponent,

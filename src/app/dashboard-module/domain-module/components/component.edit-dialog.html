@@ -11,7 +11,8 @@
 <div mat-dialog-content>
     <div *ngIf="!data.apiKey">
         <mat-form-field>
-            <input matInput #inputName [(ngModel)]="data.name" minlength="2" maxlength="20" cdkFocusInitial autocomplete="off">
+            <input matInput special-chars #inputName [(ngModel)]="data.name" 
+                minlength="2" maxlength="20" cdkFocusInitial autocomplete="off">
         </mat-form-field>
     </div>
     <div *ngIf="data.apiKey">

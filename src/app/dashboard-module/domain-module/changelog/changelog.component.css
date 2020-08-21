@@ -83,6 +83,10 @@ h1 {
 }
 
 @media only screen and (max-width: 520px) {
+  .hide-on-mobile {
+    display: none;
+  }
+
   .element-detail-panel {
     display: block;
   }
@@ -92,4 +96,3 @@ h1 {
   }
   
 }
-
