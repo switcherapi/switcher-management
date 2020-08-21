@@ -30,7 +30,7 @@ export class DomainPreviewComponent implements OnInit {
 
   updateStatus(): void {
     this.classStatus = this.domain.activated['default'] ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = this.domain.activated['default'] ? 'btn-element activated' : 'btn-element deactivated';
+    this.classBtnStatus = this.domain.activated['default'] ? 'header-section activated' : 'header-section deactivated';
   }
 
 }

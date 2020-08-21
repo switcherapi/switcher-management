@@ -1,0 +1,20 @@
+.smart-search {
+  color: #8d9492;
+}
+
+.smart-filter-type {
+  text-align: start;
+  font-size: 10px;
+}
+
+.smart-filter-group {
+  text-align: start;
+  font-size: 10px;
+  position: absolute;
+  transform: translate(10px);
+}
+
+.smart-filter-name {
+  margin-top: auto;
+  margin-left: 10px;
+}

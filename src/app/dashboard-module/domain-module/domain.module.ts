@@ -27,7 +27,6 @@ import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
 import { ChartsModule } from 'ng2-charts';
-import { MetricModuleModule } from './metric-module/metric-module.module';
 import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,6 +53,7 @@ import { TeamInviteDialog } from './team-module/team-invite-dialog/team-invite-d
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { PathRoute } from 'src/app/model/path-route';
 import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-dialog.component';
+import { MetricModule } from './metric-module/metric.module';
 
 @NgModule({
   declarations: [
@@ -105,7 +105,6 @@ import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-d
     MatSlideToggleModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
     MatListModule,
@@ -124,7 +123,7 @@ import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-d
     MatTooltipModule,
     ToasterModule,
     ChartsModule,
-    MetricModuleModule,
+    MetricModule,
     BlockUIModule.forRoot()
   ],
   providers: [ 

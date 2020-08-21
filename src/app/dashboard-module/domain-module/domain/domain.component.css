@@ -1,3 +1,7 @@
+mat-icon {
+  vertical-align: middle;
+}
+
 h4 {
   color: #fff;
   background-color: rgb(66, 71, 77);
@@ -45,29 +49,19 @@ h4 {
   color: #549bfb;
 }
 
-.smart-search {
-  width: 250px; 
-  background: white; 
+.element-filter {
   margin-left: auto; 
-  border-radius: 5px; 
-  padding-left: 10px;
+  width: 250px; 
+  transform: translateY(10%);
 }
 
-.smart-filter-type {
-  text-align: start;
-  font-size: 10px;
+:host /deep/ .mat-form-field-label {
+  color: #8d9492;
+  font-weight: lighter;
 }
 
-.smart-filter-group {
-  text-align: start;
-  font-size: 10px;
-  position: absolute;
-  transform: translate(10px);
-}
-
-.smart-filter-name {
-  margin-top: auto;
-  margin-left: 10px;
+:host /deep/ .mat-form-field-underline {
+  background: #8d9492;
 }
 
 @media only screen and (max-width: 1200px) {

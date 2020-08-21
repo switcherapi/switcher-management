@@ -1,13 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { delay, takeUntil, startWith, map } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { delay, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
 import { MatDialog } from '@angular/material/dialog';
-import { QueryRef, Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { FormControl } from '@angular/forms';
 import { PathRoute, Types } from 'src/app/model/path-route';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { ConfigService } from 'src/app/services/config.service';
@@ -17,13 +14,14 @@ import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
 
 @Component({
   selector: 'app-domain',
   templateUrl: './domain.component.html',
   styleUrls: ['./domain.component.css']
 })
-export class DomainComponent implements OnInit, OnDestroy {
+export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete {
 
   private unsubscribe: Subject<void> = new Subject();
   @BlockUI() blockUI: NgBlockUI;
@@ -38,18 +36,12 @@ export class DomainComponent implements OnInit, OnDestroy {
   navControl: boolean = false;
   transferLabel: string = '';
 
-  smartSearchFormControl = new FormControl('');
-  searchListItems: any[] = [];
-  searchedValues: Observable<string[]>;
-  private query: QueryRef<any>;
-
   constructor(
     private domainRouteService: DomainRouteService,
     private adminService: AdminService,
     private dialog: MatDialog,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private apollo: Apollo,
     private domainService: DomainService,
     private configService: ConfigService,
     private groupService: GroupService,
@@ -62,7 +54,6 @@ export class DomainComponent implements OnInit, OnDestroy {
     if (!this.currentPathRoute) {
       this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
         this.updateRoute();
-        this.loadKeys();
         this.checkDomainOwner();
       });
     }
@@ -93,7 +84,7 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   onDomainTransfer() {
     this.blockUI.start('Creating request...');
-    this.domainService.requestDomainTransfer(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
+    this.domainService.requestDomainTransfer(this.selectedDomain.id).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
       if (domain) {
         if (this.transferLabel === 'Transfer Domain') {
           this.transferLabel = 'Cancel Transfer';
@@ -118,11 +109,19 @@ export class DomainComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSelectElementFilter(value: any): void {
+    if (value.type === 'Group') {
+      this.updateGroupForRedirect(value);
+    } else if (value.type === 'Switcher' || value.type === 'Component') {
+      this.updateConfigForRedirect(value);
+    }
+  }
+
   checkDomainOwner() {
     this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
       if (currentUser) {
-        this.transferLabel = currentUser.id == this.getDomain().element.owner ? 
-          this.getDomain().element.transfer ? 'Cancel Transfer' : 'Transfer Domain' : '';
+        this.transferLabel = currentUser.id == this.selectedDomain.element.owner ? 
+          this.selectedDomain.element.transfer ? 'Cancel Transfer' : 'Transfer Domain' : '';
       }
     });
   }
@@ -183,24 +182,12 @@ export class DomainComponent implements OnInit, OnDestroy {
     return this.currentPathRoute || this.selectedDomain;
   }
 
-  getDomain(): PathRoute {
-    return this.selectedDomain;
-  }
-
   getDomainElement(): string {
     return this.selectedDomain ? JSON.stringify(this.selectedDomain.element) : '';
   }
 
-  getGroup(): PathRoute {
-    return this.selectedGroup;
-  }
-
   getGroupElement(): string {
     return this.selectedGroup ? JSON.stringify(this.selectedGroup.element) : '';
-  }
-
-  getConfig(): PathRoute {
-    return this.selectedConfig;
   }
 
   getConfigElement(): string {
@@ -234,87 +221,6 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   navToggled() {
     this.navControl = !this.navControl;
-  }
-
-  loadKeys() {
-    this.query = this.apollo.watchQuery({
-      query: this.generateGql(),
-      variables: { 
-        id: this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id,
-      }
-    });
-
-    this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-      if (result) {
-        const groups = result.data.domain.group.map(group => {
-          return {
-            type: 'Group',
-            _id: group._id,
-            description: group.description,
-            parent: '',
-            name: group.name
-          }
-        });
-
-        const switchers = result.data.domain.group.map(group => group.config.map(config => {
-          return {
-            type: 'Switcher',
-            _id: config._id,
-            description: config.description,
-            parent: group,
-            name: config.key
-          }
-        }));
-
-        const components = result.data.domain.group.map(
-          group => group.config.map(config => {
-            return {
-              type: 'Component',
-              _id: config._id,
-              description: config.components.toString() || '',
-              parent: group,
-              name: config.key
-            }
-        }).filter(comp => comp.description.length));
-        
-        this.searchListItems = [];
-        this.searchListItems.push(...groups);
-        this.searchListItems.push(...switchers.flat());
-        this.searchListItems.push(...components.flat());
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
-
-    this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
-  }
-
-  private _filter(value: any): any[] {
-    let filterValue: any[] = [];
-
-    if((value as any).type) {
-      filterValue.push(value.name);
-      this.smartSearchFormControl.setValue(value.name);
-      this.redirect(value);
-      return;
-    }
-
-    filterValue = value.toLowerCase();
-    return this.searchListItems.filter(item =>
-      item.name.toLowerCase().includes(filterValue) ||
-      item.description.toLowerCase().includes(filterValue)
-    );
-  }
-
-  private redirect(item: any) {
-    if (item.type === 'Group') {
-      this.updateGroupForRedirect(item);
-    } else if (item.type === 'Switcher' || item.type === 'Component') {
-      this.updateConfigForRedirect(item);
-    }
   }
 
   private updateConfigForRedirect(item: any) {
@@ -356,29 +262,6 @@ export class DomainComponent implements OnInit, OnDestroy {
         }
       }
     });
-  }
-
-  generateGql(): any {
-    return gql`
-      query domain($id: String!) {
-        domain(_id: $id) {
-          group {
-            _id
-            name
-            description
-            config {
-                _id
-                key
-                description
-                components
-                strategies {
-                    values
-                }
-            }
-          }
-        }
-      }
-  `;
   }
 
 }

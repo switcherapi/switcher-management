@@ -21,6 +21,8 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 export class MetricComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() switcher: string;
+  filterType: string = 'Switcher';
+  lockFilter: boolean = false;
   dateGroupPattern: string;
 
   metricViewClass = 'metrics-view graphics';
@@ -42,9 +44,10 @@ export class MetricComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.metrics = new Metric();
-    if (this.switcher)
+    if (this.switcher) {
       this.loadMetrics(1);
-    else
+      this.lockFilter = true;
+    } else
       this.loadMetricStatistics();
   }
 
@@ -57,7 +60,7 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
     this.metricService.getMetricStatistics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : 'default', 'all', this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
+      environment ? environment : 'default', 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
       .pipe(takeUntil(this.unsubscribe)).subscribe(statistics => {
         this.loading = false;
         if (statistics) {
@@ -83,9 +86,9 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.error = '';
     this.loadDataMetrics(page, environment, dateBefore, dateAfter).subscribe(metrics => {
         this.loading = false;
+        this.loadMetricStatistics(environment, dateBefore, dateAfter);
         if (metrics) {
-          this.loadMetricStatistics(environment, dateBefore, dateAfter);
-          if (this.switcher)
+          if (this.switcher && this.filterType === 'Switcher')
             this.metrics.data = metrics.data;
           else {
             this.metrics.data = null;
@@ -104,11 +107,13 @@ export class MetricComponent implements OnInit, OnDestroy {
     if (!key) {
       key = this.switcher;
     }
+
     const dialogRef = this.dialog.open(MetricFilterComponent, {
       width: '450px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: { 
-        switcher: key,
+        lockFilter: this.lockFilter,
+        filter: key,
         dateAfter: '',
         dateBefore: '',
         dateGroupPattern: '',
@@ -118,8 +123,9 @@ export class MetricComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(data => {
       if (data) {
-        if (data.switcher) {
-          this.switcher = data.switcher;
+        if (data.filter) {
+          this.switcher = data.filter;
+          this.filterType = data.filterType;
         } else {
           this.switcher = null;
         }

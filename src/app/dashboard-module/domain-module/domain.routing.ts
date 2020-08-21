@@ -40,7 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'metrics',
-        loadChildren: () => import('./metric-module/metric-module.module').then(mod => mod.MetricModuleModule),
+        loadChildren: () => import('./metric-module/metric.module').then(mod => mod.MetricModule),
         data: {
           title: 'Metrics',
           icon: 1

@@ -33,7 +33,7 @@
         </h4>
         <nav id="navbarMenu" class="navbar navbar-expand-lg navbar-dark bg-dark backgroud-style sticky">
             <a (click)="gotoListChildren()">
-                <mat-icon style="color: white; margin-top: 8px;" matTooltip="{{ getLabelListChildren() }}">format_list_bulleted</mat-icon>
+                <mat-icon style="color: white;" matTooltip="{{ getLabelListChildren() }}">format_list_bulleted</mat-icon>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" (click)="navToggled()"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Domain menu">
@@ -50,33 +50,22 @@
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
                 </div>
-                <input #smartSearchInput class="smart-search" matInput placeholder="Smart Search" aria-label="Smart Search"
-                    [formControl]="smartSearchFormControl"
-                    [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let item of searchedValues | async" [value]="item"  matTooltip="{{ item.description }}">
-                        <div style="display: flex;">
-                            <p class="smart-filter-type">{{ item.type }}</p>
-                            <div style="display: flex;">
-                                <p class="smart-filter-group">{{ item.parent.name }}</p>
-                                <span class="smart-filter-name">{{ item.name }}</span>
-                            </div>
-                        </div>
-                    </mat-option>
-                </mat-autocomplete>
+                <element-autocomplete *ngIf="selectedDomain" class="element-filter"
+                    [domain]="selectedDomain.id" [parentComponent]="this">
+                </element-autocomplete>
             </div>
         </nav>
 
         <div>
             <div class="div-router-history">
-                <a class="router-history" [routerLink]=getDomain()?.path [state]="{ element: getDomainElement() }">
-                    <span class="badge"></span>{{ getDomain()?.name }}
+                <a class="router-history" [routerLink]=selectedDomain?.path [state]="{ element: getDomainElement() }">
+                    <span class="badge"></span>{{ selectedDomain?.name }}
                 </a>
-                <a *ngIf="showPath('Group')" class="router-history" [routerLink]=getGroup()?.path [state]="{ element: getGroupElement() }">
-                    / <span class="badge"></span>{{ getGroup()?.name }}
+                <a *ngIf="showPath('Group')" class="router-history" [routerLink]=selectedGroup?.path [state]="{ element: getGroupElement() }">
+                    / <span class="badge"></span>{{ selectedGroup?.name }}
                 </a>
-                <a *ngIf="showPath('Config')"  class="router-history" [routerLink]=getConfig()?.path [state]="{ element: getConfigElement() }">
-                    / <span class="badge"></span>{{ getConfig()?.name }}
+                <a *ngIf="showPath('Config')"  class="router-history" [routerLink]=selectedConfig?.path [state]="{ element: getConfigElement() }">
+                    / <span class="badge"></span>{{ selectedConfig?.name }}
                 </a>
             </div>
         </div>

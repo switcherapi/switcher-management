@@ -32,14 +32,19 @@ export class MetricService extends ApiService {
     return this.http.get<Metric>(`${environment.apiUrl}/metric/data`, { params }).pipe(catchError(super.handleError));
   }
 
-  public getMetricStatistics(domainId: string , env: string, statistics: string = 'all', key?: string, 
+  public getMetricStatistics(domainId: string , env: string, statistics: string = 'all', key?: string, type?: string, 
       dateGroupPattern?: string, dateBefore?: string, dateAfter?: string): Observable<MetricStatistics> {
     let params: any = {}
 
     params.environment = env;
     params.domainid = domainId;
     params.statistics = statistics;
-    if (key) { params.key = key; }
+    if (key) { 
+      if (type === 'Switcher')
+        params.key = key;
+      else
+        params.group = key;
+    }
     if (dateGroupPattern) { params.dateGroupPattern = dateGroupPattern; }
     if (dateBefore) { params.dateBefore = dateBefore; }
     if (dateAfter) { params.dateAfter = dateAfter; }

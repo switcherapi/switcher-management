@@ -1,3 +1,7 @@
+mat-icon {
+  vertical-align: middle;
+}
+
 .header.activated {
   background: linear-gradient(to right, #549bfb 0, #549bfb 10px, #f7f7f7 10px, #fff 100%) no-repeat;
 }

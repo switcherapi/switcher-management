@@ -101,7 +101,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     const status = this.group.activated[envName] == undefined ? this.group.activated['default'] : this.group.activated[envName];
 
     this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = status ? 'btn-element activated' : 'btn-element deactivated';
+    this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';
 
     this.environmentStatusSelection.get('environmentStatusSelection').setValue(status);
     this.selectedEnvStatus = status;

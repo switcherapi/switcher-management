@@ -100,7 +100,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     const status = this.config.activated[envName] == undefined ? this.config.activated['default'] : this.config.activated[envName];
 
     this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = status ? 'btn-element activated' : 'btn-element deactivated';
+    this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';
 
     this.environmentStatusSelection.get('environmentStatusSelection').setValue(status);
     this.selectedEnvStatus = status;

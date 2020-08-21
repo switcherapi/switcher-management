@@ -1,3 +1,7 @@
+mat-icon {
+  vertical-align: middle;
+}
+
 .header-create {
   background: linear-gradient(to right, #549bfb 0, #549bfb, #5298ff 10px, #fff 100%) no-repeat;
   color: white;
