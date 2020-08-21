@@ -5,7 +5,7 @@ import { Directive, Input, ElementRef, HostListener } from '@angular/core';
 })
 export class SpecialCharacterDirective {
 
-    @Input() allowRegexStr: string = '^[a-zA-Z0-9_]*$';
+    @Input() allowRegexStr: string = '^[a-zA-Z0-9_-]*$';
     @Input() autoUpper: boolean = false;
     @Input() autoLower: boolean = false;
     @Input() autoUnderscore: boolean = false;

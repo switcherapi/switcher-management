@@ -5,8 +5,6 @@ import { QueryRef, Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
-import { Types } from 'src/app/model/path-route';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 
 @Component({
   selector: 'element-autocomplete',
@@ -31,12 +29,11 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   private query: QueryRef<any>;
 
   constructor(
-    private domainRouteService: DomainRouteService,
     private apollo: Apollo,
   ) { }
 
   ngOnInit() {
-    this.loadKeys();
+    this.loadKeys(this.domain);
   }
 
   ngOnDestroy() {
@@ -44,11 +41,14 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadKeys() {
+  loadKeys(domain: string): void {
+    if (!domain)
+      return;
+
     this.query = this.apollo.watchQuery({
       query: this.generateGql(),
       variables: { 
-        id: this.domain,
+        id: domain,
       }
     });
 
@@ -119,9 +119,21 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     }
 
     filterValue = value.toLowerCase();
-    return this.searchListItems.filter(item =>
-      item.name.toLowerCase().includes(filterValue) ||
-      item.description.toLowerCase().includes(filterValue)
+    let prefix: string, typePrefix: string;
+    return this.searchListItems.filter(item => {
+      if (filterValue.indexOf(':') > 0 ) {
+        prefix = filterValue[0];
+        typePrefix = prefix === 's' ? 'switcher' : prefix === 'c' ? 'component' : 'group';
+        
+        if (item.name.toLowerCase().includes((filterValue as unknown as string).split(':')[1]) &&
+            item.type.toLowerCase().includes(typePrefix))
+          return item;
+      } else 
+        if (item.name.toLowerCase().includes(filterValue) ||
+            item.description.toLowerCase().includes(filterValue) ||
+            item.type.toLowerCase().includes(filterValue))
+          return item;
+      }
     );
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { delay, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -14,7 +14,7 @@ import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
+import { OnElementAutocomplete, ElementAutocompleteComponent } from '../common/element-autocomplete/element-autocomplete.component';
 
 @Component({
   selector: 'app-domain',
@@ -25,6 +25,9 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   private unsubscribe: Subject<void> = new Subject();
   @BlockUI() blockUI: NgBlockUI;
+
+  @ViewChildren("elementFilter")
+  public elementFilter: QueryList<ElementAutocompleteComponent>
 
   selectedDomain: PathRoute;
   selectedGroup: PathRoute;
@@ -50,15 +53,13 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   ngOnInit() {
     this.scrollMenuHandler();
-    
     if (!this.currentPathRoute) {
       this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
         this.updateRoute();
         this.checkDomainOwner();
       });
-    }
-
-    this.updateRoute();
+    } else
+      this.updateRoute();
   }
 
   ngOnDestroy() {
@@ -71,6 +72,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
     this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
+    this.elementFilter.first.loadKeys(this.selectedDomain.id);
     this.getTitle();
   }
 
@@ -175,7 +177,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     }
 
     this.icon = 0;
-    return this.currentPathRoute ? this.currentPathRoute.name : 'asd';
+    return this.currentPathRoute ? this.currentPathRoute.name : this.selectedDomain.name;
   }
 
   getCurrentRoute(): PathRoute {
