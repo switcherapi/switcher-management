@@ -24,8 +24,7 @@ export class ConfigCreateComponent implements OnInit, OnDestroy {
   ]);
 
   descFormControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5)
+    Validators.maxLength(256)
   ]);
 
   constructor(

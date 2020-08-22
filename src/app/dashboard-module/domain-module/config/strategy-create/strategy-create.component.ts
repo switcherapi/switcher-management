@@ -40,7 +40,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
   ]);
 
   descFormControl = new FormControl('', [
-    Validators.required
+    Validators.maxLength(256)
   ]);
 
   valueSelectionFormControl = new FormControl('', [
@@ -76,6 +76,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
       this.data.operation = value;
     });
 
+    this.data.description = '';
     this.descFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.description = value;
     });

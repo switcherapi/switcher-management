@@ -108,7 +108,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Domain created with success');
           }
         }, error => {
-          this.toastService.showError('Unable to create a new domain.');
+          this.toastService.showError(`Unable to create a new domain. ${error.error}`);
           ConsoleLogger.printError(error);
         });
       }

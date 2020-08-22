@@ -353,7 +353,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if (this.components.length != currentConfigComponents.length || 
       this.components.every((u, i) => u != currentConfigComponents[i])
     ) {
-      this.blockUI.start('Updating switcher...');
       const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
       
       if (componentsToUpdate.length) {

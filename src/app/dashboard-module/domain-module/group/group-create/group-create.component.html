@@ -13,7 +13,8 @@
             <div class="description">
                 <form [formGroup]="elementCreationFormGroup">
                     <mat-form-field>
-                        <input #nameElement matInput cdkFocusInitial placeholder="Name" maxlength="30" style="color: black" [formControl]="nameFormControl" autocomplete="off">
+                        <input #nameElement matInput cdkFocusInitial placeholder="Name" maxlength="30" style="color: black" 
+                            [formControl]="nameFormControl" autocomplete="off">
                         <mat-error *ngIf="nameFormControl.hasError('minlength')">
                             Name must contains at least 5 characters
                         </mat-error>
@@ -22,11 +23,9 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field>
-                        <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="3" [formControl]="descFormControl">
+                        <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="3" 
+                            [formControl]="descFormControl">
                         </textarea>
-                        <mat-error *ngIf="descFormControl.hasError('required')">
-                            Description is <strong>required</strong>
-                        </mat-error>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
                 </form>
