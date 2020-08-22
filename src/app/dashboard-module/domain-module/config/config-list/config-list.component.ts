@@ -93,7 +93,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
             this.ngOnInit();
           }
         }, error => {
-          this.toastService.showError('Unable to create a new switcher.');
+          this.toastService.showError(`Unable to create a new switcher. ${error.error}`);
           ConsoleLogger.printError(error);
         });
       }

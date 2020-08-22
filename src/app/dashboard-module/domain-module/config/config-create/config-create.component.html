@@ -24,7 +24,8 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field>
-                        <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="3" [formControl]="descFormControl">
+                        <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="3" 
+                            [formControl]="descFormControl">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>

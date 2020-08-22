@@ -73,7 +73,6 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
     this.elementFilter.first.loadKeys(this.selectedDomain.id);
-    this.getTitle();
   }
 
   onDownloadSnapshot() {

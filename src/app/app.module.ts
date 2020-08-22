@@ -22,7 +22,7 @@ import { SignupComponent } from './signup/signup.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { LocationStrategy, PathLocationStrategy, CommonModule } from '@angular/common';
 import { SettingsModule } from './settings-module/settings.module';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
@@ -31,6 +31,8 @@ import { SignupDomainComponent } from './signup-domain/signup-domain.component';
 @NgModule({
     imports: [
       BrowserModule,
+      CommonModule,
+      BrowserAnimationsModule,
       ReactiveFormsModule,
       HttpClientModule,
       appRoutingModule,

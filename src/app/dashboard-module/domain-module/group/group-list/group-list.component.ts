@@ -92,7 +92,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
             this.ngOnInit();
           }
         }, error => {
-          this.toastService.showError('Unable to create a new group.');
+          this.toastService.showError(`Unable to create a new group. ${error.error}`);
           ConsoleLogger.printError(error);
         });
       }
