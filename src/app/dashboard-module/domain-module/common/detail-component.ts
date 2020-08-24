@@ -28,4 +28,8 @@ export class DetailComponent {
         return !changed.length;
     }
 
+    showResumed(value: string, length: number): string {
+        return value.length > length ? `${value.substr(0, length)}...` : value;
+    }
+
 }
