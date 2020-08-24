@@ -145,6 +145,10 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  showResumed(value: string, length: number): string {
+    return value.length > length ? `${value.substr(0, length)}...` : value;
+  }
+
 }
 
 function valueInputValidator(format: string): ValidatorFn {

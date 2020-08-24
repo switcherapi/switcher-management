@@ -34,13 +34,13 @@
                         </mat-card-header>
                         <mat-card-content style="overflow-y: scroll; height: 180px;">
                             <mat-selection-list #strategyValueSelection>
-                                <mat-list-option *ngFor="let value of strategy.values" [value]="value">
-                                    {{value}}
+                                <mat-list-option *ngFor="let value of strategy.values" [value]="value" matTooltip="{{ value }}">
+                                    {{ showResumed(value, 20) }}
                                 </mat-list-option>
                             </mat-selection-list>
                         </mat-card-content>
                         <mat-form-field style="width: 100%;">
-                            <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl" 
+                            <input #inputValue matInput placeholder="Selected" maxlength="500" [formControl]="valueSelectionFormControl" 
                                 matTooltip="{{ strategyFormatSelected }}">
                             <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
                                 Please, check the value format
