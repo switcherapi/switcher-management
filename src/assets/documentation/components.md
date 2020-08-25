@@ -1,9 +1,9 @@
 #### Overview
 Components are registered applications that will be making use of switchers.
-</br>The idea behind this configuration is to track every call from the module API so we can elaborate on a more detailed analysis about switchers usage.
+</br>The idea behind this configuration is to track every call from the client module API so we can elaborate on a more detailed analysis about switchers usage.
 
-Regarding security, all registered applications must be linked to a switcher, otherwise, the call will return an unauthorized access.
-</br>This new layer of security was created to prevent other applications to use not related switchers.
+Regarding security, all registered applications must be linked to a switcher, otherwise, the call will return access denied.
+</br>This gateway has been created to prevent other applications to use not related switchers.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/components/component.jpg" class="image-style shadow" alt=""/><p>
 

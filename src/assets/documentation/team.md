@@ -1,9 +1,9 @@
 #### Overview
-Collaborate creating teams to work on the same domain. With Teams, you can invite people to have access to all settings of your domain, plus managing roles by limiting access to every aspect of it. 
+Collaborate creating teams to work upon the same domain. With Teams, you can invite people to have access to settings of your domain, plus managing their access to every aspect of it.
 
 Teams are composed of Members and Roles. In addition to roles that will group all permissions granted to that team, it is also possible to activate and deactivate a team at any time.
 
-Get extra help while keeping control of who can create, read, update, or delete.
+Get extra help while keeping control of who can create, read, update, or delete inside your domain.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams.jpg" class="image-style shadow" alt=""/><p>
 
@@ -29,7 +29,11 @@ After creating a team, you can start setting up the new team either way, invitin
 
   Shared Domains are displayed on the Dashboard as Collaboration.
 
-2. Setting up roles
+2. Ongoing invitations can be found on the **Pending** tab.
+
+  <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams_pending.jpg" class="image-style shadow" alt=""/><p>
+
+3. Setting up roles
 
   By clicking on the Create button, you can select one of the elements available in addition to the permission that will be granted to.
   </br>The new role is a combination of rules that can also be configured by specifing one or more component names.
