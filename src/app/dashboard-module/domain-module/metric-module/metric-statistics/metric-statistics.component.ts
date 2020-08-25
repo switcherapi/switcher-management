@@ -222,13 +222,6 @@ export class SwitcherDateTimeGroupedTab {
       this.content_index = -1;
       this.total_content = 0;
   }
-  // constructor(
-  //   private data: Metric,
-  //   private dialog: MatDialog) {
-  //     this.MAX_CONTENT = 5;
-  //     this.content_index = -1;
-  //     this.total_content = 0;
-  // }
 
   public chartType: string = 'line';
   public chartLegend = true;
