@@ -8,13 +8,13 @@ We tried to keep things as simple as possible, reducing the complexity behind th
 
   **Smart Search**
 
-  This little component found on the right side of your Domain's menu can easily assist you to find the configuration element you are looking for.
+  This simple input text found on the right side of your Domain's menu can easily assist you to find the configuration element you are looking for.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/smart_search.gif" class="image-style shadow" alt=""/><p><br/>
 
-  Simple to use but let me demonstrate how powerful it can be.
+  Here are some examples of how it works.
 
-  1. If you are looking for Switchers used by a specific component, you can type the component name and it will bring all switchers configured to that component.
+  1. If you are looking for Switchers used by a specific component, you can just type the component's name that it will bring all switchers linked to it.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/smart_search_component.gif" class="image-style shadow" alt=""/><p><br/>
 
@@ -24,18 +24,22 @@ We tried to keep things as simple as possible, reducing the complexity behind th
 
   3. The search algorithm is also prepared for looking at elements description, thus it can be a good practice to add tags or keywords on all groups and switchers that you create.
 
+  * * *
+
   **Intelligent filtering**
 
-  Tracking a specific input from the Metrics dashboard can be troublesome if your domain deal with a large volume of inputed data.
-  With that in mind, this single input filter can find the exact match you are looking for.
+  Tracking a specific input from Metrics or Change Log dashboards can be troublesome if your domain deal with a large volume of stored data.
+  With that in mind, this single input filter can extract the exact match for what you are looking for.
   
   That means that the same input can find the information you are looking at in all columns of both Data Metrics and Change Log tables.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/shortcuts_datafilter.jpg" class="image-style shadow" alt=""/><p><br/>
 
+  * * *
+
   **Mobile viewport**
 
-  Switcher Management is fully responsive to work with large and small viewports. Considering these variations, we built the best and simple layout for both scenarios.
+  Switcher Management is fully responsive to work with different viewports. Considering these variations, we built the best and simple layout for all scenarios.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/shortcuts_mobile.gif" class="image-style shadow" alt=""/><p><br/>
 * * *
