@@ -82,7 +82,7 @@
   }
 
   .grid-container {
-    display: block;
+    display: block !important;
   }
 
   .options-section-label {
@@ -91,5 +91,9 @@
 
   .label-env-name {
     font-size: unset;
+  }
+
+  .btn-element {
+    width: 50%;
   }
 }
