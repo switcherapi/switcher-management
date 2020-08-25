@@ -16,6 +16,7 @@ import { TeamComponent } from './docs/team.component';
 import { SearchComponent } from './search/search.component';
 import { SearchItemComponent } from './search-item/search-item.component';
 import { ApiComponent } from './docs/api.component';
+import { ShortcutsComponent } from './docs/shortcuts.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ApiComponent } from './docs/api.component';
     TeamComponent,
     SearchComponent,
     SearchItemComponent,
-    ApiComponent
+    ApiComponent,
+    ShortcutsComponent
   ],
   imports: [
     CommonModule,

@@ -42,10 +42,12 @@ Examples of usage:
 
 ##### 5. Switcher
 Finally, define your switcher by giving a key value and a brief description.
-<br/>Since it's a constant value, though you can change in after creating, we suggest using the following patterns:
+<br/>When typing the key name the auto-pattern formatter will assist you to follow the criteria below.
 
-- No spaces
 - All caps
+- Alphanumeric
+- No spaces
+
 
 <img src="[$ASSETS_LOCATION]/documentation/images/setup/switchers.jpg" class="image-style shadow" alt=""/>
 

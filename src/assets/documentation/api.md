@@ -8,7 +8,7 @@
 
 #### Signing up
 Signing up to Switcher API must be made via Switcher Management.
-<br />It can be done by using an email address or linking it to a GitHub account.
+<br />It can be done by using an email address or linking it to a GitHub or Bitbucket account.
 
 - **Singing up via email** - /admin/signup [POST]
 ```json
@@ -21,6 +21,9 @@ Signing up to Switcher API must be made via Switcher Management.
 ```
 
 - **Singing up via GitHub** - /admin/github/auth?code= [POST]
+  <br />Code must be set by the API service provider.
+
+- **Singing up via Bitbucket** - /admin/bitbucket/auth?code= [POST]
   <br />Code must be set by the API service provider.
 
 #### Domain
@@ -106,6 +109,10 @@ Signing up to Switcher API must be made via Switcher Management.
     - DATE_VALIDATION
 
       Date validation accept both date and time input (e.g. YYYY-MM-DD or YYYY-MM-DDTHH:mm) formats.
+
+    - REGEX_VALIDATION
+
+      Regular expression based validation. No format required.
 
   - **Strategy operations**
     - EXIST / NOT_EXIST

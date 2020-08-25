@@ -237,4 +237,8 @@
     margin-bottom: 30px;
   }
 
+  .carousel.slide {
+    height: 350px;
+  }
+
 }

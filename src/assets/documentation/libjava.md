@@ -81,6 +81,7 @@ There are a few different ways to call the API using the java library.
   - Entry.VALUE: Plain text validation
   - Entry.NUMERIC: Numeric validation
   - Entry.NETWORK: IP/range validation
+  - Entry.REGEX: Regular expression validation
 
 
 3. **Strategy validation - chained call**
@@ -99,6 +100,13 @@ There are a few different ways to call the API using the java library.
   All-in-one method is fast and include everything you need to execute a complex call to the API. Stack inputs changing the last parameter to *true* in case you need to add more values to the strategy validator.
   ```java
   switcher.isItOn("FEATURE01", new Entry(Entry.NETWORK, "10.0.0.3"), false);
+  ```
+
+5. **Accessing the response history**
+
+  Switchers when created store the last execution result from a given switcher key. This can be useful for troubleshooting or internal logging.
+  ```java
+  switcher.getHistoryExecution();
   ```
 
 </br>
@@ -130,6 +138,7 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
 </br>
 
 ### Version Log
+- 1.0.7: Added Regex Validation
 - 1.0.6: Updated depencencies & new features
 	- Updated dependency jersey-hk2 from 2.28 to 2.31
 	- Updated dependency commons-net from 3.3 to 3.6.

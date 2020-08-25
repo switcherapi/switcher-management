@@ -21,17 +21,28 @@ For each switcher it is possible to add at least 4 different types of strategy.
 1. **Value validation**
 
   This plain text validator can be used to compare one or more string data you want.
-  </br>The available operations for this validator are: Exist, Not exist, Equal, Not equal
+  </br>The available operations for this validator are: Exist, Not exist, Equal, Not equal.
 
 2. **Time and Date validation**
 
   Both validators are useful to test specific or range of date/time.
-  </br>The available operations for this validator are: between, Lower, Greater
+  </br>The available operations for this validator are: between, Lower, Greater.
 
 3. **Network validation**
 
   Add network conditions if you want to restrict by a unique IP address or a range of IPs using CIDR notation.
-  </br>The available operations for this validator are: Exist, Not exist
+  </br>The available operations for this validator are: Exist, Not exist.
+
+4. **Numeric validation**
+
+  Create validations based on numeric values. Decimals and negative values are also acceptable.
+  </br>All operations are available for this validation.
+
+5. **Regex validation**
+
+  Regular expressions can be used to determine a wider possibility for validating strategies.
+  </br>The available operations for this validator are: Exist, Not exist, Equal, Not equal.
+  </br>- Equal and Not equal  implicitly use \b (delimiter) flag to match the exact input.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_create.jpg" class="image-style shadow" alt=""/><p>
 
