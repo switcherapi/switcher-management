@@ -24,7 +24,7 @@ import { ConfigService } from 'src/app/services/config.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { StrategyService } from 'src/app/services/strategy.service';
 import { ComponentService } from 'src/app/services/component.service';
-import { Config } from 'src/app/model/config';
+import { Config, ConfigRelay } from 'src/app/model/config';
 
 @Component({
   selector: 'app-config-detail',
@@ -50,6 +50,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   
   @ViewChild('componentInput') 
   componentInput: ElementRef<HTMLInputElement>;
+
+  @ViewChild('tasbset') 
+  tasbset: ElementRef<HTMLInputElement>;
   
   @ViewChild('auto') 
   matAutocomplete: MatAutocomplete;
@@ -60,6 +63,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ]);
 
   classStatus: string;
+  classStrategySection: string;
   
   config: Config;
   strategies:  Strategy[];
@@ -67,6 +71,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   hasStrategies = false;
   hasNewStrategy = false;
   error = '';
+
+  //tabset control
+  strategy_section_height: string = '450px';
+  currentTab = '1';
 
   // Component attributes
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -94,6 +102,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   ngOnInit() {
+    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "1100px";
+
     this.blockUI.start('Loading...');
     this.hasNewStrategy = false;
     this.route.paramMap
@@ -123,6 +133,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+
+    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "";
   }
   
   scrollToElement($element): void {
@@ -147,7 +159,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.listComponents = values.map(value => value.name);
         this.filteredComponents = this.componentForm.valueChanges.pipe(
           startWith(null),
-          map((component: string | null) => component ? this._filter(component) : this.listComponents.slice()));
+          map((component: string | null) => component ? this._filterComponent(component) : this.listComponents.slice()));
 
         this.blockUI.stop();
       });
@@ -232,16 +244,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
-  }
-
-  selectEnvironment(status: boolean): void {
-    this.currentStatus = status;
-
-    if (this.editing) {
-      this.classStatus = 'header editing';
-    } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-    }
   }
 
   edit() {
@@ -347,7 +349,29 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updateConfigComponents(config: Config): void {
+  addRelay() {
+    this.currentTab = '2';
+    if (!this.getConfig().relay || !this.getConfig().relay.activated) {
+      this.config.relay = new ConfigRelay();
+      this.config.relay.type = 'VALIDATION';
+      this.config.relay.method = 'GET';
+    }
+
+    this.config.relay.activated[this.envSelectionChange.selectedEnvName] = true;
+    this.updatePathRoute(this.config);
+
+    setTimeout(() => {
+      this.onSelectTab('2');
+      (this.tasbset as any).select('2');
+    }, 500);
+  }
+
+  hasRelay() {
+    return this.getConfig().relay.activated ? 
+      this.getConfig().relay.activated[this.envSelectionChange.selectedEnvName] != undefined : false;
+  }
+
+  updateConfigComponents(config: Config): void {
     const currentConfigComponents = this.config.components.map(component => component.name);
 
     if (this.components.length != currentConfigComponents.length || 
@@ -421,17 +445,29 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
+  onSelectComponent(event: MatAutocompleteSelectedEvent): void {
     this.components.push(event.option.viewValue);
     this.listComponents.splice(this.listComponents.indexOf(event.option.viewValue), 1);
     this.componentInput.nativeElement.value = '';
     this.componentForm.setValue(null);
   }
 
-  private _filter(value: string): string[] {
+  private _filterComponent(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  onSelectTab(id: string) {
+    this.currentTab = id;
+
+    if (id === '1') {
+      this.classStrategySection = 'strategy-section strategies';
+    } else if (id === '2') {
+      this.classStrategySection = 'strategy-section relay';
+    } else {
+      this.classStrategySection = 'strategy-section metrics';
+    }
   }
   
 }

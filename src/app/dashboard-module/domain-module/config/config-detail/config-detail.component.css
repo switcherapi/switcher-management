@@ -1,5 +1,13 @@
-.strategy-section {
-  margin-top: 20px;
+.strategy-section.relay {
+  min-height: 450px;
+}
+
+.strategy-section.strategies {
+  min-height: 600px;
+}
+
+.strategy-section.metrics {
+  min-height: 800px;
 }
 
 .switcher-component-section {
@@ -25,6 +33,10 @@
   height: 30px !important;
 }
 
+:host /deep/ .nav-link {
+  display: flex;
+}
+
 @media only screen and (max-width: 1200px) {
   .options-section {
     float: right;
@@ -43,5 +55,13 @@
 @media only screen and (max-width: 430px) {
   .options-section-label {
     display: none;
+  }
+
+  :host /deep/ #tabset>.justify-content-start {
+    display: block;
+  }
+
+  .strategy-section.metrics {
+    min-height: 500px;
   }
 }

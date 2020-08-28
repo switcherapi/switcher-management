@@ -34,7 +34,7 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [currentEnvironment]="getConfig().activated"></app-environment-config>
+                    <app-environment-config #envSelectionChange [configuredEnvironments]="getConfig().activated"></app-environment-config>
                 </div>
             </div>
         </section>
@@ -59,7 +59,7 @@
                     (matChipInputTokenEnd)="addComponent($event)"
                     [readonly]="!editing">
                 </mat-chip-list>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectComponent($event)">
                 <mat-option *ngFor="let component of filteredComponents | async" [value]="component">
                     {{component}}
                 </mat-option>
@@ -76,33 +76,48 @@
                     <mat-icon>code</mat-icon>
                     <div class="options-section-label">Add Strategy</div>
                 </button>
+                <button mat-button class="btn-element" (click)="addRelay()" [disabled]="!updatable || hasRelay()">
+                    <mat-icon>swap_horizontal_circle</mat-icon>
+                    <div class="options-section-label">Add Relay</div>
+                </button>
                 <button mat-button class="btn-element" style="background: #fb5454;" (click)="delete()" [disabled]="!removable">
                     <mat-icon>delete</mat-icon>
                     <div class="options-section-label">Remove</div>
                 </button>
             </div>
         </section>
-        <section #strategysection id="strategy-section" style="padding-top: 10px;">
+        <section #strategysection [ngClass]="classStrategySection" style="padding-top: 10px;">
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
             </div>
-            <ngb-tabset *ngIf="!loading" [activeId]="1" type="pills" [destroyOnHide]="false">
+            <ngb-tabset #tasbset id="tabset" *ngIf="!loading" [activeId]="currentTab" type="pills" [destroyOnHide]="false">
                 <ngb-tab *ngIf="hasStrategies" id="1">
                     <ng-template ngbTabTitle>
-                        <div (click)="scrollToElement(strategysection)">Strategies</div>
+                        <mat-icon>code</mat-icon>
+                        <div (click)="onSelectTab('1')">Strategies</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <hr>
-                        <div class="strategy-section">
-                            <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" 
-                                [parent]="this" style="width: 100%; display: grid;"></app-strategy-list>
-                        </div>
+                        <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" 
+                            [parent]="this" style="width: 100%; display: grid;"></app-strategy-list>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab id="2">
+                <ngb-tab *ngIf="hasRelay()" id="2">
                     <ng-template ngbTabTitle>
-                        <div (click)="scrollToElement(strategysection)">Metrics</div>
+                        <mat-icon>swap_horizontal_circle</mat-icon>
+                        <div (click)="onSelectTab('2')">Relay</div>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                        <hr>
+                        <app-relay-detail [config]="getConfig()" [currentEnvironment]="envSelectionChange.selectedEnvName" 
+                            [parent]="this"></app-relay-detail>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="3">
+                    <ng-template ngbTabTitle>
+                        <mat-icon> insert_chart</mat-icon>
+                        <div (click)="scrollToElement(strategysection); onSelectTab('3')">Metrics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <hr>

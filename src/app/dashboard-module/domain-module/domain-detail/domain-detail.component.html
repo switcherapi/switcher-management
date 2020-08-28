@@ -25,7 +25,7 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [currentEnvironment]="getDomain()?.activated"></app-environment-config>
+                    <app-environment-config #envSelectionChange [configuredEnvironments]="getDomain()?.activated"></app-environment-config>
                 </div>
             </div>
         </section>

@@ -35,6 +35,7 @@ import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-d
 import { MetricModule } from './metric-module/metric.module';
 import { SpecialCharacterDirective } from './common/special.char.directive';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
+import { RelayDetailComponent } from './config/relay-detail/relay-detail.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     ConfigListComponent,
     ConfigPreviewComponent,
     ConfigDetailComponent,
+    RelayDetailComponent,
     StrategyDetailComponent,
     StrategyListComponent,
     EnvironmentConfigComponent,
