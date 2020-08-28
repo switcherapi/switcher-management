@@ -83,6 +83,10 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
     this.selectedFilterType = value.type;
   }
 
+  getDomainId(): string {
+    return this.selectedDomain;
+  }
+
   loadEnvironments() {
     this.environmentService.getEnvironmentsByDomainId(this.selectedDomain)
       .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
