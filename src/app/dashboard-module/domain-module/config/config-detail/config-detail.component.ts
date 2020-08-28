@@ -266,12 +266,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             { 
               key: this.pathRoute.name, 
               description: this.pathRoute.element.description,
-              components: this.config.components.length
+              components: String(this.config.components.map(component => component.name))
             },
             { 
               key: body.key, 
               description: body.description,
-              components: this.components.length
+              components: String(this.components)
             })) {
           this.blockUI.stop();
           this.editing = false;
@@ -283,6 +283,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updateConfigComponents(data);
+            this.domainRouteService.notifyDocumentChange();
             this.toastService.showSuccess(`Switcher updated with success`);
             this.editing = false
           }
@@ -308,6 +309,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.blockUI.start('Removing switcher...');
         this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.domainRouteService.removePath(Types.CONFIG_TYPE);
+          this.domainRouteService.notifyDocumentChange();
           this.blockUI.stop();
           this.router.navigate(['/dashboard/domain/group/detail']);
           this.toastService.showSuccess(`Switcher removed with success`);
@@ -378,19 +380,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.components.every((u, i) => u != currentConfigComponents[i])
     ) {
       const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
-      
-      if (componentsToUpdate.length) {
-        this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.config = data;
-            this.loadConfig(data);
-          }
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(error ? error.error : 'Something went wront when updating components');
-          ConsoleLogger.printError(error);
-        });
-      }
+      this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.config = data;
+          this.loadConfig(data);
+        }
+      }, error => {
+        this.blockUI.stop();
+        this.toastService.showError(error ? error.error : 'Something went wront when updating components');
+        ConsoleLogger.printError(error);
+      });
     } else {
       this.loadConfig(config);
     }

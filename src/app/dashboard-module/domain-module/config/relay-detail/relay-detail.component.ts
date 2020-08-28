@@ -129,23 +129,25 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   updateEnvironmentStatus(env: any): void {
-    this.selectEnvironment(env.status);
     const configRelayStatus = new ConfigRelayStatus();
     configRelayStatus.activated[env.environment] = env.status;
 
+    this.blockUI.start('Updating environment...');
     this.configService.updateConfigRelayStatus(this.config.id, configRelayStatus).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
         this.parent.loadConfig(data);
+        this.selectEnvironment(env.status);
         this.toastService.showSuccess(`Environment updated with success`);
+        this.blockUI.stop();
       }
     }, error => {
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.blockUI.stop();
     });
   }
 
   edit() {
-    this.envSelectionChange.disableEnvChange(!this.editing);
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
@@ -180,6 +182,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         return;
       }
 
+      this.envSelectionChange.disableEnvChange(!this.editing);
       this.config.relay.type = this.relayTypeFormControl.value;
       this.config.relay.method = this.relayMethodFormControl.value;
       this.config.relay.description = this.descElement.nativeElement.value;

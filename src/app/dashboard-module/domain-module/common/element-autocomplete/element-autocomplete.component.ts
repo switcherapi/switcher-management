@@ -5,6 +5,7 @@ import { QueryRef, Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
 
 @Component({
   selector: 'element-autocomplete',
@@ -29,9 +30,14 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
   constructor(
     private apollo: Apollo,
+    private domainRouteService: DomainRouteService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.domainRouteService.documentChange.pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      this.loadKeys(this.parentComponent.getDomainId());
+    });
+  }
 
   ngOnDestroy() {
     this.unsubscribe.next();
@@ -48,6 +54,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     if (!domain)
       return;
 
+    this.searchListItems = [];
     this.query = this.apollo.watchQuery({
       query: this.generateGql(),
       variables: { 
@@ -59,7 +66,6 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       if (result) {
         this.smartSearchFormControl.setValue(this.value);
         let switchers, groups, components;
-        this.searchListItems = [];
         
         if (this.groups) {
           groups = result.data.domain.group.map(group => {

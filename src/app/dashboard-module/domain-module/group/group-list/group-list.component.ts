@@ -90,6 +90,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
           .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.ngOnInit();
+            this.domainRouteService.notifyDocumentChange();
           }
         }, error => {
           this.toastService.showError(`Unable to create a new group. ${error.error}`);

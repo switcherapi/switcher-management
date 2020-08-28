@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { delay, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -14,7 +14,7 @@ import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { OnElementAutocomplete, ElementAutocompleteComponent } from '../common/element-autocomplete/element-autocomplete.component';
+import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
 
 @Component({
   selector: 'app-domain',
@@ -25,9 +25,6 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   private unsubscribe: Subject<void> = new Subject();
   @BlockUI() blockUI: NgBlockUI;
-
-  // @ViewChildren("elementFilter")
-  // public elementFilter: QueryList<ElementAutocompleteComponent>
 
   selectedDomain: PathRoute;
   selectedGroup: PathRoute;
@@ -70,7 +67,6 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
     this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
-    // this.elementFilter.first.loadKeys(this.selectedDomain.id);
   }
 
   onDownloadSnapshot() {
@@ -218,6 +214,8 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
             document.getElementById("navbarMenu").style.top = "-60px";
         }
         this.prevScrollpos = currentScrollPos;
+      } else {
+        document.getElementById("navbarMenu").style.top = "0";
       }
     }
   }

@@ -198,6 +198,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updatePathRoute(data);
+            this.domainRouteService.notifyDocumentChange();
             this.blockUI.stop();
             this.toastService.showSuccess(`Group updated with success`);
             this.editing = false;
@@ -223,6 +224,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         this.groupService.deleteGroup(this.getGroup().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.blockUI.stop();
           this.domainRouteService.removePath(Types.GROUP_TYPE);
+          this.domainRouteService.notifyDocumentChange();
           this.router.navigate(['/dashboard/domain/group']);
           this.toastService.showSuccess(`Group removed with success`);
         }, error => {
