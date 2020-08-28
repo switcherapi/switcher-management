@@ -26,8 +26,8 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   private unsubscribe: Subject<void> = new Subject();
   @BlockUI() blockUI: NgBlockUI;
 
-  @ViewChildren("elementFilter")
-  public elementFilter: QueryList<ElementAutocompleteComponent>
+  // @ViewChildren("elementFilter")
+  // public elementFilter: QueryList<ElementAutocompleteComponent>
 
   selectedDomain: PathRoute;
   selectedGroup: PathRoute;
@@ -53,13 +53,11 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   ngOnInit() {
     this.scrollMenuHandler();
-    if (!this.currentPathRoute) {
-      this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
-        this.updateRoute();
-        this.checkDomainOwner();
-      });
-    } else
+    this.updateRoute();
+    this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
       this.updateRoute();
+      this.checkDomainOwner();
+    });
   }
 
   ngOnDestroy() {
@@ -72,7 +70,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
     this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
-    this.elementFilter.first.loadKeys(this.selectedDomain.id);
+    // this.elementFilter.first.loadKeys(this.selectedDomain.id);
   }
 
   onDownloadSnapshot() {
@@ -116,6 +114,10 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     } else if (value.type === 'Switcher' || value.type === 'Component') {
       this.updateConfigForRedirect(value);
     }
+  }
+
+  getDomainId(): string {
+    return this.selectedDomain.id;
   }
 
   checkDomainOwner() {

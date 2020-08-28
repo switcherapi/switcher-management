@@ -35,7 +35,6 @@
 
 .btn-element {
   display: block ruby;
-  padding-left: 10px;
 }
 
 @media only screen and (max-width: 430px) {
@@ -94,10 +93,6 @@
 @media only screen and (max-width: 770px) {
   .options-section-label {
     display: none;
-  }
-
-  .btn-element {
-    padding-right: 0;
   }
 }
 

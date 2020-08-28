@@ -50,9 +50,7 @@
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
                 </div>
-                <element-autocomplete #elementFilter class="element-filter"
-                    [domain]="selectedDomain?.id" [parentComponent]="this">
-                </element-autocomplete>
+                <element-autocomplete class="element-filter" [parentComponent]="this"></element-autocomplete>
             </div>
         </nav>
 

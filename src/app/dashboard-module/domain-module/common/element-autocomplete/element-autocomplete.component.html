@@ -1,5 +1,5 @@
-<mat-form-field *ngIf="domain" style="width: 100%;">
-    <input #smartSearchInput class="smart-search" matInput placeholder="Smart Search" aria-label="Smart Search"
+<mat-form-field style="width: 100%;">
+    <input #smartSearchInput class="smart-search" matInput placeholder="Smart Search" aria-label="Smart Search" (click)="loadComponent()"
         matTooltip="Use 'S:' for Switchers, 'G:' for Groups and 'C:' for Components"
         readonly="{{ lockFilter }}"
         [formControl]="smartSearchFormControl"

@@ -14,8 +14,7 @@ import { FormControl } from '@angular/forms';
 export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
-
-  @Input() domain: string;
+  
   @Input() parentComponent: OnElementAutocomplete;
   @Input() switchers: boolean = true;
   @Input() groups: boolean = true;
@@ -32,13 +31,17 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     private apollo: Apollo,
   ) { }
 
-  ngOnInit() {
-    this.loadKeys(this.domain);
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  loadComponent() {
+    if (!this.query) {
+      this.loadKeys(this.parentComponent.getDomainId());
+    }
   }
 
   loadKeys(domain: string): void {
@@ -161,4 +164,5 @@ export declare interface OnElementAutocomplete {
 
   onSelectElementFilter(value: any): void;
 
+  getDomainId(): string;
 }
