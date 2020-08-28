@@ -6,11 +6,12 @@ import { PathRoute, Types } from '../model/path-route';
 export class DomainRouteService {
 
   @Output() pathChange: EventEmitter<PathRoute> = new EventEmitter();
+  @Output() documentChange: EventEmitter<boolean> = new EventEmitter();
 
   constructor(
   ) { }
 
-  updatePath(pathRoute: PathRoute, isRouteTo: boolean) {
+  updatePath(pathRoute: PathRoute, isRouteTo: boolean): void {
     if (pathRoute.type === Types.DOMAIN_TYPE) {
       localStorage.setItem(Types.SELECTED_DOMAIN, JSON.stringify(pathRoute));
     } else if (pathRoute.type === Types.GROUP_TYPE) {
@@ -25,12 +26,16 @@ export class DomainRouteService {
     this.pathChange.emit(pathRoute);
   }
 
+  notifyDocumentChange(): void {
+    this.documentChange.emit(true);
+  }
+
   getPathElement(elementType: string) : PathRoute {
     return elementType == Types.CURRENT_ROUTE ? 
       JSON.parse(sessionStorage.getItem(elementType)) : JSON.parse(localStorage.getItem(elementType));
   }
 
-  removePath(elementType: string) {
+  removePath(elementType: string): void {
     if (elementType === Types.DOMAIN_TYPE) {
       localStorage.removeItem(Types.SELECTED_DOMAIN);
       localStorage.removeItem(Types.SELECTED_GROUP);

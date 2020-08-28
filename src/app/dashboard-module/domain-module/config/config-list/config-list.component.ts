@@ -91,6 +91,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
         .subscribe(data => {
           if (data) {
             this.ngOnInit();
+            this.domainRouteService.notifyDocumentChange();
           }
         }, error => {
           this.toastService.showError(`Unable to create a new switcher. ${error.error}`);

@@ -34,7 +34,7 @@ export class DetailComponent {
 
     validateEdition(oldObject: any, newObject: any): boolean {
         const fields = Object.keys(oldObject);
-        const changed = fields.filter(field => oldObject[`${field}`] != newObject[`${field}`]);
+        const changed = fields.filter(field => !Object.is(oldObject[`${field}`], newObject[`${field}`]));
         return !changed.length;
     }
 

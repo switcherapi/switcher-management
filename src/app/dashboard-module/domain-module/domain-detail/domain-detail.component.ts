@@ -218,6 +218,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.domainService.updateDomain(this.getDomain().id, this.domainDescription).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.updatePathRoute(data);
+          this.domainRouteService.notifyDocumentChange();
           this.blockUI.stop();
           this.toastService.showSuccess(`Domain updated with success`);
           this.editing = false;
@@ -241,6 +242,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         this.domainService.deleteDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           this.blockUI.stop();
           this.domainRouteService.removePath(Types.GROUP_TYPE);
+          this.domainRouteService.notifyDocumentChange();
           this.router.navigate(['/dashboard/']);
           this.toastService.showSuccess(`Domain removed with success`);
         }, error => {

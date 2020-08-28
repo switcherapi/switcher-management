@@ -131,6 +131,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(env => {
           if (env) {
+            this.domainRouteService.notifyDocumentChange();
             this.components.splice(this.components.indexOf(component[0]), 1);
             this.toastService.showSuccess('Component removed with success');
           }
@@ -159,6 +160,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
         this.compService.updateComponent(selectedComponent.id, body.name).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
+            this.domainRouteService.notifyDocumentChange();
             selectedComponent.name = componentChanged.name;
             this.toastService.showSuccess(`Component updated with success`);
           }
