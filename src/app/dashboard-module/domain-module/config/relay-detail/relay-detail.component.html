@@ -1,0 +1,65 @@
+<block-ui>
+    <div [ngClass]="detailBodyStyle">
+        <section [ngClass]="classStatus" style="width: 100%;">
+            <div class="header-container">
+                <div class="description" style="width: 350px;">
+                    <mat-form-field class="operations-style">
+                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Type" [value]="config.relay.type" readonly>
+                        <mat-select *ngIf="editing" placeholder="Relay Type" [formControl]="relayTypeFormControl">
+                            <mat-option value="VALIDATION">VALIDATION</mat-option>
+                            <mat-option value="NOTIFICATION">NOTIFICATION</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <textarea #descElement matInput class="readonly-fields" placeholder="Description" 
+                            [value]="config.relay.description ? config.relay.description : ''" maxlength="256"
+                            [ngStyle]="editing ? {'color': 'black'} : ''" rows="6" readonly="{{ !editing }}">
+                        </textarea>
+                        <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="description" style="width: 300px;">
+                    <mat-form-field>
+                        <input #endpointElement matInput placeholder="Endpoint" maxlength="200" required
+                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}"  autocomplete="off" [formControl]="endpointFormControl">
+                        <mat-error *ngIf="endpointFormControl.hasError('required')">
+                            Endpoint must be valid
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="operations-style">
+                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Method" [value]="config.relay.method" readonly>
+                        <mat-select *ngIf="editing" placeholder="Relay Method" [formControl]="relayMethodFormControl">
+                            <mat-option value="GET">GET</mat-option>
+                            <mat-option value="POST">POST</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input #authPrefixElement matInput placeholder="Authorization Prefix" 
+                            [value]="config.relay.auth_prefix ? config.relay.auth_prefix : ''" maxlength="50"
+                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input #authTokenElement matInput placeholder="Authorization Token" [value]="getRelayAttribute('auth_token')" maxlength="200"
+                                [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="description">
+                    <app-environment-config #envSelectionChange [configuredEnvironments]="config.relay.activated"
+                        [notSelectableEnvironments]="true" [selectedEnvName]="currentEnvironment"></app-environment-config>
+                </div>
+            </div>
+        </section>
+        <section class="strategy-control-style">
+            <div class="options-section">
+                <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
+                    <mat-icon style="font-size: large;">build</mat-icon>
+                    <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+                </button>
+                <button mat-button class="btn-element" style="background: #fb5454;" (click)="delete()" [disabled]="!removable">
+                    <mat-icon>delete</mat-icon>
+                    <div class="options-section-label">Remove</div>
+                </button>
+            </div>
+        </section>
+    </div>
+</block-ui>

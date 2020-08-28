@@ -22,6 +22,16 @@ export class DetailComponent {
         })
     }
 
+    selectEnvironment(status: boolean): void {
+        this.currentStatus = status;
+    
+        if (this.editing) {
+          this.classStatus = 'header editing';
+        } else {
+          this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+        }
+    }
+
     validateEdition(oldObject: any, newObject: any): boolean {
         const fields = Object.keys(oldObject);
         const changed = fields.filter(field => oldObject[`${field}`] != newObject[`${field}`]);

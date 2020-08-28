@@ -32,7 +32,7 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [currentEnvironment]="getGroup()?.activated"></app-environment-config>
+                    <app-environment-config #envSelectionChange [configuredEnvironments]="getGroup()?.activated"></app-environment-config>
                 </div>
             </div>
         </section>

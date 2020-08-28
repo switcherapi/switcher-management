@@ -67,8 +67,6 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   ngOnInit() {
-    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "1100px";
-
     if (this.strategy.values) {
       this.loadStrategySelectionComponent();
       this.loadOperationSelectionComponent();
@@ -90,8 +88,6 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-
-    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "";
   }
 
   loadStrategySelectionComponent(): void {

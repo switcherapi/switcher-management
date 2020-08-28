@@ -20,7 +20,8 @@ import { Types } from 'src/app/model/path-route';
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  @Input() currentEnvironment: Map<string, boolean>;
+  @Input() selectedEnvName: string;
+  @Input() configuredEnvironments: Map<string, boolean>;
   @Input() notSelectableEnvironments: boolean;
   @Output() outputEnvChanged: EventEmitter<boolean> = new EventEmitter();
   @Output() outputStatusChanged: EventEmitter<any> = new EventEmitter();
@@ -38,7 +39,6 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   environmentStatusSelection: FormGroup;
   environments: Environment[];
   selectedEnvStatus: boolean;
-  selectedEnvName: string;
 
   constructor(
     private fb: FormBuilder,
@@ -54,8 +54,8 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
         this.selectedEnvName = s.source._value.toString();
 
-        const currentEnv = this.currentEnvironment[this.selectedEnvName] === undefined ? 
-          this.currentEnvironment['default'] : this.currentEnvironment[this.selectedEnvName];
+        const currentEnv = this.configuredEnvironments[this.selectedEnvName] === undefined ? 
+          this.configuredEnvironments['default'] : this.configuredEnvironments[this.selectedEnvName];
 
         this.selectedEnvStatus = currentEnv;
         this.environmentStatusSelection.get('environmentStatusSelection').setValue(currentEnv);
@@ -77,12 +77,12 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       if (!this.notSelectableEnvironments)
         this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
       else {
-        this.selectedEnvName = Object.keys(this.currentEnvironment)[0];
+        this.selectedEnvName = this.selectedEnvName || Object.keys(this.configuredEnvironments)[0];
         this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
       }
 
 
-      this.selectedEnvStatus = this.currentEnvironment[this.environmentSelection.get('environmentSelection').value];
+      this.selectedEnvStatus = this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value];
       this.outputEnvChanged.emit(this.selectedEnvStatus);
     });
   }
@@ -102,7 +102,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   }
 
   setProductionFirst(): string {
-    const env = JSON.parse(JSON.stringify(this.currentEnvironment));
+    const env = JSON.parse(JSON.stringify(this.configuredEnvironments));
     var keys = Object.keys(env);
     let defaultEnv: Environment;
     for (var i = 0; i < keys.length; i++) {
@@ -129,7 +129,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(event: MatSlideToggleChange) {
-    this.currentEnvironment[this.environmentSelection.get('environmentSelection').value] = event.checked;
+    this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value] = event.checked;
     const envChanged = {
       environment: this.environmentSelection.get('environmentSelection').value,
       status: event.checked
@@ -149,7 +149,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     if (this.notSelectableEnvironments)
       return true;
 
-    if (this.currentEnvironment[this.selectedEnvName] === undefined)
+    if (this.configuredEnvironments[this.selectedEnvName] === undefined)
       return true;
     
     return false;
