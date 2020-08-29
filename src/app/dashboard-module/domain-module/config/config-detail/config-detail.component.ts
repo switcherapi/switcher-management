@@ -7,7 +7,7 @@ import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -363,7 +363,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.updatePathRoute(this.config);
 
     setTimeout(() => {
-      this.onSelectTab('2');
+      this.currentTab = '2';
       (this.tasbset as any).select('2');
     }, 500);
   }
@@ -457,12 +457,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  onSelectTab(id: string) {
-    this.currentTab = id;
+  onTabChange($event: NgbTabChangeEvent) {
+    this.currentTab = $event.nextId;
 
-    if (id === '1') {
+    if (this.currentTab === '1') {
       this.classStrategySection = 'strategy-section strategies';
-    } else if (id === '2') {
+    } else if (this.currentTab === '2') {
       this.classStrategySection = 'strategy-section relay';
     } else {
       this.classStrategySection = 'strategy-section metrics';

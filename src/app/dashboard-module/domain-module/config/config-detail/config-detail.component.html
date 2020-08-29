@@ -91,11 +91,12 @@
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
             </div>
-            <ngb-tabset #tasbset id="tabset" *ngIf="!loading" [activeId]="currentTab" type="pills" [destroyOnHide]="false">
+            <ngb-tabset #tasbset id="tabset" *ngIf="!loading" [activeId]="currentTab" type="pills" 
+                [destroyOnHide]="false" (tabChange)="onTabChange($event)">
                 <ngb-tab *ngIf="hasStrategies" id="1">
                     <ng-template ngbTabTitle>
                         <mat-icon>code</mat-icon>
-                        <div (click)="onSelectTab('1')">Strategies</div>
+                        <div>Strategies</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <hr>
@@ -106,7 +107,7 @@
                 <ngb-tab *ngIf="hasRelay()" id="2">
                     <ng-template ngbTabTitle>
                         <mat-icon>swap_horizontal_circle</mat-icon>
-                        <div (click)="onSelectTab('2')">Relay</div>
+                        <div>Relay</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <hr>
@@ -117,7 +118,7 @@
                 <ngb-tab id="3">
                     <ng-template ngbTabTitle>
                         <mat-icon> insert_chart</mat-icon>
-                        <div (click)="scrollToElement(strategysection); onSelectTab('3')">Metrics</div>
+                        <div (click)="scrollToElement(strategysection);">Metrics</div>
                     </ng-template>
                     <ng-template ngbTabContent>
                         <hr>

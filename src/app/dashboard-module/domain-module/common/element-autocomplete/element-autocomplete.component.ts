@@ -34,6 +34,10 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    if (this.value) {
+      this.loadKeys(this.parentComponent.getDomainId());
+    }
+    
     this.domainRouteService.documentChange.pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       this.loadKeys(this.parentComponent.getDomainId());
     });
