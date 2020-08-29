@@ -38,6 +38,10 @@
                             <input matInput placeholder="Reason" [value]="element.reason"
                                 readonly autocomplete="off">
                         </mat-form-field>
+                        <mat-form-field *ngIf="element.message" style="width: 100%;">
+                            <input matInput placeholder="Message" [value]="element.message"
+                                readonly autocomplete="off">
+                        </mat-form-field>
                     </div>
                 </div>
             </td>
