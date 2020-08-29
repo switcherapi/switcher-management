@@ -14,6 +14,7 @@ import { LibJavaScriptComponent } from './docs/lib-javascript.component';
 import { SearchComponent } from './search/search.component';
 import { ApiComponent } from './docs/api.component';
 import { ShortcutsComponent } from './docs/shortcuts.component';
+import { RelayComponent } from './docs/relay.component';
 
 const routes: Routes = [
 
@@ -30,7 +31,8 @@ const routes: Routes = [
       { path: 'libjava', component: LibJavaComponent },
       { path: 'libjavascript', component: LibJavaScriptComponent },
       { path: 'api', component: ApiComponent },
-      { path: 'shortcuts', component: ShortcutsComponent }
+      { path: 'shortcuts', component: ShortcutsComponent },
+      { path: 'relay', component: RelayComponent }
     ]  
   }
   

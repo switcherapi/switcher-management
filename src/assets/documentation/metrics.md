@@ -35,7 +35,7 @@ When visualizing Overall Statistics, it is possible to find insights into the fo
 
 - **Resons View**
     
-  Quantitative overall view of which flow features are being executed.
+  Quantitative overall view of all executed results for a specific switcher.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/metrics/metric_reasons.jpg" class="image-style" alt=""/><p>
 

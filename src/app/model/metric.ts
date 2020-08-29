@@ -44,6 +44,7 @@ export class MetricData {
     entry: StrategyDataEntry[];
     result: boolean;
     reason: string;
+    message: string;
     environment: string;
     date: Date;
 }
