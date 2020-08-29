@@ -117,6 +117,8 @@ export class MetricDataComponent implements OnInit, OnDestroy {
       return true;
     } else if (data.date.toString().indexOf(filter) >= 0) {
       return true;
+    } else if (data.reason.toLowerCase().toString().indexOf(filter) >= 0) {
+      return true;
     }
 
     return false;

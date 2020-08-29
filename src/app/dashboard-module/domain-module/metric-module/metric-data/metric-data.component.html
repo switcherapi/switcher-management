@@ -50,7 +50,6 @@
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>
     <div class="tablelog-footer">
-        <p style="margin-left: 15px;">{{pageLoaded}}/{{totalPages}}</p>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
     </div>
     <div style="display: flex; padding-bottom: 15px;">
@@ -69,5 +68,6 @@
             [disabled]="!hasNext()">
             <mat-icon style="font-size: larger;">arrow_forward</mat-icon>
         </button>
+        <p style="margin-left: 15px;">{{pageLoaded}}/{{totalPages}}</p>
     </div>
 </div>
