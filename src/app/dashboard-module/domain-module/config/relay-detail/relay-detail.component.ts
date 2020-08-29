@@ -92,6 +92,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.relayTypeFormControl.setValue(this.config.relay.type);
     this.relayMethodFormControl.setValue(this.config.relay.method);
     this.endpointFormControl.setValue(this.getRelayAttribute('endpoint'));
+    this.authTokenElement.nativeElement.value = this.getRelayAttribute('auth_token');
 
     if (this.config.relay.endpoint[this.envSelectionChange.selectedEnvName] == undefined) {
       this.edit();

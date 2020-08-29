@@ -177,8 +177,8 @@ export class ComponentsStatisticsTab {
 export class ReasonsStatisticsTab {
   constructor(private statistics: MetricStatistics) {}
 
-  public chartType: ChartType = 'pie';
-  public chartLegend = true;
+  public chartType: ChartType = 'horizontalBar';
+  public chartLegend = false;
 
   public chartLabels: Label[] = [];
   public chartData: number[] = [];
@@ -210,9 +210,17 @@ export class ReasonsStatisticsTab {
     const reasonsStatistics = this.statistics.reasons;
 
     reasonsStatistics.forEach(reasonStats => {
-      this.chartLabels.push(reasonStats.reason);
+      if (window.innerWidth < 450) {
+        this.chartLabels.push(this.showResumed(reasonStats.reason, 5));
+      } else {
+        this.chartLabels.push(reasonStats.reason);
+      }
       this.chartData.push(reasonStats.total);
     });
+  }
+
+  showResumed(value: string, length: number): string {
+    return value.length > length ? `${value.substr(0, length)}...` : value;
   }
 }
 
