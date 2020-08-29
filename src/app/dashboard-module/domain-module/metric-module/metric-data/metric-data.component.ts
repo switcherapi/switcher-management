@@ -61,7 +61,6 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.log(this.data)
     this.loadDataSource(this.data);
     this.readPermissionToObject();
 
