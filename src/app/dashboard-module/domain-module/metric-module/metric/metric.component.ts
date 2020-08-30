@@ -21,6 +21,7 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 export class MetricComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() switcher: string;
+  @Input() environment: string = 'default';
   filterType: string = 'Switcher';
   lockFilter: boolean = false;
   dateGroupPattern: string;
@@ -33,7 +34,6 @@ export class MetricComponent implements OnInit, OnDestroy {
   error = '';
 
   metrics: Metric;
-  environment: string = 'default';
 
   constructor(
     private metricService: MetricService,
@@ -60,7 +60,7 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
     this.metricService.getMetricStatistics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : 'default', 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
+      environment ? environment : this.environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
       .pipe(takeUntil(this.unsubscribe)).subscribe(statistics => {
         this.loading = false;
         if (statistics) {
@@ -77,7 +77,7 @@ export class MetricComponent implements OnInit, OnDestroy {
 
   public loadDataMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
     return this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : 'default', page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
+      environment ? environment : this.environment, page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
         .pipe(takeUntil(this.unsubscribe));
   }
 
@@ -117,7 +117,7 @@ export class MetricComponent implements OnInit, OnDestroy {
         dateAfter: '',
         dateBefore: '',
         dateGroupPattern: '',
-        environment: ''
+        environment: this.environment
       }
     });
 

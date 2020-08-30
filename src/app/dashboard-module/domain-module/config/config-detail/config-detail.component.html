@@ -35,6 +35,9 @@
                 </div>
                 <div class="description">
                     <app-environment-config #envSelectionChange [configuredEnvironments]="getConfig().activated"></app-environment-config>
+                    <mat-checkbox [(ngModel)]="disableMetrics" [color]="'primary'" style="margin: auto;" [disabled]="!editing">
+                        Disable metrics
+                    </mat-checkbox>
                 </div>
             </div>
         </section>
@@ -122,7 +125,7 @@
                     </ng-template>
                     <ng-template ngbTabContent>
                         <hr>
-                        <app-metric [switcher]="getConfig().key"></app-metric>
+                        <app-metric [switcher]="getConfig().key" [environment]="envSelectionChange.selectedEnvName"></app-metric>
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>

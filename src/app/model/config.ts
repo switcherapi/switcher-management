@@ -6,6 +6,7 @@ export class Config {
   createdAt: Date;
   updatedAt: Date;
   activated: Map<string, boolean>;
+  disable_metrics: Map<string, boolean>;
   components: any[];
   relay: ConfigRelay;
 }
