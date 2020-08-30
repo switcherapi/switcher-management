@@ -64,6 +64,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   classStatus: string;
   classStrategySection: string;
+  disableMetrics: boolean;
   
   config: Config;
   strategies:  Strategy[];
@@ -118,6 +119,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
       this.selectEnvironment(status);
       this.initStrategies();
+      this.disableMetrics = this.getConfig().disable_metrics ? 
+        this.getConfig().disable_metrics[this.envSelectionChange.selectedEnvName] : false;
     });
 
     this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
@@ -170,6 +173,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.configService.getConfigById(config.id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.config = data;
+        this.disableMetrics = this.config.disable_metrics ? 
+          this.config.disable_metrics[this.envSelectionChange.selectedEnvName] : false;
         this.loadComponents();
         super.loadAdmin(this.config.owner);
         this.keyFormControl.setValue(config.key);
@@ -266,21 +271,25 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             { 
               key: this.pathRoute.name, 
               description: this.pathRoute.element.description,
-              components: String(this.config.components.map(component => component.name))
+              components: String(this.config.components.map(component => component.name)),
+              disable_metrics: this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName]
             },
             { 
               key: body.key, 
               description: body.description,
-              components: String(this.components)
+              components: String(this.components),
+              disable_metrics: this.disableMetrics
             })) {
           this.blockUI.stop();
           this.editing = false;
           return;
         }
 
+        const updateDisableMetrics = this.getDisableMetricsChange();
         this.configService.updateConfig(this.config.id, 
           body.key != this.pathRoute.name ? body.key : undefined, 
-          body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          body.description != this.pathRoute.element.description ? body.description : undefined, updateDisableMetrics)
+            .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.updateConfigComponents(data);
             this.domainRouteService.notifyDocumentChange();
@@ -298,6 +307,15 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         });
       }
     }
+  }
+
+  getDisableMetricsChange(): any {
+    if (this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] != this.disableMetrics) {
+      return {
+        [this.envSelectionChange.selectedEnvName]: this.disableMetrics
+      }
+    }
+    return undefined;
   }
 
   delete() {

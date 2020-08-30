@@ -49,11 +49,12 @@ export class ConfigService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
-  public updateConfig(id: string, key?: string, description?: string): Observable<Config> {
+  public updateConfig(id: string, key?: string, description?: string, disable_metrics?: any): Observable<Config> {
     const body: any = {}
 
     if (key) body.key = key;
     if (description) body.description = description;
+    if (disable_metrics) body.disable_metrics = disable_metrics;
     
     return this.http.patch<Config>(`${environment.apiUrl}/config/${id}`, body)
       .pipe(catchError(super.handleError));
