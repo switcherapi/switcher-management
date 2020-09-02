@@ -272,7 +272,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
               key: this.pathRoute.name, 
               description: this.pathRoute.element.description,
               components: String(this.config.components.map(component => component.name)),
-              disable_metrics: this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName]
+              disable_metrics: this.pathRoute.element.disable_metrics != undefined ? 
+                this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] : undefined
             },
             { 
               key: body.key, 
@@ -310,7 +311,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   getDisableMetricsChange(): any {
-    if (this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] != this.disableMetrics) {
+    if (this.pathRoute.element.disable_metrics != undefined && 
+        this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] != this.disableMetrics) {
       return {
         [this.envSelectionChange.selectedEnvName]: this.disableMetrics
       }
