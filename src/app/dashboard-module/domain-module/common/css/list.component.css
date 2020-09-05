@@ -9,6 +9,16 @@ mat-icon {
   color: white;
 }
 
+.div-btn-new {
+  width: 100%; 
+  margin: auto;
+}
+
+.options-section-label {
+  vertical-align: baseline !important;
+  display: contents;
+}
+
 .svg-style {
   margin-right: 6px;
   margin-bottom: 6px;
@@ -16,13 +26,12 @@ mat-icon {
 }
 
 .header-style {
-  display: inherit; 
-  padding-top: 10px;
+  display: flex;
 }
 
 .environment-style {
-  float: right; 
-  margin-top: -10px;
+  float: right;
+  margin-top: 10px;
 }
 
 :host /deep/ .block-ui-wrapper {
@@ -76,12 +85,12 @@ mat-icon {
 }
 
 @media only screen and (max-width: 600px) {
-  .header-style {
-    display: grid;
-  }
-
   .environment-style {
     float: right; 
     margin-top: 10px;
+  }
+
+  .options-section-label {
+    display: none;
   }
 }

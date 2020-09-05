@@ -118,6 +118,7 @@ mat-icon {
     grid-area: header;
     display: inline-flex;
     width: 100% !important;
+    font-size: inherit;
   }
 
   .grid-container {
