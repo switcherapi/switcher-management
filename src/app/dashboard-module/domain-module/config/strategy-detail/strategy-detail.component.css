@@ -37,6 +37,41 @@
   display: block ruby;
 }
 
+@media only screen and (max-width: 1200px) {
+  .description {
+    display: grid;
+    align-self: start;
+    width: 95% !important;
+  }
+
+  .operations-style {
+    margin-top: 10px;
+    width: 90% !important;
+  }
+
+  .strategy-values-control {
+    display: flex;
+  }
+
+  .strategy-control-style {
+    display: flex;
+  }
+
+  .description-values {
+    display: flex;
+  }
+  
+  :host /deep/ .mat-card {
+    margin-right: 10px;
+  }
+}
+
+@media only screen and (max-width: 770px) {
+  .options-section-label {
+    display: none;
+  }
+}
+
 @media only screen and (max-width: 430px) {
   .header {
     columns: 1;
@@ -83,37 +118,6 @@
   .strategy-control-style {
     display: grid !important;
     width: 80%;
-  }
-
-  .description-values {
-    display: flex;
-  }
-}
-
-@media only screen and (max-width: 770px) {
-  .options-section-label {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1200px) {
-  .description {
-    display: grid;
-    align-self: start;
-    width: 95% !important;
-  }
-
-  .operations-style {
-    margin-top: 10px;
-    width: 90% !important;
-  }
-
-  .strategy-values-control {
-    display: flex;
-  }
-
-  .strategy-control-style {
-    display: flex;
   }
 
   .description-values {

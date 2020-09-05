@@ -12,6 +12,13 @@
   display: contents;
 }
 
+.invisible{
+  display: block;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
 @media only screen and (max-width: 430px) {
   .description {
     display: grid;
