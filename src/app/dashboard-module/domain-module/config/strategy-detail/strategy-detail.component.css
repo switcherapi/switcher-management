@@ -34,7 +34,7 @@
 }
 
 .btn-element {
-  display: block ruby;
+  display: block;
 }
 
 @media only screen and (max-width: 1200px) {

@@ -1,6 +1,6 @@
 .filter-member-style {
   white-space: nowrap;
-  display: block ruby;
+  display: block;
   padding-top: 10px;
 }
 
