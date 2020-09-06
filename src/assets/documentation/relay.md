@@ -60,6 +60,7 @@ Below you will learn how to configure a Switcher Relay and its results after it 
     - REGEX_VALIDATION: regex
 
     For example, if you call a switcher using the Java example below:
+
     ```java
     Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
           .prepareEntry(new Entry(Entry.VALUE, "Roger"))
@@ -77,33 +78,33 @@ Below you will learn how to configure a Switcher Relay and its results after it 
     ##### Code example
     Using the example above, a simple implementation of a relay receptor using NodeJS/Express can be done like:
 
-    ```javascript
-    router.post('/validate', (req, res) => {
-        try {
-            const token = req.header('Authorization').replace('Bearer ', '');
+```javascript
+router.post('/validate', (req, res) => {
+    try {
+        const token = req.header('Authorization').replace('Bearer ', '');
 
-            if (!validateToken(token)) {
-              return res.status(401).send({
-                result: false,
-                message: `Invalid token`
-              });
-            }
-
-            if (!validateArguments(req.body.value, req.body.network)) {
-              return res.send({
-                result: false,
-                message: `Invalid user name '${req.body.value}' for ${req.body.network} network address`
-              });
-            }
-
-            res.send({
-                result: true
-            });
-        } catch (e) {
-            res.status(500).send();
+        if (!validateToken(token)) {
+          return res.status(401).send({
+            result: false,
+            message: `Invalid token`
+          });
         }
-    })
-    ```
+
+        if (!validateArguments(req.body.value, req.body.network)) {
+          return res.send({
+            result: false,
+            message: `Invalid user name '${req.body.value}' for ${req.body.network} network address`
+          });
+        }
+
+        res.send({
+            result: true
+        });
+    } catch (e) {
+        res.status(500).send();
+    }
+})
+```
 
     The response when implementing a *NOTIFICATION* receptor service must contain the following return arguments:
     <li style="list-style-type: disclosure-closed;">result: boolean

@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/logo/switcherapi_management_grey.png" class="image-style center width-70" alt=""/><p>
+<img src="https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/docs/SwitcherAPI_connectivity.jpg" class="image-style center" alt=""/><p>
 
 ## About  
 **Switcher API** is a *Feature Flag* API focused on decreasing the friction caused by changes providing a simple and flexible interface.
@@ -13,7 +13,14 @@ Main features:
 - API endpoints exposed in REST and GraphQL.
 - Offline mode also enables your applications to work with no latency.
 
-<img src="https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/docs/SwitcherAPI_connectivity.jpg" class="image-style center" alt=""/>
+* * *
+
+## Project overview
+
+<a href="[$ASSETS_LOCATION]/documentation/images/overview/macro_overview.jpg" target="_blank">
+<img src="[$ASSETS_LOCATION]/documentation/images/overview/macro_overview.jpg" class="image-style center width-70" alt=""/>
+</a>
+<p>
 
 * * *
  
