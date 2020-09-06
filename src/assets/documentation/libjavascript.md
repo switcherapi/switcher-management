@@ -70,6 +70,7 @@ Before you call the API, there is one single step you need to execute to complet
 If you are not running the API expecting to use the offline features, you can ignore this step. 
 
 After instantiating the Switcher, you need to load the snapshot engine to watch for changes in your Domain structure.
+
 ```js
 await switcher.loadSnapshot();
 ```
@@ -80,6 +81,7 @@ Here are some examples:
 
 1. **No parameters**
 Invoking the API can be done by instantiating the switcher and calling *isItOn* passing its key as a parameter.
+
 ```js
 const switcher = new Switcher(url, apiKey, domain, component, environment);
 await switcher.isItOn('FEATURE01');
@@ -96,6 +98,7 @@ switcher.isItOn('KEY')
 
 3. **Strategy validation - preparing input**
 Loading information into the switcher can be made by using *prepare*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
+
 ```js
 switcher.prepare('FEATURE01', [Switcher.StrategiesType.VALUE, 'USER_1');
 switcher.isItOn();
@@ -103,6 +106,7 @@ switcher.isItOn();
 
 4. **Strategy validation - all-in-one execution**
 All-in-one method is fast and include everything you need to execute a complex call to the API.
+
 ```js
 await switcher.isItOn('FEATURE01',
     [Switcher.StrategiesType.VALUE, 'User 1', 

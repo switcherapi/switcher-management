@@ -26,11 +26,11 @@
             "styles": [
               "src/custom-theme.scss",
               "src/styles.css",
-              "node_modules/prismjs/themes/prism-coy.css"
+              "src/assets/css/prism.css"
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js",
-              "node_modules/prismjs/prism.js"
+              "src/assets/js/prism.js"
             ]
           },
           "configurations": {

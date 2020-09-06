@@ -4,7 +4,7 @@
         <strong>Found: </strong>{{ skimmmingResult.found }}</h3>
     <div class="spacer"></div>
     <div class="segment-list" *ngFor="let segment of skimmmingResult?.segment; let i = index">
-        <markdown>{{segment}}</markdown>
+        <markdown>{{renderSegment(segment, skimmmingResult.file)}}</markdown>
         <div *ngIf="i < skimmmingResult?.segment.length - 1" class="spacer-segment"></div>
     </div>
 </div>
