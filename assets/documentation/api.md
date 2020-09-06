@@ -11,6 +11,7 @@ Signing up to Switcher API must be made via Switcher Management.
 <br />It can be done by using an email address or linking it to a GitHub or Bitbucket account.
 
 - **Singing up via email** - /admin/signup [POST]
+
 ```json
 {
     "name": "[USER NAME]",
@@ -30,6 +31,7 @@ Signing up to Switcher API must be made via Switcher Management.
 
 - **New domain** - /domain/create [POST]
   <br />The API Key will be generated after creating the domain.
+
 ```json
 {
     "name": "[DOMAIN NAME]",
@@ -40,6 +42,7 @@ Signing up to Switcher API must be made via Switcher Management.
 #### Component
 
 - **Create a component** - /component/create [POST]
+
 ```json
 {
     "name": "[COMPONENT NAME]",
@@ -54,6 +57,7 @@ Signing up to Switcher API must be made via Switcher Management.
 #### Group
 
 - **New Group** - /groupconfig/create [POST]
+
 ```json
 {
     "name": "[GROUP NAME]",
@@ -65,6 +69,7 @@ Signing up to Switcher API must be made via Switcher Management.
 #### Switcher
 
 - **New Switcher** - /config/create [POST]
+
 ```json
 {
     "key": "[SWITCHER KEY]",
@@ -76,6 +81,7 @@ Signing up to Switcher API must be made via Switcher Management.
 #### Strategy
 
 - **New Strategy** - /configstrategy/create [POST]
+
 ```json
 {
     "description": "[STRATEGY DESCRIPTION]",
@@ -126,12 +132,14 @@ To use the API, each component must authenticate before executing the API criter
 
 - **Auth** - /criteria/auth [POST]
 <br />The header must contain the following:
+
 ```
 'headers': {
     'switcher-api-key': '[API_KEY]'
 }
 ```
 The body must contain the exact registered domain, component, and environment name.
+
 ```json
 {
    "domain": "[DOMAIN NAME]",
@@ -142,6 +150,7 @@ The body must contain the exact registered domain, component, and environment na
 
 - **Executing** - /criteria?key=SWITCHER_KEY [POST]
 <br />The header must contain the authorization token provided by the criteria/auth endpoint.
+
 ```
 Bearer Token: [TOKEN]
 ```

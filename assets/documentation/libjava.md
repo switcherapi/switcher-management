@@ -17,6 +17,7 @@
 
 ##### - Install  
 - Maven
+
 ```xml
 <dependency>
     <groupId>com.github.switcherapi</groupId>
@@ -41,6 +42,7 @@ The context map properties stores all information regarding connectivity and str
 - SNAPSHOT_AUTO_LOAD: (boolean) Set the module to automatically download the snapshot configuration.
 
 All set, you can now build the context.
+
 ```java
 SwitcherFactory.buildContext(properties, false);
 ```
@@ -54,6 +56,7 @@ There are a few different ways to call the API using the java library.
 1. **No parameters**
 
   Invoking the API can be done by obtaining the switcher object and calling *isItOn*. It can also be forced to call another key any time you want.
+
   ```java
   Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01");
   switcher.isItOn();
@@ -64,6 +67,7 @@ There are a few different ways to call the API using the java library.
 2. **Strategy validation - preparing input**
 
   Loading values into the switcher can be done by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
+
   ```java
   List<Entry> entries = new ArrayList<>();
   entries.add(new Entry(Entry.DATE, "2019-12-10"));
@@ -87,6 +91,7 @@ There are a few different ways to call the API using the java library.
 3. **Strategy validation - chained call**
 
   Create chained calls using 'prepareEntry' functions one by one.
+
   ```java
   Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
         .prepareEntry(new Entry(Entry.VALUE, "My value"))
@@ -98,6 +103,7 @@ There are a few different ways to call the API using the java library.
 4. **Strategy validation - all-in-one execution**
 
   All-in-one method is fast and include everything you need to execute a complex call to the API. Stack inputs changing the last parameter to *true* in case you need to add more values to the strategy validator.
+
   ```java
   switcher.isItOn("FEATURE01", new Entry(Entry.NETWORK, "10.0.0.3"), false);
   ```
@@ -105,6 +111,7 @@ There are a few different ways to call the API using the java library.
 5. **Accessing the response history**
 
   Switchers when created store the last execution result from a given switcher key. This can be useful for troubleshooting or internal logging.
+  
   ```java
   switcher.getHistoryExecution();
   ```
