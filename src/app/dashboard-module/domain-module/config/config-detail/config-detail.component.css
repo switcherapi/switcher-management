@@ -22,11 +22,11 @@
 }
 
 .btn-element {
-  display: block ruby;
+  display: block;
 }
 
 :host /deep/ .flex-column {
-  display: block ruby;
+  display: block;
 }
 
 :host /deep/ .mat-list-option {

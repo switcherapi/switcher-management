@@ -9,7 +9,7 @@
         </mat-form-field>
     </form>
     <form [formGroup]="environmentStatusSelection">
-        <div style="display: block ruby;">
+        <div style="display: block;">
             <div class="toggle-section">
                 <mat-slide-toggle #toggleEnv [checked]="selectedEnvStatus" [ngClass]="toggleClass" 
                     (change)="changeStatus($event)" formControlName="environmentStatusSelection">
