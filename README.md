@@ -1,4 +1,5 @@
 ![Deployment](https://github.com/switcherapi/switcher-management/workflows/Deployment/badge.svg)
+[![Known Vulnerabilities](https://snyk.io/test/github/petruki/switcher-management/badge.svg?targetFile=package.json)](https://snyk.io/test/github/petruki/switcher-management?targetFile=package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
