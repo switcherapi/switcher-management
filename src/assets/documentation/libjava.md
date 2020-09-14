@@ -22,7 +22,7 @@
 <dependency>
     <groupId>com.github.switcherapi</groupId>
     <artifactId>switcher-client</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>
 ```
 
@@ -90,14 +90,13 @@ There are a few different ways to call the API using the java library.
 
 3. **Strategy validation - chained call**
 
-  Create chained calls using 'prepareEntry' functions one by one.
+  Create chained calls using 'getSwitcher' then 'prepareEntry' then 'isItOn' functions.
 
   ```java
   Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
         .prepareEntry(new Entry(Entry.VALUE, "My value"))
-        .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.1"));
-			
-	switcher.isItOn();
+        .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.1"))
+        .isItOn();
   ```
 
 4. **Strategy validation - all-in-one execution**
@@ -117,6 +116,22 @@ There are a few different ways to call the API using the java library.
   ```
 
 </br>
+
+##### - Real-time snapshot updater
+Let the Switcher Client manage your application local snapshot file.
+
+In order to minimize roundtrips and unnecessary file parsing, try to use one of these features to improve the overall performance when accessing snapshots locally.
+
+1. This feature will update the in-memory Snapshot every time a modification on the file occurs.
+```java
+SwitcherFactory.watchSnapshot();
+SwitcherFactory.stopWatchingSnapshot();
+```
+
+2. You can tell the Switcher Client to check if the snapshot file is updated. This will ensure that your application is running the most recent version of your cloud configuration.
+```java
+SwitcherFactory.validateSnapshot();
+```
 
 ##### - Offline settings
 You can also force the Switcher library to work offline. In this case, the snapshot location must be set up and the context re-built using the offline flag.
@@ -145,6 +160,11 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
 </br>
 
 ### Version Log
+- 1.0.8:
+	- Fixed issues when using Silent Mode
+	- Fixed error when using only access to online API
+	- Improved validation when verifying whether API is accessible
+	- Added validations when preparing the Switcher Context
 - 1.0.7: Added Regex Validation
 - 1.0.6: Updated depencencies & new features
 	- Updated dependency jersey-hk2 from 2.28 to 2.31
