@@ -1,5 +1,5 @@
 <div class="filter-member-style">
-    <mat-form-field>
+    <mat-form-field class="filter-input">
         <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter / Email">
     </mat-form-field>
     <button mat-button class="btn-element" (click)="inviteMember(inputMember.value)" [disabled]="inputMember.value.length < 2 || !creatable">
