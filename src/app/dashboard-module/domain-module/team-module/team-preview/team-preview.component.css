@@ -14,7 +14,7 @@
 }
 
 .options-section {
-  display: block;
+  height: min-content;
 }
 
 .toggle-section {

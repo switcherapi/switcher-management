@@ -1,30 +1,27 @@
 .filter-member-style {
-    white-space: nowrap;
-    display: block;
-    padding-top: 10px;
-  }
-  
-  .btn-save {
-    float: right;
-  }
-  
-  .btn-cancel {
-    float: right;
-    margin-right: 10px;
-  }
-  
+  white-space: nowrap;
+  display: block;
+  padding-top: 10px;
+}
+
+.filter-input {
+  float: left;
+  width: 330px;
+  padding-right: 20px;
+}
+
+.options-section-label {
+  vertical-align: baseline !important;
+  display: contents;
+}
+
+.mat-elevation-z8 {
+  border: none;
+  box-shadow: none;
+}
+
+@media only screen and (max-width: 560px) {
   .options-section-label {
-    vertical-align: baseline !important;
-    display: contents;
+    display: none;
   }
-  
-  .mat-elevation-z8 {
-    border: 1px solid #cccccc80;
-    box-shadow: none;
-  }
-  
-  @media only screen and (max-width: 560px) {
-    .options-section-label {
-      display: none;
-    }
-  }
+}

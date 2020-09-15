@@ -1,6 +1,6 @@
 <block-ui>
     <div class="filter-role-style">
-        <mat-form-field>
+        <mat-form-field class="filter-input">
             <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         </mat-form-field>
         <button mat-button class="btn-element" (click)="createRole()" [disabled]="!creatable">
