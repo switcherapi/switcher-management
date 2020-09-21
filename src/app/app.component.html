@@ -17,6 +17,7 @@
                 <div>{{ loggedUserName }}</div>
             </li>
             <li><a class="topbar-menu-item" routerLink="/settings/account" title="Profile Panel">Settings</a></li>
+            <li><a class="topbar-menu-item" title="Profile Panel" onclick="document.documentElement.classList.toggle('dark-mode')">Toggle Dark-Mode</a></li>
             <li><a class="topbar-menu-item" (click)="logout()" title="Sign Out">Sign Out</a></li>
         </ul>
     </div>
