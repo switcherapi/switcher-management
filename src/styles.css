@@ -48,7 +48,7 @@ html.dark-mode .carousel-images {
   filter: invert(0%);
 }
 
-html.dark-mode .home-section {
+html.dark-mode .home-section, html.dark-mode #page-container {
   background: white !important;
   box-shadow: none !important;
 }
