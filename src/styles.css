@@ -7,11 +7,15 @@ body {
   height: 100%;
 }
 
+/* Start - Dark theme setup */
+
 html.dark-mode {
   filter: invert(100%) hue-rotate(180deg);
+  top: 0 !important; /*fix cdk modal issues*/
+  transition: all 1s;
 }
 
-html.dark-mode h4, html.dark-mode img, html.dark-mode {
+html.dark-mode h4, html.dark-mode img, html.dark-mode, html.dark-mode .navbar-toggler-icon, html.dark-mode .link {
   filter: invert(100%) hue-rotate(180deg);
 }
 
@@ -52,6 +56,8 @@ html.dark-mode .home-section, html.dark-mode #page-container {
   background: white !important;
   box-shadow: none !important;
 }
+
+/* End - Dark theme setup */
 
 body {
   margin: 0;

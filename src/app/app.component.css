@@ -73,3 +73,21 @@
   padding-left: 10px;
   color: #8d9492;
 }
+
+.new-feature-text {
+  margin: 3px 0px 3px; 
+  font-size: 12px; 
+  font-weight: lighter; 
+  line-height: initial;
+  color: white;
+}
+
+.new-feature {
+  position: absolute;
+  right: 0;
+  transform: translate(-20%,-50%);
+  padding-left: .5rem;
+  padding-right: .5rem;
+  background-color: #5298ff;
+  border-radius: 20px;
+}
