@@ -108,14 +108,13 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       if (data) {
         this.selectEnvironment(env.status);
         this.updatePathRoute(data);
-        this.blockUI.stop();
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    });
+    }, () => this.blockUI.stop());
   }
 
   removeEnvironmentStatus(env : any): void {

@@ -135,14 +135,16 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   updateEnvironmentStatus(env: any): void {
+    this.blockUI.start('Updating environment...');
     this.selectEnvironment(env.status);
     this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
+      this.blockUI.stop();
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    });
+    }, () => this.blockUI.stop());
   }
 
   selectEnvironment(status: boolean): void {
@@ -241,15 +243,14 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.blockUI.stop();
           this.toastService.showError(error.error);
           ConsoleLogger.printError(error);
-        }, () => {
-          this.blockUI.stop();
-        });
+        }, () => this.blockUI.stop());
       }
     });
   }
 
   addValue(newValue: string) {
     const { valid } = this.valueSelectionFormControl;
+    this.blockUI.start('Adding new value...');
     if (valid) {
       this.strategyService.addValue(this.strategy.id, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
@@ -259,8 +260,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
+        this.blockUI.stop();
         this.toastService.showError(error ? error.error : 'Unable to add this value');
-      });
+      }, () => this.blockUI.stop());
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -268,6 +270,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   editValue(oldValue: string, newValue: string) {
     const { valid } = this.valueSelectionFormControl;
+    this.blockUI.start('Updating value...');
     if (valid) {
       this.strategyService.updateValue(this.strategy.id, oldValue, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
@@ -276,8 +279,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
+        this.blockUI.stop();
         this.toastService.showError(error ? error.error : 'Unable to edit this value');
-      });
+      }, () => this.blockUI.stop());
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -285,6 +289,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   removeValue(value: string) {
     if (this.strategyValueSelection.options.length > 1) {
+      this.blockUI.start('Removing value...');
       this.strategyService.deleteValue(this.strategy.id, value).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.strategy = data;
@@ -292,8 +297,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.toastService.showSuccess(`Strategy updated with success`);
         }
       }, error => {
+        this.blockUI.stop();
         this.toastService.showError(error ? error.error : 'Unable to remove this value');
-      });
+      }, () => this.blockUI.stop());
     } else {
       this.toastService.showError(`One value is required, update or add new values`);
     }
