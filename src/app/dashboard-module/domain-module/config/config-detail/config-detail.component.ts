@@ -226,14 +226,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.loadConfig(data);
-        this.blockUI.stop();
         this.toastService.showSuccess(`Environment updated with success`);
       }
     }, error => {
       ConsoleLogger.printError(error);
       this.blockUI.stop();
       this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    });
+    }, () => this.blockUI.stop());
   }
 
   removeEnvironmentStatus(env : any): void {
