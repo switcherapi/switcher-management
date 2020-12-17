@@ -137,6 +137,15 @@ Switcher.forget('FEATURE01');
 switcher.isItOn('FEATURE01'); // Now, it's going to return the result retrieved from the API or the Snaopshot file
 ```
 
+**Enabling Test Mode**
+You may want to enable this feature while using Switcher Client with automated testing.
+It prevents the Switcher Client from locking snapshot files even after the test execution.
+
+To enable this feature, it is recommended to place the following on your test setup files:
+```js
+Switcher.setTestEnabled();
+```
+
 ##### - Snapshot version check
 For convenience, an implementation of a domain version checker is available if you have external processes that manage snapshot files.
 
@@ -148,6 +157,10 @@ switcher.checkSnapshot();
 
 ### Version Log
 
+- 2.0.9:
+    - Added Test Mode feature
+    - Security patch: Axios updated from 0.21.0 to 0.21.1
+    - Improved API resource handling
 - 2.0.5: Added Snapshot Autoload
 - 2.0.2: Added a built-in execution logger
 - 2.0.0:
