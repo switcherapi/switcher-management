@@ -15,7 +15,7 @@ html.dark-mode {
   transition: all 1s;
 }
 
-html.dark-mode h4, html.dark-mode img, html.dark-mode, html.dark-mode .navbar-toggler-icon, html.dark-mode .link {
+html.dark-mode h4, html.dark-mode, html.dark-mode .navbar-toggler-icon, html.dark-mode .link {
   filter: invert(100%) hue-rotate(180deg);
 }
 
@@ -29,6 +29,19 @@ html.dark-mode .backgroud-style, html.dark-mode #footer, html.dark-mode .home-se
 
 html.dark-mode #main-menu, html.dark-mode #footer {
   box-shadow: 0px 0px 10px 10px #eee !important;
+}
+
+html.dark-mode #sidebar {
+  filter: invert(100%) hue-rotate(180deg);;
+}
+
+html.dark-mode .profile-avatar, 
+html.dark-mode .switcher-logo, 
+html.dark-mode .doc-icon, 
+html.dark-mode .home-image,
+html.dark-mode .carousel-images,
+html.dark-mode .collab-image  {
+  filter: invert(100%) hue-rotate(180deg);;
 }
 
 html.dark-mode .card {
@@ -49,7 +62,6 @@ html.dark-mode .block-ui-wrapper {
 
 html.dark-mode .carousel-images {
   border-radius: 10px;
-  filter: invert(0%);
 }
 
 html.dark-mode .home-section, html.dark-mode #page-container {
