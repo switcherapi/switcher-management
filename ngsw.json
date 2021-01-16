@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1610766407233,
+  "timestamp": 1610824274692,
   "index": "/switcher-management/index.html",
   "assetGroups": [
     {
@@ -216,12 +216,12 @@
     "/switcher-management/assets/home_showcase_environment.png": "ddcfd9be87720a27af4572fc641fd3b943beebdc",
     "/switcher-management/assets/home_showcase_libraries.png": "8bc8801f147d3d1bd23f5ff9370e234bd81086e7",
     "/switcher-management/assets/home_showcase_tracking.png": "eca051a1c0bfe31d98680fbb90fd9f15f3c96b4b",
-    "/switcher-management/assets/icons/icon-144x144.png": "aa0e2699d1f081633aaa016719e36654df156fc5",
-    "/switcher-management/assets/icons/icon-152x152.png": "b4c8c556959c0345752250854dd5e807e6bb7be9",
-    "/switcher-management/assets/icons/icon-192x192.png": "8b9007965d74a00e1ff6db43eff338d84d72cf30",
-    "/switcher-management/assets/icons/icon-48x48.png": "3a05547669299e2c7ba6004453a91836506fcca6",
-    "/switcher-management/assets/icons/icon-72x72.png": "2971c4e394b9aac4a00ce396828bb33178dfd9bc",
-    "/switcher-management/assets/icons/icon-96x96.png": "e865357860d28ee261021297a4c0aeac2581f702",
+    "/switcher-management/assets/icons/icon-144x144.png": "e18964c9a495cab67fde7dc6caf3df807cdaac37",
+    "/switcher-management/assets/icons/icon-152x152.png": "fda1838de64ae9ae1601417eb5ac2d0e8ebe642e",
+    "/switcher-management/assets/icons/icon-192x192.png": "c624fc81c0298d5359a61eb98c20124236f86eb6",
+    "/switcher-management/assets/icons/icon-48x48.png": "44facb8d9327332f440fc522d2eb7b4c785bde78",
+    "/switcher-management/assets/icons/icon-72x72.png": "30a0b66bf68d3accdb8eb987e6911e3cac731894",
+    "/switcher-management/assets/icons/icon-96x96.png": "6d8aaba5ccd10cafff7a0e6244cadabf7d4c906a",
     "/switcher-management/assets/js/bootstrap-4.4.1.min.js": "b3c116c65e6f053aaab45e5619a78ec00271a50f",
     "/switcher-management/assets/js/jquery-3.4.1.slim.min.js": "dd15958a3f0f1f3601461f927c4703a56ed59011",
     "/switcher-management/assets/js/popper-1.16.0.min.js": "62f238e73348c77eb9e865426a7d1b7de23cbb2d",
