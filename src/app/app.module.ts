@@ -47,7 +47,7 @@ import { PwaService } from './services/pwa.service';
       RecaptchaModule,
       RecaptchaFormsModule,
       SettingsModule,
-      ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+      ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production })
     ],
     declarations: [
       AppComponent,
