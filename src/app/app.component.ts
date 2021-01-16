@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
+import { PwaService } from './services/pwa.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnDestroy {
 
   constructor(
       private router: Router,
-      private authService: AuthService
+      private authService: AuthService,
+      private pwaService: PwaService
   ) {
     this.authService.currentToken.subscribe(x => {
       this.currentToken = x;
@@ -29,6 +31,7 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
+    this.pwaService.checkForUpdate();
     this.authService.logoff.subscribe((currentToken: String) => {
       this.currentToken = currentToken;
     });

@@ -27,6 +27,9 @@ import { SettingsModule } from './settings-module/settings.module';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
 import { SignupDomainComponent } from './signup-domain/signup-domain.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { PwaService } from './services/pwa.service';
 
 @NgModule({
     imports: [
@@ -43,7 +46,8 @@ import { SignupDomainComponent } from './signup-domain/signup-domain.component';
       BrowserAnimationsModule,
       RecaptchaModule,
       RecaptchaFormsModule,
-      SettingsModule
+      SettingsModule,
+      ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
     ],
     declarations: [
       AppComponent,
@@ -56,6 +60,7 @@ import { SignupDomainComponent } from './signup-domain/signup-domain.component';
       SignupDomainComponent
     ],
     providers: [
+      PwaService,
       AuthGuard,
       AuthService,
       {
