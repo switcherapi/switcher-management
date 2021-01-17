@@ -4,11 +4,11 @@
         <h4 class="card-header">
             <div>
                 Domains
-                <button mat-button [matMenuTriggerFor]="belowMenu" style="float:right">
+                <button mat-button [matMenuTriggerFor]="belowMenu" style="float: right; outline: none;">
                     <mat-icon> list_alt</mat-icon>
                 </button>
                 <mat-menu #belowMenu="matMenu" yPosition="below">
-                    <button mat-menu-item (click)="createDomain()">
+                    <button mat-menu-item (click)="createDomain()" style="outline: none;">
                         <mat-icon>build</mat-icon>
                         Create
                     </button>

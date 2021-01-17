@@ -91,3 +91,21 @@
   background-color: #5298ff;
   border-radius: 20px;
 }
+
+.hide-nav {
+  display: initial;
+}
+
+.hide-menu {
+  display: none;
+}
+
+@media only screen and (max-width: 500px) {
+  .hide-nav {
+    display: none;
+  }
+
+  .hide-menu {
+    display: initial;
+  }
+}
