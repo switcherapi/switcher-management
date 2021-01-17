@@ -7,7 +7,7 @@
         <a class="nav-item nav-link" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
         <a class="nav-item nav-link" routerLink="/documentation">Documentation</a>
         <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
-        <a class="nav-item nav-link menu-border-left" routerLink="/signup"  *ngIf="!currentToken">Sign up</a>
+        <a class="nav-item nav-link menu-border-left" routerLink="/signup" *ngIf="!currentToken">Sign up</a>
         <div id="menuProfile" *ngIf="currentToken" class="profile-btn menu-border-left">
             <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="">
             <mat-icon style="color: white; transform: translateY(6px);">keyboard_arrow_down</mat-icon>

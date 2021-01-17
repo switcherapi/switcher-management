@@ -26,8 +26,8 @@ export class DocumentationComponent implements OnInit, OnDestroy {
     if (document.getElementById('sidebar').className == 'active') {
       document.getElementById('sidebar').className = "";
       document.getElementById('content').className = "";
-    }
-    else {
+    } else {
+      window.scrollTo(0, 0);
       document.getElementById('sidebar').className = "active";
       document.getElementById('content').className = "hide";
     }
