@@ -76,7 +76,12 @@ Below you will learn how to configure a Switcher Relay and its results after it 
     </br></br>
 
     ##### Code example
-    Using the example above, a simple implementation of a relay receptor using NodeJS/Express can be done like:
+    Using the example above, a simple implementation of a relay receptor using NodeJS/Express can be done as the example below.
+
+    The response when implementing a *NOTIFICATION* receptor service must contain the following return arguments:
+    <li style="list-style-type: disclosure-closed;">result: boolean
+    <li style="list-style-type: disclosure-closed;">message: string (optional argument)
+    </br></br>
 
 ```javascript
 router.post('/validate', (req, res) => {
@@ -105,12 +110,6 @@ router.post('/validate', (req, res) => {
     }
 })
 ```
-
-    The response when implementing a *NOTIFICATION* receptor service must contain the following return arguments:
-    <li style="list-style-type: disclosure-closed;">result: boolean
-    <li style="list-style-type: disclosure-closed;">message: string (optional argument)
-
-    </p>
 
 3. Stacking
 
