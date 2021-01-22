@@ -1,5 +1,9 @@
 <block-ui>
-    <div [ngClass]="detailBodyStyle">
+    <div *ngIf="loading" class="card-body loader-div">
+        <div class="loader"></div>
+        <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+    </div>
+    <div [ngClass]="loading ? 'loading' : detailBodyStyle">
         <section [ngClass]="classStatus">
             <div class="header-container">
                 <div class="description" style="width: 350px;">

@@ -7,6 +7,7 @@ export class DetailComponent {
     classStatus: string;
     editing: boolean;
     currentStatus: boolean;
+    loading: boolean;
 
     updatable: boolean = false;
     removable: boolean = false;

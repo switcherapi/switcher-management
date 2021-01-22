@@ -55,6 +55,14 @@ h4 {
   transform: translateY(10%);
 }
 
+.nav-item-hidden {
+  display: inherit;
+}
+
+.nav-menu-hidden {
+  display: none;
+}
+
 :host /deep/ .mat-form-field-label {
   color: #8d9492;
   font-weight: lighter;
@@ -87,6 +95,17 @@ h4 {
     background: #24292e !important;
     padding-top: 5px;
     padding-bottom: 5px;
+  }
+}
+
+
+@media only screen and (max-width: 990px) {
+  .nav-item-hidden {
+    display: none;
+  }
+
+  .nav-menu-hidden {
+    display: inherit;
   }
 }
 

@@ -15,7 +15,6 @@ import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { PathRoute, Types } from 'src/app/model/path-route';
 import { Domain } from 'src/app/model/domain';
-import { subscribe } from 'graphql';
 
 @Component({
   selector: 'app-domain-detail',
@@ -56,7 +55,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   ngOnInit() {
-    this.blockUI.start('Loading...');
+    this.loading = true;
     this.route.paramMap
       .pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data.element) {
@@ -194,6 +193,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       ConsoleLogger.printError(error);
     }, () => {
       this.blockUI.stop();
+      this.loading = false;
       this.detailBodyStyle = 'detail-body ready';
     });
   }

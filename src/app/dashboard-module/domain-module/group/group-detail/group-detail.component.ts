@@ -57,7 +57,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.blockUI.start('Loading...');
+    this.loading = true;
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
         if (data.element) {
@@ -163,7 +163,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     }, error => {
       ConsoleLogger.printError(error);
     }, () => {
-      this.blockUI.stop();
+      this.loading = false;
       this.detailBodyStyle = 'detail-body ready';
     });
   }

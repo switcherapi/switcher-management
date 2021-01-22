@@ -41,14 +41,31 @@
             </button>
         
             <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="navbar-nav">
+                <div class="navbar-nav nav-item-hidden">
                     <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
                     <a class="nav-item nav-link" (click)="gotoListChildren()">{{ getLabelListChildren() }}</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics" >Metrics</a>
+                    <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics">Metrics</a>
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log">Change Log</a>
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/components">Components</a>
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
                     <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
+                </div>
+
+                <div class="navbar-nav nav-menu-hidden">
+                    <a class="nav-item nav-link" (click)="gotoDetails()" 
+                         data-toggle="collapse" data-target="#navbarContent">Details</a>
+                    <a class="nav-item nav-link" (click)="gotoListChildren()" 
+                        data-toggle="collapse" data-target="#navbarContent">{{ getLabelListChildren() }}</a>
+                    <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics" 
+                        data-toggle="collapse" data-target="#navbarContent">Metrics</a>
+                    <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log" 
+                        data-toggle="collapse" data-target="#navbarContent">Change Log</a>
+                    <a class="nav-item nav-link" routerLink="/dashboard/domain/components" 
+                        data-toggle="collapse" data-target="#navbarContent">Components</a>
+                    <a class="nav-item nav-link" routerLink="/dashboard/domain/environments" 
+                        data-toggle="collapse" data-target="#navbarContent">Environments</a>
+                    <a class="nav-item nav-link" routerLink="/dashboard/domain/team" 
+                        data-toggle="collapse" data-target="#navbarContent">Teams</a>
                 </div>
                 <element-autocomplete class="element-filter" [parentComponent]="this"></element-autocomplete>
             </div>

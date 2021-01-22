@@ -35,6 +35,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.value) {
+      this.smartSearchFormControl.setValue(this.value);
       this.loadKeys(this.parentComponent.getDomainId());
     }
     
@@ -68,7 +69,6 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
     this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
       if (result) {
-        this.smartSearchFormControl.setValue(this.value);
         let switchers, groups, components;
         
         if (this.groups) {
