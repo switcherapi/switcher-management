@@ -105,7 +105,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ngOnInit() {
     (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "1100px";
 
-    this.blockUI.start('Loading...');
+    this.loading = true;
     this.hasNewStrategy = false;
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
@@ -215,7 +215,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }, error => {
       ConsoleLogger.printError(error);
     }, () => {
-      this.blockUI.stop();
+      this.loading = false;
       this.detailBodyStyle = 'detail-body ready';
     });
   }

@@ -86,6 +86,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loading = true;
         this.configService.createConfig(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).id, result.key, result.description)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
@@ -94,6 +95,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
             this.domainRouteService.notifyDocumentChange();
           }
         }, error => {
+          this.loading = false;
           this.toastService.showError(`Unable to create a new switcher. ${error.error}`);
           ConsoleLogger.printError(error);
         });

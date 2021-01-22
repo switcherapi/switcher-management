@@ -105,6 +105,10 @@ mat-icon {
   animation: 2s ease-out 0s 1 fadeIn;
 }
 
+.loading {
+  display: none;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }

@@ -86,6 +86,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loading = true;
         this.groupService.createGroup(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, result.name, result.description)
           .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
@@ -93,6 +94,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
             this.domainRouteService.notifyDocumentChange();
           }
         }, error => {
+          this.loading = false;
           this.toastService.showError(`Unable to create a new group. ${error.error}`);
           ConsoleLogger.printError(error);
         });
