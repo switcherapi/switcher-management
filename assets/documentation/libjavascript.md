@@ -22,20 +22,20 @@
 </br>
 
 ##### - Module initialization
-The context properties stores all information regarding connectivity and strategy settings.
+The context properties stores all information regarding connectivity.
 
 ```js
-const Switcher = require("switcher-client");
+const Switcher = require('switcher-client');
 
-const apiKey = 'API Key';
-const environment = 'default'; // Production = default
+const apiKey = '[API_KEY]';
+const environment = 'default';
 const domain = 'My Domain';
 const component = 'MyApp';
-const url = 'https://switcher-load-balance.herokuapp.com';
+const url
 ```
 
-- **apiKey**: Switcher-API key generated after creating a domain..
-- **environment**: Environment name. Production environment is named as 'default'.
+- **apiKey**: Switcher-API key generated to your component.
+- **environment**: (optional) Environment name. Production environment is named as 'default'.
 - **domain**: Domain name.
 - **component**: Application name.
 - **url**: Swither-API endpoint.
@@ -46,34 +46,24 @@ You can also activate features such as offline and silent mode:
 ```js
 const offline = true;
 const logger = true;
-const snapshotAutoload = true;
 const snapshotLocation = './snapshot/';
 const silentMode = true;
 const retryAfter = '5m';
 
-let switcher = new Switcher(url, apiKey, domain, component, environment, {
-      offline, logger, snapshotLocation, snapshotAutoload, silentMode, retryAfter
+Switcher.buildContext({ url, apiKey, domain, component, environment }, {
+    offline, logger, snapshotLocation, silentMode, retryAfter
 });
+
+let switcher = Switcher.factory();
 ```
 
 - **offline**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'.
 - **logger**: If activated, it is possible to retrieve the last results from a given Switcher key using Switcher.getLogger('KEY')
 - **snapshotLocation**: Location of snapshot files. The default value is './snapshot/'.
-- **snapshotAutload**: If activated, snapshot folder and files are going to be created automatically.
 - **silentMode**: If activated, all connectivity issues will be ignored and the client will automatically fetch the configuration into your snapshot file.
 - **retryAfter** : Time given to the module to re-establish connectivity with the API - e.g. 5s (s: seconds - m: minutes - h: hours).
 
 </br>
-
-##### - Pre-execution
-Before you call the API, there is one single step you need to execute to complete the configuration.
-If you are not running the API expecting to use the offline features, you can ignore this step. 
-
-After instantiating the Switcher, you need to load the snapshot engine to watch for changes in your Domain structure.
-
-```js
-await switcher.loadSnapshot();
-```
 
 ##### - Executing
 There are a few different ways to call the API using the JavaScript module.
@@ -116,16 +106,6 @@ await switcher.isItOn('FEATURE01',
 
 </br>
 
-##### - Offline settings
-You can also force the Switcher library to work offline. In this case, the snapshot location must be set up and the context re-built using the offline flag.
-
-```java
-properties.put(SwitcherContextParam.SNAPSHOT_LOCATION, "/src/resources");
-SwitcherFactory.buildContext(properties, true);
-```
-
-</br>
-
 ##### - Built-in mock feature
 You can also bypass your switcher configuration by invoking 'Switcher.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false.
 
@@ -146,6 +126,13 @@ To enable this feature, it is recommended to place the following on your test se
 Switcher.setTestEnabled();
 ```
 
+##### Loading Snapshot from the API
+This step is optional if you want to load a copy of the configuration that can be used to eliminate latency when offline mode is activated.
+
+```js
+Switcher.loadSnapshot();
+```
+
 ##### - Snapshot version check
 For convenience, an implementation of a domain version checker is available if you have external processes that manage snapshot files.
 
@@ -157,6 +144,11 @@ switcher.checkSnapshot();
 
 ### Version Log
 
+- 3.0.0:
+    - Improved client inicialization
+    - Improved Snapshop data lookup
+    - Added compatibility with ES6
+    - Fixed built-in log manager
 - 2.0.9:
     - Added Test Mode feature
     - Security patch: Axios updated from 0.21.0 to 0.21.1

@@ -22,7 +22,7 @@
 <dependency>
     <groupId>com.github.switcherapi</groupId>
     <artifactId>switcher-client</artifactId>
-    <version>1.0.8</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -160,6 +160,15 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
 </br>
 
 ### Version Log
+- 1.1.0:
+  - Improved snapshop lookup mechanism
+  - Included snashot validation when set to online mode
+  - Critical fix: reverted jersey-media-json-jackson version to 2.33
+- 1.0.9:
+  - Updated dependency jersey-client from 2.31 to 2.32
+  - Updated dependency jersey-hk2 from 2.31 to 2.32
+  - Updated dependency jersey-media-json-jackson from 2.31 to 3.0.0
+  - Updated dependency common-net from 3.7 to 3.7.1
 - 1.0.8:
 	- Fixed issues when using Silent Mode
 	- Fixed error when using only access to online API
@@ -168,17 +177,17 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
 - 1.0.7: Added Regex Validation
 - 1.0.6: Updated depencencies & new features
 	- Updated dependency jersey-hk2 from 2.28 to 2.31
-	- Updated dependency commons-net from 3.3 to 3.6.
-	- Updated dependency commons-lang3 from 3.8.1 to 3.10.
-	- Updated dependency gson from 2.8.5 to 2.8.6.
-	- Added execution log to Switcher.
-	- Added bypass metrics and show detailed criteria evaluation options to Switcher objects.
+	- Updated dependency commons-net from 3.3 to 3.6
+	- Updated dependency commons-lang3 from 3.8.1 to 3.10
+	- Updated dependency gson from 2.8.5 to 2.8.6
+	- Added execution log to Switcher
+	- Added bypass metrics and show detailed criteria evaluation options to Switcher objects
 - 1.0.5: Security patch - Jersey has been updated - 2.28 to 2.31
 - 1.0.4: Added Numeric Validation
 - 1.0.3: Security patch - Log4J has been updated - 2.13.1 to 2.13.3
 - 1.0.2: 
-    - Improved performance when loading snapshot file.
-    - Snapshot file auto load when updated.
+    - Improved performance when loading snapshot file
+    - Snapshot file auto load when updated
     - Re-worked built-in mock implementation
 - 1.0.1: Security patch - Log4J has been updated
 - 1.0.0: Working release
