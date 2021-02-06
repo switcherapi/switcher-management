@@ -142,19 +142,17 @@ export class AuthService {
     }
   }
 
-  handleError(error) {
+  private handleError(result: any) {
     let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
+    if (result.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${result.error.message}`;
     } else {
-      if (error.status === 401) {
-        errorMessage = 'Email or password is incorrect';
-      } else if (error.status === 422) {
-        errorMessage = 'Invalid email format';
-      } else if (error.status === 400) {
-        errorMessage = 'Invalid account input or account already exists';
+      if (result.status === 401 || result.status === 422) {
+        errorMessage = 'Invalid email/password';
+      } else if (result.status === 400) {
+        errorMessage = result.error.error;
       } else {
-        ConsoleLogger.printError(error);
+        ConsoleLogger.printError(result);
         errorMessage = `Switcher API is offline`;
       }
     }
