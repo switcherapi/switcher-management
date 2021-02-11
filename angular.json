@@ -32,6 +32,11 @@
             "scripts": [
               "node_modules/marked/lib/marked.js",
               "src/assets/js/prism.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "graphql-tag",
+              "chart.js",
+              "zen-observable"
             ]
           },
           "configurations": {

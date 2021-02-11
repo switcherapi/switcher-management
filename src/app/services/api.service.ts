@@ -1,4 +1,4 @@
-import { throwError } from 'rxjs/internal/observable/throwError';
+import { throwError } from "rxjs";
 
 export class ApiService {
     
