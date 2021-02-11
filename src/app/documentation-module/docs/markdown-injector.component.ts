@@ -1,13 +1,15 @@
 import { environment } from 'src/environments/environment';
 import { MarkdownService } from 'ngx-markdown';
-import { OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
+import { Inject } from '@angular/core';
 
-export class MarkdownInjector implements OnInit {
+@Injectable()
+export abstract class MarkdownInjector implements OnInit {
 
   markdown: string;
 
-  constructor(private markdownService: MarkdownService,
-    private documentToRender: string) { }
+  constructor(protected markdownService: MarkdownService,
+    @Inject(String) protected documentToRender: String) { }
 
   ngOnInit(): void {
     this.markdownService.getSource(`${environment.docsUrl}${this.documentToRender}`).subscribe(data => {
