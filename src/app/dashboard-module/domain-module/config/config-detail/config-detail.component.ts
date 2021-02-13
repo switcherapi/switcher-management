@@ -68,7 +68,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   
   config: Config;
   strategies:  Strategy[];
-  loading = false;
+  loading = true;
+  loadingStrategies = true;
   hasStrategies = false;
   hasNewStrategy = false;
   error = '';
@@ -415,7 +416,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private initStrategies() {
-    this.loading = true;
+    this.loadingStrategies = true;
     this.error = '';
     this.strategyService.getStrategiesByConfig(this.pathRoute.id, this.envSelectionChange.selectedEnvName).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
@@ -424,12 +425,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.loading = false;
+      this.loadingStrategies = false;
     }, () => {
       if (!this.strategies) {
         this.error = 'Failed to connect to Switcher API';
       }
-      this.loading = false;
+      this.loadingStrategies = false;
     });
   }
 

@@ -98,7 +98,7 @@
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
             </div>
-            <ngb-tabset #tasbset id="tabset" *ngIf="!loading" [activeId]="currentTab" type="pills" 
+            <ngb-tabset #tasbset id="tabset" *ngIf="!loadingStrategies" [activeId]="currentTab" type="pills" 
                 [destroyOnHide]="false" (tabChange)="onTabChange($event)">
                 <ngb-tab *ngIf="hasStrategies" id="1">
                     <ng-template ngbTabTitle>
