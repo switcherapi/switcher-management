@@ -60,6 +60,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    window.onscroll = () => {};
   }
 
   updateRoute() {
