@@ -93,46 +93,47 @@
                 </button>
             </div>
         </section>
-        <section #strategysection [ngClass]="classStrategySection" style="padding-top: 10px;">
+        <section #strategysection *ngIf="!loadingStrategies" [ngClass]="classStrategySection" style="padding-top: 10px;">
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
             </div>
-            <ngb-tabset #tasbset id="tabset" *ngIf="!loadingStrategies" [activeId]="currentTab" type="pills" 
-                [destroyOnHide]="false" (tabChange)="onTabChange($event)">
-                <ngb-tab *ngIf="hasStrategies" id="1">
-                    <ng-template ngbTabTitle>
+
+            <nav ngbNav #nav="ngbNav" [activeId]="1" class="nav-pills" (navChange)="onNavChange($event)">
+                <ng-container [ngbNavItem]="1" *ngIf="hasStrategies">
+                    <a ngbNavLink (click)="scrollToElement(strategysection);">
                         <mat-icon>code</mat-icon>
                         <div>Strategies</div>
-                    </ng-template>
-                    <ng-template ngbTabContent>
+                    </a>
+                    <ng-template ngbNavContent>
                         <hr>
                         <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" 
                             [parent]="this" style="width: 100%; display: grid;"></app-strategy-list>
                     </ng-template>
-                </ngb-tab>
-                <ngb-tab *ngIf="hasRelay()" id="2">
-                    <ng-template ngbTabTitle>
+                </ng-container>
+                <ng-container [ngbNavItem]="2" *ngIf="hasRelay()">
+                    <a ngbNavLink (click)="scrollToElement(strategysection);">
                         <mat-icon>swap_horizontal_circle</mat-icon>
                         <div>Relay</div>
-                    </ng-template>
-                    <ng-template ngbTabContent>
+                    </a>
+                    <ng-template ngbNavContent>
                         <hr>
                         <app-relay-detail [config]="getConfig()" [currentEnvironment]="envSelectionChange.selectedEnvName" 
                             [parent]="this"></app-relay-detail>
                     </ng-template>
-                </ngb-tab>
-                <ngb-tab id="3">
-                    <ng-template ngbTabTitle>
-                        <mat-icon> insert_chart</mat-icon>
-                        <div (click)="scrollToElement(strategysection);">Metrics</div>
-                    </ng-template>
-                    <ng-template ngbTabContent>
+                </ng-container>
+                <ng-container [ngbNavItem]="3">
+                    <a ngbNavLink (click)="scrollToElement(strategysection);">
+                        <mat-icon>insert_chart</mat-icon>
+                        <div>Metrics</div>
+                    </a>
+                    <ng-template ngbNavContent>
                         <hr>
                         <app-metric [switcher]="getConfig().key" [environment]="envSelectionChange.selectedEnvName"></app-metric>
                     </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
+                </ng-container>
+            </nav>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
         </section>
     </div>
 </block-ui>
