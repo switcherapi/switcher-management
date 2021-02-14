@@ -9,7 +9,7 @@ import { Metric } from 'src/app/model/metric';
 import { MetricService } from 'src/app/services/metric.service';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
-import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-metric',
@@ -141,7 +141,7 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.onFilter(key);
   }
   
-  onTabChange($event: NgbTabChangeEvent) {
+  onNavChange($event: NgbNavChangeEvent) {
     if (this.metricViewClass === 'metrics-view data') {
       this.metricViewClass = 'metrics-view graphics';
     } else {

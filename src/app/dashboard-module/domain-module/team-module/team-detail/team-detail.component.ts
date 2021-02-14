@@ -38,7 +38,6 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   domain: Domain;
   loading: boolean = false;
 
-
   constructor(
     private domainRouteService: DomainRouteService,
     private adminService: AdminService,

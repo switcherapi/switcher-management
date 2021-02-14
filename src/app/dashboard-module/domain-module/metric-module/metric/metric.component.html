@@ -11,24 +11,22 @@
     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     <section id="data-section" [ngClass]="classStatus" style="margin-top: 20px;">
         <div #tabmetrics *ngIf="!loading">
-            <ngb-tabset [activeId]="1" [destroyOnHide]="false" (tabChange)="onTabChange($event)">
-                <ngb-tab id="1">
-                    <ng-template ngbTabTitle>
-                        Overall Statistics
+            <nav ngbNav #nav="ngbNav" class="nav-tabs" (navChange)="onNavChange($event)">
+                <ng-container [ngbNavItem]="1">
+                    <a ngbNavLink>Overall Statistics</a>
+                    <ng-template ngbNavContent>
+                        <app-metric-statistics [data]="metrics" [switcher]="switcher" 
+                            [environment]="environment" [parent]="this"></app-metric-statistics>
                     </ng-template>
-                    <ng-template ngbTabContent>
-                        <app-metric-statistics [data]="metrics" [switcher]="switcher" [environment]="environment" [parent]="this"></app-metric-statistics>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab *ngIf="metrics.data" id="2">
-                    <ng-template ngbTabTitle>
-                        Data
-                    </ng-template>
-                    <ng-template ngbTabContent>
+                </ng-container>
+                <ng-container [ngbNavItem]="2" *ngIf="metrics.data">
+                    <a ngbNavLink>Data</a>
+                    <ng-template ngbNavContent>
                         <app-metric-data [data]="metrics.data" [switcher]="switcher" [parent]="this"></app-metric-data>
                     </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
+                </ng-container>
+            </nav>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
         </div>
     </section>
 </div>

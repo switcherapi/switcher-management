@@ -57,7 +57,7 @@
     display: none;
   }
 
-  :host /deep/ #tabset>.justify-content-start {
+  :host /deep/ .nav {
     display: block;
   }
 

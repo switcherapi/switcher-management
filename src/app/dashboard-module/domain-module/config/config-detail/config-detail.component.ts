@@ -7,7 +7,7 @@ import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
-import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -76,7 +76,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   //tabset control
   strategy_section_height: string = '450px';
-  currentTab = '1';
+  currentTab = 1;
 
   // Component attributes
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -372,7 +372,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   addRelay() {
-    this.currentTab = '2';
+    this.currentTab = 2;
     if (!this.getConfig().relay || !this.getConfig().relay.activated) {
       this.config.relay = new ConfigRelay();
       this.config.relay.type = 'VALIDATION';
@@ -383,7 +383,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.updatePathRoute(this.config);
 
     setTimeout(() => {
-      this.currentTab = '2';
+      this.currentTab = 2;
       (this.tasbset as any).select('2');
     }, 500);
   }
@@ -477,12 +477,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  onTabChange($event: NgbTabChangeEvent) {
+  onNavChange($event: NgbNavChangeEvent) {
     this.currentTab = $event.nextId;
 
-    if (this.currentTab === '1') {
+    if (this.currentTab === 1) {
       this.classStrategySection = 'strategy-section strategies';
-    } else if (this.currentTab === '2') {
+    } else if (this.currentTab === 2) {
       this.classStrategySection = 'strategy-section relay';
     } else {
       this.classStrategySection = 'strategy-section metrics';
