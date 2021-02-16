@@ -16,7 +16,7 @@ export class ToastService {
         this.show(textOrTpl, { classname: 'bg-danger text-light', delay: 8000 });
     }
 
-    remove(toast) {
+    remove(toast: any) {
         this.toasts = this.toasts.filter(t => t !== toast);
     }
 }
