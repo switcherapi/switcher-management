@@ -28,4 +28,7 @@
 
 .skimming-item {
   padding: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 5px gray;
+  border-radius: 20px;
 }

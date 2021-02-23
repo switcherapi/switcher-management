@@ -29,6 +29,11 @@ h4 {
   font-size: larger;
   color: #24292e;
   font-weight: bold;
+  text-decoration: none;
+}
+
+.router-history:hover {
+  color: #9bc5fd;
 }
 
 .div-router-history {
