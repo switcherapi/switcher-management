@@ -12,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(public authService: AuthService, private router: Router) { 
+  constructor(private authService: AuthService, private router: Router) { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
     })
