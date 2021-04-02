@@ -11,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(public authService: AuthService) { 
+  constructor(private authService: AuthService) { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
     })
@@ -55,11 +55,18 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.token);
           return next.handle(this.addToken(request, token.token));
-        }),
-        catchError((error) => {
-          // this.router.navigate(['/login']);
-          return throwError(error);
         }));
+
+      // return this.authService.refreshToken().pipe(
+      //   switchMap((token: any) => {
+      //     this.isRefreshing = false;
+      //     this.refreshTokenSubject.next(token.token);
+      //     return next.handle(this.addToken(request, token.token));
+      //   }),
+      //   catchError((error) => {
+      //     this.router.navigate(['/login']);
+      //     return throwError(error);
+      //   }));
 
     } else {
       return this.refreshTokenSubject.pipe(
