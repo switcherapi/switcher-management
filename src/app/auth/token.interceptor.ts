@@ -4,6 +4,7 @@ import { AuthService } from './services/auth.service';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor, OnDestroy {
@@ -11,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(public authService: AuthService) { 
+  constructor(public authService: AuthService, private router: Router) { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
     })
@@ -55,6 +56,10 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.token);
           return next.handle(this.addToken(request, token.token));
+        }),
+        catchError((error) => {
+          this.router.navigate(['/login']);
+          return throwError(error);
         }));
 
     } else {

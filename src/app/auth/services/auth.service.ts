@@ -114,9 +114,9 @@ export class AuthService {
   refreshToken() {
     return this.http.post<any>(`${environment.apiUrl}/admin/refresh/me`, {
       'refreshToken': this.getRefreshToken()
-    }).pipe(tap((tokens: Tokens) => {
-      this.storeJwtToken(tokens);
-    }));
+    }).pipe(
+      tap((tokens: Tokens) => this.storeJwtToken(tokens), 
+      () => this.cleanSession()));
   }
 
   isAlive(): Observable<any> {
