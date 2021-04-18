@@ -52,13 +52,14 @@ Below you will learn how to configure a Switcher Relay and its results after it 
 
   When using one of the Switcher Libraries to access the API, the input provided for validating strategies are the only input necessary you need to process on the switcher relay. For easy understanding on how strategies input are built to compose the request wrapper, below you will see a description of all strategies validation field and how it will translate to the wrapper.
 
-    - VALUE_VALIDATION: value
-    - NUMERIC_VALIDATION: numeric
-    - NETWORK_VALIDATION: network
-    - TIME_VALIDATION: time
-    - DATE_VALIDATION: date
-    - REGEX_VALIDATION: regex
-
+  <li style="list-style-type: disclosure-closed;">VALUE_VALIDATION: value
+  <li style="list-style-type: disclosure-closed;">NUMERIC_VALIDATION: numeric
+  <li style="list-style-type: disclosure-closed;">NETWORK_VALIDATION: network
+  <li style="list-style-type: disclosure-closed;">TIME_VALIDATION: time
+  <li style="list-style-type: disclosure-closed;">DATE_VALIDATION: date
+  <li style="list-style-type: disclosure-closed;">REGEX_VALIDATION: regex
+  </br></br>
+  
     For example, if you call a switcher using the Java example below:
 
     ```java
