@@ -13,52 +13,51 @@ This document will show you the different ways you can configure it and how to i
 
 Below you will learn how to configure a Switcher Relay and its results after it is completed.
 
-1. Adding a Relay
+##### 1. Adding a Relay
 
-  After creating a Switcher, you can add one Relay per-environment by clicking on *Add Relay*. A new view will be showed right below your switcher main view. This panel must contains all the related information regarding how to access your REST receptor.
+After creating a Switcher, you can add one Relay per-environment by clicking on *Add Relay*. A new view will be showed right below your switcher main view. This panel must contains all the related information regarding how to access your REST receptor.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_setup.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_setup.jpg" class="image-style shadow" alt=""/><p>
 
-  This view is composed by the settings:
+This view is composed by the settings:
 
-  - **Relay Type**:
+- **Relay Type**:
 
-    It defines if your REST receptor will be responsible for *VALIDATION* or just *NOTIFICATION*. The difference is that when executing the switcher criteria, validation relays will wait for a response given by the REST receptor, while notification relays are triggered but it does not wait for a response.
+  It defines if your REST receptor will be responsible for *VALIDATION* or just *NOTIFICATION*. The difference is that when executing the switcher criteria, validation relays will wait for a response given by the REST receptor, while notification relays are triggered but it does not wait for a response.
 
-  - **Description**:
+- **Description**:
 
-    Add here a short description of what exactly this relay is for. It can be useful for easy traceability and the purpose of the configured feature switcher.
+  Add here a short description of what exactly this relay is for. It can be useful for easy traceability and the purpose of the configured feature switcher.
 
-  - **Endpoint** - Multi-environment:
+- **Endpoint** - Multi-environment:
 
-    Define here the URL that will be called by the switcher relay.
+  Define here the URL that will be called by the switcher relay.
 
-  - **Relay Method**:
+- **Relay Method**:
 
-    The two available methods are GET and POST. The difference besides the method used to call the REST receptor is that when using GET, inputs are going to be placed as query parameters and when using POST, inputs are going to be sent via request body.
+  The two available methods are GET and POST. The difference besides the method used to call the REST receptor is that when using GET, inputs are going to be placed as query parameters and when using POST, inputs are going to be sent via request body.
 
-  - **Authorization Prefix**:
+- **Authorization Prefix**:
 
-    This configuration is responsible for building the header by adding an Authorization element. The prefix is going to be placed at the start of the value. A common prefix used for the authorization header is *Bearer*, which is proceeded by a token value.
+  This configuration is responsible for building the header by adding an Authorization element. The prefix is going to be placed at the start of the value. A common prefix used for the authorization header is *Bearer*, which is proceeded by a token value.
 
-  - **Authorization Token** - Multi-environment:
+- **Authorization Token** - Multi-environment:
 
-    This value is combined with the Authorization Prefix that will compose the Authorization header.
+  This value is combined with the Authorization Prefix that will compose the Authorization header.
 
 
-2. Implementing the API receptor
+#### 2. Implementing the API receptor
 
   Before getting into the coding examples, it is important to understand how the Switcher Relay will wrap the request and then send the request to the receptor.
 
   When using one of the Switcher Libraries to access the API, the input provided for validating strategies are the only input necessary you need to process on the switcher relay. For easy understanding on how strategies input are built to compose the request wrapper, below you will see a description of all strategies validation field and how it will translate to the wrapper.
 
-  <li style="list-style-type: disclosure-closed;">VALUE_VALIDATION: value
-  <li style="list-style-type: disclosure-closed;">NUMERIC_VALIDATION: numeric
-  <li style="list-style-type: disclosure-closed;">NETWORK_VALIDATION: network
-  <li style="list-style-type: disclosure-closed;">TIME_VALIDATION: time
-  <li style="list-style-type: disclosure-closed;">DATE_VALIDATION: date
-  <li style="list-style-type: disclosure-closed;">REGEX_VALIDATION: regex
-  </br></br>
+  - VALUE_VALIDATION: value
+  - NUMERIC_VALIDATION: numeric
+  - NETWORK_VALIDATION: network
+  - TIME_VALIDATION: time
+  - DATE_VALIDATION: date
+  - REGEX_VALIDATION: regex
   
   For example, if you call a switcher using the Java example below:
 
@@ -112,7 +111,7 @@ router.post('/validate', (req, res) => {
 })
 ```
 
-3. Stacking
+##### 3. Stacking
 
   This approach allows you to determine whether the relay has to be executed or not. It consists of adding strategy validations before invoking the relay.
   The advantages of this approach are pre-filtering requests and eliminating unnecessary calls to your receptor that might not be valid for the implemented business rule.
