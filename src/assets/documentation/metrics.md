@@ -9,7 +9,8 @@ When your application/component calls the API, it will store the result of this 
 
 ##### Overall Statistics
 When visualizing Overall Statistics, it is possible to find insights into the following:
- - **Switchers View**
+
+###### **Switchers View**
     
   Quantifies how many negative and positive calls were made by switchers.
 
@@ -20,20 +21,20 @@ When visualizing Overall Statistics, it is possible to find insights into the fo
 
   <img src="[$ASSETS_LOCATION]/documentation/images/metrics/metric_filter.jpg" class="image-style shadow" alt=""/><p>
 
-- **Switchers Date/Time View**
+###### **Switchers Date/Time View**
 
   Navigate through the time frame to visualize the execution history. By clicking on one of the nodes you can also open the detailed Data View for that specific date-time.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/metrics/metric_switchers_datetime.jpg" class="image-style" alt=""/><p>
 
 
-- **Components View**
+###### **Components View**
  
   Quantified per component. Here you can track how your components are behaving.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/metrics/metric_components.jpg" class="image-style" alt=""/><p>
 
-- **Resons View**
+###### **Resons View**
     
   Quantitative overall view of all executed results for a specific switcher.
 

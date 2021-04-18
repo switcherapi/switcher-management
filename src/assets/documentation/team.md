@@ -12,7 +12,7 @@ Get extra help while keeping control of who can create, read, update, or delete 
 #### Usage
 After creating a team, you can start setting up the new team either way, inviting new members or adding permissions.
 
-1. Inviting members
+##### 1. Inviting members
 
   Using the field as shown below to filter or inviting members.
 
@@ -29,11 +29,13 @@ After creating a team, you can start setting up the new team either way, invitin
 
   Shared Domains are displayed on the Dashboard as Collaboration.
 
-2. Ongoing invitations can be found on the **Pending** tab.
+##### 2. Ongoing invitations
+
+  Visualize all ongoing invitations by accessing the **Pending** tab as well as recovery the invitation link.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams_pending.jpg" class="image-style shadow" alt=""/><p>
 
-3. Setting up roles
+##### 3. Setting up roles
 
   By clicking on the Create button, you can select one of the elements available in addition to the permission that will be granted to.
   </br>The new role is a combination of rules that can also be configured by specifing one or more component names.
