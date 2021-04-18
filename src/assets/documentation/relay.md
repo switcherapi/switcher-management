@@ -60,29 +60,29 @@ Below you will learn how to configure a Switcher Relay and its results after it 
   <li style="list-style-type: disclosure-closed;">REGEX_VALIDATION: regex
   </br></br>
   
-    For example, if you call a switcher using the Java example below:
+  For example, if you call a switcher using the Java example below:
 
-    ```java
-    Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
-          .prepareEntry(new Entry(Entry.VALUE, "Roger"))
-          .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.3"));
-        
-    switcher.isItOn();
-    ```
+  ```java
+  Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
+        .prepareEntry(new Entry(Entry.VALUE, "Roger"))
+        .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.3"));
+      
+  switcher.isItOn();
+  ```
 
-    Considering that **FEATURE01** has a configured relay to access the endpoint <a style="text-decoration: none; color: black; cursor: default">https://myapi/validate</a>. The wrapper will be sending to this receptor the following parameter:
+  Considering that **FEATURE01** has a configured relay to access the endpoint <a style="text-decoration: none; color: black; cursor: default">https://myapi/validate</a>. The wrapper will be sending to this receptor the following parameter:
 
-    <li style="list-style-type: disclosure-closed;">If the method equals to [GET] > https://myapi/validate?value=Roger&network=10.0.0.3
-    <li style="list-style-type: disclosure-closed;">If the method equals to [POST] > https://myapi/validate { body: value: 'Roger', network: '10.0.0.3' }
-    </br></br>
+  <li style="list-style-type: disclosure-closed;">If the method equals to [GET] > https://myapi/validate?value=Roger&network=10.0.0.3
+  <li style="list-style-type: disclosure-closed;">If the method equals to [POST] > https://myapi/validate { body: value: 'Roger', network: '10.0.0.3' }
+  </br></br>
 
-    ##### Code example
-    Using the example above, a simple implementation of a relay receptor using NodeJS/Express can be done as the example below.
+  ##### Code example
+  Using the example above, a simple implementation of a relay receptor using NodeJS/Express can be done as the example below.
 
-    The response when implementing a *NOTIFICATION* receptor service must contain the following return arguments:
-    <li style="list-style-type: disclosure-closed;">result: boolean
-    <li style="list-style-type: disclosure-closed;">message: string (optional argument)
-    </br></br>
+  The response when implementing a *NOTIFICATION* receptor service must contain the following return arguments:
+  <li style="list-style-type: disclosure-closed;">result: boolean
+  <li style="list-style-type: disclosure-closed;">message: string (optional argument)
+  </br></br>
 
 ```javascript
 router.post('/validate', (req, res) => {
