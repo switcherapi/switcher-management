@@ -26,11 +26,11 @@ Environment settings can be also be reset using two different options.
 1. Removing the environment setting inside your Domain, Group, Switcher, or Strategy, by selecting the trach icon.
 In case your application uses the removed environment, then it will automatically use the default environment settings.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_remove.jpg" class="image-style shadow" alt=""/><p>
+   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_remove.jpg" class="image-style shadow" alt=""/><p>
 
 2. Resetting the entire environment to use the default settings. This action will also remove strategies since they are created per environment.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_reset.jpg" class="image-style shadow" alt=""/><p></br>
+   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_reset.jpg" class="image-style shadow" alt=""/><p></br>
 
 #### Environment Snapshot file
 When using the provided modules to connect to the Switcher API, it is also possible to opt for accessing all configuration made inside Switcher Management via a snapshot configuration file. This file is generated in JSON and can be download by selecting the icon on the top of your Domain panel.

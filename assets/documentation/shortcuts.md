@@ -16,11 +16,11 @@ We tried to keep things as simple as possible, reducing the complexity behind th
 
   1. If you are looking for Switchers used by a specific component, you can just type the component's name that it will bring all switchers linked to it.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/smart_search_component.gif" class="image-style shadow" alt=""/><p><br/>
+     <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/smart_search_component.gif" class="image-style shadow" alt=""/><p><br/>
 
   2. You can also filter elements by its prefix: 's:' for Switcher, 'g:' for Groups and 'c:' for Components
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/smart_search_prefix.gif" class="image-style shadow" alt=""/><p><br/>
+     <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/smart_search_prefix.gif" class="image-style shadow" alt=""/><p><br/>
 
   3. The search algorithm is also prepared for looking at elements description, thus it can be a good practice to add tags or keywords on all groups and switchers that you create.
 

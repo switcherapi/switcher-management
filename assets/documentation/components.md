@@ -12,14 +12,14 @@ Regarding security, all registered applications must be linked to a switcher, ot
 #### Usage
 Creating a components is very simple and after doing it, you just have to link it with one or more switchers you have already created and add to your application module context.
 
-1. Linking with a Switcher
+##### 1. Linking with a Switcher
 
   Enter in the edition mode and just type the name of your registered component. 
   </br>It will try to match in an auto-complete list for you to choose afterwards.
 
   <img src="[$ASSETS_LOCATION]/documentation/images/components/component_add.jpg" class="image-style shadow" alt=""/><p>
 
-2. Including into your application module context
+##### 2. Including into your application module context
 
   Here it is an example of a NodeJS Express-based application context named as 'IventoryWS'.
 
