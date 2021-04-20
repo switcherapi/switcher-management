@@ -120,4 +120,8 @@ h4 {
     margin-top: 10px;
     margin-left: 0px;
   }
+
+  .card {
+    padding-bottom: 10px;
+  }
 }

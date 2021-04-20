@@ -5,7 +5,7 @@ export const environment = {
   bitbucketApiClientId: 'JNfFteJqcjcDytFAh5',
   teamInviteLink: 'https://switcherapi.github.io/switcher-management/collab/join',
   domainTransferLink: 'https://switcherapi.github.io/switcher-management/domain/transfer',
-  apiUrl: 'https://switcher-load-balance.herokuapp.com',
+  apiUrl: 'https://switcher-api.herokuapp.com',
   skimmingApi: 'https://dance-0m7.begin.app',
   docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/', 
   timeout: 5000
