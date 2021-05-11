@@ -20,34 +20,57 @@
 
 ```xml
 <dependency>
-    <groupId>com.github.switcherapi</groupId>
-    <artifactId>switcher-client</artifactId>
-    <version>1.1.0</version>
+  <groupId>com.github.switcherapi</groupId>
+  <artifactId>switcher-client</artifactId>
+  <version>1.2.1</version>
 </dependency>
+```
+
+- Gradle
+
+```
+implementation 'com.github.switcherapi:switcher-client:1.2.1'
 ```
 
 </br>
 
 ##### - Context properties
-The context map properties stores all information regarding connectivity and strategy settings. These constants can be accessed using *SwitcherContextParam*.
+SwitcherContext implements all external configurations regarding API access and SDK behaviors.
+This new approach has eliminated unnecessary boilerplates and also has added a new layer for security purposes.
 
-- URL: Endpoint of your Swither-API - e.g. https://switcher-load-balance.herokuapp.com.
-- APIKEY: Switcher-API key generated after creating a domain.
-- DOMAIN: Domain name.
-- COMPONENT: Application name.
-- ENVIRONMENT: Environment name. Production environment is named as 'default'.
-- SILENT_MODE: (boolean) Activate contingency in case of some problem with connectivity with the API.
-- RETRY_AFTER: Time given to the module to re-establish connectivity with the API - e.g. 5s (s: seconds - m: minutes - h: hours)
-- SNAPSHOT_LOCATION: Set the folder location where snapshot files will be saved.
-- SNAPSHOT_AUTO_LOAD: (boolean) Set the module to automatically download the snapshot configuration.
+Similarly as frameworks like Spring Boot, Log4j, the SDK also requires creating an external properties file that will contain all the settings.
 
-All set, you can now build the context.
+1. Inside the resources folder, create a file called: switcherapi.properties.
 
-```java
-SwitcherFactory.buildContext(properties, false);
+```
+#required
+switcher.context -> Feature class that extends SwitcherContext
+switcher.url -> Swither-API endpoint
+switcher.apikey -> Switcher-API key generated for the application/component
+switcher.component -> Application/component name
+switcher.environment -> Environment name. Production environment is named as 'default'
+switcher.domain -> Domain name
+
+#optional
+switcher.offline -> true/false When offline, it will only use a local snapshot file
+switcher.snapshot.file -> Snapshot file path
+switcher.snapshot.location -> Folder from where snapshots will be saved/read
+switcher.snapshot.auto -> true/false Automated lookup for snapshot when loading the application
+switcher.silent -> true/false Contingency in case of some problem with connectivity with the API
+switcher.retry -> Time given to the module to re-establish connectivity with the API - e.g. 5s (s: seconds - m: minutes - h: hours)
 ```
 
-</br>
+2. Defining your features
+
+```java
+public class MyAppFeatures extends SwitcherContext {
+	@SwitcherKey
+	public static final String MY_SWITCHER = "MY_SWITCHER";
+}
+
+Switcher mySwitcher = MyAppFeatures.getSwitcher(MY_SWITCHER);
+mySwitcher.isItOn();
+```
 
 ##### - Executing
 There are a few different ways to call the API using the java library.
@@ -55,69 +78,84 @@ There are a few different ways to call the API using the java library.
 
 1. **No parameters**
 
-  Invoking the API can be done by obtaining the switcher object and calling *isItOn*. It can also be forced to call another key any time you want.
+Invoking the API can be done by obtaining the switcher object and calling *isItOn*. It can also be forced to call another key any time you want.
 
-  ```java
-  Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01");
-  switcher.isItOn();
-  //or
-  switcher.isItOn("FEATURE01");
-  ```
+```java
+Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
+switcher.isItOn();
+//or
+switcher.isItOn(FEATURE01);
+```
 
 2. **Strategy validation - preparing input**
 
-  Loading values into the switcher can be done by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
+Loading values into the switcher can be done by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
 
-  ```java
-  List<Entry> entries = new ArrayList<>();
-  entries.add(new Entry(Entry.DATE, "2019-12-10"));
-  entries.add(new Entry(Entry.DATE, "2020-12-10"));
-  
-  switcher.prepareEntry(entries);
-  switcher.isItOn();
-  //or
-  switcher.isItOn(entries);
-  ```
+```java
+List<Entry> entries = new ArrayList<>();
+entries.add(new Entry(Entry.DATE, "2019-12-10"));
+entries.add(new Entry(Entry.DATE, "2020-12-10"));
 
-  Strategy validators can be specified as:
-  - Entry.DATE: Date validation
-  - Entry.TIME: Time validation
-  - Entry.VALUE: Plain text validation
-  - Entry.NUMERIC: Numeric validation
-  - Entry.NETWORK: IP/range validation
-  - Entry.REGEX: Regular expression validation
+switcher.prepareEntry(entries);
+switcher.isItOn();
+//or
+switcher.isItOn(entries);
+```
+
+Strategy validators can be specified as:
+- Entry.DATE: Date validation
+- Entry.TIME: Time validation
+- Entry.VALUE: Plain text validation
+- Entry.NUMERIC: Numeric validation
+- Entry.NETWORK: IP/range validation
+- Entry.REGEX: Regular expression validation
 
 
 3. **Strategy validation - chained call**
 
-  Create chained calls using 'getSwitcher' then 'prepareEntry' then 'isItOn' functions.
+Create a chained call using check functions.
 
-  ```java
-  Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
-        .prepareEntry(new Entry(Entry.VALUE, "My value"))
-        .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.1"))
-        .isItOn();
-  ```
+```java
+MyAppFeatures.getSwitcher(FEATURE01)
+	.checkValue("My value")
+	.checkNetwork("10.0.0.1")
+	.isItOn();
+```
 
 4. **Strategy validation - all-in-one execution**
 
-  All-in-one method is fast and include everything you need to execute a complex call to the API. Stack inputs changing the last parameter to *true* in case you need to add more values to the strategy validator.
+All-in-one method is fast and include everything you need to execute a complex call to the API. Stack inputs changing the last parameter to *true* in case you need to add more values to the strategy validator.
 
-  ```java
-  switcher.isItOn("FEATURE01", new Entry(Entry.NETWORK, "10.0.0.3"), false);
-  ```
+```java
+switcher.isItOn(FEATURE01, new Entry(Entry.NETWORK, "10.0.0.3"), false);
+//or
+switcher.checkNetwork("10.0.0.3").isItOn(FEATURE01);
+```
 
 5. **Accessing the response history**
 
-  Switchers when created store the last execution result from a given switcher key. This can be useful for troubleshooting or internal logging.
-  
-  ```java
-  switcher.getHistoryExecution();
-  ```
+Switchers when created store the last execution result from a given switcher key. This can be useful for troubleshooting or internal logging.
+
+```java
+switcher.getHistoryExecution();
+```
 
 </br>
 
-##### - Real-time snapshot updater
+##### - Offline settings
+You can also force the Switcher library to work offline. In this case, the snapshot location must be set up and the context reinitialized.
+
+```java
+MyAppFeatures.getProperties().setOfflineMode(true);
+MyAppFeatures.getProperties().setSnapshotLocation("/src/resources");
+MyAppFeatures.initializeClient();
+
+Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
+switcher.isItOn();
+```
+</br>
+
+##### - Real-time snapshot reloader
 Let the Switcher Client manage your application local snapshot file.
 
 In order to minimize roundtrips and unnecessary file parsing, try to use one of these features to improve the overall performance when accessing snapshots locally.
@@ -131,14 +169,6 @@ SwitcherFactory.stopWatchingSnapshot();
 2. You can tell the Switcher Client to check if the snapshot file is updated. This will ensure that your application is running the most recent version of your cloud configuration.
 ```java
 SwitcherFactory.validateSnapshot();
-```
-
-##### - Offline settings
-You can also force the Switcher library to work offline. In this case, the snapshot location must be set up and the context re-built using the offline flag.
-
-```java
-properties.put(SwitcherContextParam.SNAPSHOT_LOCATION, "/src/resources");
-SwitcherFactory.buildContext(properties, true);
 ```
 
 </br>
@@ -156,6 +186,35 @@ switcher.isItOn(); // 'false'
 SwitcherExecutor.forget("FEATURE01");
 switcher.isItOn(); // Now, it's going to return the result retrieved from the API or the Snaopshot file
 ```
+
+</br>
+
+##### - Smoke test
+Validate Switcher Keys on your testing pipelines before deploying a change.
+Switcher Keys may not be configured correctly and can cause your code to have undesired results.
+
+This feature will validate using the context provided to check if everything is up and running.
+In case something is missing, this operation will throw an exception pointing out which Switcher Keys are not configured.
+
+```java
+@Test
+void testSwitchers() {
+	assertDoesNotThrow(() -> MyAppFeatures.checkSwitchers());
+}
+```
+
+#### SwitcherMock annotation - Requires JUnit 5 Jupiter
+Predefine Switchers result outside your test methods via Parametrized Test.
+</br>It encapsulates the test and makes sure that the Switcher returns to its original state after concluding the test.
+
+```java
+@ParameterizedTest
+@SwitcherMock(key = MY_SWITCHER, result = true)
+void testMyFeature() {
+   assertTrue(instance.myFeature());
+}
+```
+
 
 </br>
 
