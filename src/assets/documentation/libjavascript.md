@@ -31,7 +31,7 @@ const apiKey = '[API_KEY]';
 const environment = 'default';
 const domain = 'My Domain';
 const component = 'MyApp';
-const url
+const url = 'https://switcher-api.herokuapp.com';
 ```
 
 - **apiKey**: Switcher-API key generated to your component.
@@ -90,7 +90,9 @@ switcher.isItOn('KEY')
 Loading information into the switcher can be made by using *prepare*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
 
 ```js
-switcher.prepare('FEATURE01', [Switcher.StrategiesType.VALUE, 'USER_1');
+const { checkValue, checkNetwork } = require('switcher-client');
+
+switcher.prepare('FEATURE01', [checkValue('USER_1')];
 switcher.isItOn();
 ```
 
@@ -98,10 +100,10 @@ switcher.isItOn();
 All-in-one method is fast and include everything you need to execute a complex call to the API.
 
 ```js
-await switcher.isItOn('FEATURE01',
-    [Switcher.StrategiesType.VALUE, 'User 1', 
-    Switcher.StrategiesType.NETWORK, '192.168.0.1']
-);
+await switcher.isItOn('FEATURE01', [
+    checkValue('User 1'),
+    checkNetwork('192.168.0.1')
+]);
 ```
 
 </br>
@@ -126,6 +128,17 @@ To enable this feature, it is recommended to place the following on your test se
 Switcher.setTestEnabled();
 ```
 
+**Smoke Test**
+Validate Switcher Keys on your testing pipelines before deploying a change.
+Switcher Keys may not be configured correctly and can cause your code to have undesired results.
+
+This feature will validate using the context provided to check if everything is up and running.
+In case something is missing, this operation will throw an exception pointing out which Switcher Keys are not configured.
+
+```js
+Switcher.checkSwitchers(['FEATURE01', 'FEATURE02'])
+```
+
 ##### Loading Snapshot from the API
 This step is optional if you want to load a copy of the configuration that can be used to eliminate latency when offline mode is activated.
 
@@ -143,7 +156,10 @@ switcher.checkSnapshot();
 * * *
 
 ### Version Log
-
+- 3.0.1:
+    - Fixes class definition: removed snapshopAutoload
+    - Fixes silent mode
+    - Adds Smoke test
 - 3.0.0:
     - Improved client inicialization
     - Improved Snapshop data lookup
