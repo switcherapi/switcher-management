@@ -1,3 +1,7 @@
+button {
+  outline: none;
+}
+
 .backgroud-style {
   background: #24292e !important;
   padding-top: 0;

@@ -94,7 +94,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
             this.domainRouteService.notifyDocumentChange();
           }
         }, error => {
-          this.loading = false;
+          this.ngOnInit();
           this.toastService.showError(`Unable to create a new group. ${error.error}`);
           ConsoleLogger.printError(error);
         });
