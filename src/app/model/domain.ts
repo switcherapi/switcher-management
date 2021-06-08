@@ -10,4 +10,9 @@ export class Domain {
   activated: Map<string, boolean>;
   group: Group[];
   transfer: boolean;
+  integrations: Integrations;
+}
+
+export class Integrations {
+  slack: string;
 }

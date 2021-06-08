@@ -36,6 +36,7 @@ import { MetricModule } from './metric-module/metric.module';
 import { SpecialCharacterDirective } from './common/special.char.directive';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
 import { RelayDetailComponent } from './config/relay-detail/relay-detail.component';
+import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { RelayDetailComponent } from './config/relay-detail/relay-detail.compone
     ChangeLogDialog,
     DomainSnapshotComponent,
     DomainTransferDialog,
-    SpecialCharacterDirective
+    SpecialCharacterDirective,
+    ExtSlackComponent
   ],
   entryComponents: [
     GroupCreateComponent,
