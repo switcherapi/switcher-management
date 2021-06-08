@@ -140,12 +140,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "";
   }
-  
-  scrollToElement($element): void {
-    setTimeout(() => {
-      $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    }, 500);
-  }
 
   getConfig(): Config {
     return this.pathRoute.element;
@@ -362,7 +356,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             this.envSelectionChange.selectedEnvName, 
             result.values).subscribe(data => {
               this.initStrategies();
-              this.toastService.showSuccess(`Strategy created with success`);
+              this.toastService.showSuccess('Strategy created with success');
             }, error => {
               this.toastService.showError(error ? error.error : 'Unable to add strategy');
               ConsoleLogger.printError(error);

@@ -203,6 +203,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.strategyList.reloadStrategies(this.strategy);
           this.blockUI.stop();
           this.toastService.showSuccess(`Strategy removed with success`);
+
+          if (!this.strategyList.strategies.length)
+            this.scrollToElement(document.getElementById('page-container'));
         }, error => {
           this.blockUI.stop();
           this.toastService.showError(`Unable to remove this strategy`);

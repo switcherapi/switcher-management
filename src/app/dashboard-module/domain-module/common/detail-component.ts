@@ -43,4 +43,10 @@ export class DetailComponent {
         return value.length > length ? `${value.substr(0, length)}...` : value;
     }
 
+    scrollToElement($element: any): void {
+        setTimeout(() => {
+          $element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+        }, 500);
+    }
+
 }
