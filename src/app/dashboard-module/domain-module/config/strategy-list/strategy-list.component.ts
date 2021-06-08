@@ -16,7 +16,7 @@ export class StrategyListComponent implements OnInit {
 
   ngOnInit() { }
 
-  scrollToElement($element): void {
+  scrollToElement($element: any): void {
     setTimeout(() => {
       $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     }, 200);
