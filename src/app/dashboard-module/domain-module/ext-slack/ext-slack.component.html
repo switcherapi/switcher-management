@@ -1,0 +1,68 @@
+<div *ngIf="loading" class="card-body loader-div">
+    <div class="loader"></div>
+    <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" />
+</div>
+<div [ngClass]="loading ? 'loading' : 'detail-body ready'">
+    <div class="panel-slack-detail">
+        <img src="assets\slack.svg" style="width: 30px;" />
+        <h3>Slack Integration</h3>
+    </div>
+    <div class="container-fluid content-row">
+        <div *ngIf="slack" class="row">
+            <div class="col-sm-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Details</h5>
+                        <div class="description">
+                            <mat-form-field>
+                                <input matInput placeholder="Team Name" [value]="slack.team_name" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="description">
+                            <mat-form-field>
+                                <input matInput placeholder="Approval Channel" [value]="slack.channel" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="description">
+                            <mat-form-field>
+                                <input matInput placeholder="Installed At"
+                                    [value]="slack.installed_at * 1000 | date:'medium'" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="description">
+                            <a class="ticket_stats" style="text-align: center;" title="Reset ticket history" (click)="onResetTicketsHistory()">
+                                <mat-icon>fiber_new</mat-icon> {{slack.tickets_opened}} -
+                                <mat-icon>thumb_up</mat-icon> {{slack.tickets_opened}} -
+                                <mat-icon>thumb_down</mat-icon> {{slack.tickets_opened}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Settings</h5>
+                        <div class="description">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="Required approvals" min="1" max="50" maxlength="2"
+                                    [formControl]="formQtyApprovals" [(ngModel)]="slack.settings.approvals">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="options-section">
+                            <button *ngIf="slackUpdate" mat-button class="btn-element" (click)="onUpdate()">
+                                <mat-icon style="font-size: large;">build</mat-icon>
+                                <div class="options-section-label">Update</div>
+                            </button>
+                            <button mat-button class="btn-element" style="background: #fb5454;" (click)="onUninstall()">
+                                <mat-icon>cloud_off</mat-icon>
+                                <div class="options-section-label">Uninstall</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

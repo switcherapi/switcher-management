@@ -12,6 +12,7 @@ import { GroupDetailComponent } from './group/group-detail/group-detail.componen
 import { ConfigListComponent } from './config/config-list/config-list.component';
 import { ConfigDetailComponent } from './config/config-detail/config-detail.component';
 import { AuthGuard } from '../../auth/guards/auth.guard';
+import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 
 const routes: Routes = [
   {
@@ -78,7 +79,10 @@ const routes: Routes = [
           icon: 6
         }
       },
-
+      {
+        path: 'integration/slack',
+        component: ExtSlackComponent, canActivate: [AuthGuard]
+      },
       { path: '**', redirectTo: '/dashboard/domain' }
     ]
   }
