@@ -16,18 +16,23 @@
                     <mat-icon> list_alt</mat-icon>
                 </button>
                 <mat-menu #belowMenu="matMenu" yPosition="below">
-                    <button mat-menu-item (click)="onDownloadSnapshot()">
+                    <button mat-menu-item (click)="onDownloadSnapshot()" style="outline: none;">
                         <mat-icon>cloud_download</mat-icon>
                         Download Snapshot
-                    </button>
-                    <button *ngIf="hasSlackIntegration()" mat-menu-item routerLink="/dashboard/domain/integration/slack">
-                        <mat-icon>settings</mat-icon>
-                        Slack Integration
                     </button>
                     <button *ngIf="transferLabel" mat-menu-item (click)="onDomainTransfer()">
                         <mat-icon>next_week</mat-icon>
                         {{ transferLabel }}
                     </button>
+                    <button *ngIf="hasSlackIntegration()" mat-menu-item routerLink="/dashboard/domain/integration/slack">
+                        <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" />
+                        Slack Integration
+                    </button>
+                    <a *ngIf="transferLabel && !hasSlackIntegration()" mat-menu-item style="text-decoration: none;"
+                        href="{{ getSlackUrl() }}" target="_parent">
+                        <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" />
+                        Install Slack App
+                    </a>
                 </mat-menu>
             </div>
         </h4>

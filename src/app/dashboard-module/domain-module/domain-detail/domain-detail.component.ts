@@ -76,8 +76,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.removeEnvironmentStatus(env);
     });
-
-    super.loadAdmin(this.getDomain().owner);
   }
 
   ngOnDestroy() {
@@ -98,6 +96,8 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.domainRouteService.updatePath(this.pathRoute, true);
     this.readPermissionToObject();
     this.checkDomainOwner();
+
+    super.loadAdmin(this.getDomain().owner);
   }
 
   updateEnvironmentStatus(env : any): void {

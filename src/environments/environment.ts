@@ -13,6 +13,7 @@ export const environment = {
   apiUrl: 'https://switcher-api-staging.herokuapp.com',
   // skimmingApi: 'https://dance-0m7.begin.app',
   skimmingApi: 'https://dance-0m7-staging.begin.app',
+  slackUrl: 'https://switcher-slack-app.herokuapp.com/slack/install',
   docsUrl: 'assets/',
   // docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/',
   timeout: 5000

@@ -30,6 +30,7 @@ import { SignupDomainComponent } from './signup-domain/signup-domain.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { PwaService } from './services/pwa.service';
+import { SlackAuthComponent } from './slack-auth/slack-auth.component';
 
 @NgModule({
     imports: [
@@ -57,7 +58,8 @@ import { PwaService } from './services/pwa.service';
       SignupComponent,
       SignupAuthComponent,
       SignupTeamComponent,
-      SignupDomainComponent
+      SignupDomainComponent,
+      SlackAuthComponent
     ],
     providers: [
       PwaService,

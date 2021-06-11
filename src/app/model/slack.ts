@@ -11,6 +11,11 @@ export class Slack {
     settings: Settings;
 }
 
+export class SlackInstallation {
+    team_name: string;
+    incoming_webhook_channel: string;
+}
+
 export class Settings {
     approvals: number;
 }
