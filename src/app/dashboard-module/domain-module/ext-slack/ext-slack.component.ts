@@ -3,8 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Label } from 'ng2-charts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Domain } from 'src/app/model/domain';
@@ -96,11 +94,10 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = 'Are you sure you want to uninstall Slack?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        console.log('Uninstalling...');
         this.slackService.unlinkInstallation(this.domain.id)
           .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
             if (data) {
-              this.router.navigate(['/dashboard/domain']);
+              this.router.navigate(['/dashboard']);
               this.toastService.showSuccess(data.message);
             }
           }, (error) => {

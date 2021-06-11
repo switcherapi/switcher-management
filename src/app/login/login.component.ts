@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.route.queryParams.subscribe(params => {
             const platform =  params['platform'];
             const code =  params['code'];
+            this.returnUrl = '/dashboard';
             
             if (code) {
                 if (platform === 'github') {
@@ -57,8 +58,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
-
-        this.returnUrl = '/dashboard';
+        
         this.inviteLink();
         this.isAlive();
     }

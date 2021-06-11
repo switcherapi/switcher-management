@@ -8,6 +8,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
 import { SignupDomainComponent } from './signup-domain/signup-domain.component';
+import { SlackAuthComponent } from './slack-auth/slack-auth.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -41,6 +42,8 @@ const routes: Routes = [
     { path: 'collab/join', component: SignupTeamComponent, canActivate: [AuthGuard] },
 
     { path: 'domain/transfer', component: SignupDomainComponent, canActivate: [AuthGuard] },
+
+    { path: 'slack/authorization', component: SlackAuthComponent, canActivate: [AuthGuard] },
 
     { path: '**', redirectTo: '/dashboard' }
 ];

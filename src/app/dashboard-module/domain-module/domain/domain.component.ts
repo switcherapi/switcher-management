@@ -15,6 +15,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
+import { environment } from 'src/environments/environment';
 import { SlackService } from 'src/app/services/slack.service';
 import { FEATURES } from 'src/app/model/slack';
 
@@ -261,6 +262,10 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   getConfigElement(): string {
     return this.selectedConfig ? JSON.stringify(this.selectedConfig.element) : '';
+  }
+
+  getSlackUrl(): string {
+    return environment.slackUrl;
   }
 
   hasSlackIntegration(): boolean {

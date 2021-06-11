@@ -5,6 +5,7 @@ import { PathRoute, Types } from '../model/path-route';
 @Injectable()
 export class DomainRouteService {
 
+  
   @Output() pathChange: EventEmitter<PathRoute> = new EventEmitter();
   @Output() documentChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -53,6 +54,10 @@ export class DomainRouteService {
       sessionStorage.setItem(Types.CURRENT_ROUTE, sessionStorage.getItem(Types.SELECTED_GROUP));
       this.pathChange.emit(this.getPathElement(Types.GROUP_TYPE));
     }
+  }
+
+  isSessionLoaded(): boolean {
+    return sessionStorage.getItem(Types.CURRENT_ROUTE) != null;
   }
 
 }
