@@ -1,19 +1,21 @@
 #### Overview
+* * *
 
 Switcher Relay is a message wrapper that can invoke an external REST service in order to either process the result or just notify that an execution has been made.
 Not only can applications make use of all the built-in strategy validations, but they can also create a customized and totally independent mechanisms to manipulate software behavior.
 
 This document will show you the different ways you can configure it and how to implement the REST API receptor, which will be responsible for receiving and processing the information provided by the Switcher Relay.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_relay.jpg" class="image-style center width-70" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_relay.jpg" class="image-style center width-70" alt=""/>
 
-* * *
+</br></br>
 
 #### How to use
 
 Below you will learn how to configure a Switcher Relay and its results after it is completed.
 
 ##### 1. Adding a Relay
+* * *
 
 After creating a Switcher, you can add one Relay per-environment by clicking on *Add Relay*. A new view will be showed right below your switcher main view. This panel must contains all the related information regarding how to access your REST receptor.
 
@@ -45,8 +47,10 @@ This view is composed by the settings:
 
   This value is combined with the Authorization Prefix that will compose the Authorization header.
 
+</br></br>
 
 #### 2. Implementing the API receptor
+* * *
 
   Before getting into the coding examples, it is important to understand how the Switcher Relay will wrap the request and then send the request to the receptor.
 
@@ -111,20 +115,30 @@ router.post('/validate', (req, res) => {
 })
 ```
 
+</br></br>
+
 ##### 3. Stacking
+* * *
 
   This approach allows you to determine whether the relay has to be executed or not. It consists of adding strategy validations before invoking the relay.
   The advantages of this approach are pre-filtering requests and eliminating unnecessary calls to your receptor that might not be valid for the implemented business rule.
 
   Defining strategies before Relays are the best way to keep the consistency of all external validation. It creates a smart gateway between your application and the external API used to validate or being notified. 
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_stack.jpg" class="image-style center width-70" alt=""/><p>
+  <img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_stack.jpg" class="image-style center width-70" alt=""/>
+
+</br></br>
 
 #### Metrics
+* * *
 
   Below you can access the result given a possible execution of this validation made via Switcher Relay where the user on the context is not allowed to access the feature.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_datametrics.jpg" class="image-style shadow" alt=""/><p>
+  <img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_datametrics.jpg" class="image-style shadow" alt=""/>
+
+</br></br>
+
+* * *
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[relay.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">

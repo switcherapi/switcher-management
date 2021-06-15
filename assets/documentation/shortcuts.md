@@ -1,12 +1,11 @@
 #### Switcher Management Shortcuts
+* * *
 
 We tried to keep things as simple as possible, reducing the complexity behind the mechanism that runs Switcher API.
 </br>In this section you will find some nice features that will assist you in navigating throughout the Switcher Management.
 
-
-* * *
-
   **Smart Search**
+  * * *
 
   This simple input text found on the right side of your Domain's menu can easily assist you to find the configuration element you are looking for.
 
@@ -24,9 +23,10 @@ We tried to keep things as simple as possible, reducing the complexity behind th
 
   3. The search algorithm is also prepared for looking at elements description, thus it can be a good practice to add tags or keywords on all groups and switchers that you create.
 
-  * * *
+</br></br>
 
   **Intelligent filtering**
+  * * *
 
   Tracking a specific input from Metrics or Change Log dashboards can be troublesome if your domain deal with a large volume of stored data.
   With that in mind, this single input filter can extract the exact match for what you are looking for.
@@ -35,13 +35,17 @@ We tried to keep things as simple as possible, reducing the complexity behind th
 
   <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/shortcuts_datafilter.jpg" class="image-style shadow" alt=""/><p><br/>
 
-  * * *
+</br></br>
 
   **Mobile viewport**
+  * * *
 
   Switcher Management is fully responsive to work with different viewports. Considering these variations, we built the best and simple layout for all scenarios.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/shortcuts_mobile.gif" class="image-style shadow" alt=""/><p><br/>
+  <img src="[$ASSETS_LOCATION]/documentation/images/shortcuts/shortcuts_mobile.gif" class="image-style shadow" alt=""/><p>
+
+</br></br>
+
 * * *
 
 *Did you find an error? Please, open an issue*
