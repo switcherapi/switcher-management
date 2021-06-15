@@ -1,15 +1,19 @@
 #### Overview
+* * *
+
 You can benefit from working with different environments when using Switcher API. 
 </br>Here are some advantages:
 
 - Decrease the impact of your either productive or other sensitive environments when switching features.
 - Set up exclusive variables (strategies) that will be used to run the switcher criteria.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/environment/environment.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/environment/environment.jpg" class="image-style shadow" alt=""/>
 
-* * *
+</br></br>
 
 #### Usage
+* * *
+
 After registering a new environment, it will become available as an option for:
 - Domains
 - Groups
@@ -30,9 +34,13 @@ In case your application uses the removed environment, then it will automaticall
 
 2. Resetting the entire environment to use the default settings. This action will also remove strategies since they are created per environment.
 
-   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_reset.jpg" class="image-style shadow" alt=""/><p></br>
+   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_reset.jpg" class="image-style shadow" alt=""/><p>
+
+</br></br>
 
 #### Environment Snapshot file
+* * *
+
 When using the provided modules to connect to the Switcher API, it is also possible to opt for accessing all configuration made inside Switcher Management via a snapshot configuration file. This file is generated in JSON and can be download by selecting the icon on the top of your Domain panel.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/environment/snapshot_location.jpg" class="image-style shadow"/><p>

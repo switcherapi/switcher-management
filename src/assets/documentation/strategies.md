@@ -1,4 +1,6 @@
 #### Overview
+* * *
+
 Create conditions that would enable the use of a new feature. These rules are not necessarily part of the implementation, however, they might be fundamental to assure that new changes are working properly not on a small proportion but controllable scope.
 </br>Running multiple versions of your project can bring safeness by providing a soft-launch carrying less impact to your production environment.
 
@@ -10,11 +12,13 @@ The advantages of using strategies are:
 
 *Fast response to negative feedbacks without impacting the final release.*
 
-<img src="https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/docs/SwitcherAPI_softlaunch.jpg" class="image-style" alt=""/><p>
+<img src="https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/docs/SwitcherAPI_softlaunch.jpg" class="image-style" alt=""/>
 
-* * *
+</br></br>
 
 #### Usage
+* * *
+
 For each switcher it is possible to add at least 4 different types of strategy.
 </br>For each strategy you can choose one of the available operations.
 
@@ -44,18 +48,28 @@ For each switcher it is possible to add at least 4 different types of strategy.
   </br>The available operations for this validator are: Exist, Not exist, Equal, Not equal.
   </br>- Equal and Not equal  implicitly use \b (delimiter) flag to match the exact input.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_create.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_create.jpg" class="image-style shadow" alt=""/>
+
+</br></br>
 
 #### Cloning strategies
+* * *
+
 Strategies are defined per environment, adding more flexibility for you to specify conditions that are not shared or common among environments.
 </br>To simplify, it is possible to clone a created strategy instead of starting from scratch.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_clone.jpg" class="image-style shadow" alt=""/><p></br>
+<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_clone.jpg" class="image-style shadow" alt=""/><p>
+
+</br></br>
 
 #### Monitoring
+* * *
+
 Keep control of what is being sent as input to strategies. Under Metrics - Data tab view, besides the result of each call executed you can see what it was sent for each strategy.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_data_fail.jpg" class="image-style shadow" alt=""/><p></br>
+<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_data_fail.jpg" class="image-style shadow" alt=""/><p>
+
+</br></br>
 
 * * *
 

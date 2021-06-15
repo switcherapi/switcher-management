@@ -52,6 +52,17 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="active">
+                        <a href="#slackSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Slack App</a>
+                        <ul class="collapse list-unstyled" id="slackSubmenu">
+                            <li>
+                                <a routerLink="/documentation/slackinstallation" (click)="toggleMenu()">- Installation</a>
+                            </li>
+                            <li>
+                                <a routerLink="/documentation/slackfeatures" (click)="toggleMenu()">- Features</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 <div id="searchBox" class="input-group md-form form-sm form-2 pl-0">
                     <input #searchQuery class="form-control" 

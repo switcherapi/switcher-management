@@ -15,6 +15,8 @@ import { SearchComponent } from './search/search.component';
 import { ApiComponent } from './docs/api.component';
 import { ShortcutsComponent } from './docs/shortcuts.component';
 import { RelayComponent } from './docs/relay.component';
+import { SlackInstallationDocsComponent } from './docs/slack-installation.component';
+import { SlackFeaturesDocsComponent } from './docs/slack-features.component';
 
 const routes: Routes = [
 
@@ -32,7 +34,9 @@ const routes: Routes = [
       { path: 'libjavascript', component: LibJavaScriptComponent },
       { path: 'api', component: ApiComponent },
       { path: 'shortcuts', component: ShortcutsComponent },
-      { path: 'relay', component: RelayComponent }
+      { path: 'relay', component: RelayComponent },
+      { path: 'slackinstallation', component: SlackInstallationDocsComponent },
+      { path: 'slackfeatures', component: SlackFeaturesDocsComponent }
     ]  
   }
   
