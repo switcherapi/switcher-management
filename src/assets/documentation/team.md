@@ -1,18 +1,21 @@
 #### Overview
+* * *
+
 Collaborate creating teams to work upon the same domain. With Teams, you can invite people to have access to settings of your domain, plus managing their access to every aspect of it.
 
 Teams are composed of Members and Roles. In addition to roles that will group all permissions granted to that team, it is also possible to activate and deactivate a team at any time.
 
 Get extra help while keeping control of who can create, read, update, or delete inside your domain.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/teams/teams.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/teams/teams.jpg" class="image-style shadow" alt=""/>
 
-* * *
+</br></br>
 
 #### Usage
 After creating a team, you can start setting up the new team either way, inviting new members or adding permissions.
 
 ##### 1. Inviting members
+* * *
 
   Using the field as shown below to filter or inviting members.
 
@@ -29,13 +32,19 @@ After creating a team, you can start setting up the new team either way, invitin
 
   Shared Domains are displayed on the Dashboard as Collaboration.
 
+</br></br>
+
 ##### 2. Ongoing invitations
+* * *
 
   Visualize all ongoing invitations by accessing the **Pending** tab as well as recovery the invitation link.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams_pending.jpg" class="image-style shadow" alt=""/><p>
+  <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams_pending.jpg" class="image-style shadow" alt=""/>
+
+</br></br>
 
 ##### 3. Setting up roles
+* * *
 
   By clicking on the Create button, you can select one of the elements available in addition to the permission that will be granted to.
   </br>The new role is a combination of rules that can also be configured by specifing one or more component names.
@@ -52,6 +61,8 @@ The available components are:
 The available actions are:
 - **CRUD**: Create, Read, Update and Delete.
 - **ALL**: Include all CRUD actions in just one rule.
+
+</br></br>
 
 * * *
 

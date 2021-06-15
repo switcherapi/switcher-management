@@ -31,18 +31,19 @@ html.dark-mode #main-menu, html.dark-mode #footer {
   box-shadow: 0px 0px 10px 10px #eee !important;
 }
 
-html.dark-mode #sidebar {
-  filter: invert(100%) hue-rotate(180deg);;
-}
-
+html.dark-mode #sidebar,
 html.dark-mode .profile-avatar, 
 html.dark-mode .avatar, 
-html.dark-mode .switcher-logo, 
+html.dark-mode .switcher-logo,
 html.dark-mode .doc-icon, 
 html.dark-mode .home-image,
 html.dark-mode .carousel-images,
 html.dark-mode .collab-image  {
-  filter: invert(100%) hue-rotate(180deg);;
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+html.dark-mode .image-style {
+  filter: invert(100%) hue-rotate(180deg);
 }
 
 html.dark-mode .card {

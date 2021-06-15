@@ -18,6 +18,8 @@ import { SearchItemComponent } from './search-item/search-item.component';
 import { ApiComponent } from './docs/api.component';
 import { ShortcutsComponent } from './docs/shortcuts.component';
 import { RelayComponent } from './docs/relay.component';
+import { SlackInstallationDocsComponent } from './docs/slack-installation.component';
+import { SlackFeaturesDocsComponent } from './docs/slack-features.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { RelayComponent } from './docs/relay.component';
     SearchItemComponent,
     ApiComponent,
     ShortcutsComponent,
-    RelayComponent
+    RelayComponent,
+    SlackInstallationDocsComponent,
+    SlackFeaturesDocsComponent
   ],
   imports: [
     CommonModule,
