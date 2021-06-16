@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
-import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -50,9 +49,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   
   @ViewChild('componentInput') 
   componentInput: ElementRef<HTMLInputElement>;
-
-  @ViewChild('tasbset') 
-  tasbset: ElementRef<HTMLInputElement>;
   
   @ViewChild('auto') 
   matAutocomplete: MatAutocomplete;
@@ -95,7 +91,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private adminService: AdminService,
     private strategyService: StrategyService,
     private componentService: ComponentService,
-    private errorHandler: RouterErrorHandler,
     private toastService: ToastService,
     private _modalService: NgbModal,
     private dialog: MatDialog
@@ -376,10 +371,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.config.relay.activated[this.envSelectionChange.selectedEnvName] = true;
     this.updatePathRoute(this.config);
 
-    setTimeout(() => {
-      this.currentTab = 2;
-      (this.tasbset as any).select('2');
-    }, 500);
+    this.classStrategySection = 'strategy-section relay';
+    setTimeout(() => this.currentTab = 2, 500);
   }
 
   hasRelay() {
@@ -416,6 +409,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       if (data) {
         this.hasStrategies = data.length > 0;
         this.strategies = data;
+
+        if (this.hasStrategies)
+          this.updateNavTab(1);
       }
     }, error => {
       ConsoleLogger.printError(error);
@@ -473,6 +469,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   onNavChange($event: NgbNavChangeEvent) {
     this.currentTab = $event.nextId;
+    this.updateNavTab(this.currentTab);
+  }
+
+  updateNavTab(tab: number): void {
+    this.currentTab = tab;
 
     if (this.currentTab === 1) {
       this.classStrategySection = 'strategy-section strategies';

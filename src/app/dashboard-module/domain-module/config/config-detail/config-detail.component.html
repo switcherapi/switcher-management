@@ -99,7 +99,7 @@
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
             </div>
 
-            <nav ngbNav #nav="ngbNav" [activeId]="1" class="nav-pills" (navChange)="onNavChange($event)">
+            <nav ngbNav #nav="ngbNav" [activeId]="currentTab" class="nav-pills" (navChange)="onNavChange($event)">
                 <ng-container [ngbNavItem]="1" *ngIf="hasStrategies">
                     <a ngbNavLink (click)="scrollToElement(strategysection);">
                         <mat-icon>code</mat-icon>

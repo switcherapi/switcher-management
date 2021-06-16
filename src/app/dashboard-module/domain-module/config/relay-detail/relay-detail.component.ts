@@ -9,7 +9,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { MatDialog } from '@angular/material/dialog';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { Types } from 'src/app/model/path-route';
@@ -61,8 +60,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     private adminService: AdminService,
     private configService: ConfigService,
     private toastService: ToastService,
-    private _modalService: NgbModal,
-    private dialog: MatDialog
+    private _modalService: NgbModal
   ) {
     super(adminService);
   }
@@ -244,6 +242,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     }
     delete this.config.relay.endpoint[this.envSelectionChange.selectedEnvName];
     this.parent.updatePathRoute(data);
+    this.parent.updateNavTab(3);
   }
 
   getRelayAttribute(field: string): string {
