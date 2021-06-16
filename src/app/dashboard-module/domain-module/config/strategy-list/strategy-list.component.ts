@@ -25,6 +25,9 @@ export class StrategyListComponent implements OnInit {
   reloadStrategies(strategy: Strategy) {
     this.strategies.splice(this.strategies.indexOf(strategy), 1);
     this.parent.hasStrategies = this.strategies.length > 0;
+
+    if (!this.parent.hasStrategies)
+      this.parent.updateNavTab(3);
   }
 
 }
