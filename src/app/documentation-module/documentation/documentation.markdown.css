@@ -1,18 +1,18 @@
 /* Markdown style rules */
-:host /deep/ .image-style {
+:host ::ng-deep .image-style {
   width: 100%;
   max-width: max-content;
 }
 
-:host /deep/ .image-style.shadow {
+:host ::ng-deep .image-style.shadow {
   box-shadow: 0px 0px 10px black;
 }
 
-:host /deep/ .image-style.center {
+:host ::ng-deep .image-style.center {
   display: block;
   margin: auto;
 }
 
-:host /deep/ .image-style.width-70 {
+:host ::ng-deep .image-style.width-70 {
   width: 70%;
 }

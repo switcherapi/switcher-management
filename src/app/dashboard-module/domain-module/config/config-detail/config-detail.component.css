@@ -25,15 +25,15 @@
   display: block;
 }
 
-:host /deep/ .flex-column {
+:host ::ng-deep .flex-column {
   display: block;
 }
 
-:host /deep/ .mat-list-option {
+:host ::ng-deep .mat-list-option {
   height: 30px !important;
 }
 
-:host /deep/ .nav-link {
+:host ::ng-deep .nav-link {
   display: flex;
 }
 
@@ -47,7 +47,7 @@
     display: flex;
   }
 
-  :host /deep/ .mat-tab-header {
+  :host ::ng-deep .mat-tab-header {
     display: contents;
   }
 }
@@ -57,7 +57,7 @@
     display: none;
   }
 
-  :host /deep/ .nav {
+  :host ::ng-deep .nav {
     display: block;
   }
 

@@ -80,7 +80,7 @@
     100% { opacity: 1; }
   }
   
-  :host /deep/ .mat-button-wrapper {
+  :host ::ng-deep .mat-button-wrapper {
     color: white;
   }
   

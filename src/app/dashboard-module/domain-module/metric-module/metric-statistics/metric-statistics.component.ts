@@ -367,7 +367,7 @@ export class SwitcherDateTimeGroupedTab {
     }
 
     @media only screen and (max-width: 510px) {
-      :host /deep/ .mat-elevation-z8 {
+      :host ::ng-deep .mat-elevation-z8 {
         display: inline-table;
       }
     }
