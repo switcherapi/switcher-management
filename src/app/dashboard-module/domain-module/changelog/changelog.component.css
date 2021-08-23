@@ -63,11 +63,11 @@ tr.element-row:not(.expanded-row):active {
 }
 
 /* fix layout issues */
-:host /deep/ .mat-paginator-container {
+:host ::ng-deep .mat-paginator-container {
   min-height: auto;
 }
 
-:host /deep/ .mat-header-row {
+:host ::ng-deep .mat-header-row {
   height: 30px;
   font-size: smaller;
 }

@@ -33,7 +33,7 @@
   display: contents;
 }
 
-:host /deep/ .mat-list-option {
+:host ::ng-deep .mat-list-option {
   height: 30px !important;
 }
 

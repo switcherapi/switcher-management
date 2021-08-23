@@ -68,12 +68,12 @@ h4 {
   display: none;
 }
 
-:host /deep/ .mat-form-field-label {
+:host ::ng-deep .mat-form-field-label {
   color: #8d9492;
   font-weight: lighter;
 }
 
-:host /deep/ .mat-form-field-underline {
+:host ::ng-deep .mat-form-field-underline {
   background: #8d9492;
 }
 
@@ -115,7 +115,7 @@ h4 {
 }
 
 @media only screen and (max-width: 450px) {
-  :host /deep/ .card-body {
+  :host ::ng-deep .card-body {
     padding-left: 10px;
     padding-right: 10px;
   }

@@ -80,7 +80,7 @@ mat-icon {
   vertical-align: top;
 }
 
-:host /deep/ .block-ui-wrapper {
+:host ::ng-deep .block-ui-wrapper {
   background: rgba(0, 0, 0, 0.3);
 }
 

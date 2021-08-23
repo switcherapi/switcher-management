@@ -40,15 +40,15 @@ mat-icon {
   margin-top: 10px;
 }
 
-:host /deep/ .block-ui-wrapper {
+:host ::ng-deep .block-ui-wrapper {
   background: rgba(0, 0, 0, 0.3);
 }
 
-:host /deep/ .card.mt-4.loading {
+:host ::ng-deep .card.mt-4.loading {
   opacity: 0.0;
 }
 
-:host /deep/ .card.mt-4.ready {
+:host ::ng-deep .card.mt-4.ready {
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
 }
