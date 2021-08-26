@@ -38,7 +38,7 @@ export class SignupComponent implements OnInit, OnDestroy {
             name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
-            captcha: ['', Validators.required]
+            captcha: ['', environment.recaptchaPublicKey ? Validators.required : '']
         });
 
         this.returnUrl = '/dashboard';
@@ -52,17 +52,15 @@ export class SignupComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        if (this.loginForm.invalid) {
+        if (this.loginForm.invalid)
             return;
-        }
-
+        
         this.loading = true;
-
         this.authService.signup({
                 name: this.f.name.value,
                 email: this.f.email.value,
                 password: this.f.password.value,
-                token: this.recaptcha_token
+                token: this.recaptcha_token || ''
             }).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
                 if (data) {
                     this.waitingConfirmation = true;
@@ -96,6 +94,14 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     resolved(captchaResponse: string) {
         this.recaptcha_token = captchaResponse;
+    }
+
+    hasGithubIntegration(): boolean {
+        return environment.githubApiClientId != undefined;
+    }
+
+    haBitbucketIntegration(): boolean {
+        return environment.bitbucketApiClientId != undefined;
     }
 
     private isAlive(): void {

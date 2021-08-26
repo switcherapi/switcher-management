@@ -26,8 +26,8 @@ export class AppComponent implements OnDestroy {
     this.authService.currentUser.subscribe(y => {
       this.loggedUserName = this.authService.getUserInfo('name');
       const avatar = this.authService.getUserInfo('avatar');
-      this.profileAvatar = avatar || "assets//switcherapi_mark_white.png";
-    })
+      this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
+    });
   }
 
   ngOnInit() {

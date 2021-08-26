@@ -28,7 +28,7 @@
                         <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" />
                         Slack Integration
                     </button>
-                    <a *ngIf="transferLabel && !hasSlackIntegration()" mat-menu-item style="text-decoration: none;"
+                    <a *ngIf="hasSlackUrl() && transferLabel && !hasSlackIntegration()" mat-menu-item style="text-decoration: none;"
                         href="{{ getSlackUrl() }}" target="_parent">
                         <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" />
                         Install Slack App

@@ -24,11 +24,13 @@
                             <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
                             <span style="color: white; padding-left: 5px;">Login</span>
                         </button>
-                        <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
+                        <button *ngIf="hasGithubIntegration()" type="button" 
+                            mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
                             <img src="assets\github.svg" style="width: 20px;"/>
                             <span style="color: black; padding-left: 5px;">GitHub</span>
                         </button>
-                        <button type="button" mat-button class="btn-element white" [disabled]="loading" (click)="onBitBucketLogin()">
+                        <button *ngIf="haBitbucketIntegration()" type="button" 
+                            mat-button class="btn-element white" [disabled]="loading" (click)="onBitBucketLogin()">
                             <img src="assets\bitbucket.svg" style="width: 20px;"/>
                             <span style="color: black; padding-left: 5px;">Bitbucket</span>
                             <div class="new-feature">

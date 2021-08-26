@@ -70,9 +70,11 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       this.updateRoute();
       this.checkDomainOwner();
 
-      this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => this.slackIntegration = data?.result);
+      if (environment.slackUrl) {
+        this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => this.slackIntegration = data?.result);
+      }
     });
   }
 
@@ -270,6 +272,10 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   hasSlackIntegration(): boolean {
     return this.selectedDomain?.element.integrations?.slack && this.slackIntegration;
+  }
+
+  hasSlackUrl(): boolean {
+    return environment.slackUrl != undefined;
   }
 
   showPath(type: string) {

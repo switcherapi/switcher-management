@@ -62,7 +62,7 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     this.userEmail = this.authService.getUserInfo('email');
     this.userPlatform = this.authService.getUserInfo('platform');
     const avatar = this.authService.getUserInfo('avatar');
-    this.profileAvatar = avatar || "assets//switcherapi_mark_white.png";
+    this.profileAvatar = avatar || "assets\\switcherapi_mark_grey.png";
   }
   
   loadDomains(): void {
