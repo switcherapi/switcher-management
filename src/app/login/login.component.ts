@@ -178,4 +178,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    hasGithubIntegration(): boolean {
+        return environment.githubApiClientId != undefined;
+    }
+
+    haBitbucketIntegration(): boolean {
+        return environment.bitbucketApiClientId != undefined;
+    }
 }
