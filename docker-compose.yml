@@ -1,0 +1,18 @@
+version: '3.8'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  switchermanagement:
+    image: trackerforce/switcher-management
+    container_name: switchermanagement
+    command: /bin/sh -c "setup.sh"
+    ports:
+      - 80:80
+    networks:
+      - backend
+    environment: 
+      - SWITCHERAPI_URL=https://switcher-api.herokuapp.com
+      - SM_IP=localhost
