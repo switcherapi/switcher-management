@@ -44,7 +44,6 @@ import { SlackAuthComponent } from './slack-auth/slack-auth.component';
       DashboardModule,
       AppMaterialModule,
       NgbModule,
-      BrowserAnimationsModule,
       RecaptchaModule,
       RecaptchaFormsModule,
       SettingsModule,
