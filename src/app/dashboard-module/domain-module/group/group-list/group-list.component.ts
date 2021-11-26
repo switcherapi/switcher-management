@@ -109,7 +109,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok' ? true : false;
+            this.creatable = element.result === 'ok';
           }
         });
       }

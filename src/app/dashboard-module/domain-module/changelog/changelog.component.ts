@@ -96,7 +96,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok' ? true : false;
+            this.removable = element.result === 'ok';
           }
         });
       }

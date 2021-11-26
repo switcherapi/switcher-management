@@ -56,10 +56,12 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.route.paramMap.pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.team) {
         sessionStorage.setItem(Types.SELECTED_TEAM, data.team);
-        this.readPermissionToObject(JSON.parse(data.team));
+        this.team = JSON.parse(data.team);
+        this.readPermissionToObject();
         this.loadDomain(this.team.domain);
       } else {
-        this.readPermissionToObject(JSON.parse(sessionStorage.getItem(Types.SELECTED_TEAM)));
+        this.team = JSON.parse(sessionStorage.getItem(Types.SELECTED_TEAM))
+        this.readPermissionToObject();
         this.loadDomain(this.team.domain);
       }
     })
@@ -85,26 +87,22 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.unsubscribe.complete();
   }
 
-  readPermissionToObject(team: Team): void {
+  readPermissionToObject(): void {
     const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
     this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok' ? true : false;
+            this.updatable = element.result === 'ok';
           } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok' ? true : false;
+            this.removable = element.result === 'ok';
           } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok' ? true : false;
+            this.creatable = element.result === 'ok';
           }
         });
       }
     });
-
-    if (team) {
-      this.team = team;
-    }
   }
 
   getTeam(): Team {
