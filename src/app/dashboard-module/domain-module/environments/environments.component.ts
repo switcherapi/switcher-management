@@ -82,11 +82,11 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok' ? true : false;
+            this.updatable = element.result === 'ok';
           } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok' ? true : false;
+            this.removable = element.result === 'ok';
           } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok' ? true : false;
+            this.creatable = element.result === 'ok';
           }
         });
       }

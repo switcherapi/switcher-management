@@ -1,11 +1,8 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { PathRoute, Types } from '../model/path-route';
 
-
 @Injectable()
 export class DomainRouteService {
-
-  
   @Output() pathChange: EventEmitter<PathRoute> = new EventEmitter();
   @Output() documentChange: EventEmitter<boolean> = new EventEmitter();
 

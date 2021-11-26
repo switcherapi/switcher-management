@@ -124,10 +124,10 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok' ? true : false;
+            this.updatable = element.result === 'ok';
             this.envSelectionChange.disableEnvChange(!this.updatable);
           } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok' ? true : false;
+            this.removable = element.result === 'ok';
           }
         });
       }

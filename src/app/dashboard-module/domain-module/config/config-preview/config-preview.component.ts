@@ -131,7 +131,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok' ? true : false;
+            this.updatable = element.result === 'ok';
             
             if (!this.updatable) {
               this.environmentStatusSelection.disable({ onlySelf: true });
@@ -139,7 +139,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
               this.toggleSectionStyle = 'toggle-section';
             }
           } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok' ? true : false;
+            this.removable = element.result === 'ok';
           }
         });
       }

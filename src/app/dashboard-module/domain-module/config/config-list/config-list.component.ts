@@ -110,7 +110,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
       if (data.length) {
         data.forEach(element => {
           if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok' ? true : false;
+            this.creatable = element.result === 'ok';
           }
         });
       }
