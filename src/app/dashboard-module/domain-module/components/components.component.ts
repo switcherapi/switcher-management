@@ -102,6 +102,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     const { valid } = this.compFormControl;
 
     if (valid) {
+      this.loading = true;
       this.compService.createComponent(
         this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.compFormControl.value, 'Created using Switcher Manager')
         .pipe(takeUntil(this.unsubscribe))
@@ -111,8 +112,11 @@ export class ComponentsComponent implements OnInit, OnDestroy {
             this.confirmKeyCreated(data.apiKey, data.component.name);
           }
         }, error => {
+          this.loading = false;
           this.toastService.showError(error.error);
           ConsoleLogger.printError(error);
+        }, () => {
+          this.loading = false;
         });
     } else {
       this.toastService.showError('Unable to create this Component');
