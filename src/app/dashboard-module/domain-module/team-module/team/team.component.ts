@@ -60,10 +60,9 @@ export class TeamComponent implements OnInit, OnDestroy {
       ConsoleLogger.printError(error);
       this.loading = false;
     }, () => {
-      if (!this.teams) {
-        this.error = 'Failed to connect to Switcher API';
-      }
       this.loading = false;
+      if (!this.teams)
+        this.error = 'Failed to connect to Switcher API';
     });
   }
 
@@ -96,6 +95,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     const { valid } = this.teamFormControl;
 
     if (valid) {
+      this.loading = true;
       this.teamService.createTeam(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.teamFormControl.value)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(team => {
@@ -104,7 +104,10 @@ export class TeamComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Team created with success');
           }
         }, error => {
+          this.loading = false;
           this.toastService.showError(error.error);
+        }, () => {
+          this.loading = false;
         });
     } else {
       this.toastService.showError('Unable to create this team');

@@ -97,6 +97,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     const { valid } = this.envFormControl;
 
     if (valid) {
+      this.loading = true;
       this.envService.createEnvironment(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.envFormControl.value)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(env => {
@@ -105,7 +106,10 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Environment created with success');
           }
         }, error => {
+          this.loading = false;
           this.toastService.showError(error.error);
+        }, () => {
+          this.loading = false;
         });
     } else {
       this.toastService.showError('Unable to create this Environment');

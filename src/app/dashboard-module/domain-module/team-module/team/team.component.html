@@ -1,4 +1,4 @@
-<div *ngIf="teams" class="header-style">
+<div *ngIf="teams && !loading" class="header-style">
     <div style="display: flex;">
         <button mat-button class="btn-element create" (click)="createTeam()" [disabled]="inputTeamName.value.length < 2 || !creatable">
             <mat-icon style="font-size: large;">build</mat-icon>
