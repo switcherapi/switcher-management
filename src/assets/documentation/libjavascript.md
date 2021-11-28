@@ -155,7 +155,7 @@ switcher.checkSnapshot();
 
 * * *
 
-### Version Log
+### Change Log
 - 3.0.1:
     - Fixes class definition: removed snapshopAutoload
     - Fixes silent mode
