@@ -78,13 +78,11 @@ There are a few different ways to call the API using the java library.
 
 1. **No parameters**
 
-Invoking the API can be done by obtaining the switcher object and calling *isItOn*. It can also be forced to call another key any time you want.
+Invoking the API can be done by obtaining the switcher object and calling *isItOn*.
 
 ```java
 Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
 switcher.isItOn();
-//or
-switcher.isItOn(FEATURE01);
 ```
 
 2. **Strategy validation - preparing input**
@@ -128,8 +126,8 @@ All-in-one method is fast and include everything you need to execute a complex c
 
 ```java
 switcher.isItOn(FEATURE01, new Entry(Entry.NETWORK, "10.0.0.3"), false);
-//or
-switcher.checkNetwork("10.0.0.3").isItOn(FEATURE01);
+//or simply
+switcher.checkNetwork("10.0.0.3").isItOn();
 ```
 
 5. **Accessing the response history**
@@ -138,6 +136,14 @@ Switchers when created store the last execution result from a given switcher key
 
 ```java
 switcher.getHistoryExecution();
+```
+
+6. **Throttling**
+
+Improve the overall performance by using throttle feature to skip API calls in a short time. This feature is ideal for critical or repetitive code executions that requires high performance.
+
+```java
+switcher.throttle(1000).isItOn();
 ```
 
 </br>
@@ -218,21 +224,39 @@ void testMyFeature() {
 
 </br>
 
-### Version Log
+### Change Log
+- 1.3.0-SNAPSHOT:
+	- Optimized Switcher instance creation management
+	- Added Throttling and Async calls
+	- Updated com.google.code.gson:gson from 2.8.6 to 2.8.9
+	- Updated Jersey dependencies from 2.34 to 2.35
+	- Fixed Autoload snapshot is creating null as file name
+- 1.2.1: Medium Severity Security Patch: Jersey has been updated - 2.33 to 2.34
+- 1.2.0:
+	- Changed how SwitcherContext is implemented - added support to properties file
+	- Offline mode can programmatically load snapshots
+	- Added extra security layer for verifying features
+	- Added @SwitcherMock feature
+	- Smoke testing
+	- Removed PowerMockito: tests are way simpler to read using Okhttp3
+	- Updated dependecy junit to JUnit5-jupiter
 - 1.1.0:
-  - Improved snapshop lookup mechanism
-  - Included snashot validation when set to online mode
-  - Critical fix: reverted jersey-media-json-jackson version to 2.33
-- 1.0.9:
-  - Updated dependency jersey-client from 2.31 to 2.32
-  - Updated dependency jersey-hk2 from 2.31 to 2.32
-  - Updated dependency jersey-media-json-jackson from 2.31 to 3.0.0
-  - Updated dependency common-net from 3.7 to 3.7.1
+	- Improved snapshot lookup mechanism
+	- Both online and offline modes can validate/update snapshot version
+- 1.0.10:
+	- Dependency patch: Commons Net from 3.7.1 to 3.7.2
+	- Critical Fix: Downgraded jersey-media-json-jackson 3.0.0 to 2.33
+- 1.0.9: Security patch
+	- Updated dependency jersey-client from 2.31 to 2.32
+	- Updated dependency jersey-hk2 from 2.31 to 2.32
+	- Updated dependency jersey-media-json-jackson from 2.31 to 3.0.0
+	- Updated dependency common-net from 3.7 to 3.7.1
 - 1.0.8:
 	- Fixed issues when using Silent Mode
 	- Fixed error when using only access to online API
 	- Improved validation when verifying whether API is accessible
 	- Added validations when preparing the Switcher Context
+	- Updated dependency commons-net.version from 3.6 to 3.7
 - 1.0.7: Added Regex Validation
 - 1.0.6: Updated depencencies & new features
 	- Updated dependency jersey-hk2 from 2.28 to 2.31
@@ -245,8 +269,8 @@ void testMyFeature() {
 - 1.0.4: Added Numeric Validation
 - 1.0.3: Security patch - Log4J has been updated - 2.13.1 to 2.13.3
 - 1.0.2: 
-    - Improved performance when loading snapshot file
-    - Snapshot file auto load when updated
+    - Improved performance when loading snapshot file.
+    - Snapshot file auto load when updated.
     - Re-worked built-in mock implementation
 - 1.0.1: Security patch - Log4J has been updated
 - 1.0.0: Working release
