@@ -106,6 +106,17 @@ await switcher.isItOn('FEATURE01', [
 ]);
 ```
 
+5. **Throttle**
+Throttling is useful when placing Feature Flags at critical code blocks require zero-latency without having to switch to offline.
+API calls will happen asynchronously and the result returned is based on the last API response.
+
+```js
+const switcher = Switcher.factory();
+await switcher
+    .throttle(1000)
+    .isItOn('FEATURE01');
+```
+
 </br>
 
 ##### - Built-in mock feature
@@ -156,6 +167,10 @@ switcher.checkSnapshot();
 * * *
 
 ### Change Log
+- 3.0.2:
+    - Added throttling for critical and async calls
+    - Improved SDK size by replacing axios by node-fetch
+    - Fixes Silent mode that was invoking checkHealth operation when it shouldn't
 - 3.0.1:
     - Fixes class definition: removed snapshopAutoload
     - Fixes silent mode
