@@ -167,7 +167,7 @@ switcher.checkSnapshot();
 * * *
 
 ### Change Log
-- 3.0.2:
+- 3.1.0:
     - Added throttling for critical and async calls
     - Improved SDK size by replacing axios by node-fetch
     - Fixes Silent mode that was invoking checkHealth operation when it shouldn't
