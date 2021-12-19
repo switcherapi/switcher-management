@@ -22,14 +22,14 @@
 <dependency>
   <groupId>com.github.switcherapi</groupId>
   <artifactId>switcher-client</artifactId>
-  <version>1.2.1</version>
+  <version>1.3.3</version>
 </dependency>
 ```
 
 - Gradle
 
 ```
-implementation 'com.github.switcherapi:switcher-client:1.2.1'
+implementation 'com.github.switcherapi:switcher-client:1.3.3'
 ```
 
 </br>
@@ -225,7 +225,10 @@ void testMyFeature() {
 </br>
 
 ### Change Log
-- 1.3.0-SNAPSHOT:
+- 1.3.3:
+	- Updated dependency org.apache.logging.log4j from 2.15.0 to 2.17.0
+	- Updated managed dependency junit to 4.13.1
+- 1.3.0:
 	- Optimized Switcher instance creation management
 	- Added Throttling and Async calls
 	- Updated com.google.code.gson:gson from 2.8.6 to 2.8.9
