@@ -183,7 +183,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         return environment.githubApiClientId != undefined;
     }
 
-    haBitbucketIntegration(): boolean {
+    hasBitbucketIntegration(): boolean {
         return environment.bitbucketApiClientId != undefined;
     }
 }
