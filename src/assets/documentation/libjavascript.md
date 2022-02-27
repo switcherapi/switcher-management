@@ -120,14 +120,14 @@ await switcher
 </br>
 
 ##### - Built-in mock feature
-You can also bypass your switcher configuration by invoking 'Switcher.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false.
+You can also bypass your switcher configuration by invoking 'Switcher.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false. For example, assume that you had configured FEATURE01 to be false. You can do the following to test both scenarios:
 
 ```js
 Switcher.assume('FEATURE01').true();
 switcher.isItOn('FEATURE01'); // true
 
 Switcher.forget('FEATURE01');
-switcher.isItOn('FEATURE01'); // Now, it's going to return the result retrieved from the API or the Snaopshot file
+switcher.isItOn('FEATURE01'); // false
 ```
 
 **Enabling Test Mode**
