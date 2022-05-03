@@ -109,24 +109,12 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
   }
 
   onCopy() {
-    let selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = this.snapshot;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-
     this.snapshot = null;
     this.lockEnvSelection();
     this.toastService.showSuccess(`Snapshot copied with success`);
   }
 
-  lockEnvSelection(): void {
+  private lockEnvSelection(): void {
     if (this.snapshot) {
       this.environmentSelection.disable({ onlySelf: true });
     } else {
@@ -134,7 +122,7 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     }
   }
 
-  generateGql(includeStatusByEnv: boolean = true, includeDescription: boolean = true): any {
+  private generateGql(includeStatusByEnv: boolean = true, includeDescription: boolean = true): any {
     return gql`
       query domain($id: String!, $environment: String!) {
         domain(_id: $id, environment: $environment) {
