@@ -12,6 +12,7 @@ import { GroupPreviewComponent } from './group/group-preview/group-preview.compo
 import { GroupDetailComponent } from './group/group-detail/group-detail.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ConfigListComponent } from './config/config-list/config-list.component';
 import { ConfigPreviewComponent } from './config/config-preview/config-preview.component';
 import { ConfigDetailComponent } from './config/config-detail/config-detail.component';
@@ -85,6 +86,7 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
     ReactiveFormsModule,
     NgbModule,
     CommonModule,
+    ClipboardModule,
     DomainRoutingModule,
     AppMaterialModule,
     ToasterModule,

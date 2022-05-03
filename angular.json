@@ -33,7 +33,6 @@
               "src/assets/css/prism.css"
             ],
             "scripts": [
-              "node_modules/marked/lib/marked.js",
               "src/assets/js/prism.js"
             ],
             "allowedCommonJsDependencies": [
