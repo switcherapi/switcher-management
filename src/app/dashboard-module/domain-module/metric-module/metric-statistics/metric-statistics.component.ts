@@ -106,7 +106,7 @@ export class SwitchersStatisticsTab {
         align: 'end',
       }
     },
-    onClick : (evt, array: any) => {
+    onClick : (_evt, array: any) => {
       if (array.length)
         this.selectSwitcherKey(array[0]._index);
     }
@@ -220,7 +220,7 @@ export class ReasonsStatisticsTab {
   }
 
   showResumed(value: string, length: number): string {
-    return value.length > length ? `${value.substr(0, length)}...` : value;
+    return value.length > length ? `${value.substring(0, length)}...` : value;
   }
 }
 
@@ -254,7 +254,7 @@ export class SwitcherDateTimeGroupedTab {
 
   public chartOptions: any = {
     responsive: true,
-    onClick : (evt, array) => {
+    onClick : (_evt, array) => {
       if (array.length)
         this.expandSelectedData(array[0]._index);
     }

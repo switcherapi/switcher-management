@@ -87,7 +87,7 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
     return this.selectedDomain;
   }
 
-  loadEnvironments() {
+  private loadEnvironments() {
     this.environmentService.getEnvironmentsByDomainId(this.selectedDomain)
       .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.environments = env;

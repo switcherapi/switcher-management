@@ -103,7 +103,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     });
   }
 
-  readPermissionToObject(): void {
+  private readPermissionToObject(): void {
     const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
     this.adminService.readCollabPermission(domain.id, ['CREATE'], 'SWITCHER', 'name', domain.name)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {

@@ -83,62 +83,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.unsubscribe.complete();
   }
 
-  updatePathRoute(domain: Domain) {
-    this.pathRoute = {
-      id: domain.id,
-      element: domain,
-      name: domain.name,
-      path: '/dashboard/domain/',
-      type: Types.DOMAIN_TYPE
-    };
-
-    this.domainDescription = domain.description;
-    this.domainRouteService.updatePath(this.pathRoute, true);
-    this.readPermissionToObject();
-    this.checkDomainOwner();
-
-    super.loadAdmin(this.getDomain().owner);
-  }
-
-  updateEnvironmentStatus(env : any): void {
-    this.blockUI.start('Updating environment...');
-    this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.selectEnvironment(env.status);
-        this.updatePathRoute(data);
-        this.blockUI.stop();
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    });
-  }
-
-  removeEnvironmentStatus(env : any): void {
-    this.blockUI.start('Removing environment status...');
-    this.domainService.removeDomainEnvironmentStatus(this.getDomain().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.blockUI.stop();
-        this.updatePathRoute(data);
-        this.toastService.showSuccess(`Environment removed with success`);
-      }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove the environment '${env}'`);
-    });
-  }
-
-  checkDomainOwner(): void {
-    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
-      if (currentUser) {
-        this.collabUser = currentUser.id != this.getDomain().owner;
-      }
-    });
-  }
-
   leaveDomain() {
     const modalConfirmation = this._modalService.open(NgbdModalConfirm);
     modalConfirmation.componentInstance.title = 'Quit domain';
@@ -174,28 +118,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   getDomain() {
     return this.pathRoute.element;
-  }
-
-  readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.getDomain().id, ['UPDATE', 'DELETE'], 'DOMAIN', 'name', this.getDomain().name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            this.envSelectionChange.disableEnvChange(!this.updatable);
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.blockUI.stop();
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
   }
 
   edit() {
@@ -239,7 +161,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing domain...');
-        this.domainService.deleteDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        this.domainService.deleteDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
           this.blockUI.stop();
           this.domainRouteService.removePath(Types.GROUP_TYPE);
           this.domainRouteService.notifyDocumentChange();
@@ -251,6 +173,84 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           ConsoleLogger.printError(error);
         });
       }
+    });
+  }
+
+  private updatePathRoute(domain: Domain) {
+    this.pathRoute = {
+      id: domain.id,
+      element: domain,
+      name: domain.name,
+      path: '/dashboard/domain/',
+      type: Types.DOMAIN_TYPE
+    };
+
+    this.domainDescription = domain.description;
+    this.domainRouteService.updatePath(this.pathRoute, true);
+    this.readPermissionToObject();
+    this.checkDomainOwner();
+
+    super.loadAdmin(this.getDomain().owner);
+  }
+
+  private updateEnvironmentStatus(env : any): void {
+    this.blockUI.start('Updating environment...');
+    this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.selectEnvironment(env.status);
+        this.updatePathRoute(data);
+        this.blockUI.stop();
+        this.toastService.showSuccess(`Environment updated with success`);
+      }
+    }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    });
+  }
+
+  private removeEnvironmentStatus(env : any): void {
+    this.blockUI.start('Removing environment status...');
+    this.domainService.removeDomainEnvironmentStatus(this.getDomain().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.blockUI.stop();
+        this.updatePathRoute(data);
+        this.toastService.showSuccess(`Environment removed with success`);
+      }
+    }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to remove the environment '${env}'`);
+    });
+  }
+
+  private checkDomainOwner(): void {
+    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
+      if (currentUser) {
+        this.collabUser = currentUser.id != this.getDomain().owner;
+      }
+    });
+  }
+
+  private readPermissionToObject(): void {
+    this.adminService.readCollabPermission(this.getDomain().id, ['UPDATE', 'DELETE'], 'DOMAIN', 'name', this.getDomain().name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          }
+        });
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.blockUI.stop();
+      this.loading = false;
+      this.detailBodyStyle = 'detail-body ready';
     });
   }
 }

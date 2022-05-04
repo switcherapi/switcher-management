@@ -64,12 +64,13 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
 
     this.routerFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.router = value;
-      this.roleService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(value => {
-        if (value) {
-          this.key = value.key;
+      this.roleService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(roleValue => {
+        if (roleValue) {
+          this.key = roleValue.key;
           this.validKeyOnly = true;
         }
       }, error => {
+        ConsoleLogger.printError(error);
         this.validKeyOnly = false;
         this.valueSelectionFormControl.setValue(null);
         this.data.values = [];
@@ -84,32 +85,6 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  loadRouter(): void {
-    this.roleService.getRoleRouters().pipe(takeUntil(this.unsubscribe)).subscribe(routers => {
-      if (routers) {
-        this.routers = routers.routersAvailable;
-        if (this.data.router) {
-          this.routerFormControl.setValue(this.data.router);
-        }
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
-  }
-
-  loadActions(): void {
-    this.roleService.getRoleActions().pipe(takeUntil(this.unsubscribe)).subscribe(actions => {
-      if (actions) {
-        this.actions = actions.actionsAvailable;
-        if (this.data.action) {
-          this.actionFormControl.setValue(this.data.action);
-        }
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
   }
 
   addValue(newValue: string) {
@@ -140,7 +115,33 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
     }      
   }
 
-  validateData(data: any): boolean {
+  private loadRouter(): void {
+    this.roleService.getRoleRouters().pipe(takeUntil(this.unsubscribe)).subscribe(routers => {
+      if (routers) {
+        this.routers = routers.routersAvailable;
+        if (this.data.router) {
+          this.routerFormControl.setValue(this.data.router);
+        }
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private loadActions(): void {
+    this.roleService.getRoleActions().pipe(takeUntil(this.unsubscribe)).subscribe(actions => {
+      if (actions) {
+        this.actions = actions.actionsAvailable;
+        if (this.data.action) {
+          this.actionFormControl.setValue(this.data.action);
+        }
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private validateData(data: any): boolean {
     // When editing
     if (this.data.role) {
       return true;
@@ -158,7 +159,7 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  loadIdentifiedBy(): void {
+  private loadIdentifiedBy(): void {
     if (this.data.values.length) {
       this.data.identifiedBy = this.key;
     } else {

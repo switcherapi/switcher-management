@@ -73,11 +73,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
           this.blockUI.stop();
           this.toastService.showSuccess(`Team removed with success`);
         }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove team: '${this.team.name}'`);
-    })
+    }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
   }
   
   edit() {
@@ -97,17 +93,8 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
         this.editing = false;
         this.blockUI.start('Updating Team...');
         this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
-          .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-            if (team) {
-              this.team = team;
-              this.blockUI.stop();
-              this.toastService.showSuccess(`Team updated with success`);
-            }
-        }, error => {
-          this.blockUI.stop();
-          ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update team: '${this.team.name}'`);
-        });
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
       }
     }
   }
@@ -115,23 +102,26 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   changeStatus(event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
-      .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-        if (team) {
-          this.team = team;
-          this.blockUI.stop();
-          this.toastService.showSuccess(`Team updated with success`);
-        }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update team: '${this.team.name}'`);
-    });
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
   }
 
   validateEdition(oldObject: any, newObject: any): boolean {
     const fields = Object.keys(oldObject);
     const changed = fields.filter(field => oldObject[`${field}`] != newObject[`${field}`]);
     return !changed.length;
-}
+  }
+
+  private onError(error: any, message: string): void {
+    this.blockUI.stop();
+    ConsoleLogger.printError(error);
+    this.toastService.showError(message);
+  }
+
+  private onSuccess(team: Team): void {
+    this.team = team;
+    this.blockUI.stop();
+    this.toastService.showSuccess(`Team updated with success`);
+  }
 
 }

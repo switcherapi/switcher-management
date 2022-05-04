@@ -75,23 +75,6 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     return this.group.name;
   }
 
-  getGroup() {
-    return this.group;
-  }
-
-  updatePathRoute(group: Group) {
-    const pathRoute = {
-      id: group.id,
-      element: group,
-      name: group.name,
-      path: '/dashboard/domain/group/detail',
-      type: Types.GROUP_TYPE
-    };
-
-    this.domainRouteService.updatePath(pathRoute, false);
-    this.readPermissionToObject();
-  }
-
   selectGroup() {
     this.router.navigate(['/dashboard/domain/group/detail'], { state: { element: JSON.stringify(this.group) } });
   }
@@ -112,7 +95,8 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     this.group.activated[this.selectedEnv] = event.checked;
     this.selectEnvironment(this.selectedEnv);
 
-    this.groupService.setGroupEnvironmentStatus(this.getGroup().id, this.selectedEnv, event.checked).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+    this.groupService.setGroupEnvironmentStatus(this.group.id, this.selectedEnv, event.checked)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.updatePathRoute(data);
         this.blockUI.stop();
@@ -125,9 +109,22 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  readPermissionToObject(): void {
+  private updatePathRoute(group: Group) {
+    const pathRoute = {
+      id: group.id,
+      element: group,
+      name: group.name,
+      path: '/dashboard/domain/group/detail',
+      type: Types.GROUP_TYPE
+    };
+
+    this.domainRouteService.updatePath(pathRoute, false);
+    this.readPermissionToObject();
+  }
+
+  private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      ['UPDATE', 'DELETE'], 'GROUP', 'name', this.getGroup().name)
+      ['UPDATE', 'DELETE'], 'GROUP', 'name', this.getGroupName())
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data.length) {
         data.forEach(element => {

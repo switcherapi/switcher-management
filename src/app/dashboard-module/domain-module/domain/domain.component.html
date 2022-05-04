@@ -25,12 +25,12 @@
                         {{ transferLabel }}
                     </button>
                     <button *ngIf="hasSlackIntegration()" mat-menu-item routerLink="/dashboard/domain/integration/slack">
-                        <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" />
+                        <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" alt="Slack" />
                         Slack Integration
                     </button>
                     <a *ngIf="hasSlackUrl() && transferLabel && !hasSlackIntegration()" mat-menu-item style="text-decoration: none;"
                         href="{{ getSlackUrl() }}" target="_parent">
-                        <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" />
+                        <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" alt="Slack" />
                         Install Slack App
                     </a>
                 </mat-menu>

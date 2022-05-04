@@ -34,7 +34,7 @@
     </button>
 </div>
 <div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
-    <button class="btn-save" mat-button (click)="copyKey(data.apiKey)" cdkFocusInitial>
+    <button class="btn-save" mat-button (click)="copyKey()" [cdkCopyToClipboard]="data.apiKey" cdkFocusInitial>
         <mat-icon>file_copy</mat-icon>
         <div class="options-section-label"> Copy to clipboard</div>
     </button>

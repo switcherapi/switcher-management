@@ -89,7 +89,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  readPermissionToObject(): void {
+  private readPermissionToObject(): void {
     const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
     this.adminService.readCollabPermission(domain.id, ['DELETE'], 'ADMIN', 'name', domain.name)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
@@ -103,7 +103,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadChangeLog(): void {
+  private loadChangeLog(): void {
     this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE) || 
       this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
 
@@ -118,119 +118,93 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadDomainHistory(pathRouteSelection: PathRoute): void {
+  private loadDomainHistory(pathRouteSelection: PathRoute): void {
     this.loading = true;
-    this.domainService.getHistory(pathRouteSelection.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.loadDataSource(data);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.errorHandler.doError(error);
-      this.loading = false;
-    });
+    this.domainService.getHistory(pathRouteSelection.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
 
-  loadGroupHistory(pathRouteSelection: PathRoute): void {
+  private loadGroupHistory(pathRouteSelection: PathRoute): void {
     this.loading = true;
-    this.groupService.getHistory(pathRouteSelection.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.loadDataSource(data);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.errorHandler.doError(error);
-      this.loading = false;
-    });
+    this.groupService.getHistory(pathRouteSelection.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
 
-  loadConfigHistory(pathRouteSelection: PathRoute): void {
+  private loadConfigHistory(pathRouteSelection: PathRoute): void {
     this.loading = true;
-    this.configService.getHistory(pathRouteSelection.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.loadDataSource(data);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.errorHandler.doError(error);
-      this.loading = false;
-    });
+    this.configService.getHistory(pathRouteSelection.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
 
-  loadStrategyHistory(selectedStrategy: Strategy): void {
+  private loadStrategyHistory(selectedStrategy: Strategy): void {
     this.loading = true;
-    this.strategyService.getHistory(selectedStrategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.loadDataSource(data);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.errorHandler.doError(error);
-      this.loading = false;
-    });
+    this.strategyService.getHistory(selectedStrategy.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
 
-  loadDataSource(data: History[]): void {
+  private loadDataSource(data: History[]): void {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = (data: History, filter: string) => {
-      return this.customFilterPredicate(data, filter);
+    this.dataSource.filterPredicate = (dataHistory: History, filter: string) => {
+      return this.customFilterPredicate(dataHistory, filter);
     };
 
     this.loading = false;
     this.classStatus = "mat-elevation-z8 ready";
   }
 
-  resetDomainChangeLog(): void {
-    this.domainService.resetHistory(this.currentPathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.dataSource = new MatTableDataSource(null);
-        this.toastService.showSuccess(`Change Log reseted with success`);
-      }
-    }, error => {
-        this.toastService.showError(`Unable to reset the Change Log`);
-        ConsoleLogger.printError(error);
-    })
+  private resetDomainChangeLog(): void {
+    this.domainService.resetHistory(this.currentPathRoute.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
 
-  resetGroupChangeLog(): void {
-    this.groupService.resetHistory(this.currentPathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.dataSource = new MatTableDataSource(null);
-        this.toastService.showSuccess(`Change Log reseted with success`);
-      }
-    }, error => {
-        this.toastService.showError(`Unable to reset the Change Log`);
-        ConsoleLogger.printError(error);
-    })
+  private resetGroupChangeLog(): void {
+    this.groupService.resetHistory(this.currentPathRoute.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
 
-  resetConfigChangeLog(): void {
-    this.configService.resetHistory(this.currentPathRoute.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.dataSource = new MatTableDataSource(null);
-        this.toastService.showSuccess(`Change Log reseted with success`);
-      }
-    }, error => {
-        this.toastService.showError(`Unable to reset the Change Log`);
-        ConsoleLogger.printError(error);
-    })
+  private resetConfigChangeLog(): void {
+    this.configService.resetHistory(this.currentPathRoute.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
 
-  resetStrategyChangeLog(): void {
-    this.strategyService.resetHistory(this.strategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.dataSource = new MatTableDataSource(null);
-        this.toastService.showSuccess(`Change Log reseted with success`);
-      }
-    }, error => {
-        this.toastService.showError(`Unable to reset the Change Log`);
-        ConsoleLogger.printError(error);
-    })
+  private resetStrategyChangeLog(): void {
+    this.strategyService.resetHistory(this.strategy.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
 
-  customFilterPredicate(data: History, filter: string): boolean {
+  private changeLogSuccess(data: any): void {
+    if (data) {
+      this.dataSource = new MatTableDataSource(null);
+      this.toastService.showSuccess(`Change Log reseted with success`);
+    }
+  }
+
+  private changeLogError(error: any): void {
+    this.toastService.showError(`Unable to reset the Change Log`);
+        ConsoleLogger.printError(error);
+  }
+
+  private loadSuccess(data: History[]): void {
+    if (data) this.loadDataSource(data);
+  }
+
+  private loadError(error: any): void {
+    ConsoleLogger.printError(error);
+    this.errorHandler.doError(error);
+    this.loading = false;
+  }
+
+  private customFilterPredicate(data: History, filter: string): boolean {
     if (data.updatedBy.indexOf(filter) >= 0) {
       return true;
     } else if (data.date.toString().indexOf(filter) >= 0) {
@@ -240,16 +214,18 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }
   }
 
-  sortData(sort: Sort) {
-    let sortedData;
+  private compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
 
+  sortData(sort: Sort) {
     const data = this.dataSource.data.slice();
+    
     if (!sort.active || sort.direction === '') {
-      sortedData = data;
       return;
     }
 
-    sortedData = data.sort((a, b) => {
+    let sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'newValue': return this.compare(this.formatResumedData(a.newValue), this.formatResumedData(b.newValue), isAsc);
@@ -260,10 +236,6 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     });
     
     this.loadDataSource(sortedData);
-  }
-
-  compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   getColumnLabel(dataColumn: string): string {

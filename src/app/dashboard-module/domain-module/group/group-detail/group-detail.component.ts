@@ -87,51 +87,6 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     this.unsubscribe.complete();
   }
 
-  updatePathRoute(group: Group) {
-    this.pathRoute = {
-      id: group.id,
-      element: group,
-      name: group.name,
-      path: '/dashboard/domain/group/detail',
-      type: Types.GROUP_TYPE
-    };
-
-    this.nameFormControl.setValue(group.name);
-    this.domainRouteService.updatePath(this.pathRoute, true);
-    this.readPermissionToObject();
-  }
-
-  updateEnvironmentStatus(env : any): void {
-    this.blockUI.start('Updating environment...');
-    this.selectEnvironment(env.status);
-    this.groupService.setGroupEnvironmentStatus(this.getGroup().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.selectEnvironment(env.status);
-        this.updatePathRoute(data);
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    }, () => this.blockUI.stop());
-  }
-
-  removeEnvironmentStatus(env : any): void {
-    this.blockUI.start('Removing environment status...');
-    this.groupService.removeDomainEnvironmentStatus(this.getGroup().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.blockUI.stop();
-        this.updatePathRoute(data);
-        this.toastService.showSuccess(`Environment removed with success`);
-      }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove the environment '${env}'`);
-    });
-  }
-
   selectEnvironment(status: boolean): void {
     this.currentStatus = status;
 
@@ -192,27 +147,11 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           return;
         }
 
-        this.groupService.updateGroup(this.getGroup().id, 
-          body.name != this.pathRoute.name ? body.name : undefined, 
-          body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.updatePathRoute(data);
-            this.domainRouteService.notifyDocumentChange();
-            this.blockUI.stop();
-            this.toastService.showSuccess(`Group updated with success`);
-            this.editing = false;
-          }
-        }, error => {
-          this.blockUI.stop();
-          ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update group`);
-          this.classStatus = 'header editing';
-          this.editing = true;
-        });
+        this.editGroup(body);
       }
     }
   }
-  
+
   delete() {
     const modalConfirmation = this._modalService.open(NgbdModalConfirm);
     modalConfirmation.componentInstance.title = 'Group removal';
@@ -220,7 +159,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing group...');
-        this.groupService.deleteGroup(this.getGroup().id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        this.groupService.deleteGroup(this.getGroup().id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
           this.blockUI.stop();
           this.domainRouteService.removePath(Types.GROUP_TYPE);
           this.domainRouteService.notifyDocumentChange();
@@ -232,6 +171,71 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           ConsoleLogger.printError(error);
         });
       }
+    });
+  }
+
+  private editGroup(body: { name: any; description: any; }) {
+    this.groupService.updateGroup(this.getGroup().id,
+      body.name != this.pathRoute.name ? body.name : undefined,
+      body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.updatePathRoute(data);
+          this.domainRouteService.notifyDocumentChange();
+          this.blockUI.stop();
+          this.toastService.showSuccess(`Group updated with success`);
+          this.editing = false;
+        }
+      }, error => {
+        this.blockUI.stop();
+        ConsoleLogger.printError(error);
+        this.toastService.showError(`Unable to update group`);
+        this.classStatus = 'header editing';
+        this.editing = true;
+      });
+  }
+
+  private updatePathRoute(group: Group) {
+    this.pathRoute = {
+      id: group.id,
+      element: group,
+      name: group.name,
+      path: '/dashboard/domain/group/detail',
+      type: Types.GROUP_TYPE
+    };
+
+    this.nameFormControl.setValue(group.name);
+    this.domainRouteService.updatePath(this.pathRoute, true);
+    this.readPermissionToObject();
+  }
+
+  private updateEnvironmentStatus(env : any): void {
+    this.blockUI.start('Updating environment...');
+    this.selectEnvironment(env.status);
+    this.groupService.setGroupEnvironmentStatus(this.getGroup().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.selectEnvironment(env.status);
+        this.updatePathRoute(data);
+        this.toastService.showSuccess(`Environment updated with success`);
+      }
+    }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    }, () => this.blockUI.stop());
+  }
+
+  private removeEnvironmentStatus(env : any): void {
+    this.blockUI.start('Removing environment status...');
+    this.groupService.removeDomainEnvironmentStatus(this.getGroup().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.blockUI.stop();
+        this.updatePathRoute(data);
+        this.toastService.showSuccess(`Environment removed with success`);
+      }
+    }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to remove the environment '${env}'`);
     });
   }
 

@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM node:fermium-alpine3.14 as builder
+FROM node:16.13-alpine3.15 as builder
 
 WORKDIR /usr/local/app
 

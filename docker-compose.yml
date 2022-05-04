@@ -16,7 +16,7 @@ services:
     environment: 
       - SWITCHERAPI_URL=https://switcher-api.herokuapp.com
       - SM_IP=localhost
-      # - GOOGLE_RECAPTCHA=6LcpJ74ZAAAAAGY88BXVyk1qwjPhb2PmKXeoh5yT
-      # - GITHUB_CLIENTID=5745650fe81a1f1f3486
-      # - BITBUCKET_CLIENTID=JNfFteJqcjcDytFAh5
-      # - SWITCHERSLACKAPP_URL=https://switcher-slack-app.herokuapp.com/slack/install
+      # - GOOGLE_RECAPTCHA=
+      # - GITHUB_CLIENTID=
+      # - BITBUCKET_CLIENTID=
+      # - SWITCHERSLACKAPP_URL=

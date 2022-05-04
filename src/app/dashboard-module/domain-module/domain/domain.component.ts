@@ -35,7 +35,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   currentPathRoute: PathRoute;
   icon: number;
 
-  prevScrollpos = window.pageYOffset;
+  prevScrollpos = window.scrollY;
   navControl: boolean = false;
   slackIntegration: boolean = false;
   transferLabel: string = '';
@@ -63,92 +63,6 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.unsubscribe.next();
     this.unsubscribe.complete();
     window.onscroll = () => {};
-  }
-
-  private loadDomain() {
-    this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
-      this.updateRoute();
-      this.checkDomainOwner();
-
-      if (environment.slackUrl) {
-        this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => this.slackIntegration = data?.result);
-      }
-    });
-  }
-
-  private updateRoute() {
-    this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
-    this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
-    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
-  }
-
-  private checkDomainOwner() {
-    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
-      if (currentUser) {
-        this.transferLabel = currentUser.id == this.selectedDomain.element.owner ? 
-          this.selectedDomain.element.transfer ? 'Cancel Transfer' : 'Transfer Domain' : '';
-      }
-    });
-  }
-
-  private scrollMenuHandler() {
-    window.onscroll = () => {
-      if (!this.navControl && window.innerWidth < 1200) {
-        var currentScrollPos = window.pageYOffset;
-        if (this.prevScrollpos > currentScrollPos) {
-            document.getElementById("navbarMenu").style.top = "0";
-        } else {
-            document.getElementById("navbarMenu").style.top = "-60px";
-        }
-        this.prevScrollpos = currentScrollPos;
-      } else {
-        document.getElementById("navbarMenu").style.top = "0";
-      }
-    }
-  }
-
-  private updateConfigForRedirect(item: any) {
-    this.configService.getConfigById(item._id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        const pathRoute: PathRoute = {
-          id: item._id,
-          element: data,
-          name: item.name,
-          path: '/dashboard/domain/group/switcher/detail',
-          type: Types.CONFIG_TYPE
-        };
-        this.domainRouteService.updatePath(pathRoute, true);
-        this.updateGroupForRedirect(item.parent, true);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
-  }
-
-  private updateGroupForRedirect(item: any, parent = false) {
-    this.groupService.getGroupById(item._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        const pathRouteGroup: PathRoute = {
-          id: data.id,
-          element: data,
-          name: data.name,
-          path: '/dashboard/domain/group/detail',
-          type: Types.GROUP_TYPE
-        };
-        this.domainRouteService.updatePath(pathRouteGroup, !parent);
-
-        if (!parent) {
-          this.router.navigate(['/dashboard/domain/group/']).then(data =>
-            this.router.navigate(['/dashboard/domain/group/detail']));
-        } else {
-          this.router.navigate(['/dashboard/domain/group/switcher']).then(data =>
-            this.router.navigate(['/dashboard/domain/group/switcher/detail']));
-        }
-      }
-    });
   }
 
   onDownloadSnapshot() {
@@ -291,6 +205,98 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   navToggled() {
     this.navControl = !this.navControl;
+  }
+
+  private loadDomain() {
+    this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
+      this.updateRoute();
+      this.checkDomainOwner();
+
+      if (environment.slackUrl) {
+        this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => this.slackIntegration = data?.result);
+      }
+    });
+  }
+
+  private updateRoute() {
+    this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
+    this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
+    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
+  }
+
+  private checkDomainOwner() {
+    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
+      if (currentUser) {
+        if (currentUser.id == this.selectedDomain.element.owner) {
+          if (this.selectedDomain.element.transfer)
+            this.transferLabel = 'Cancel Transfer';
+          else
+            this.transferLabel = 'Transfer Domain';
+        } else {
+          this.transferLabel = '';
+        }
+      }
+    });
+  }
+
+  private scrollMenuHandler() {
+    window.onscroll = () => {
+      if (!this.navControl && window.innerWidth < 1200) {
+        var currentScrollPos = window.scrollY;
+        if (this.prevScrollpos > currentScrollPos) {
+            document.getElementById("navbarMenu").style.top = "0";
+        } else {
+            document.getElementById("navbarMenu").style.top = "-60px";
+        }
+        this.prevScrollpos = currentScrollPos;
+      } else {
+        document.getElementById("navbarMenu").style.top = "0";
+      }
+    }
+  }
+
+  private updateConfigForRedirect(item: any) {
+    this.configService.getConfigById(item._id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        const pathRoute: PathRoute = {
+          id: item._id,
+          element: data,
+          name: item.name,
+          path: '/dashboard/domain/group/switcher/detail',
+          type: Types.CONFIG_TYPE
+        };
+        this.domainRouteService.updatePath(pathRoute, true);
+        this.updateGroupForRedirect(item.parent, true);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private updateGroupForRedirect(item: any, parent = false) {
+    this.groupService.getGroupById(item._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        const pathRouteGroup: PathRoute = {
+          id: data.id,
+          element: data,
+          name: data.name,
+          path: '/dashboard/domain/group/detail',
+          type: Types.GROUP_TYPE
+        };
+        this.domainRouteService.updatePath(pathRouteGroup, !parent);
+
+        if (!parent) {
+          this.router.navigate(['/dashboard/domain/group/']).then(_data =>
+            this.router.navigate(['/dashboard/domain/group/detail']));
+        } else {
+          this.router.navigate(['/dashboard/domain/group/switcher']).then(_data =>
+            this.router.navigate(['/dashboard/domain/group/switcher/detail']));
+        }
+      }
+    });
   }
 
 }

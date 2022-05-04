@@ -46,48 +46,6 @@ export class DomainListComponent implements OnInit, OnDestroy {
     this.loadCollabDomain();
   }
 
-  loadDomain(): void {
-    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.domains = data;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      if (!this.domains) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loading = false;
-    });
-  }
-
-  loadCollabDomain(): void {
-    this.collabDomains = [];
-    this.adminService.getAdminCollab().pipe(takeUntil(this.unsubscribe)).subscribe(domains => {
-      if (domains.length) {
-        domains.forEach(domain => {
-          this.domainService.getDomain(domain).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-            if (data) {
-              this.collabDomains.push(data);
-            }
-          }, error => {
-            ConsoleLogger.printError(error);
-            this.loadingCollab = false;
-            this.error = this.errorHandler.doError(error);
-          }, () => {
-            this.loadingCollab = false;
-          });
-        });
-      }
-    });
-  }
-
-  getTeamDomains(teams: Team[]): string[] {
-    return teams.map(team => team.domain);
-  }
-
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
@@ -115,6 +73,48 @@ export class DomainListComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+  
+  private loadDomain(): void {
+    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.domains = data;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loading = false;
+      this.error = this.errorHandler.doError(error);
+    }, () => {
+      if (!this.domains) {
+        this.error = 'Failed to connect to Switcher API';
+      }
+      this.loading = false;
+    });
+  }
+
+  private loadCollabDomain(): void {
+    this.collabDomains = [];
+    this.adminService.getAdminCollab().pipe(takeUntil(this.unsubscribe)).subscribe(domains => {
+      if (domains.length) {
+        domains.forEach(domain => {
+          this.domainService.getDomain(domain).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+            if (data) {
+              this.collabDomains.push(data);
+            }
+          }, error => {
+            ConsoleLogger.printError(error);
+            this.loadingCollab = false;
+            this.error = this.errorHandler.doError(error);
+          }, () => {
+            this.loadingCollab = false;
+          });
+        });
+      }
+    });
+  }
+
+  private getTeamDomains(teams: Team[]): string[] {
+    return teams.map(team => team.domain);
   }
 
 }

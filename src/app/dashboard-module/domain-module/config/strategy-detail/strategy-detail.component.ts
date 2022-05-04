@@ -90,63 +90,6 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.unsubscribe.complete();
   }
 
-  loadStrategySelectionComponent(): void {
-    this.strategyValueSelection.selectionChange.pipe(takeUntil(this.unsubscribe)).subscribe((s: MatSelectionListChange) => {
-      this.strategyValueSelection.deselectAll();
-      s.option.selected = true;
-      this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
-    });
-  }
-
-  loadOperationSelectionComponent(): void {
-    let toSelect = this.strategyOperations.find(operation => operation === this.strategy.operation);
-    this.operationCategoryFormControl.setValue(toSelect);
-  }
-
-  loadStrategyRequirements(): void {
-    this.strategyService.getStrategiesRequirements(this.strategy.strategy).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
-      this.strategyReq = req;
-      this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
-      this.operationCategoryFormControl.setValue(this.strategy.operation);
-      this.strategyFormatSelected = req.operationsAvailable.format;
-
-      this.valueSelectionFormControl.setValidators([
-        Validators.required,
-        valueInputValidator(this.strategyReq.operationsAvailable.validator)
-      ]);
-    });
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'STRATEGY', 'strategy', this.strategy.strategy)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            this.envSelectionChange.disableEnvChange(!this.updatable);
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
-    });
-  }
-
-  updateEnvironmentStatus(env: any): void {
-    this.blockUI.start('Updating environment...');
-    this.selectEnvironment(env.status);
-    this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
-    }, error => {
-      this.blockUI.stop();
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    }, () => this.blockUI.stop());
-  }
-
   selectEnvironment(status: boolean): void {
     this.currentStatus = status;
 
@@ -199,7 +142,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing strategy...');
-        this.strategyService.deleteStrategy(this.strategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        this.strategyService.deleteStrategy(this.strategy.id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
           this.strategyList.reloadStrategies(this.strategy);
           this.blockUI.stop();
           this.toastService.showSuccess(`Strategy removed with success`);
@@ -235,18 +178,14 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
               this.strategy.strategy,
               this.strategy.operation,
               result.environment,
-              this.strategy.values).subscribe(data => {
+              this.strategy.values).subscribe(_data => {
                 this.toastService.showSuccess(`Strategy cloned with success`);
               }, error => {
                 this.toastService.showError(error.error);
                 ConsoleLogger.printError(error);
               });
           }
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(error.error);
-          ConsoleLogger.printError(error);
-        }, () => this.blockUI.stop());
+        }, error => this.updateValueError(error, 'Unable to edit this value'), () => this.blockUI.stop());
       }
     });
   }
@@ -262,10 +201,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           this.loadStrategyRequirements();
           this.toastService.showSuccess(`Strategy updated with success`);
         }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(error ? error.error : 'Unable to add this value');
-      }, () => this.blockUI.stop());
+      }, error => this.updateValueError(error, 'Unable to add this value'), 
+      () => this.blockUI.stop());
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -273,18 +210,13 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   editValue(oldValue: string, newValue: string) {
     const { valid } = this.valueSelectionFormControl;
-    this.blockUI.start('Updating value...');
     if (valid) {
-      this.strategyService.updateValue(this.strategy.id, oldValue, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.strategy = data;
-          this.loadStrategyRequirements();
-          this.toastService.showSuccess(`Strategy updated with success`);
-        }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(error ? error.error : 'Unable to edit this value');
-      }, () => this.blockUI.stop());
+      this.blockUI.start('Updating value...');
+      this.strategyService.updateValue(this.strategy.id, oldValue, newValue)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => this.updateValueSuccess(data), 
+          error => this.updateValueError(error, 'Unable to edit this value'), 
+          () => this.blockUI.stop());
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -293,16 +225,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   removeValue(value: string) {
     if (this.strategyValueSelection.options.length > 1) {
       this.blockUI.start('Removing value...');
-      this.strategyService.deleteValue(this.strategy.id, value).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.strategy = data;
-          this.loadStrategyRequirements();
-          this.toastService.showSuccess(`Strategy updated with success`);
-        }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(error ? error.error : 'Unable to remove this value');
-      }, () => this.blockUI.stop());
+      this.strategyService.deleteValue(this.strategy.id, value)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => this.updateValueSuccess(data), 
+          error => this.updateValueError(error, 'Unable to remove this value'), 
+          () => this.blockUI.stop());
     } else {
       this.toastService.showError(`One value is required, update or add new values`);
     }
@@ -316,6 +243,78 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         strategy: this.strategy
       }
     });
+  }
+
+  private updateValueSuccess(data: Strategy) {
+    if (data) {
+      this.strategy = data;
+      this.loadStrategyRequirements();
+      this.toastService.showSuccess(`Strategy updated with success`);
+    }
+  }
+
+  private updateValueError(error: any, message: string) {
+    this.blockUI.stop();
+    this.toastService.showError(error ? error.error : message);
+    ConsoleLogger.printError(error);
+  }
+
+  private loadStrategySelectionComponent(): void {
+    this.strategyValueSelection.selectionChange.pipe(takeUntil(this.unsubscribe)).subscribe((s: MatSelectionListChange) => {
+      this.strategyValueSelection.deselectAll();
+      s.option.selected = true;
+      this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
+    });
+  }
+
+  private loadOperationSelectionComponent(): void {
+    let toSelect = this.strategyOperations.find(operation => operation === this.strategy.operation);
+    this.operationCategoryFormControl.setValue(toSelect);
+  }
+
+  private loadStrategyRequirements(): void {
+    this.strategyService.getStrategiesRequirements(this.strategy.strategy).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
+      this.strategyReq = req;
+      this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
+      this.operationCategoryFormControl.setValue(this.strategy.operation);
+      this.strategyFormatSelected = req.operationsAvailable.format;
+
+      this.valueSelectionFormControl.setValidators([
+        Validators.required,
+        valueInputValidator(this.strategyReq.operationsAvailable.validator)
+      ]);
+    });
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'STRATEGY', 'strategy', this.strategy.strategy)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          }
+        });
+      }
+    });
+  }
+
+  private updateEnvironmentStatus(env: any): void {
+    this.blockUI.start('Updating environment...');
+    this.selectEnvironment(env.status);
+    this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.toastService.showSuccess(`Environment updated with success`);
+      }
+    }, error => {
+      this.blockUI.stop();
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      ConsoleLogger.printError(error);
+    }, () => this.blockUI.stop());
   }
 }
 

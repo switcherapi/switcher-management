@@ -6,6 +6,8 @@ import gql from 'graphql-tag';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Config } from 'src/app/model/config';
+import { Group } from 'src/app/model/group';
 
 @Component({
   selector: 'element-autocomplete',
@@ -39,7 +41,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       this.loadKeys(this.parentComponent.getDomainId());
     }
     
-    this.domainRouteService.documentChange.pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+    this.domainRouteService.documentChange.pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
       this.loadKeys(this.parentComponent.getDomainId());
     });
   }
@@ -55,7 +57,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadKeys(domain: string): void {
+  private loadKeys(domain: string): void {
     if (!domain)
       return;
 
@@ -69,7 +71,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
     this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
       if (result) {
-        let switchers, groups, components;
+        let switchers: any, groups: any, components: any;
         
         if (this.groups) {
           groups = result.data.domain.group.map(group => {
@@ -117,14 +119,14 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
     this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this.filter(value))
     );
   }
 
-  private _filter(value: any): any[] {
+  private filter(value: any): any[] {
     let filterValue: any[] = [];
 
-    if((value as any).type) {
+    if (value.type) {
       filterValue.push(value.name);
       this.smartSearchFormControl.setValue(value.name);
       this.parentComponent.onSelectElementFilter(value);
@@ -134,9 +136,9 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     filterValue = value.toLowerCase();
     let prefix: string, typePrefix: string;
     return this.searchListItems.filter(item => {
-      if (filterValue.indexOf(':') > 0 ) {
+      if (filterValue.includes(':')) {
         prefix = filterValue[0];
-        typePrefix = prefix === 's' ? 'switcher' : prefix === 'c' ? 'component' : 'group';
+        typePrefix = this.getPrefix(prefix);
         
         if (item.name.toLowerCase().includes((filterValue as unknown as string).split(':')[1]) &&
             item.type.toLowerCase().includes(typePrefix))
@@ -150,7 +152,13 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     );
   }
 
-  generateGql(): any {
+  private getPrefix(prefix: string): string {
+    if (prefix === 's') return 'switcher';
+    if (prefix === 'c') return 'component';
+    return 'group';
+  }
+
+  private generateGql(): any {
     return gql`
       query domain($id: String!) {
         domain(_id: $id) {
@@ -175,4 +183,5 @@ export declare interface OnElementAutocomplete {
   onSelectElementFilter(value: any): void;
 
   getDomainId(): string;
+
 }

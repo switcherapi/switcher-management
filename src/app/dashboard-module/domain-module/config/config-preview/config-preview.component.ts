@@ -65,45 +65,12 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadOperationSelectionComponent(): void {
-    this.environmentStatusSelection = this.fb.group({
-      environmentStatusSelection: [null, Validators.required]
-    });
-  }
-
-  getConfigName() {
-    return this.config.name;
-  }
-
   getConfig() {
     return this.config;
   }
 
-  updatePathRoute(config: Config) {
-    const pathRoute = {
-      id: config.id,
-      element: config,
-      name: config.key,
-      path: '/dashboard/domain/group/switcher/detail',
-      type: Types.CONFIG_TYPE
-    };
-
-    this.domainRouteService.updatePath(pathRoute, false);
-  }
-
   selectConfig() {
     this.router.navigate(['/dashboard/domain/group/switcher/detail'], { state: { element: JSON.stringify(this.config) } });
-  }
-
-  selectEnvironment(envName: string): void {
-    this.selectedEnv = envName;
-    const status = this.config.activated[envName] == undefined ? this.config.activated['default'] : this.config.activated[envName];
-
-    this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';
-
-    this.environmentStatusSelection.get('environmentStatusSelection').setValue(status);
-    this.selectedEnvStatus = status;
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
@@ -124,7 +91,36 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  readPermissionToObject(): void {
+  private loadOperationSelectionComponent(): void {
+    this.environmentStatusSelection = this.fb.group({
+      environmentStatusSelection: [null, Validators.required]
+    });
+  }
+
+  private updatePathRoute(config: Config) {
+    const pathRoute = {
+      id: config.id,
+      element: config,
+      name: config.key,
+      path: '/dashboard/domain/group/switcher/detail',
+      type: Types.CONFIG_TYPE
+    };
+
+    this.domainRouteService.updatePath(pathRoute, false);
+  }
+
+  private selectEnvironment(envName: string): void {
+    this.selectedEnv = envName;
+    const status = this.config.activated[envName] == undefined ? this.config.activated['default'] : this.config.activated[envName];
+
+    this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
+    this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';
+
+    this.environmentStatusSelection.get('environmentStatusSelection').setValue(status);
+    this.selectedEnvStatus = status;
+  }
+
+  private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
       ['UPDATE', 'DELETE'], 'SWITCHER', 'name', this.getConfig().name)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {

@@ -63,51 +63,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isAlive();
     }
 
-    private isAlive(): void {
-        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, error => {
-            this.status = 'Offline for Maintenance';
-        });
-    }
-
-    private loginWithGitHub(code: string) {
-        this.loading = true;
-
-        this.authService.loginWithGitHub(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-                if (success) {
-                    this.router.navigateByUrl(this.returnUrl);
-                    this.authService.releaseOldSessions.emit(true);
-                }
-                this.loading = false;
-            }, error => {
-                ConsoleLogger.printError(error);
-                this.error = error;
-                this.loading = false;
-            });
-    }
-
-    private loginWithBitBucket(code: string) {
-        this.loading = true;
-
-        this.authService.loginWithBitBucket(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-                if (success) {
-                    this.router.navigateByUrl(this.returnUrl);
-                    this.authService.releaseOldSessions.emit(true);
-                }
-                this.loading = false;
-            }, error => {
-                ConsoleLogger.printError(error);
-                this.error = error;
-                this.loading = false;
-            });
-    }
-
-    private inviteLink() {
-        const queryUrl: string = this.route.snapshot.queryParams['returnUrl'];
-        if (queryUrl && queryUrl.includes('/collab/join?request')) {
-            this.returnUrl = queryUrl;
-        }
-    }
-
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
@@ -120,18 +75,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authService.login({
                 email: this.f.email.value,
                 password: this.f.password.value
-            }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-                if (success) {
-                    this.router.navigateByUrl(this.returnUrl);
-                    this.authService.releaseOldSessions.emit(true);
-                }
-                this.loading = false;
-            }, error => {
-                ConsoleLogger.printError(error);
-                this.error = error;
-                this.loading = false;
-            }
-        );
+            })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(success => this.onSuccess(success), error => this.onError(error));
     }
 
     onGitHubLogin() {
@@ -149,7 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.unsubscribe.complete();
     }
 
-    onKey(event: any) {
+    onKey(_event: any) {
         this.error = '';
     }
 
@@ -172,10 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
                 this.loading = false;
                 
-            }, error => {
-                this.error = error;
-                this.loading = false;
-            });
+            }, error => this.onError(error));
         }
     }
 
@@ -185,5 +128,48 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     hasBitbucketIntegration(): boolean {
         return environment.bitbucketApiClientId != undefined;
+    }
+    
+    private isAlive(): void {
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, _error => {
+            this.status = 'Offline for Maintenance';
+        });
+    }
+
+    private loginWithGitHub(code: string) {
+        this.loading = true;
+
+        this.authService.loginWithGitHub(code)
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(success => this.onSuccess(success), error => this.onError(error));
+    }
+
+    private loginWithBitBucket(code: string) {
+        this.loading = true;
+
+        this.authService.loginWithBitBucket(code)
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(success => this.onSuccess(success), error => this.onError(error));
+    }
+
+    private inviteLink() {
+        const queryUrl: string = this.route.snapshot.queryParams['returnUrl'];
+        if (queryUrl && queryUrl.includes('/collab/join?request')) {
+            this.returnUrl = queryUrl;
+        }
+    }
+
+    private onError(error: any) {
+        ConsoleLogger.printError(error);
+        this.error = error;
+        this.loading = false;
+    }
+
+    private onSuccess(success: any) {
+        if (success) {
+            this.router.navigateByUrl(this.returnUrl);
+            this.authService.releaseOldSessions.emit(true);
+        }
+        this.loading = false;
     }
 }

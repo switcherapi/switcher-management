@@ -87,34 +87,6 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadAvailableStrategies(): void {
-    const currentStrategies: Strategy[] = this.data.currentStrategies
-    currentStrategies.forEach(strategy => {
-      this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1);
-    })
-  }
-
-  loadOperations(strategySelected: string): void {
-    this.strategyService.getStrategiesRequirements(strategySelected).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
-      this.strategyReq = req;
-      this.data.values = [];
-      this.operations = req.operationsAvailable.operations;
-      this.strategyFormatSelected = req.operationsAvailable.format;
-
-      this.valueSelectionFormControl.setValidators([
-        Validators.required,
-        valueInputValidator(req.operationsAvailable.validator)
-      ]);
-    });
-  }
-
-  loadStrategies(): void {
-    this.strategyService.getStrategiesAvailable().pipe(takeUntil(this.unsubscribe)).subscribe(req => {
-      this.strategies = req.strategiesAvailable;
-      this.loadAvailableStrategies();
-    });
-  }
-
   onCancel(): void {
     this.dialogRef.close();
   }
@@ -147,6 +119,34 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
   showResumed(value: string, length: number): string {
     return value.length > length ? `${value.substr(0, length)}...` : value;
+  }
+
+  private loadAvailableStrategies(): void {
+    const currentStrategies: Strategy[] = this.data.currentStrategies
+    currentStrategies.forEach(strategy => {
+      this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1);
+    })
+  }
+
+  private loadOperations(strategySelected: string): void {
+    this.strategyService.getStrategiesRequirements(strategySelected).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
+      this.strategyReq = req;
+      this.data.values = [];
+      this.operations = req.operationsAvailable.operations;
+      this.strategyFormatSelected = req.operationsAvailable.format;
+
+      this.valueSelectionFormControl.setValidators([
+        Validators.required,
+        valueInputValidator(req.operationsAvailable.validator)
+      ]);
+    });
+  }
+
+  private loadStrategies(): void {
+    this.strategyService.getStrategiesAvailable().pipe(takeUntil(this.unsubscribe)).subscribe(req => {
+      this.strategies = req.strategiesAvailable;
+      this.loadAvailableStrategies();
+    });
   }
 
 }

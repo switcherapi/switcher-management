@@ -140,24 +140,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     return this.pathRoute.element;
   }
 
-  loadComponents(): void {
-    this.components = this.config.components.map(component => component.name);
-    
-    this.componentService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(values => {
-        this.availableComponents = values;
-
-        values = values.filter(value => !this.components.includes(value.name));
-        this.listComponents = values.map(value => value.name);
-        this.filteredComponents = this.componentForm.valueChanges.pipe(
-          startWith(null),
-          map((component: string | null) => component ? this._filterComponent(component) : this.listComponents.slice()));
-
-        this.blockUI.stop();
-      });
-  }
-
   loadConfig(config: Config) {
     this.updatePathRoute(config);
     this.configService.getConfigById(config.id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
@@ -188,58 +170,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.readPermissionToObject();
   }
 
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.getConfig().key)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            this.envSelectionChange.disableEnvChange(!this.updatable);
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
-  }
-
-  updateEnvironmentStatus(env : any): void {
-    this.blockUI.start('Updating environment...');
-    this.selectEnvironment(env.status);
-    this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.loadConfig(data);
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.blockUI.stop();
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-    }, () => this.blockUI.stop());
-  }
-
-  removeEnvironmentStatus(env : any): void {
-    this.blockUI.start('Removing environment status...');
-    this.configService.removeDomainEnvironmentStatus(this.config.id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.updatePathRoute(data);
-        this.blockUI.stop();
-        this.toastService.showSuccess(`Environment removed with success`);
-      }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove the environment '${env}'`);
-    });
-  }
-
   edit() {
     if (!this.editing) {
       this.classStatus = 'header editing';
@@ -256,8 +186,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           description: this.descElement.nativeElement.value
         };
         
-        if (super.validateEdition(
-            { 
+        if (super.validateEdition({ 
               key: this.pathRoute.name, 
               description: this.pathRoute.element.description,
               components: String(this.config.components.map(component => component.name)),
@@ -275,38 +204,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           return;
         }
 
-        const updateDisableMetrics = this.getDisableMetricsChange();
-        this.configService.updateConfig(this.config.id, 
-          body.key != this.pathRoute.name ? body.key : undefined, 
-          body.description != this.pathRoute.element.description ? body.description : undefined, updateDisableMetrics)
-            .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.updateConfigComponents(data);
-            this.domainRouteService.notifyDocumentChange();
-            this.toastService.showSuccess(`Switcher updated with success`);
-            this.editing = false
-          }
-        }, error => {
-          this.blockUI.stop();
-          ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update switcher`);
-          this.classStatus = 'header editing';
-          this.editing = true;
-        }, () => {
-          this.blockUI.stop();
-        });
+        this.editConfig(body);
       }
     }
-  }
-
-  getDisableMetricsChange(): any {
-    if (this.pathRoute.element.disable_metrics === undefined || 
-      this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] != this.disableMetrics) {
-      return {
-        [this.envSelectionChange.selectedEnvName]: this.disableMetrics
-      }
-    }
-    return undefined;
   }
 
   delete() {
@@ -316,7 +216,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing switcher...');
-        this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
           this.domainRouteService.removePath(Types.CONFIG_TYPE);
           this.domainRouteService.notifyDocumentChange();
           this.blockUI.stop();
@@ -349,7 +249,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             result.strategy, 
             result.operation, 
             this.envSelectionChange.selectedEnvName, 
-            result.values).subscribe(data => {
+            result.values).subscribe(_data => {
               this.initStrategies();
               this.toastService.showSuccess('Strategy created with success');
             }, error => {
@@ -378,50 +278,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   hasRelay() {
     return this.getConfig().relay.activated ? 
       this.getConfig().relay.activated[this.envSelectionChange.selectedEnvName] != undefined : false;
-  }
-
-  updateConfigComponents(config: Config): void {
-    const currentConfigComponents = this.config.components.map(component => component.name);
-
-    if (this.components.length != currentConfigComponents.length || 
-      this.components.every((u, i) => u != currentConfigComponents[i])
-    ) {
-      const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
-      this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.config = data;
-          this.loadConfig(data);
-        }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(error ? error.error : 'Something went wront when updating components');
-        ConsoleLogger.printError(error);
-      });
-    } else {
-      this.loadConfig(config);
-    }
-  }
-
-  private initStrategies() {
-    this.loadingStrategies = true;
-    this.error = '';
-    this.strategyService.getStrategiesByConfig(this.pathRoute.id, this.envSelectionChange.selectedEnvName).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.hasStrategies = data.length > 0;
-        this.strategies = data;
-
-        if (this.hasStrategies)
-          this.updateNavTab(1);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loadingStrategies = false;
-    }, () => {
-      if (!this.strategies) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loadingStrategies = false;
-    });
   }
 
   addComponent(event: MatChipInputEvent): void {
@@ -461,12 +317,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.componentForm.setValue(null);
   }
 
-  private _filterComponent(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
-  }
-
   onNavChange($event: NgbNavChangeEvent) {
     this.currentTab = $event.nextId;
     this.updateNavTab(this.currentTab);
@@ -482,6 +332,160 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     } else {
       this.classStrategySection = 'strategy-section metrics';
     }
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.getConfig().key)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+            this.envSelectionChange.disableEnvChange(!this.updatable);
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          }
+        });
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.loading = false;
+      this.detailBodyStyle = 'detail-body ready';
+    });
+  }
+
+  private updateEnvironmentStatus(env : any): void {
+    this.blockUI.start('Updating environment...');
+    this.selectEnvironment(env.status);
+    this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.loadConfig(data);
+        this.toastService.showSuccess(`Environment updated with success`);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.blockUI.stop();
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+    }, () => this.blockUI.stop());
+  }
+
+  private removeEnvironmentStatus(env : any): void {
+    this.blockUI.start('Removing environment status...');
+    this.configService.removeDomainEnvironmentStatus(this.config.id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.updatePathRoute(data);
+        this.blockUI.stop();
+        this.toastService.showSuccess(`Environment removed with success`);
+      }
+    }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to remove the environment '${env}'`);
+    });
+  }
+
+  private loadComponents(): void {
+    this.components = this.config.components.map(component => component.name);
+    
+    this.componentService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(values => {
+        this.availableComponents = values;
+
+        values = values.filter(value => !this.components.includes(value.name));
+        this.listComponents = values.map(value => value.name);
+        this.filteredComponents = this.componentForm.valueChanges.pipe(
+          startWith(null),
+          map((component: string | null) => component ? this.filterComponent(component) : this.listComponents.slice()));
+
+        this.blockUI.stop();
+      });
+  }
+
+  private editConfig(body: { key: any; description: any; }): void {
+    const updateDisableMetrics = this.getDisableMetricsChange();
+    this.configService.updateConfig(this.config.id,
+      body.key != this.pathRoute.name ? body.key : undefined,
+      body.description != this.pathRoute.element.description ? body.description : undefined, updateDisableMetrics)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.updateConfigComponents(data);
+          this.domainRouteService.notifyDocumentChange();
+          this.toastService.showSuccess(`Switcher updated with success`);
+          this.editing = false;
+        }
+      }, error => {
+        this.blockUI.stop();
+        ConsoleLogger.printError(error);
+        this.toastService.showError(`Unable to update switcher`);
+        this.classStatus = 'header editing';
+        this.editing = true;
+      }, () => {
+        this.blockUI.stop();
+      });
+  }
+
+  private getDisableMetricsChange(): any {
+    if (this.pathRoute.element.disable_metrics === undefined || 
+      this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] != this.disableMetrics) {
+      return {
+        [this.envSelectionChange.selectedEnvName]: this.disableMetrics
+      }
+    }
+    return undefined;
+  }
+
+  private updateConfigComponents(config: Config): void {
+    const currentConfigComponents = this.config.components.map(component => component.name);
+
+    if (this.components.length != currentConfigComponents.length || 
+      this.components.every((u, i) => u != currentConfigComponents[i])
+    ) {
+      const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
+      this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+        if (data) {
+          this.config = data;
+          this.loadConfig(data);
+        }
+      }, error => {
+        this.blockUI.stop();
+        this.toastService.showError(error ? error.error : 'Something went wront when updating components');
+        ConsoleLogger.printError(error);
+      });
+    } else {
+      this.loadConfig(config);
+    }
+  }
+
+
+  private initStrategies() {
+    this.loadingStrategies = true;
+    this.error = '';
+    this.strategyService.getStrategiesByConfig(this.pathRoute.id, this.envSelectionChange.selectedEnvName).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.hasStrategies = data.length > 0;
+        this.strategies = data;
+
+        if (this.hasStrategies)
+          this.updateNavTab(1);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loadingStrategies = false;
+    }, () => {
+      if (!this.strategies) {
+        this.error = 'Failed to connect to Switcher API';
+      }
+      this.loadingStrategies = false;
+    });
+  }
+
+  private filterComponent(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
   
 }

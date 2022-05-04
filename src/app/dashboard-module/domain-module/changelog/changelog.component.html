@@ -4,10 +4,10 @@
 
 <div *ngIf="loading" class="card-body loader-div">
     <div class="loader"></div>
-    <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+    <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
 <div [ngClass]="classStatus">
-    <table *ngIf="dataSource" mat-table [dataSource]="dataSource" 
+    <table *ngIf="dataSource" mat-table [dataSource]="dataSource" aria-describedby="changelog-table"
         multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="newValue">

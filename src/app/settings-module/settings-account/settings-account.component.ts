@@ -57,25 +57,6 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadAdmin() {
-    this.f.name.setValue(this.authService.getUserInfo('name'));
-    this.userEmail = this.authService.getUserInfo('email');
-    this.userPlatform = this.authService.getUserInfo('platform');
-    const avatar = this.authService.getUserInfo('avatar');
-    this.profileAvatar = avatar || "assets\\switcherapi_mark_grey.png";
-  }
-  
-  loadDomains(): void {
-    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.domains = data.length;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.error = 'Something went wrong when attepting to verify your profile';
-    });
-  }
-
   onUpdate() {
     if (this.accountForm.invalid) {
       return;
@@ -129,7 +110,7 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
     this.resetSuccess = '';
   }
@@ -143,5 +124,24 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.accountForm.controls; }
+
+  private loadAdmin() {
+    this.f.name.setValue(this.authService.getUserInfo('name'));
+    this.userEmail = this.authService.getUserInfo('email');
+    this.userPlatform = this.authService.getUserInfo('platform');
+    const avatar = this.authService.getUserInfo('avatar');
+    this.profileAvatar = avatar || "assets\\switcherapi_mark_grey.png";
+  }
+  
+  private loadDomains(): void {
+    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.domains = data.length;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.error = 'Something went wrong when attepting to verify your profile';
+    });
+  }
 
 }

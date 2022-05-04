@@ -69,11 +69,9 @@ export class MetricDataComponent implements OnInit, OnDestroy {
       //if filtered by date, get the sum of positive and negative results
       .filter(switcher => switcher.switcher === this.parent.switcher)[0].dateTimeStatistics
       .filter(date => date.date == this.date)
-      .map(sumResuls => sumResuls.negative + sumResuls.positive)[0] :
+      .map(sumResults => sumResults.negative + sumResults.positive)[0] :
       //otherwise, just get the total from the statistics
-      this.parent.metrics.statistics.switchers.length ?
-        this.parent.metrics.statistics.switchers
-        .filter(switcher => switcher.switcher === this.parent.switcher)[0].total : 0;
+      this.getTotalStatistics();
 
     this.currentPageSize = this.pageLoaded;
   }
@@ -81,47 +79,6 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
-    });
-  }
-
-  loadDataSource(data: MetricData[]): void {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = (data: MetricData, filter: string) => {
-      return this.customFilterPredicate(data, filter);
-    };
-  }
-
-  customFilterPredicate(data: MetricData, filter: string): boolean {
-    if (data.config.key.toLowerCase().indexOf(filter) >= 0) {
-      return true;
-    } else if (data.component.toLowerCase().indexOf(filter) >= 0) {
-      return true;
-    } else if (data.result && 'true'.indexOf(filter) >= 0) {
-      return true;
-    } else if (!data.result && 'false'.indexOf(filter) >= 0) {
-      return true;
-    } else if (data.date.toString().indexOf(filter) >= 0) {
-      return true;
-    } else if (data.reason.toLowerCase().toString().indexOf(filter) >= 0) {
-      return true;
-    }
-
-    return false;
   }
 
   applyFilter(filterValue: string) {
@@ -142,7 +99,6 @@ export class MetricDataComponent implements OnInit, OnDestroy {
         this.metricService.resetMetricsForSwitcher(domain.id, this.switcher).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
           if (data) {
             this.parent.switcher = null;
-            // this.parent.loadMetrics(1);
             this.dataSource = new MatTableDataSource(null);
             this.toastService.showSuccess(`Metrics reseted with success`);
           }
@@ -155,15 +111,12 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    let sortedData;
-
-    const data = this.dataSource.data.slice();
     if (!sort.active || sort.direction === '') {
-      sortedData = data;
       return;
     }
-
-    sortedData = data.sort((a, b) => {
+    
+    const data = this.dataSource.data.slice();
+    let sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'switcher': return this.compare(a.config.key, b.config.key, isAsc);
@@ -211,6 +164,48 @@ export class MetricDataComponent implements OnInit, OnDestroy {
 
   hasNext(): boolean {
     return this.currentPageSize === 50;
+  }
+
+  private getTotalStatistics(): number {
+    if (this.parent.metrics.statistics.switchers.length) {
+      return this.parent.metrics.statistics.switchers
+        .filter(switcher => switcher.switcher === this.parent.switcher)[0].total;
+    }
+    return 0;
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['DELETE'], 'ADMIN', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          }
+        });
+      }
+    });
+  }
+
+  private loadDataSource(data: MetricData[]): void {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = (metricData: MetricData, filter: string) => {
+      return this.customFilterPredicate(metricData, filter);
+    };
+  }
+
+  private customFilterPredicate(data: MetricData, filter: string): boolean {
+    if (data.config.key.toLowerCase().indexOf(filter) >= 0 ||
+      data.component.toLowerCase().indexOf(filter) >= 0 ||
+      data.result && 'true'.indexOf(filter) >= 0 ||
+      !data.result && 'false'.indexOf(filter) >= 0 ||
+      data.date.toString().indexOf(filter) >= 0 ||
+      data.reason.toLowerCase().toString().indexOf(filter) >= 0)
+      return true;
+    return false;
   }
   
 }

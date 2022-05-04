@@ -71,7 +71,7 @@ export class LoginResetComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
   }
 
