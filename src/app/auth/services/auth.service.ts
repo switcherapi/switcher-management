@@ -5,7 +5,6 @@ import { catchError, mapTo, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
 import { Tokens } from '../models/tokens';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { Admin } from 'src/app/model/admin';
 
 @Injectable({
   providedIn: 'root'

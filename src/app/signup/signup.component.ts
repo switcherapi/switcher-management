@@ -88,7 +88,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.unsubscribe.complete();
     }
 
-    onKey(event: any) {
+    onKey(_event: any) {
         this.error = '';
     }
 
@@ -105,7 +105,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     private isAlive(): void {
-        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, error => {
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, _error => {
             this.status = 'Offline for Maintenance';
         });
     }

@@ -29,21 +29,21 @@
                     </re-captcha>
                     <div style="padding-top: 20px;">
                         <button *ngIf="getRecaptchaPublicKey()" mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
-                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
+                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
                             <span style="color: white; padding-left: 5px;">Create</span>
                         </button>
                         <button *ngIf="!getRecaptchaPublicKey()" mat-button class="btn-element" [disabled]="loading">
-                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
+                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
                             <span style="color: white; padding-left: 5px;">Create</span>
                         </button>
                         <button *ngIf="hasGithubIntegration()" type="button" 
                             mat-button class="btn-element white" [disabled]="loading || !recaptcha_token" (click)="onGitHubLogin()">
-                            <img src="assets\github.svg" style="width: 20px;"/>
+                            <img src="assets\github.svg" style="width: 20px;" alt="GitHub"/>
                             <span style="color: black; padding-left: 5px;">GitHub</span>
                         </button>
                         <button *ngIf="hasBitbucketIntegration()" type="button" 
                             mat-button class="btn-element white" [disabled]="loading || !recaptcha_token" (click)="onBitBucketLogin()">
-                            <img src="assets\bitbucket.svg" style="width: 20px;"/>
+                            <img src="assets\bitbucket.svg" style="width: 20px;" alt="Bitbucket"/>
                             <span style="color: black; padding-left: 5px;">Bitbucket</span>
                             <div class="new-feature">
                                 <p class="new-feature-text">New</p>
@@ -56,7 +56,7 @@
             </div>
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);"/>
+                <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API"/>
             </div>
 
             <div *ngIf="!loading && waitingConfirmation" class="card-body">

@@ -116,11 +116,13 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
   }
 
   getPlatformIcon(): string {
-    return this.userPlatform === 'Switcher API' ? 
-      "assets\\switcherapi_mark_grey.png" :
-      this.userPlatform === 'GitHub' ?
-        "assets\\github.svg" :
-        "assets\\bitbucket.svg";
+    if (this.userPlatform === 'Switcher API')
+      return "assets\\switcherapi_mark_grey.png";
+
+    if (this.userPlatform === 'GitHub')
+      return "assets\\github.svg";
+
+    return "assets\\bitbucket.svg";
   }
 
   get f() { return this.accountForm.controls; }

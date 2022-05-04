@@ -1,5 +1,4 @@
-import { OnDestroy } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { OnDestroy, Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';

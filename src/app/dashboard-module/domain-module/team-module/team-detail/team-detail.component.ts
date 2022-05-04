@@ -95,14 +95,8 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
         this.editing = false;
         this.blockUI.start('Updating Team...');
         this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
-          .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-            if (team) {
-              this.team = team;
-              this.setHeaderStyle();
-              this.blockUI.stop();
-              this.toastService.showSuccess(`Team updated with success`);
-            }
-        }, error => this.onError(error, `Unable to update team: '${this.team.name}'`));
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
       }
     }
   }
@@ -110,14 +104,8 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   changeStatus(event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
-      .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-        if (team) {
-          this.team = team;
-          this.setHeaderStyle();
-          this.blockUI.stop();
-          this.toastService.showSuccess(`Team updated with success`);
-        }
-    }, error => this.onError(error, `Unable to update team: '${this.team.name}'`));
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
   }
 
   removeTeam() {
@@ -129,6 +117,15 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
           this.toastService.showSuccess(`Team removed with success`);
         }
       }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
+  }
+
+  private onSuccess(team: any): void {
+    if (team) {
+      this.team = team;
+      this.setHeaderStyle();
+      this.blockUI.stop();
+      this.toastService.showSuccess(`Team updated with success`);
+    }
   }
 
   private onError(error: any, message: string): void {
