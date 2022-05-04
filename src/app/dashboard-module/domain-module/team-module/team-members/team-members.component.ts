@@ -51,26 +51,6 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadTeam(): void {
-    this.loading = true;
-    this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-      if (team) {
-        this.loadDataSource(team.members)
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    })
-  }
-
-  loadDataSource(data: Admin[]): void {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-  }
-
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -90,7 +70,39 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
     });
   }
 
-  onInvite(teamInvite: TeamInvite): void {
+  removeMember(member: Admin) {
+    this.teamService.removeTeamMember(this.team._id, member.id)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(memberRemoved => {
+      if (memberRemoved) {
+        this.loadTeam();
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
+    })
+  }
+
+  private loadTeam(): void {
+    this.loading = true;
+    this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
+      if (team) {
+        this.loadDataSource(team.members)
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    })
+  }
+
+  private loadDataSource(data: Admin[]): void {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  private onInvite(teamInvite: TeamInvite): void {
     this.inputMember.nativeElement.value = '';
     this.dialog.open(TeamInviteDialog, {
       width: '450px',
@@ -101,17 +113,6 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
         team: this.team
       }
     });
-  }
-
-  removeMember(member: Admin) {
-    this.teamService.removeTeamMember(this.team._id, member.id).pipe(takeUntil(this.unsubscribe)).subscribe(member => {
-      if (member) {
-        this.loadTeam();
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
-    })
   }
 
 }

@@ -41,8 +41,9 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
       this.enterprise_id = params['e_id'] || '';
       this.team_id = params['t_id'] || '';
       this.selectedDomain = routeDomain?.element;
-
-      if (!(this.error = this.validate(params['error'], params['reason'])))
+      this.error = this.validate(params['error'], params['reason']);
+      
+      if (!this.error)
         this.loadSlackInstallation();
     });
   }

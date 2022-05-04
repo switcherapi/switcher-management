@@ -56,53 +56,6 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadMetricStatistics(environment?: string, dateBefore?: string, dateAfter?: string): void {
-    this.loading = true;
-    this.error = '';
-    this.metricService.getMetricStatistics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : this.environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(statistics => {
-        this.loading = false;
-        if (statistics) {
-          this.metrics.statistics = statistics;
-        }
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.errorHandler.doError(error);
-        this.loading = false;
-      }, () => {
-        this.classStatus = "ready";
-      });
-  }
-
-  public loadDataMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
-    return this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      environment ? environment : this.environment, page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
-        .pipe(takeUntil(this.unsubscribe));
-  }
-
-  loadMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): void {
-    this.loading = true;
-    this.error = '';
-    this.loadDataMetrics(page, environment, dateBefore, dateAfter).subscribe(metrics => {
-        this.loading = false;
-        this.loadMetricStatistics(environment, dateBefore, dateAfter);
-        if (metrics) {
-          if (this.switcher && this.filterType === 'Switcher')
-            this.metrics.data = metrics.data;
-          else {
-            this.metrics.data = null;
-          }
-        }
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.errorHandler.doError(error);
-        this.loading = false;
-      }, () => {
-        this.classStatus = "ready";
-      });
-  }
-
   onFilter(key?: string) {
     if (!key) {
       key = this.switcher;
@@ -141,11 +94,54 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.onFilter(key);
   }
   
-  onNavChange($event: NgbNavChangeEvent) {
+  onNavChange(_$event: NgbNavChangeEvent) {
     if (this.metricViewClass === 'metrics-view data') {
       this.metricViewClass = 'metrics-view graphics';
     } else {
       this.metricViewClass = 'metrics-view data';
     }
+  }
+
+  private loadMetricStatistics(environment?: string, dateBefore?: string, dateAfter?: string): void {
+    this.loading = true;
+    this.error = '';
+    this.metricService.getMetricStatistics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+      environment ? environment : this.environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(statistics => {
+        this.loading = false;
+        if (statistics) {
+          this.metrics.statistics = statistics;
+        }
+      }, error => this.onError(error), 
+      () => this.classStatus = "ready");
+  }
+
+  public loadDataMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
+    return this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+      environment ? environment : this.environment, page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
+        .pipe(takeUntil(this.unsubscribe));
+  }
+
+  private loadMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): void {
+    this.loading = true;
+    this.error = '';
+    this.loadDataMetrics(page, environment, dateBefore, dateAfter).subscribe(metrics => {
+        this.loading = false;
+        this.loadMetricStatistics(environment, dateBefore, dateAfter);
+        if (metrics) {
+          if (this.switcher && this.filterType === 'Switcher')
+            this.metrics.data = metrics.data;
+          else {
+            this.metrics.data = null;
+          }
+        }
+      }, error => this.onError(error), 
+      () => this.classStatus = "ready");
+  }
+
+  private onError(error: any) {
+    ConsoleLogger.printError(error);
+    this.errorHandler.doError(error);
+    this.loading = false;
   }
 }

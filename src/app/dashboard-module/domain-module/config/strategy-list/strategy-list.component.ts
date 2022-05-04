@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
 import { Strategy } from 'src/app/model/strategy';
 
@@ -7,14 +7,10 @@ import { Strategy } from 'src/app/model/strategy';
   templateUrl: './strategy-list.component.html',
   styleUrls: ['./strategy-list.component.css']
 })
-export class StrategyListComponent implements OnInit {
+export class StrategyListComponent {
   @Input() strategies: Strategy[];
   @Input() moveToEnd: boolean;
   @Input() parent: ConfigDetailComponent;
-
-  constructor() { }
-
-  ngOnInit() { }
 
   scrollToElement($element: any): void {
     setTimeout(() => {

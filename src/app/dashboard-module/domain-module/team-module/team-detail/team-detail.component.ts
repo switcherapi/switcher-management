@@ -67,42 +67,9 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     })
   }
 
-  loadDomain(domainId: string): void {
-    this.nameFormControl.setValue(this.team.name);
-    this.setHeaderStyle();
-    this.domainService.getDomain(domainId).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
-      if (domain) {
-        this.domain = domain;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    });
-  }
-
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          }
-        });
-      }
-    });
   }
 
   getTeam(): Team {
@@ -128,18 +95,8 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
         this.editing = false;
         this.blockUI.start('Updating Team...');
         this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
-          .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-            if (team) {
-              this.team = team;
-              this.setHeaderStyle();
-              this.blockUI.stop();
-              this.toastService.showSuccess(`Team updated with success`);
-            }
-        }, error => {
-          this.blockUI.stop();
-          ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update team: '${this.team.name}'`);
-        });
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
       }
     }
   }
@@ -147,18 +104,8 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   changeStatus(event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
-      .pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-        if (team) {
-          this.team = team;
-          this.setHeaderStyle();
-          this.blockUI.stop();
-          this.toastService.showSuccess(`Team updated with success`);
-        }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update team: '${this.team.name}'`);
-    });
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
   }
 
   removeTeam() {
@@ -169,14 +116,58 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
           this.router.navigate(['/dashboard/domain/team']);
           this.toastService.showSuccess(`Team removed with success`);
         }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove team: '${this.team.name}'`);
-    })
+      }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
   }
 
-  setHeaderStyle(): void {
+  private onSuccess(team: any): void {
+    if (team) {
+      this.team = team;
+      this.setHeaderStyle();
+      this.blockUI.stop();
+      this.toastService.showSuccess(`Team updated with success`);
+    }
+  }
+
+  private onError(error: any, message: string): void {
+    this.blockUI.stop();
+    ConsoleLogger.printError(error);
+    this.toastService.showError(message);
+  }
+
+  private loadDomain(domainId: string): void {
+    this.nameFormControl.setValue(this.team.name);
+    this.setHeaderStyle();
+    this.domainService.getDomain(domainId).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
+      if (domain) {
+        this.domain = domain;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    });
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok';
+          }
+        });
+      }
+    });
+  }
+
+  private setHeaderStyle(): void {
     if (this.editing) {
       this.classStatus = 'header editing';
     } else {

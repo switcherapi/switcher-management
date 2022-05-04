@@ -11,15 +11,15 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class AuthService {
 
-  @Output() logoff: EventEmitter<String> = new EventEmitter();
+  @Output() logoff: EventEmitter<string> = new EventEmitter();
   @Output() releaseOldSessions: EventEmitter<any> = new EventEmitter();
 
   public static readonly USER_INFO = 'USER_INFO';
   public static readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
-  private currentTokenSubject: BehaviorSubject<String>;
-  public currentToken: Observable<String>;
+  private currentTokenSubject: BehaviorSubject<string>;
+  public currentToken: Observable<string>;
 
   private userInfoSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
@@ -27,7 +27,7 @@ export class AuthService {
   loggedUser: string;
 
   constructor(private http: HttpClient) {
-    this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(AuthService.JWT_TOKEN));
+    this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN));
     this.currentToken = this.currentTokenSubject.asObservable();
 
     this.userInfoSubject = new BehaviorSubject<any>(localStorage.getItem(AuthService.USER_INFO));
@@ -160,7 +160,7 @@ export class AuthService {
   }
 
   private doLoginUser(user: any, tokens: Tokens) {
-    const loggegWith = user._gitid ? 'GitHub' : user._bitbucketid ? 'BitBucket' : 'Switcher API';
+    const loggegWith = this.getLoggedWith(user);
     const userData = JSON.stringify({ 
       name: user.name,
       email: loggegWith === 'Switcher API' ? user.email : `Logged @${loggegWith}`,
@@ -178,6 +178,12 @@ export class AuthService {
   private doLogoutUser() {
     this.loggedUser = null;
     this.removeTokens();
+  }
+
+  private getLoggedWith(user: any): string {
+    if (user._gitid) return 'GitHub';
+    if (user._bitbucketid) return 'Bitbucket';
+    return 'Switcher API';
   }
 
   private getRefreshToken() {

@@ -46,49 +46,9 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.loadTeams();
   }
 
-  loadTeams(): void {
-    this.loading = true;
-    this.error = '';
-    this.readPermissionToObject();
-    this.teamService.getTeamsByDomain(
-      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      
-      if (data) {
-        this.teams = data;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-      if (!this.teams)
-        this.error = 'Failed to connect to Switcher API';
-    });
-  }
-
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['READ', 'CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          } else if (element.action === 'READ') {
-            this.readable = element.result === 'ok';
-          } 
-        });
-      }
-    });
   }
 
   createTeam() {
@@ -116,6 +76,46 @@ export class TeamComponent implements OnInit, OnDestroy {
 
   removeTeamFromList(teamRemoved: Team): void {
     this.teams = this.teams.filter(team => team._id != teamRemoved._id);
+  }
+  
+  private loadTeams(): void {
+    this.loading = true;
+    this.error = '';
+    this.readPermissionToObject();
+    this.teamService.getTeamsByDomain(
+      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      
+      if (data) {
+        this.teams = data;
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+      if (!this.teams)
+        this.error = 'Failed to connect to Switcher API';
+    });
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['READ', 'CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok';
+          } else if (element.action === 'READ') {
+            this.readable = element.result === 'ok';
+          } 
+        });
+      }
+    });
   }
 
 }

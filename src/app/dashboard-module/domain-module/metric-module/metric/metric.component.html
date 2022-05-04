@@ -6,7 +6,7 @@
     </div>
     <div *ngIf="loading" class="card-body loader-div">
         <div class="loader"></div>
-        <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+        <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
     </div>
     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     <section id="data-section" [ngClass]="classStatus" style="margin-top: 20px;">

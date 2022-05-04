@@ -102,7 +102,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     });
   }
 
-  readPermissionToObject(): void {
+  private readPermissionToObject(): void {
     const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
     this.adminService.readCollabPermission(domain.id, ['CREATE'], 'GROUP', 'name', domain.name)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {

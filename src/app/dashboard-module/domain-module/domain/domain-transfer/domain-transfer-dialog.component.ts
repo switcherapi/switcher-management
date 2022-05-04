@@ -22,19 +22,11 @@ import { environment } from 'src/environments/environment';
     }
   
     onCopy() {
-      let selBox = document.createElement('textarea');
-      selBox.style.position = 'fixed';
-      selBox.style.left = '0';
-      selBox.style.top = '0';
-      selBox.style.opacity = '0';
-      selBox.value = encodeURI(`${environment.domainTransferLink}?request=${this.data.request_id}&domain=${this.data.domain}`);
-      document.body.appendChild(selBox);
-      selBox.focus();
-      selBox.select();
-      document.execCommand('copy');
-      document.body.removeChild(selBox);
-  
       this.toastService.showSuccess(`Domain transfer link copied with success`);
+    }
+
+    getUrl() {
+      return encodeURI(`${environment.domainTransferLink}?request=${this.data.request_id}&domain=${this.data.domain}`);
     }
   
   }

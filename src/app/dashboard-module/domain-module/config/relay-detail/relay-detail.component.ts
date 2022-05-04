@@ -84,68 +84,6 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.unsubscribe.complete();
   }
 
-  loadRelay(): void {
-    this.currentStatus = this.config.relay.activated[this.envSelectionChange.selectedEnvName];
-
-    this.relayTypeFormControl.setValue(this.config.relay.type);
-    this.relayMethodFormControl.setValue(this.config.relay.method);
-    this.endpointFormControl.setValue(this.getRelayAttribute('endpoint'));
-    this.authTokenElement.nativeElement.value = this.getRelayAttribute('auth_token');
-
-    if (this.config.relay.endpoint[this.envSelectionChange.selectedEnvName] == undefined) {
-      this.edit();
-    } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-      this.editing = false;
-    }
-
-    this.detailBodyStyle = 'detail-body ready';
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.config.key)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-
-            if (!this.editing) {
-              this.envSelectionChange.disableEnvChange(!this.updatable);
-            }
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.blockUI.stop();
-      this.detailBodyStyle = 'detail-body ready';
-    });
-  }
-
-  updateEnvironmentStatus(env: any): void {
-    const configRelayStatus = new ConfigRelayStatus();
-    configRelayStatus.activated[env.environment] = env.status;
-
-    this.blockUI.start('Updating environment...');
-    this.configService.updateConfigRelayStatus(this.config.id, configRelayStatus).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
-        this.parent.loadConfig(data);
-        this.selectEnvironment(env.status);
-        this.toastService.showSuccess(`Environment updated with success`);
-        this.blockUI.stop();
-      }
-    }, error => {
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
-      this.blockUI.stop();
-    });
-  }
-
   edit() {
     if (!this.editing) {
       this.classStatus = 'header editing';
@@ -181,31 +119,35 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         return;
       }
 
-      this.envSelectionChange.disableEnvChange(!this.editing);
-      this.config.relay.type = this.relayTypeFormControl.value;
-      this.config.relay.method = this.relayMethodFormControl.value;
-      this.config.relay.description = this.descElement.nativeElement.value;
-      this.config.relay.endpoint[this.envSelectionChange.selectedEnvName] = this.endpointFormControl.value;
-
-      if (!this.config.relay.auth_token) {
-        this.config.relay.auth_token = new Map<string, string>();
-      }
-      this.config.relay.auth_token[this.envSelectionChange.selectedEnvName] = this.authTokenElement.nativeElement.value;
-      this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
-
-      this.configService.updateConfigRelay(this.config).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.toastService.showSuccess(`Relay saved with success`);
-          this.config = data;
-          this.editing = false;
-          this.parent.loadConfig(data);
-        }
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update relay`);
-        this.editing = false;
-      });
+      this.editRelay();
     }
+  }
+
+  private editRelay() {
+    this.envSelectionChange.disableEnvChange(!this.editing);
+    this.config.relay.type = this.relayTypeFormControl.value;
+    this.config.relay.method = this.relayMethodFormControl.value;
+    this.config.relay.description = this.descElement.nativeElement.value;
+    this.config.relay.endpoint[this.envSelectionChange.selectedEnvName] = this.endpointFormControl.value;
+
+    if (!this.config.relay.auth_token) {
+      this.config.relay.auth_token = new Map<string, string>();
+    }
+    this.config.relay.auth_token[this.envSelectionChange.selectedEnvName] = this.authTokenElement.nativeElement.value;
+    this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
+
+    this.configService.updateConfigRelay(this.config).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.toastService.showSuccess(`Relay saved with success`);
+        this.config = data;
+        this.editing = false;
+        this.parent.loadConfig(data);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to update relay`);
+      this.editing = false;
+    });
   }
 
   delete() {
@@ -235,6 +177,69 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
+  private loadRelay(): void {
+    this.currentStatus = this.config.relay.activated[this.envSelectionChange.selectedEnvName];
+
+    this.relayTypeFormControl.setValue(this.config.relay.type);
+    this.relayMethodFormControl.setValue(this.config.relay.method);
+    this.endpointFormControl.setValue(this.getRelayAttribute('endpoint'));
+    this.authTokenElement.nativeElement.value = this.getRelayAttribute('auth_token');
+
+    if (this.config.relay.endpoint[this.envSelectionChange.selectedEnvName] == undefined) {
+      this.edit();
+    } else {
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      this.editing = false;
+    }
+
+    this.detailBodyStyle = 'detail-body ready';
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.config.key)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+
+            if (!this.editing) {
+              this.envSelectionChange.disableEnvChange(!this.updatable);
+            }
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          }
+        });
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.blockUI.stop();
+      this.detailBodyStyle = 'detail-body ready';
+    });
+  }
+
+  private updateEnvironmentStatus(env: any): void {
+    const configRelayStatus = new ConfigRelayStatus();
+    configRelayStatus.activated[env.environment] = env.status;
+
+    this.blockUI.start('Updating environment...');
+    this.configService.updateConfigRelayStatus(this.config.id, configRelayStatus).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
+        this.parent.loadConfig(data);
+        this.selectEnvironment(env.status);
+        this.toastService.showSuccess(`Environment updated with success`);
+        this.blockUI.stop();
+      }
+    }, error => {
+      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+    });
+  }
+
   private updateConfiguredRelay(data: Config): void {
     delete this.config.relay.activated[this.envSelectionChange.selectedEnvName];
     if (this.config.relay.auth_token) {
@@ -245,7 +250,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.parent.updateNavTab(3);
   }
 
-  getRelayAttribute(field: string): string {
+  private getRelayAttribute(field: string): string {
     if (this.config.relay[field] && this.config.relay[field][this.envSelectionChange.selectedEnvName])
       return this.config.relay[field][this.envSelectionChange.selectedEnvName];
     return '';

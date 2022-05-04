@@ -59,40 +59,6 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadEnvironments(): void {
-    this.loading = true;
-    this.envService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(env => {
-        this.environments = env.filter(e => e.name != 'default');
-    }, error => {
-      this.error = error;
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      this.loading = false;
-      this.classStatus = "card mt-4 ready";
-    });
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          }
-        });
-      }
-    });
-  }
-
   createEnvironment() {
     const { valid } = this.envFormControl;
 
@@ -158,6 +124,40 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
         });
       }
     })
+  }
+  
+  private loadEnvironments(): void {
+    this.loading = true;
+    this.envService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(env => {
+        this.environments = env.filter(e => e.name != 'default');
+    }, error => {
+      this.error = error;
+      this.loading = false;
+      this.error = this.errorHandler.doError(error);
+    }, () => {
+      this.loading = false;
+      this.classStatus = "card mt-4 ready";
+    });
+  }
+
+  private readPermissionToObject(): void {
+    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
+    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT', 'name', domain.name)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data.length) {
+        data.forEach(element => {
+          if (element.action === 'UPDATE') {
+            this.updatable = element.result === 'ok';
+          } else if (element.action === 'DELETE') {
+            this.removable = element.result === 'ok';
+          } else if (element.action === 'CREATE') {
+            this.creatable = element.result === 'ok';
+          }
+        });
+      }
+    });
   }
 
 }

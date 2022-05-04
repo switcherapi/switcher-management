@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -6,16 +6,11 @@ import { Subject } from 'rxjs';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit, OnDestroy {
+export class SettingsComponent implements OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
 
   navControl: boolean = false;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   navToggled() {
     this.navControl = !this.navControl;

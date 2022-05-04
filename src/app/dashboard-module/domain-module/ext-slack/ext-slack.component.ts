@@ -1,5 +1,4 @@
-import { OnDestroy } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { OnDestroy, Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -52,35 +51,6 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  private loadSlack(): void {
-    this.loading = true;
-
-    this.domain = this.domainRouteService.getPathElement(
-      Types.SELECTED_DOMAIN).element;
-
-    this.slackService.getSlackInstallation(this.domain.id)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(slack => {
-        this.slack = slack;
-        this.loadSlackAvailability();
-    }, (error) => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError('Unable to display Slack Integrations properties');
-    }, () => {
-      this.loading = false;
-    });
-  }
-
-  private loadSlackAvailability(): void {
-    this.slackService.getSlackAvailability(FEATURES.SLACK_UPDATE)
-    .pipe(takeUntil(this.unsubscribe))
-    .subscribe(data => {
-      this.slackUpdate = data?.result;
-      if (this.slackUpdate)
-        this.formQtyApprovals.enable({ onlySelf: true });
-    });
-  }
-
   onUpdate(): void {
     const { valid } = this.formQtyApprovals;
 
@@ -127,6 +97,35 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
             this.toastService.showError('Unable to reset tickets');
           });
       }
+    });
+  }
+
+  private loadSlack(): void {
+    this.loading = true;
+
+    this.domain = this.domainRouteService.getPathElement(
+      Types.SELECTED_DOMAIN).element;
+
+    this.slackService.getSlackInstallation(this.domain.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(slack => {
+        this.slack = slack;
+        this.loadSlackAvailability();
+    }, (error) => {
+      ConsoleLogger.printError(error);
+      this.toastService.showError('Unable to display Slack Integrations properties');
+    }, () => {
+      this.loading = false;
+    });
+  }
+
+  private loadSlackAvailability(): void {
+    this.slackService.getSlackAvailability(FEATURES.SLACK_UPDATE)
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(data => {
+      this.slackUpdate = data?.result;
+      if (this.slackUpdate)
+        this.formQtyApprovals.enable({ onlySelf: true });
     });
   }
 

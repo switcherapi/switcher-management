@@ -8,7 +8,11 @@
         </div>
         <div [ngClass]="toggleSectionStyle">
             <form [formGroup]="environmentStatusSelection">
-                <mat-slide-toggle [checked]="selectedEnvStatus" class="toggle-style" (change)="updateEnvironmentStatus($event)" formControlName="environmentStatusSelection">
+                <mat-slide-toggle 
+                    class="toggle-style" 
+                    [checked]="selectedEnvStatus" 
+                    (change)="updateEnvironmentStatus($event)"
+                    formControlName="environmentStatusSelection">
                 </mat-slide-toggle>
             </form>
         </div>

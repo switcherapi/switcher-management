@@ -4,6 +4,6 @@ export class ConsoleLogger {
 
     public static printError(error: string, object?: any) {
         if (!environment.production)
-            console.error(error);
+            console.error(error, object);
     }
 }

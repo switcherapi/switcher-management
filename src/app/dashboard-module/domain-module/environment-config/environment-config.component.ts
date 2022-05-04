@@ -69,56 +69,6 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadEnvironments() {
-    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.environments = env;
-
-      if (!this.notSelectableEnvironments)
-        this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
-      else {
-        this.selectedEnvName = this.selectedEnvName || Object.keys(this.configuredEnvironments)[0];
-        this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
-      }
-
-
-      this.selectedEnvStatus = this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value];
-      this.outputEnvChanged.emit(this.selectedEnvStatus);
-    });
-  }
-
-  loadOperationSelectionComponent(): void {
-    this.environmentSelection = this.fb.group({
-      environmentSelection: [null, Validators.required]
-    });
-
-    if (this.notSelectableEnvironments) {
-      this.environmentSelection.get('environmentSelection').disable({ onlySelf: true});
-    }
-
-    this.environmentStatusSelection = this.fb.group({
-      environmentStatusSelection: [null, Validators.required]
-    });
-  }
-
-  setProductionFirst(): string {
-    const env = JSON.parse(JSON.stringify(this.configuredEnvironments));
-    var keys = Object.keys(env);
-    let defaultEnv: Environment;
-    for (var i = 0; i < keys.length; i++) {
-      defaultEnv = this.environments.find(env => env.name === 'default' || env.name === keys[i]);
-      break;
-    }
-
-    if (defaultEnv) {
-      this.selectedEnvName = defaultEnv.name
-      return defaultEnv.name;
-    }
-
-    this.selectedEnvName = this.environments[0].name; 
-    return this.environments[0].name;
-  }
-
   disableEnvChange(disable: boolean): void {
     this.toggleEnv.disabled = disable;
     if (disable) {
@@ -153,6 +103,57 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       return true;
     
     return false;
+  }
+  
+  private loadEnvironments() {
+    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
+      this.environments = env;
+
+      if (!this.notSelectableEnvironments)
+        this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
+      else {
+        this.selectedEnvName = this.selectedEnvName || Object.keys(this.configuredEnvironments)[0];
+        this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
+      }
+
+
+      this.selectedEnvStatus = this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value];
+      this.outputEnvChanged.emit(this.selectedEnvStatus);
+    });
+  }
+
+  private loadOperationSelectionComponent(): void {
+    this.environmentSelection = this.fb.group({
+      environmentSelection: [null, Validators.required]
+    });
+
+    if (this.notSelectableEnvironments) {
+      this.environmentSelection.get('environmentSelection').disable({ onlySelf: true});
+    }
+
+    this.environmentStatusSelection = this.fb.group({
+      environmentStatusSelection: [null, Validators.required]
+    });
+  }
+
+  private setProductionFirst(): string {
+    const env = JSON.parse(JSON.stringify(this.configuredEnvironments));
+    var keys = Object.keys(env);
+    let defaultEnv: Environment;
+    
+    for (var key of keys) {
+      defaultEnv = this.environments.find(e => e.name === 'default' || env.name === key);
+      break;
+    }
+
+    if (defaultEnv) {
+      this.selectedEnvName = defaultEnv.name
+      return defaultEnv.name;
+    }
+
+    this.selectedEnvName = this.environments[0].name; 
+    return this.environments[0].name;
   }
 
 }

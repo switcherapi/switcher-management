@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Strategy } from '../model/strategy';
-import { Config, ConfigRelay, ConfigRelayStatus } from '../model/config';
+import { Config, ConfigRelayStatus } from '../model/config';
 import { History } from '../model/history';
 
 @Injectable({

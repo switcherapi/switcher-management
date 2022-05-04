@@ -64,7 +64,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadComponents(): void {
+  private loadComponents(): void {
     this.loading = true;
     this.compService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
       .pipe(takeUntil(this.unsubscribe))
@@ -80,7 +80,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     });
   }
 
-  readPermissionToObject(): void {
+  private readPermissionToObject(): void {
     const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
     this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'COMPONENT', 'name', domain.name)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
@@ -176,13 +176,6 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     });
   }
 
-  confirmKeyCreated(apiKey: string, componentName: string): void {
-    this.dialog.open(ComponentEditDialog, {
-      width: '400px',
-      data: { apiKey, componentName }
-    });
-  }
-
   generateApiKey(selectedComponent: SwitcherComponent) {
     const modalConfirmation = this._modalService.open(NgbdModalConfirm);
     modalConfirmation.componentInstance.title = 'API Key';
@@ -202,6 +195,13 @@ export class ComponentsComponent implements OnInit, OnDestroy {
         });
       }
     })
+  }
+
+  private confirmKeyCreated(apiKey: string, componentName: string): void {
+    this.dialog.open(ComponentEditDialog, {
+      width: '400px',
+      data: { apiKey, componentName }
+    });
   }
 
 }
@@ -229,19 +229,7 @@ export class ComponentEditDialog {
     this.dialogRef.close();
   }
 
-  copyKey(val: string) {
-    let selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-
+  copyKey() {
     this.toastService.showSuccess(`API Key copied with success`);
   }
 

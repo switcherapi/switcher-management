@@ -48,24 +48,6 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadPendingInvitations(): void {
-    this.loading = true;
-    this.teamService.getPendingInvitations(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(invitations => {
-      this.loadDataSource(invitations);
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    })
-  }
-
-  loadDataSource(data: any[]): void {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-  }
-
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -95,6 +77,24 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
         team: this.team
       }
     });
+  }
+
+  private loadPendingInvitations(): void {
+    this.loading = true;
+    this.teamService.getPendingInvitations(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(invitations => {
+      this.loadDataSource(invitations);
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    })
+  }
+
+  private loadDataSource(data: any[]): void {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
 }

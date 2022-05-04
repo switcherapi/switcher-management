@@ -6,9 +6,6 @@ export class DomainRouteService {
   @Output() pathChange: EventEmitter<PathRoute> = new EventEmitter();
   @Output() documentChange: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(
-  ) { }
-
   updatePath(pathRoute: PathRoute, isRouteTo: boolean): void {
     if (pathRoute.type === Types.DOMAIN_TYPE) {
       localStorage.setItem(Types.SELECTED_DOMAIN, JSON.stringify(pathRoute));

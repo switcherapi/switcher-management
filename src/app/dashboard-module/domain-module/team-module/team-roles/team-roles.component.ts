@@ -57,27 +57,6 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadRoles(): void {
-    this.loading = true;
-    this.roleService.getRolesByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(roles => {
-      if (roles) {
-        this.roles = roles;
-        this.loadDataSource(this.roles);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    })
-  }
-
-  loadDataSource(data: any): void {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-  }
-
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -104,14 +83,16 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.roleService.updateRole(role._id, result.action, result.router, result.identifiedBy)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
-            if (role) {
-              this.roleService.updateRoleValues(role._id, result.values).pipe(takeUntil(this.unsubscribe)).subscribe(role => {
-                if (role) {
-                  this.loadRoles();
-                  this.toastService.showSuccess('Role updated with success');
-                }
-              });
+          .pipe(takeUntil(this.unsubscribe)).subscribe(roleUpdated => {
+            if (roleUpdated) {
+              this.roleService.updateRoleValues(roleUpdated._id, result.values)
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe(roleValues => {
+                  if (roleValues) {
+                    this.loadRoles();
+                    this.toastService.showSuccess('Role updated with success');
+                  }
+                });
             }
           });
       }
@@ -158,8 +139,8 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   updateStatus(role: Role, event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
     this.roleService.updateRole(role._id, role.action, role.router, role.identifiedBy, event.checked)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
-        if (role) {
+      .pipe(takeUntil(this.unsubscribe)).subscribe(roleUpdated => {
+        if (roleUpdated) {
           this.toastService.showSuccess('Role updated with success');
         }
       }, error => {
@@ -179,15 +160,12 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    let sortedData;
-
-    const data = this.roles.slice();
     if (!sort.active || sort.direction === '') {
-      sortedData = data;
       return;
     }
-
-    sortedData = data.sort((a, b) => {
+    
+    const data = this.roles.slice();
+    let sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'router': return this.compare(a.router, b.router, isAsc);
@@ -200,7 +178,28 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     this.loadDataSource(sortedData);
   }
 
-  compare(a: number | string, b: number | string, isAsc: boolean) {
+  private loadRoles(): void {
+    this.loading = true;
+    this.roleService.getRolesByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(roles => {
+      if (roles) {
+        this.roles = roles;
+        this.loadDataSource(this.roles);
+      }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    })
+  }
+
+  private loadDataSource(data: any): void {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  private compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
