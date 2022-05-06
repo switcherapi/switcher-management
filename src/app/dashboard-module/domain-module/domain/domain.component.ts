@@ -187,11 +187,11 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   hasSlackIntegration(): boolean {
-    return this.selectedDomain?.element.integrations?.slack && this.slackIntegration;
+    return this.slackIntegration && this.transferLabel.length > 0;
   }
 
-  hasSlackUrl(): boolean {
-    return environment.slackUrl != undefined;
+  hasSlackInstalled(): boolean {
+    return this.selectedDomain?.element.integrations?.slack;
   }
 
   showPath(type: string) {
