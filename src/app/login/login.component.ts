@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     loading = false;
     forgotPassword = false;
     returnUrl: string;
+    apiVersion: string;
     error: string = '';
     success: string = '';
     status: string = ''; 
@@ -66,12 +67,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        if (this.loginForm.invalid || this.forgotPassword) {
+        if (this.loginForm.invalid || this.forgotPassword)
             return;
-        }
 
+        this.status = '';
         this.loading = true;
-
         this.authService.login({
                 email: this.f.email.value,
                 password: this.f.password.value
@@ -131,7 +131,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     
     private isAlive(): void {
-        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, _error => {
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+            if (data) {
+                this.apiVersion = data.attributes.version;
+            }
+        }, error => {
+            ConsoleLogger.printError(error);
             this.status = 'Offline for Maintenance';
         });
     }
