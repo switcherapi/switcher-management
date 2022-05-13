@@ -6,6 +6,7 @@ import { AuthService } from '../auth/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { ConsoleLogger } from '../_helpers/console-logger';
 
 @Component({
     selector: 'app-signup',
@@ -19,6 +20,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     loading = false;
     waitingConfirmation = false;
     returnUrl: string;
+    apiVersion: string;
     error: string = '';
     recaptcha_token: string;
     status: string = '';
@@ -55,6 +57,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         if (this.loginForm.invalid)
             return;
         
+        this.status = '';
         this.loading = true;
         this.authService.signup({
                 name: this.f.name.value,
@@ -67,6 +70,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                 }
                 this.loading = false;
             }, error => {
+                ConsoleLogger.printError(error);
                 this.error = error;
                 this.loading = false;
             }
@@ -105,7 +109,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     private isAlive(): void {
-        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, _error => {
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+            if (data) {
+                this.apiVersion = data.attributes.version;
+            }
+        }, error => {
+            ConsoleLogger.printError(error);
             this.status = 'Offline for Maintenance';
         });
     }

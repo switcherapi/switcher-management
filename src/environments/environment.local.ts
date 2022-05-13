@@ -1,4 +1,5 @@
 export const environment = {
+  version: 'v1.2.3',
   production: true,
   recaptchaPublicKey: window["env"]["GOOGLE_RECAPTCHA"] || undefined,
   githubApiClientId: window["env"]["GITHUB_CLIENTID"] || undefined,
