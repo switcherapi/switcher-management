@@ -20,7 +20,8 @@ export class ConfigCreateComponent implements OnInit, OnDestroy {
 
   keyFormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(3)
+    Validators.minLength(3),
+    Validators.maxLength(30)
   ]);
 
   descFormControl = new FormControl('', [

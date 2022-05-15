@@ -12,13 +12,13 @@
         <div class="header-container">
             <div class="description">
                 <mat-form-field>
-                    <input #nameElement matInput cdkFocusInitial placeholder="Name" maxlength="20" style="color: black" [formControl]="nameFormControl" autocomplete="off">
+                    <input #nameElement matInput cdkFocusInitial placeholder="Name" maxlength="30" style="color: black" [formControl]="nameFormControl" autocomplete="off">
                     <mat-error *ngIf="nameFormControl.hasError('minlength')">
                         Name must contains at least 5 characters
-                      </mat-error>
-                      <mat-error *ngIf="nameFormControl.hasError('required')">
+                    </mat-error>
+                    <mat-error *ngIf="nameFormControl.hasError('required')">
                         Name is <strong>required</strong>
-                      </mat-error>
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field>
                     <textarea #descElement matInput placeholder="Description" [(ngModel)]="data.description" maxlength="256" style="color: black" rows="3">

@@ -18,7 +18,8 @@ export class DomainCreateComponent implements OnInit, OnDestroy {
 
   nameFormControl = new FormControl('', [
     Validators.required,
-    Validators.minLength(5)
+    Validators.minLength(5),
+    Validators.maxLength(30)
   ]);
 
   constructor(
