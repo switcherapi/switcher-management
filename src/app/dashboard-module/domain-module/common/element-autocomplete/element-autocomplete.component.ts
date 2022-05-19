@@ -6,8 +6,6 @@ import gql from 'graphql-tag';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Config } from 'src/app/model/config';
-import { Group } from 'src/app/model/group';
 
 @Component({
   selector: 'element-autocomplete',
@@ -70,48 +68,10 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     });
 
     this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-      if (result) {
-        let switchers: any, groups: any, components: any;
-        
-        if (this.groups) {
-          groups = result.data.domain.group.map(group => {
-            return {
-              type: 'Group',
-              _id: group._id,
-              description: group.description,
-              parent: '',
-              name: group.name
-            }
-          });
-          this.searchListItems.push(...groups);
-        }
-
-        if (this.switchers) {
-          switchers = result.data.domain.group.map(group => group.config.map(config => {
-            return {
-              type: 'Switcher',
-              _id: config._id,
-              description: config.description,
-              parent: group,
-              name: config.key
-            }
-          }));
-          this.searchListItems.push(...switchers.flat());
-        }
-
-        if (this.components) {
-          components = result.data.domain.group.map(
-            group => group.config.map(config => {
-              return {
-                type: 'Component',
-                _id: config._id,
-                description: config.components.toString() || '',
-                parent: group,
-                name: config.key
-              }
-          }).filter(comp => comp.description.length));
-          this.searchListItems.push(...components.flat());
-        }
+      if (result && result.data) {        
+        this.loadByGroup(result.data.domain.group);
+        this.loadBySwitcher(result.data.domain.group);
+        this.loadByComponent(result.data.domain.group);
       }
     }, error => {
       ConsoleLogger.printError(error);
@@ -121,6 +81,56 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       startWith(''),
       map(value => this.filter(value))
     );
+  }
+
+  private loadByComponent(groups: any) {
+    if (!this.components)
+      return;
+
+    let filtered = groups.map(
+      group => group.config.map(config => {
+        return {
+          type: 'Component',
+          _id: config._id,
+          description: config.components.toString() || '',
+          parent: group,
+          name: config.key
+        };
+      }).filter(comp => comp.description.length));
+    this.searchListItems.push(...filtered.flat());
+  }
+
+  private loadBySwitcher(groups: any) {
+    if (!this.switchers)
+      return;
+
+    let filtered = groups.map(
+      group => group.config.map(config => {
+        return {
+          type: 'Switcher',
+          _id: config._id,
+          description: config.description,
+          parent: group,
+          name: config.key
+        };
+      }));
+    this.searchListItems.push(...filtered.flat());
+  }
+
+  private loadByGroup(groups: any) {
+    if (!this.groups)
+      return;
+      
+    let filtered = groups.map(group => {
+      return {
+        type: 'Group',
+        _id: group._id,
+        description: group.description,
+        parent: '',
+        name: group.name
+      };
+    });
+    this.searchListItems.push(...filtered);
   }
 
   private filter(value: any): any[] {
@@ -140,7 +150,9 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
         prefix = filterValue[0];
         typePrefix = this.getPrefix(prefix);
         
-        if (item.name.toLowerCase().includes((filterValue as unknown as string).split(':')[1]) &&
+        const filterValuePrefix = (filterValue as unknown as string).split(':')[1];
+        if ((item.name.toLowerCase().includes(filterValuePrefix) || 
+            item.description.toLowerCase().includes(filterValuePrefix)) &&
             item.type.toLowerCase().includes(typePrefix))
           return item;
       } else 

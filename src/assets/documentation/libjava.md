@@ -22,25 +22,24 @@
 <dependency>
   <groupId>com.github.switcherapi</groupId>
   <artifactId>switcher-client</artifactId>
-  <version>1.3.4</version>
+  <version>${switcher-client.version}</version>
 </dependency>
 ```
 
 - Gradle
 
 ```
-implementation 'com.github.switcherapi:switcher-client:1.3.4'
+implementation 'com.github.switcherapi:switcher-client:[VERSION]'
 ```
 
 </br>
 
-##### - Context properties
-SwitcherContext implements all external configurations regarding API access and SDK behaviors.
-This new approach has eliminated unnecessary boilerplates and also has added a new layer for security purposes.
+##### - Client Context Properties
+Define a feature class that extends SwitcherContext. This implementation will centralize all features in a single place of your application and will have all the operations and features available to access the API remotely as well local snapshots.
 
-Similarly as frameworks like Spring Boot, Log4j, the SDK also requires creating an external properties file that will contain all the settings.
+The Client SDK configuration must be defined in a properties file that contains all settings for your application to start communicating with the API.
 
-1. Inside the resources folder, create a file called: switcherapi.properties.
+1. Inside a resources folder, create a file called: switcherapi.properties.
 
 **Required**
 
@@ -114,12 +113,14 @@ Strategy validators can be specified as:
 - Entry.REGEX: Regular expression validation
 
 
-3. **Strategy validation - chained call**
+3. **Strategy validation - Fluent style**
 
 Create a chained call using check functions.
 
 ```java
-MyAppFeatures.getSwitcher(FEATURE01)
+import static **.MyAppFeatures.*;
+
+getSwitcher(FEATURE01)
 	.checkValue("My value")
 	.checkNetwork("10.0.0.1")
 	.isItOn();
@@ -154,7 +155,8 @@ switcher.throttle(1000).isItOn();
 </br>
 
 ##### - Offline settings
-You can also force the Switcher library to work offline. In this case, the snapshot location must be set up and the context reinitialized.
+You can also force the Switcher library to work offline. In this case, the snapshot location must be set up, so the context can be re-built using the offline configuration.
+Or you can just configure the Client SDK using the properties file.
 
 ```java
 MyAppFeatures.getProperties().setOfflineMode(true);
@@ -171,13 +173,13 @@ Let the Switcher Client manage your application local snapshot file.
 
 In order to minimize roundtrips and unnecessary file parsing, try to use one of these features to improve the overall performance when accessing snapshots locally.
 
-1. This feature will update the in-memory Snapshot every time a modification on the file occurs.
+1. This feature will update the in-memory Snapshot every time the file is modified.
 ```java
 SwitcherFactory.watchSnapshot();
 SwitcherFactory.stopWatchingSnapshot();
 ```
 
-2. You can tell the Switcher Client to check if the snapshot file is updated. This will ensure that your application is running the most recent version of your cloud configuration.
+2. You can also perform snapshot update validation to verify if there are changes to be pulled. This will ensure that your application is running the most recent version of your remote configuration.
 ```java
 SwitcherFactory.validateSnapshot();
 ```
@@ -195,7 +197,7 @@ SwitcherExecutor.assume("FEATURE01", false);
 switcher.isItOn(); // 'false'
 
 SwitcherExecutor.forget("FEATURE01");
-switcher.isItOn(); // Now, it's going to return the result retrieved from the API or the Snaopshot file
+switcher.isItOn(); // Now, it's going to return the result retrieved from the API or the Snapshot file
 ```
 
 </br>
