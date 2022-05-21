@@ -4,176 +4,76 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-api/badge.svg)](https://snyk.io/test/github/switcherapi/switcher-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-### API configuration
+### Local setup
+1. npm install
+2. Add .env-cmdrc file into the project directory (use '.env-cmdrc-template')
+3. Replace values such as secret keys and URLs
 
-#### Signing up
-Signing up to Switcher API must be made via Switcher Management.
-<br />It can be done by using an email address or linking it to a GitHub or Bitbucket account.
+### Running Switcher API from Docker Composer manifest file
 
-- **Singing up via email** - /admin/signup [POST]
+This option leverages Switcher API and Switcher Management with minimum settings required to start using.
 
-```json
-{
-    "name": "[USER NAME]",
-    "email": "[EMAIL ADDRESS]",
-    "password": "[PASSWORD]",
-    "token": "[GOOGLE reCAPTCHA TOKEN]"
-}
-```
+1. Modify the minimal configuration file "config/.env.dev":
 
-- **Singing up via GitHub** - /admin/github/auth?code= [POST]
-  <br />Code must be set by the API service provider.
+Change the values for:
 
-- **Singing up via Bitbucket** - /admin/bitbucket/auth?code= [POST]
-  <br />Code must be set by the API service provider.
+- JWT_SECRET: With your secure private key
+- SWITCHERAPI_URL: The Switcher API URL that Switcher Management will use internally
+- SM_IP: IP/DNS used by Switcher Management internal redirects
 
-#### Domain
-
-- **New domain** - /domain/create [POST]
-  <br />The API Key will be generated after creating the domain.
-
-```json
-{
-    "name": "[DOMAIN NAME]",
-    "description": "[DOMAIN DESCRIPTION]"
-}
-```
-
-#### Component
-
-- **Create a component** - /component/create [POST]
-
-```json
-{
-    "name": "[COMPONENT NAME]",
-    "description": "[COMPONENT DESCRIPTION]",
-    "domain": "[DOMAIN ID]"
-}
-```
-
-- **Generating a new API Key** - /component/generateApiKey/COMPONENT_ID [GET]
-  <br />This operation cannot be undone.
-
-#### Group
-
-- **New Group** - /groupconfig/create [POST]
-
-```json
-{
-    "name": "[GROUP NAME]",
-    "description": "[GROUP DESCRIPTION]",
-    "domain": "[DOMAIN ID]"
-}
-```
-
-#### Switcher
-
-- **New Switcher** - /config/create [POST]
-
-```json
-{
-    "key": "[SWITCHER KEY]",
-    "description": "[SWITCHER DESCRIPTION]",
-    "group": "[GROUP ID]"
-}
-```
-
-#### Strategy
-
-- **New Strategy** - /configstrategy/create [POST]
-
-```json
-{
-    "description": "[STRATEGY DESCRIPTION]",
-    "strategy": "[STRATEGY TYPE]",
-    "values": ["ARRAY OF VALUES"],
-    "operation": "[SRATEGY OPERATION]",
-    "config": "[CONFIG ID]",
-    "env": "default"
-}
-```
-
-*env can be replaced by the environment your application is currently running.*
-
-  - **Strategy types**
-    - VALUE_VALIDATION
-
-      Plain text validation. No format required.
-
-    - NUMERIC_VALIDATION
-
-      Numeric type validation. It accepts positive/negative and decimal values.
-
-    - NETWORK_VALIDATION
-
-      This validation accept CIDR (e.g. 10.0.0.0/24) or IPv4 (e.g. 10.0.0.1) formats.
-
-    - TIME_VALIDATION
-
-      This validation accept only HH:mm format input.
-
-    - DATE_VALIDATION
-
-      Date validation accept both date and time input (e.g. YYYY-MM-DD or YYYY-MM-DDTHH:mm) formats.
-
-    - REGEX_VALIDATION
-
-      Regular expression based validation. No format required.
-
-  - **Strategy operations**
-    - EXIST / NOT_EXIST
-    - EQUAL / NOT_EQUAL
-    - GREATER / LOWER / BETWEEN
-
-* * *
-
-### API usage
-To use the API, each component must authenticate before executing the API criteria evaluation.
-
-- **Auth** - /criteria/auth [POST]
-<br />The header must contain the following:
+2. Run the command: 
 
 ```
-'headers': {
-    'switcher-api-key': '[API_KEY]'
-}
-```
-The body must contain the exact registered domain, component, and environment name.
-
-```json
-{
-   "domain": "[DOMAIN NAME]",
-   "component": "[COMPONENT NAME]",
-   "environment": "default"
-}
+docker-compose --env-file ./config/.env.dev up -d
 ```
 
-- **Executing** - /criteria?key=SWITCHER_KEY [POST]
-<br />The header must contain the authorization token provided by the criteria/auth endpoint.
+### Quick start
 
-```
-Bearer Token: [TOKEN]
-```
+Initialize Swagger UI by accessing the URL: http://localhost:3000/api-docs
+<br>
+Or import either the OpenAPI docs from "http://localhost:3000/swagger.json" or Postman Collection from "requests/Switcher API*"
 
-**Optional parameters**
+#### API configuration
+##### Signing up
+Signing up to Switcher API using email/password or linking it to a GitHub or Bitbucket account.
 
-- showReason [true/false]: returns the detailed criteria result.
-- showStrategy [true/false]: returns the configured strategy.
-- bypassMetric [true/false]: bypass registering the execution result.
+- **Singing up via email** - Admin: /admin/signup [POST]
+- **Singing up via GitHub** - Admin: /admin/github/auth?code= [POST]
+- **Singing up via BitBucket** - Admin: /admin/bitbucket/auth?code= [POST]
+- **Access confirmation** - Admin: /admin/signup/authorization?code= [POST]
 
-**REST - Strategy input**
+##### Domain
+Domains are responsible for centralizing all settings and configurations. It is equivalent to an organization that can manage multiple projects, users, and environments.
 
-Multiple input can be provided to the API. In case the registered Switcher does not contain any configured strategy, the input sent is going to be ignored.
+- **New domain** - Domain: /domain/create [POST]
 
-```json
-{
-  "entry": [
-    {
-      "strategy": "[STRATEGY TYPE]",
-      "input": "[VALUE]"
-    }]
-}
-```
+##### Component
+Components are applications that are using Switcher API. Each component has its own access token and need to be linked to Switchers.
+
+- **Create a component** - Component: /component/create [POST]
+- **Generating a new API Key** - Component: /component/generateApiKey [GET]
+
+##### Group
+Groups are used to organize Switchers that share the same scope.
+
+- **New Group** - GroupConfig: /groupconfig/create [POST]
+
+##### Switcher
+Switchers are the main entities to control features.
+
+- **New Switcher** - Config: /config/create [POST]
+
+##### Strategy
+Customize the behavior of the Switcher by including strategies rules.
+
+- **New Strategy** - ConfigStrategy: /configstrategy/create [POST]
+
+#### API usage
+In order to use Switcher API, you need authenticate an component before using it.
+See our SDKs to integrate Switcher API with your application.
+
+- **Auth** - Client API: /criteria/auth [POST]
+- **Executing** -  Client API: /criteria?key=SWITCHER_KEY [POST]
 
 **GraphQL - Strategy input** - /graphql [POST]
 
