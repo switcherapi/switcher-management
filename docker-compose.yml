@@ -19,4 +19,4 @@ services:
       # - GOOGLE_RECAPTCHA=
       # - GITHUB_CLIENTID=
       # - BITBUCKET_CLIENTID=
-      # - SWITCHERSLACKAPP_URL=
+      # - SWITCHERSLACKAPP_URL=[ENDPOINT]/slack/install
