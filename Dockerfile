@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM node:16.13-alpine3.15 as builder
+FROM node:gallium-alpine as builder
 
 WORKDIR /usr/local/app
 
@@ -16,7 +16,7 @@ RUN npm run build:local
 RUN npm prune --production
 
 # ---------- Release ----------
-FROM nginx:1.21.1-alpine
+FROM nginx:1.22.0-alpine
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf
