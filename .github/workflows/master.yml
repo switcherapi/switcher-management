@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-lint:
-    name: Lint
+    name: Build & Lint
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     concurrency: ci-${{ github.ref }}
@@ -23,14 +23,14 @@ jobs:
           node-version: 16.x
 
       - name: Build & Lint
-        run: npm ci && npm run lint
+        run: npm install && npm run lint
 
   deploy:
     name: Deploy
     needs: [ build-lint ]
     runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/master'
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
