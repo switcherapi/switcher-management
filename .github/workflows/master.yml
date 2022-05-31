@@ -7,8 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build-lint:
-    name: Build & Lint
+  build-lint-deploy:
+    name: Build - Lint - Deploy
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     concurrency: ci-${{ github.ref }}
@@ -26,33 +26,10 @@ jobs:
         run: |
           npm install
           npm run lint
-          npm run ng -- build --configuration production --base-href=/switcher-management/
-
-      - name: Archive build
-        if: success()
-        uses: actions/upload-artifact@v1
-        with:
-          name: deploy_dist
-          path: dist
-
-  deploy:
-    name: Deploy
-    needs: [ build-lint ]
-    runs-on: ubuntu-latest
-    if: success() && github.ref == 'refs/heads/master'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Download build
-        uses: actions/download-artifact@v1
-        with:
-          name: deploy_dist
 
       - name: Deploy
-        if: success()
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
-        with:
-          branch: gh-pages
-          folder: deploy_dist/switcher-management
+        if: success() && github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm run ng -- deploy --base-href=/switcher-management/ --name="switcherapi" --email="switcher.project@gmail.com" --no-silent
