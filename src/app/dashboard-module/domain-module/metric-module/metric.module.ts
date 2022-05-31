@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MetricComponent } from './metric/metric.component';
-import { MetricStatisticsComponent, SwitcherDataStatsDialog } from './metric-statistics/metric-statistics.component';
+import { MetricStatisticsComponent, SwitcherDataStatsDialogComponent } from './metric-statistics/metric-statistics.component';
 import { MetricDataComponent } from './metric-data/metric-data.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,7 +17,7 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     MetricComponent, 
     MetricStatisticsComponent, 
     MetricDataComponent,
-    SwitcherDataStatsDialog,
+    SwitcherDataStatsDialogComponent,
     MetricFilterComponent,
     ElementAutocompleteComponent
   ],
@@ -28,7 +28,7 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     ElementAutocompleteComponent
   ],
   entryComponents: [
-    SwitcherDataStatsDialog
+    SwitcherDataStatsDialogComponent
   ],
   imports: [
     MetricRoutingModule,

@@ -7,7 +7,7 @@ import { EnvironmentConfigComponent } from '../../environment-config/environment
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -210,7 +210,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   delete() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Switcher removal';
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this switcher?';
     modalConfirmation.result.then((result) => {

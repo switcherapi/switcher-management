@@ -7,7 +7,7 @@ import { EnvironmentConfigComponent } from '../environment-config/environment-co
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
@@ -84,7 +84,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   leaveDomain() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Quit domain';
     modalConfirmation.componentInstance.question = 'Are you sure you want to leave this domain?';
     modalConfirmation.result.then((result) => {
@@ -155,7 +155,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   delete() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Domain removal';
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this domain?';
     modalConfirmation.result.then((result) => {

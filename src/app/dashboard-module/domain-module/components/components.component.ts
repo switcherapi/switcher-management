@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntil } from 'rxjs/operators';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -124,7 +124,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   removeComponent(selectedEnvironment: SwitcherComponent) {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Component Removal';
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${selectedEnvironment.name}?`;
     modalConfirmation.result.then((result) => {
@@ -148,7 +148,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   editComponent(selectedComponent: SwitcherComponent): void {
-    const dialogRef = this.dialog.open(ComponentEditDialog, {
+    const dialogRef = this.dialog.open(ComponentEditDialogComponent, {
       width: '350px',
       data: {
         name: selectedComponent.name,
@@ -177,7 +177,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   generateApiKey(selectedComponent: SwitcherComponent) {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'API Key';
     modalConfirmation.componentInstance.question = 'Are you sure you want to generate a new key for this component?';
     modalConfirmation.result.then((result) => {
@@ -198,7 +198,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   private confirmKeyCreated(apiKey: string, componentName: string): void {
-    this.dialog.open(ComponentEditDialog, {
+    this.dialog.open(ComponentEditDialogComponent, {
       width: '400px',
       data: { apiKey, componentName }
     });
@@ -214,10 +214,10 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     './components.component.css'
   ]
 })
-export class ComponentEditDialog {
+export class ComponentEditDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<ComponentEditDialog>,
+    public dialogRef: MatDialogRef<ComponentEditDialogComponent>,
     private toastService: ToastService,
     @Inject(MAT_DIALOG_DATA) public data: SwitcherComponent) { }
 

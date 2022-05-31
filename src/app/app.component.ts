@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 import { PwaService } from './services/pwa.service';
@@ -8,11 +8,11 @@ import { PwaService } from './services/pwa.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
-  currentToken: String;
-  loggedUserName: String;
-  profileAvatar: String;
+  currentToken: string;
+  loggedUserName: string;
+  profileAvatar: string;
 
   constructor(
       private router: Router,
@@ -23,7 +23,7 @@ export class AppComponent implements OnDestroy {
       this.currentToken = x;
     });
 
-    this.authService.currentUser.subscribe(y => {
+    this.authService.currentUser.subscribe(_ => {
       this.loggedUserName = this.authService.getUserInfo('name');
       const avatar = this.authService.getUserInfo('avatar');
       this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
@@ -32,7 +32,7 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit() {
     this.pwaService.checkForUpdate();
-    this.authService.logoff.subscribe((currentToken: String) => {
+    this.authService.logoff.subscribe((currentToken: string) => {
       this.currentToken = currentToken;
     });
   }

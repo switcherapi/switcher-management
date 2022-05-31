@@ -6,7 +6,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -281,7 +281,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   resetHistory() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Change Log Reset';
     modalConfirmation.componentInstance.question = 'Are you sure you want to reset the change log?';
     modalConfirmation.result.then((result) => {

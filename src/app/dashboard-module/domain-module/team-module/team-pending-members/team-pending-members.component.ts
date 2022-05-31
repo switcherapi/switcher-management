@@ -7,7 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { TeamInviteDialog } from '../team-invite-dialog/team-invite-dialog.component';
+import { TeamInviteDialogComponent } from '../team-invite-dialog/team-invite-dialog.component';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
 
@@ -68,7 +68,7 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   }
 
   onGetInviteRequest(invite: any): void {
-    this.dialog.open(TeamInviteDialog, {
+    this.dialog.open(TeamInviteDialogComponent, {
       width: '450px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {

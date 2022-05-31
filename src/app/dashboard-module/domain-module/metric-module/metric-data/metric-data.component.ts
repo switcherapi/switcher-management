@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { trigger, state, style } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MetricComponent } from '../metric/metric.component';
@@ -90,7 +90,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   resetSwitcherMetrics(): void {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Metric Reset';
     modalConfirmation.componentInstance.question = `Are you sure you want to reset metrics for ${this.switcher}?`;
     modalConfirmation.result.then((result) => {

@@ -1,18 +1,18 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToastsContainer } from '../toasts-container.component';
+import { ToastsContainerComponent } from '../toasts-container.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
-    ToastsContainer
+    ToastsContainerComponent
   ],
   imports: [
     CommonModule,
     NgbModule
   ],
   exports: [
-    ToastsContainer
+    ToastsContainerComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

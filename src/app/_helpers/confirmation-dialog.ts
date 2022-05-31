@@ -20,7 +20,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       </div>
       `
   })
-  export class NgbdModalConfirm {
+  export class NgbdModalConfirmComponent {
     @Input() title: string;
     @Input() question: string;
   

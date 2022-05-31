@@ -10,11 +10,11 @@ import { environment } from 'src/environments/environment';
       '../../common/css/create.component.css',
       '../team-members/team-members.component.css']
   })
-  export class TeamInviteDialog {
+  export class TeamInviteDialogComponent {
   
     constructor(
       private toastService: ToastService,
-      public dialogRef: MatDialogRef<TeamInviteDialog>,
+      public dialogRef: MatDialogRef<TeamInviteDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) { }
   
     onCancel() {
