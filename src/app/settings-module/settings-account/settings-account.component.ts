@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DomainService } from 'src/app/services/domain.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { Router } from '@angular/router';
 
 @Component({
@@ -92,7 +92,7 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Deleting account';
     modalConfirmation.componentInstance.question = `Are you sure you want to delete this account?`;
     modalConfirmation.result.then((result) => {

@@ -31,7 +31,7 @@
                     <fieldset>
                         <legend style="font-size: inherit; color: #fb5454;">Delete account</legend>
                         <p *ngIf="domains > 0">This account has {{ domains }} Domain(s) that must be either deleted or transfered to another account.</p>
-                        <p *ngIf="domains == 0">
+                        <p *ngIf="domains === 0">
                             <strong>Important:</strong> This process is not reversible. 
                             Once you delete your account you will lose all of your data, and the account will be terminated.
                         </p>

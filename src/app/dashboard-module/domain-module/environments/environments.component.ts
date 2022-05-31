@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Environment } from 'src/app/model/environment';
@@ -83,7 +83,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   }
 
   removeEnvironment(selectedEnvironment: Environment) {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Environment Removal';
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${selectedEnvironment.name}?`;
     modalConfirmation.result.then((result) => {
@@ -106,7 +106,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   }
 
   resetEnvironment(selectedEnvironment: Environment) {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Environment Reset';
     modalConfirmation.componentInstance.question = `Are you sure you want to reset ${selectedEnvironment.name}?
       Strategies are going to be deleted for this environment.`;

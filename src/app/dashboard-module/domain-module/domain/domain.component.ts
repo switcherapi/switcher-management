@@ -9,7 +9,7 @@ import { PathRoute, Types } from 'src/app/model/path-route';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { GroupService } from 'src/app/services/group.service';
-import { DomainTransferDialog } from './domain-transfer/domain-transfer-dialog.component';
+import { DomainTransferDialogComponent } from './domain-transfer/domain-transfer-dialog.component';
 import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -81,7 +81,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       if (domain) {
         if (this.transferLabel === 'Transfer Domain') {
           this.transferLabel = 'Cancel Transfer';
-          this.dialog.open(DomainTransferDialog, {
+          this.dialog.open(DomainTransferDialogComponent, {
             width: '450px',
             minWidth: window.innerWidth < 450 ? '95vw' : '',
             data: {

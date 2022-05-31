@@ -10,11 +10,11 @@ import { environment } from 'src/environments/environment';
       '../../common/css/create.component.css',
       './domain-transfer.component.css']
   })
-  export class DomainTransferDialog {
+  export class DomainTransferDialogComponent {
   
     constructor(
       private toastService: ToastService,
-      public dialogRef: MatDialogRef<DomainTransferDialog>,
+      public dialogRef: MatDialogRef<DomainTransferDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) { }
   
     onCancel() {

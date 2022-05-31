@@ -68,10 +68,6 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     });
   }
 
-  ngAfterViewInit() {
-    super.ngAfterViewInit();
-  }
-
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();

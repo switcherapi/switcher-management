@@ -1,6 +1,6 @@
 <div *ngIf="!loading" #tabmetrics id="tabmetrics_id">
     <mat-tab-group dynamicHeight>
-        <mat-tab *ngIf="switcher != null" label="Switchers Date/Time View">
+        <mat-tab *ngIf="switcher" label="Switchers Date/Time View">
             <div style="display: block">
                 <canvas baseChart
                     [chartType]="getSwitcherDateTimeGroupStats().chartType"
@@ -47,7 +47,7 @@
                 </canvas>
             </div>
         </mat-tab>
-        <mat-tab *ngIf="switcher != null" label="Reasons View">
+        <mat-tab *ngIf="switcher" label="Reasons View">
             <div style="display: block">
                 <canvas baseChart
 					[data]="getReasonsStats().chartData"

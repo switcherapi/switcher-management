@@ -5,7 +5,7 @@ import { DomainComponent } from './domain/domain.component';
 import { DomainRoutingModule } from './domain.routing';
 import { DomainDetailComponent } from './domain-detail/domain-detail.component';
 import { ChangelogComponent } from './changelog/changelog.component';
-import { ComponentsComponent, ComponentEditDialog } from './components/components.component';
+import { ComponentsComponent, ComponentEditDialogComponent } from './components/components.component';
 import { EnvironmentsComponent } from './environments/environments.component';
 import { GroupListComponent } from './group/group-list/group-list.component';
 import { GroupPreviewComponent } from './group/group-preview/group-preview.component';
@@ -16,23 +16,23 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ConfigListComponent } from './config/config-list/config-list.component';
 import { ConfigPreviewComponent } from './config/config-preview/config-preview.component';
 import { ConfigDetailComponent } from './config/config-detail/config-detail.component';
-import { StrategyDetailComponent, ChangeLogDialog } from './config/strategy-detail/strategy-detail.component';
+import { StrategyDetailComponent, ChangeLogDialogComponent } from './config/strategy-detail/strategy-detail.component';
 import { StrategyListComponent } from './config/strategy-list/strategy-list.component';
 import { EnvironmentConfigComponent } from './environment-config/environment-config.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GroupCreateComponent } from './group/group-create/group-create.component';
 import { ConfigCreateComponent } from './config/config-create/config-create.component';
 import { ToasterModule } from 'src/app/_helpers/toaster/toaster.module';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
 import { ChartsModule } from 'ng2-charts';
 import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
-import { TeamInviteDialog } from './team-module/team-invite-dialog/team-invite-dialog.component';
+import { TeamInviteDialogComponent } from './team-module/team-invite-dialog/team-invite-dialog.component';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { PathRoute } from 'src/app/model/path-route';
-import { DomainTransferDialog } from './domain/domain-transfer/domain-transfer-dialog.component';
+import { DomainTransferDialogComponent } from './domain/domain-transfer/domain-transfer-dialog.component';
 import { MetricModule } from './metric-module/metric.module';
 import { SpecialCharacterDirective } from './common/special.char.directive';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
@@ -58,14 +58,14 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
     EnvironmentConfigComponent,
     GroupCreateComponent,
     ConfigCreateComponent,
-    NgbdModalConfirm,
+    NgbdModalConfirmComponent,
     StrategyCreateComponent,
     StrategyCloneComponent,
-    ComponentEditDialog,
-    TeamInviteDialog,
-    ChangeLogDialog,
+    ComponentEditDialogComponent,
+    TeamInviteDialogComponent,
+    ChangeLogDialogComponent,
     DomainSnapshotComponent,
-    DomainTransferDialog,
+    DomainTransferDialogComponent,
     SpecialCharacterDirective,
     ExtSlackComponent
   ],
@@ -73,13 +73,13 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
     GroupCreateComponent,
     ConfigCreateComponent,
     StrategyCreateComponent,
-    NgbdModalConfirm,
+    NgbdModalConfirmComponent,
     StrategyCloneComponent,
-    ComponentEditDialog,
-    TeamInviteDialog,
-    ChangeLogDialog,
+    ComponentEditDialogComponent,
+    TeamInviteDialogComponent,
+    ChangeLogDialogComponent,
     DomainSnapshotComponent,
-    DomainTransferDialog
+    DomainTransferDialogComponent
   ],
   imports: [
     FormsModule,

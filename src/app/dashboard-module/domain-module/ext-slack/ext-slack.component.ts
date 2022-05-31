@@ -9,7 +9,7 @@ import { Types } from 'src/app/model/path-route';
 import { FEATURES, Slack } from 'src/app/model/slack';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { SlackService } from 'src/app/services/slack.service';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { ToastService } from 'src/app/_helpers/toast.service';
 
@@ -59,7 +59,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   }
 
   onUninstall(): void {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Slack Uninstall';
     modalConfirmation.componentInstance.question = 'Are you sure you want to uninstall Slack?';
     modalConfirmation.result.then((result) => {
@@ -79,7 +79,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   }
 
   onResetTicketsHistory(): void {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Reset Ticket History';
     modalConfirmation.componentInstance.question = 'Are you sure you want to delete all tickets?';
     modalConfirmation.result.then((result) => {

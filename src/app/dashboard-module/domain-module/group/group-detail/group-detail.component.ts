@@ -7,7 +7,7 @@ import { EnvironmentConfigComponent } from '../../environment-config/environment
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
@@ -153,7 +153,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   delete() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Group removal';
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this group?';
     modalConfirmation.result.then((result) => {

@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalConfirm } from 'src/app/_helpers/confirmation-dialog';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyListComponent } from '../strategy-list/strategy-list.component';
 import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -136,7 +136,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   delete() {
-    const modalConfirmation = this._modalService.open(NgbdModalConfirm);
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Strategy removal';
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this strategy?';
     modalConfirmation.result.then((result) => {
@@ -236,7 +236,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   showChangeLog() {
-    this.dialog.open(ChangeLogDialog, {
+    this.dialog.open(ChangeLogDialogComponent, {
       width: '1200px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
@@ -354,10 +354,10 @@ function valueInputValidator(format: string): ValidatorFn {
     }
   `]
 })
-export class ChangeLogDialog {
+export class ChangeLogDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<ChangeLogDialog>,
+    public dialogRef: MatDialogRef<ChangeLogDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Strategy) { }
 
   onClose() {

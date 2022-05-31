@@ -320,7 +320,7 @@ export class SwitcherDateTimeGroupedTab {
   expandSelectedData(index: number) {
     this.parent.parent.loadDataMetrics(1, this.parent.environment, this.chartLabels[index], this.chartLabels[index]).subscribe(metrics => {
       if (metrics) {
-        this.parent.dialog.open(SwitcherDataStatsDialog, {
+        this.parent.dialog.open(SwitcherDataStatsDialogComponent, {
           width: '1200px',
           minWidth: window.innerWidth < 450 ? '95vw' : '',
           data: {
@@ -373,10 +373,10 @@ export class SwitcherDateTimeGroupedTab {
     }
   `]
 })
-export class SwitcherDataStatsDialog {
+export class SwitcherDataStatsDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<SwitcherDataStatsDialog>,
+    public dialogRef: MatDialogRef<SwitcherDataStatsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onClose() {

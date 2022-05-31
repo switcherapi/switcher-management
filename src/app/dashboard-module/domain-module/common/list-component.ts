@@ -1,4 +1,4 @@
-import { ViewChildren, QueryList, Output, EventEmitter, Directive } from '@angular/core';
+import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { MatSelect } from '@angular/material/select';
@@ -9,7 +9,7 @@ import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
 
 @Directive()
-export class ListComponent {
+export class ListComponent implements AfterViewInit {
     @ViewChildren("envSelectionChange")
     public component: QueryList<MatSelect>
     private envSelectionChange: MatSelect;
