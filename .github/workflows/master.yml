@@ -23,7 +23,17 @@ jobs:
           node-version: 16.x
 
       - name: Build & Lint
-        run: npm install && npm run lint
+        run: |
+          npm install
+          npm run lint
+          npm run build --prod
+
+      - name: Archive build
+        if: success()
+        uses: actions/upload-artifact@v1
+        with:
+          name: deploy_dist
+          path: dist
 
   deploy:
     name: Deploy
