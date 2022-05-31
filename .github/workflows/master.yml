@@ -54,6 +54,5 @@ jobs:
         if: success()
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: deploy_dist/swicther-management
+          folder: deploy_dist
