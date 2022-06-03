@@ -6,7 +6,7 @@
 
 <div align="center">
 
-[![Master CI](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml/badge.svg)](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml)
+[![Master CI](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml/badge.svg?branch=master)](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-management/badge.svg?targetFile=package.json)](https://snyk.io/test/github/switcherapi/switcher-management?targetFile=package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
