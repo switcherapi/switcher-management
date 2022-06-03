@@ -1,7 +1,19 @@
-[![Master Branch](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml/badge.svg)](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml)
+***
+
+<div align="center">
+<b>Switcher Management</b><br>
+</div>
+
+<div align="center">
+
+[![Master CI](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml/badge.svg)](https://github.com/switcherapi/switcher-management/actions/workflows/master.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-management/badge.svg?targetFile=package.json)](https://snyk.io/test/github/switcherapi/switcher-management?targetFile=package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
+
+</div>
+
+***
 
 ![Switcher API Management: Cloud-based Feature Flag API](https://github.com/switcherapi/switcherapi-assets/blob/master/logo/switcherapi_management_grey.png)
 
@@ -13,10 +25,10 @@
  - **Java SDK**: (https://github.com/switcherapi/switcher-client)
 
 # Demo environment
-Join us on Slack to get your access to this demo environment. [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
- - https://switcherapi.github.io/switcher-management/
+[Switcher Management](https://switcherapi.github.io/switcher-management)
 
+Join us on Slack if you have questions about your account. [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
 ## Donation
 Donations for cookies and pizza are extremely welcomed.
