@@ -65,7 +65,7 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
     this.routerFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.router = value;
       this.roleService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(roleValue => {
-        if (roleValue) {
+        if (roleValue && roleValue.key) {
           this.key = roleValue.key;
           this.validKeyOnly = true;
         }
