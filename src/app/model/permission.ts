@@ -1,4 +1,4 @@
-export class Role {
+export class Permission {
   _id: string;
   action: string;
   active: boolean;

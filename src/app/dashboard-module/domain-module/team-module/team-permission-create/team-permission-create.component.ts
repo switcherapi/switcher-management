@@ -6,19 +6,19 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSelectionList } from '@angular/material/list';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RoleService } from 'src/app/services/role.service';
-import { Role } from 'src/app/model/role';
+import { PermissionService } from 'src/app/services/permission.service';
+import { Permission } from 'src/app/model/permission';
 
 @Component({
-  selector: 'app-team-role-create',
-  templateUrl: './team-role-create.component.html',
+  selector: 'app-team-permission-create',
+  templateUrl: './team-permission-create.component.html',
   styleUrls: [
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
-    './team-role-create.component.css'
+    './team-permission-create.component.css'
   ]
 })
-export class TeamRoleCreateComponent implements OnInit, OnDestroy {
+export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   routers: string[] = [];
@@ -46,9 +46,9 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
   private componentValueSelection: MatSelectionList;
 
   constructor(
-    public dialogRef: MatDialogRef<TeamRoleCreateComponent>,
+    public dialogRef: MatDialogRef<TeamPermissionCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private roleService: RoleService,
+    private permissionService: PermissionService,
     private formBuilder: FormBuilder,
     private toastService: ToastService
   ) { }
@@ -64,9 +64,9 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
 
     this.routerFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.router = value;
-      this.roleService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(roleValue => {
-        if (roleValue && roleValue.key) {
-          this.key = roleValue.key;
+      this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(permissionValue => {
+        if (permissionValue && permissionValue.key) {
+          this.key = permissionValue.key;
           this.validKeyOnly = true;
         }
       }, error => {
@@ -116,7 +116,7 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
   }
 
   private loadRouter(): void {
-    this.roleService.getRoleRouters().pipe(takeUntil(this.unsubscribe)).subscribe(routers => {
+    this.permissionService.getPermissionRouters().pipe(takeUntil(this.unsubscribe)).subscribe(routers => {
       if (routers) {
         this.routers = routers.routersAvailable;
         if (this.data.router) {
@@ -129,7 +129,7 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
   }
 
   private loadActions(): void {
-    this.roleService.getRoleActions().pipe(takeUntil(this.unsubscribe)).subscribe(actions => {
+    this.permissionService.getPermissionActions().pipe(takeUntil(this.unsubscribe)).subscribe(actions => {
       if (actions) {
         this.actions = actions.actionsAvailable;
         if (this.data.action) {
@@ -143,16 +143,16 @@ export class TeamRoleCreateComponent implements OnInit, OnDestroy {
 
   private validateData(data: any): boolean {
     // When editing
-    if (this.data.role) {
+    if (this.data.permission) {
       return true;
     }
 
-    const foundRole = this.data.roles.filter((role: Role) => 
-      role.router === data.router || role.router === 'ALL' || data.router === 'ALL');
-    const foundRoleAction = foundRole.filter((role: Role) => role.action === data.action || role.action === 'ALL');
+    const foundPermission = this.data.permissions.filter((permission: Permission) => 
+    permission.router === data.router || permission.router === 'ALL' || permission.router === 'ALL');
+    const foundPermissionAction = foundPermission.filter((permission: Permission) => permission.action === data.action || permission.action === 'ALL');
 
-    if (foundRoleAction.length) {
-      this.toastService.showError(`This role has conflicted with an existing role: ${foundRoleAction[0].router} - ${foundRoleAction[0].action}`);
+    if (foundPermissionAction.length) {
+      this.toastService.showError(`This permission has conflicted with an existing permission: ${foundPermissionAction[0].router} - ${foundPermissionAction[0].action}`);
       return false;
     }
 

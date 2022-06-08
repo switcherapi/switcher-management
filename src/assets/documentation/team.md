@@ -3,7 +3,7 @@
 
 Collaborate creating teams to work upon the same domain. With Teams, you can invite people to have access to settings of your domain, plus managing their access to every aspect of it.
 
-Teams are composed of Members and Roles. In addition to roles that will group all permissions granted to that team, it is also possible to activate and deactivate a team at any time.
+Teams are composed of Members and Permissions. In addition to permissions that will group all permissions granted to that team, it is also possible to activate and deactivate a team at any time.
 
 Get extra help while keeping control of who can create, read, update, or delete inside your domain.
 
@@ -43,13 +43,13 @@ After creating a team, you can start setting up the new team either way, invitin
 
 </br></br>
 
-##### 3. Setting up roles
+##### 3. Setting up permissions
 * * *
 
   By clicking on the Create button, you can select one of the elements available in addition to the permission that will be granted to.
-  </br>The new role is a combination of rules that can also be configured by specifing one or more component names.
+  </br>The new permission is a combination of rules that can also be configured by specifing one or more component names.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams_roles_create.jpg" class="image-style shadow" alt=""/><p>
+  <img src="[$ASSETS_LOCATION]/documentation/images/teams/teams_permissions_create.jpg" class="image-style shadow" alt=""/><p>
 
 The available components are:
 - **All**: The permission will applies to all components.
