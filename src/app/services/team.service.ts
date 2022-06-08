@@ -75,12 +75,12 @@ export class TeamService extends ApiService {
     return this.http.patch<Team>(`${environment.apiUrl}/team/member/remove/${id}`, body).pipe(catchError(super.handleError));
   }
 
-  public removeTeamRole(id: string, role: string): Observable<Team> {
+  public removeTeamPermission(id: string, permission: string): Observable<Team> {
     let body = {
-      role
+      permission
     };
 
-    return this.http.patch<Team>(`${environment.apiUrl}/team/role/remove/${id}`, body).pipe(catchError(super.handleError));
+    return this.http.patch<Team>(`${environment.apiUrl}/team/permission/remove/${id}`, body).pipe(catchError(super.handleError));
   }
 
   public deleteTeam(id: string): Observable<Team> {

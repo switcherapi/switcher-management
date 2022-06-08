@@ -1,6 +1,6 @@
 <h4 mat-dialog-title>
     <mat-toolbar role="toolbar" class="dialog-header">
-        <span>New Role</span>
+        <span>New Permission</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
             <mat-icon mat-list-icon>close</mat-icon>
@@ -15,14 +15,14 @@
                     <div>
                         <mat-form-field class="strategy-style">
                             <mat-select placeholder="Component" [formControl]="routerFormControl">
-                                <mat-option *ngFor="let router of routers" [value]="router" [disabled]="data.role">
+                                <mat-option *ngFor="let router of routers" [value]="router" [disabled]="data.permission">
                                     {{router}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field class="strategy-style">
                             <mat-select placeholder="Permission" [formControl]="actionFormControl">
-                                <mat-option *ngFor="let action of actions" [value]="action" [disabled]="data.role">
+                                <mat-option *ngFor="let action of actions" [value]="action" [disabled]="data.permission">
                                     {{action}}
                                 </mat-option>
                             </mat-select>

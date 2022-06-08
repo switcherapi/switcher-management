@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
-import { TeamRoleCreateComponent } from '../team-role-create/team-role-create.component';
+import { TeamPermissionCreateComponent } from '../team-permission-create/team-permission-create.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -11,19 +11,19 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Team } from 'src/app/model/team';
-import { Role } from 'src/app/model/role';
-import { RoleService } from 'src/app/services/role.service';
+import { Permission } from 'src/app/model/permission';
+import { PermissionService } from 'src/app/services/permission.service';
 
 @Component({
-  selector: 'app-team-roles',
-  templateUrl: './team-roles.component.html',
+  selector: 'app-team-permissions',
+  templateUrl: './team-permissions.component.html',
   styleUrls: [
     '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
-    './team-roles.component.css'
+    './team-permissions.component.css'
   ]
 })
-export class TeamRolesComponent implements OnInit, OnDestroy {
+export class TeamPermissionsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() team: Team;
 
@@ -32,8 +32,8 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  roles: Role[];
-  dataSource: MatTableDataSource<Role>;
+  permissions: Permission[];
+  dataSource: MatTableDataSource<Permission>;
   dataColumns = ['remove', 'edit', 'router', 'action', 'active'];
 
   @Input() updatable: boolean = false;
@@ -43,13 +43,13 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
   loading: boolean = false;
 
   constructor(
-    private roleService: RoleService,
+    private permissionService: PermissionService,
     private toastService: ToastService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.loadRoles();
+    this.loadPermissions();
   }
 
   ngOnDestroy() {
@@ -65,32 +65,32 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     }
   }
 
-  editRole(role: Role) {
-    const roleCopy = JSON.parse(JSON.stringify(role));
-    const dialogRef = this.dialog.open(TeamRoleCreateComponent, {
+  editPermission(permission: Permission) {
+    const permissionCopy = JSON.parse(JSON.stringify(permission));
+    const dialogRef = this.dialog.open(TeamPermissionCreateComponent, {
       width: '400px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
-        roles: this.dataSource.data,
-        router: roleCopy.router,
-        action: roleCopy.action,
-        values: roleCopy.values,
-        identifiedBy: roleCopy.identifiedBy,
-        role: roleCopy
+        permissions: this.dataSource.data,
+        router: permissionCopy.router,
+        action: permissionCopy.action,
+        values: permissionCopy.values,
+        identifiedBy: permissionCopy.identifiedBy,
+        permission: permissionCopy
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.roleService.updateRole(role._id, result.action, result.router, result.identifiedBy)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(roleUpdated => {
-            if (roleUpdated) {
-              this.roleService.updateRoleValues(roleUpdated._id, result.values)
+        this.permissionService.updatePermission(permission._id, result.action, result.router, result.identifiedBy)
+          .pipe(takeUntil(this.unsubscribe)).subscribe(permissionUpdated => {
+            if (permissionUpdated) {
+              this.permissionService.updatePermissionValues(permissionUpdated._id, result.values)
                 .pipe(takeUntil(this.unsubscribe))
-                .subscribe(roleValues => {
-                  if (roleValues) {
-                    this.loadRoles();
-                    this.toastService.showSuccess('Role updated with success');
+                .subscribe(permissionValues => {
+                  if (permissionValues) {
+                    this.loadPermissions();
+                    this.toastService.showSuccess('Permission updated with success');
                   }
                 });
             }
@@ -99,14 +99,14 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     });
   }
 
-  removeRole(role: Role) {
-    this.blockUI.start('Removing role...');
-    this.roleService.deleteRole(role._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+  removePermission(permission: Permission) {
+    this.blockUI.start('Removing permission...');
+    this.permissionService.deletePermission(permission._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
-        this.roles.splice(this.roles.indexOf(role), 1);
-        this.loadDataSource(this.roles);
+        this.permissions.splice(this.permissions.indexOf(permission), 1);
+        this.loadDataSource(this.permissions);
         this.blockUI.stop();
-        this.toastService.showSuccess('Role removed with success');
+        this.toastService.showSuccess('Permission removed with success');
       }
     }, error => {
       this.blockUI.stop();
@@ -114,34 +114,34 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     });
   }
 
-  createRole() {
-    const dialogRef = this.dialog.open(TeamRoleCreateComponent, {
+  createPermission() {
+    const dialogRef = this.dialog.open(TeamPermissionCreateComponent, {
       width: '400px',
       data: {
-        roles: this.dataSource.data,
+        permissions: this.dataSource.data,
         values: []
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.roleService.createRole(this.team._id, result.action, result.router, result.identifiedBy, result.values)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(role => {
-            if (role) {
-              this.loadRoles();
-              this.toastService.showSuccess('Role created with success');
+        this.permissionService.createPermission(this.team._id, result.action, result.router, result.identifiedBy, result.values)
+          .pipe(takeUntil(this.unsubscribe)).subscribe(permission => {
+            if (permission) {
+              this.loadPermissions();
+              this.toastService.showSuccess('Permission created with success');
             }
           });
       }
     });
   }
 
-  updateStatus(role: Role, event: MatSlideToggleChange) {
+  updateStatus(permission: Permission, event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
-    this.roleService.updateRole(role._id, role.action, role.router, role.identifiedBy, event.checked)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(roleUpdated => {
-        if (roleUpdated) {
-          this.toastService.showSuccess('Role updated with success');
+    this.permissionService.updatePermission(permission._id, permission.action, permission.router, permission.identifiedBy, event.checked)
+      .pipe(takeUntil(this.unsubscribe)).subscribe(permissionUpdated => {
+        if (permissionUpdated) {
+          this.toastService.showSuccess('Permission updated with success');
         }
       }, error => {
         this.toastService.showError('Permission denied');
@@ -164,7 +164,7 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
       return;
     }
     
-    const data = this.roles.slice();
+    const data = this.permissions.slice();
     let sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
@@ -178,12 +178,12 @@ export class TeamRolesComponent implements OnInit, OnDestroy {
     this.loadDataSource(sortedData);
   }
 
-  private loadRoles(): void {
+  private loadPermissions(): void {
     this.loading = true;
-    this.roleService.getRolesByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(roles => {
-      if (roles) {
-        this.roles = roles;
-        this.loadDataSource(this.roles);
+    this.permissionService.getPermissionsByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(permissions => {
+      if (permissions) {
+        this.permissions = permissions;
+        this.loadDataSource(this.permissions);
       }
     }, error => {
       ConsoleLogger.printError(error);
