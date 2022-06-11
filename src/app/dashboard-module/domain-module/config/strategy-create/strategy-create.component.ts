@@ -1,14 +1,16 @@
 import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatSelectionList } from '@angular/material/list';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { StrategyReq } from 'src/app/model/strategy_req';
+import { MAX_VALUE_LENGTH, StrategyReq } from 'src/app/model/strategy_req';
 import { StrategyService } from 'src/app/services/strategy.service';
 import { Strategy } from 'src/app/model/strategy';
+import { JsonReader } from 'src/app/_helpers/json-reader';
+import { DataUtils } from 'src/app/_helpers/data-utils';
 
 @Component({
   selector: 'app-strategy-create',
@@ -60,6 +62,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadStrategies();
+    this.loadStrategySelectionComponent();
 
     this.elementCreationFormGroup = this.formBuilder.group({
       strategyFormControl: this.strategyFormControl,
@@ -100,10 +103,18 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
     }      
   }
 
-  addValue(newValue: string) {
-    const { valid } = this.valueSelectionFormControl;
-    if (valid) {
-      this.data.values.push(newValue);
+  addValue(value: string) {
+    let { valid } = this.valueSelectionFormControl;
+    if (valid && this.data.values) {
+      if (JsonReader.isValidJSONString(value)) {
+        valid = DataUtils.pushValuesIfValid(this.data.values, 
+          JsonReader.payloadReader(JSON.parse(value)), MAX_VALUE_LENGTH);
+      } else {
+        valid = DataUtils.pushValuesIfValid(this.data.values, [value], MAX_VALUE_LENGTH);
+      }
+
+      if (!valid)
+        this.toastService.showError(`One or more values are longer than ${MAX_VALUE_LENGTH} characters`);
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -118,7 +129,15 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
   }
 
   showResumed(value: string, length: number): string {
-    return value.length > length ? `${value.substr(0, length)}...` : value;
+    return DataUtils.showResumed(value, length);
+  }
+
+  private loadStrategySelectionComponent(): void {
+    this.strategyValueSelection.selectionChange.pipe(takeUntil(this.unsubscribe)).subscribe((s: MatSelectionListChange) => {
+      this.strategyValueSelection.deselectAll();
+      s.options[0].selected = true;
+      this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
+    });
   }
 
   private loadAvailableStrategies(): void {
@@ -137,7 +156,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
       this.valueSelectionFormControl.setValidators([
         Validators.required,
-        valueInputValidator(req.operationsAvailable.validator)
+        DataUtils.valueInputValidator(req.operationsAvailable.validator)
       ]);
     });
   }
@@ -149,13 +168,4 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
     });
   }
 
-}
-
-function valueInputValidator(format: string): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    if (!control.value.match(format)) {
-      return [control.value]
-    }
-    return null;
-  };
 }
