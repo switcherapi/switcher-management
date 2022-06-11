@@ -16,3 +16,5 @@ export class OperationReq {
     min: number;
     max: number;
 }
+
+export const MAX_VALUE_LENGTH = 500;

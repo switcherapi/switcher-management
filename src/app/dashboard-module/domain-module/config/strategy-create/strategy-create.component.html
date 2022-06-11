@@ -29,7 +29,7 @@
                         </mat-form-field>
                         <mat-form-field>
                             <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="5" 
-                                [formControl]="descFormControl">
+                                [formControl]="descFormControl" autocomplete="off">
                             </textarea>
                             <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                         </mat-form-field>
@@ -49,7 +49,8 @@
                                         </mat-selection-list>
                                     </mat-card-content>
                                     <mat-form-field>
-                                        <input #inputValue matInput placeholder="Selected" maxlength="500" [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected }}">
+                                        <input #inputValue matInput placeholder="Value" 
+                                            [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected }}" autocomplete="off">
                                         <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
                                             Please, check the value format
                                         </mat-error>

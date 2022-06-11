@@ -262,7 +262,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   private loadStrategySelectionComponent(): void {
     this.strategyValueSelection.selectionChange.pipe(takeUntil(this.unsubscribe)).subscribe((s: MatSelectionListChange) => {
       this.strategyValueSelection.deselectAll();
-      s.option.selected = true;
+      s.options[0].selected = true;
       this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
     });
   }

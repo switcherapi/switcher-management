@@ -6,6 +6,7 @@ import { MetricComponent } from '../metric/metric.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { DataUtils } from 'src/app/_helpers/data-utils';
 
 @Component({
   selector: 'app-metric-statistics',
@@ -220,7 +221,7 @@ export class ReasonsStatisticsTab {
   }
 
   showResumed(value: string, length: number): string {
-    return value.length > length ? `${value.substring(0, length)}...` : value;
+    return DataUtils.showResumed(value, length);
   }
 }
 

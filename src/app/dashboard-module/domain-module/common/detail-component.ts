@@ -1,4 +1,5 @@
 import { AdminService } from 'src/app/services/admin.service';
+import { DataUtils } from 'src/app/_helpers/data-utils';
 
 export class DetailComponent {
     detailBodyStyle: string = 'detail-body loading';
@@ -18,9 +19,7 @@ export class DetailComponent {
     loadAdmin(id: string): void {
         this.service.getAdminById(id).subscribe(adm => {
             this.createdBy = adm.name;
-        }, () => {
-            this.createdBy = '';
-        })
+        }, () => this.createdBy = '')
     }
 
     selectEnvironment(status: boolean): void {
@@ -40,7 +39,7 @@ export class DetailComponent {
     }
 
     showResumed(value: string, length: number): string {
-        return value.length > length ? `${value.substr(0, length)}...` : value;
+        return  DataUtils.showResumed(value, length);
     }
 
     scrollToElement($element: any): void {

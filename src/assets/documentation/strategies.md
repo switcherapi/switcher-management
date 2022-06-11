@@ -46,7 +46,12 @@ For each switcher it is possible to add at least 4 different types of strategy.
 
   Regular expressions can be used to determine a wider possibility for validating strategies.
   </br>The available operations for this validator are: Exist, Not exist, Equal, Not equal.
-  </br>- Equal and Not equal  implicitly use \b (delimiter) flag to match the exact input.
+  </br>- Equal and Not equal implicitly use \b (delimiter) flag to match the exact input.
+
+6. **Payload validation**
+
+  Payload validations are useful to validate keys from a JSON input request.
+  </br>The available operations for this validator are: Has one, Has all.
 
 <img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_create.jpg" class="image-style shadow" alt=""/>
 
