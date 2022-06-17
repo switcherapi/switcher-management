@@ -35,7 +35,7 @@
                         <mat-card-content style="overflow-y: scroll; height: 180px;">
                             <mat-selection-list #strategyValueSelection>
                                 <mat-list-option *ngFor="let value of strategy.values" [value]="value" matTooltip="{{ value }}">
-                                    {{ showResumed(value, 20) }}
+                                    {{ showResumed(value, strategyValuesLength) }}
                                 </mat-list-option>
                             </mat-selection-list>
                         </mat-card-content>
