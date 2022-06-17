@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject, HostListener } from '@angular/core';
 import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
@@ -54,6 +54,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   strategyFormatSelected: string;
   strategyOperations: string[] = [];
+  strategyValuesLength: number;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -64,6 +65,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     private dialog: MatDialog
   ) {
     super(adminService);
+    this.onResize();
   }
 
   ngOnInit() {
@@ -97,6 +99,16 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.classStatus = 'header editing';
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(_event?: any) {
+    this.strategyValuesLength = 30;
+    if (window.innerWidth < 1200 && window.innerWidth > 770) {
+      this.strategyValuesLength = 50;
+    } else if (window.innerWidth < 770) {
+      this.strategyValuesLength = 20;
     }
   }
 
