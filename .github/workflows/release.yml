@@ -3,8 +3,6 @@ name: Release CI
 on:
   release:
     types: [ created ]
-  push:
-    tags: [ v* ]
 
 jobs:
   build-lint:
