@@ -31,7 +31,6 @@ import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
 import { TeamInviteDialogComponent } from './team-module/team-invite-dialog/team-invite-dialog.component';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { PathRoute } from 'src/app/model/path-route';
 import { DomainTransferDialogComponent } from './domain/domain-transfer/domain-transfer-dialog.component';
 import { MetricModule } from './metric-module/metric.module';
 import { SpecialCharacterDirective } from './common/special.char.directive';
@@ -95,8 +94,7 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
     BlockUIModule.forRoot()
   ],
   providers: [
-    DomainRouteService,
-    PathRoute
+    DomainRouteService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,6 +1,6 @@
 <block-ui>
     <div class="detail-body">
-        <section class="{{ getTeam().active ? 'header activated' : 'header deactivated' }}">
+        <section class="{{ team.active ? 'header activated' : 'header deactivated' }}">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="options-section">
                     <div class="toggle-section">
-                        <mat-slide-toggle [checked]="getTeam().active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
+                        <mat-slide-toggle [checked]="team.active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
                             (change)="changeStatus($event)" [disabled]="!updatable">
                         </mat-slide-toggle>
                     </div>

@@ -7,9 +7,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MetricFilterComponent } from '../metric-filter/metric-filter.component';
 import { Metric } from 'src/app/model/metric';
 import { MetricService } from 'src/app/services/metric.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
 
 @Component({
   selector: 'app-metric',
@@ -29,6 +29,8 @@ export class MetricComponent implements OnInit, OnDestroy {
   metricViewClass = 'metrics-view graphics';
   filterClass = 'body-filter show';
 
+  domainId: string;
+  domainName: string;
   classStatus = "loading";
   loading = true;
   error = '';
@@ -36,19 +38,27 @@ export class MetricComponent implements OnInit, OnDestroy {
   metrics: Metric;
 
   constructor(
-    private metricService: MetricService,
+    private activatedRoute: ActivatedRoute,
     private domainRouteService: DomainRouteService,
+    private metricService: MetricService,
     private dialog: MatDialog,
     private errorHandler: RouterErrorHandler
-  ) { }
+  ) {
+    this.activatedRoute.parent.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = decodeURIComponent(params.name);
+    });
+   }
 
   ngOnInit() {
     this.metrics = new Metric();
     if (this.switcher) {
       this.loadMetrics(1);
       this.lockFilter = true;
-    } else
+    } else {
+      this.domainRouteService.updateView('Metrics', 1);
       this.loadMetricStatistics();
+    }
   }
 
   ngOnDestroy() {
@@ -70,6 +80,7 @@ export class MetricComponent implements OnInit, OnDestroy {
         dateAfter: '',
         dateBefore: '',
         dateGroupPattern: '',
+        domainId: this.domainId,
         environment: this.environment
       }
     });
@@ -105,9 +116,10 @@ export class MetricComponent implements OnInit, OnDestroy {
   private loadMetricStatistics(environment?: string, dateBefore?: string, dateAfter?: string): void {
     this.loading = true;
     this.error = '';
-    this.metricService.getMetricStatistics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+    this.metricService.getMetricStatistics(this.domainId, 
       environment ? environment : this.environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(statistics => {
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(statistics => {
         this.loading = false;
         if (statistics) {
           this.metrics.statistics = statistics;
@@ -117,7 +129,7 @@ export class MetricComponent implements OnInit, OnDestroy {
   }
 
   public loadDataMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
-    return this.metricService.getMetrics(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
+    return this.metricService.getMetrics(this.domainId, 
       environment ? environment : this.environment, page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
         .pipe(takeUntil(this.unsubscribe));
   }

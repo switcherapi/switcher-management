@@ -1,14 +1,14 @@
 <block-ui>
     <div *ngIf="loading" class="card-body loader-div">
         <div class="loader"></div>
-        <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+        <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
     </div>
     <div [ngClass]="loading ? 'loading' : detailBodyStyle">
         <section [ngClass]="classStatus">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
-                        <input #nameElement matInput placeholder="Name" [value]="getGroup().name" maxlength="30"
+                        <input #nameElement matInput placeholder="Name" [value]="group?.name" maxlength="30"
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="nameFormControl" autocomplete="off">
                         <mat-error *ngIf="nameFormControl.hasError('minlength')">
                             Name must contains at least 5 characters
@@ -18,7 +18,7 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field>
-                        <textarea #descElement matInput placeholder="Description" [value]="getGroup()?.description" maxlength="256"
+                        <textarea #descElement matInput placeholder="Description" [value]="group?.description" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
@@ -26,17 +26,24 @@
                 </div>
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
-                        <input matInput placeholder="Created At" [value]="getGroup()?.createdAt | date:'medium'" readonly>
+                        <input matInput placeholder="Created At" [value]="group?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput placeholder="Last Update" [value]="getGroup()?.updatedAt | date:'medium'" readonly>
+                        <input matInput placeholder="Last Update" [value]="group?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <input matInput placeholder="Created By" [value]="createdBy" readonly>
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [configuredEnvironments]="getGroup()?.activated"></app-environment-config>
+                    <app-environment-config *ngIf="group"
+                        [enable]="envEnable"
+                        [domainId]="domainId" 
+                        [configuredEnvironments]="group.activated"
+                        (outputEnvChanged)="onEnvChange($event)"
+                        (outputStatusChanged)="onEnvStatusChanged($event)"
+                        (outputEnvRemoved)="onEnvRemoved($event)">
+                    </app-environment-config>
                 </div>
             </div>
         </section>

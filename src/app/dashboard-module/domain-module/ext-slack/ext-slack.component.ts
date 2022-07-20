@@ -1,11 +1,9 @@
 import { OnDestroy, Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Domain } from 'src/app/model/domain';
-import { Types } from 'src/app/model/path-route';
 import { FEATURES, Slack } from 'src/app/model/slack';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { SlackService } from 'src/app/services/slack.service';
@@ -24,7 +22,8 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 export class ExtSlackComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   
-  private domain: Domain;
+  domainId: string;
+  domainName: string;
   slackUpdate: boolean = false;
   loading: boolean = true;
   slack: Slack;
@@ -35,14 +34,21 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   ]);
 
   constructor(
+    private route: ActivatedRoute,
     private domainRouteService: DomainRouteService,
     private slackService: SlackService,
     private toastService: ToastService,
     private router: Router,
     private _modalService: NgbModal
-  ) { }
+  ) { 
+    this.route.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = decodeURIComponent(params.name);
+    });
+  }
 
   ngOnInit(): void {
+    this.domainRouteService.updateView(this.domainName, 0);
     this.loadSlack();
   }
 
@@ -64,7 +70,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = 'Are you sure you want to uninstall Slack?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.slackService.unlinkInstallation(this.domain.id)
+        this.slackService.unlinkInstallation(this.domainId)
           .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
             if (data) {
               this.router.navigate(['/dashboard']);
@@ -85,7 +91,8 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     modalConfirmation.result.then((result) => {
       if (result) {
         this.slackService.resetTickets(this.slack.team_id)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => {
             if (data) {
               this.toastService.showSuccess(data.message);
               this.slack.tickets_approved = 0;
@@ -103,10 +110,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   private loadSlack(): void {
     this.loading = true;
 
-    this.domain = this.domainRouteService.getPathElement(
-      Types.SELECTED_DOMAIN).element;
-
-    this.slackService.getSlackInstallation(this.domain.id)
+    this.slackService.getSlackInstallation(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(slack => {
         this.slack = slack;

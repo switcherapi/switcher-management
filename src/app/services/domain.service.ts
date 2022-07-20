@@ -6,13 +6,24 @@ import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { History } from '../model/history';
 import { Domain } from '../model/domain';
+import { Apollo } from 'apollo-angular';
+import { GraphQLConfigurationResultSet } from '../model/configuration';
+import { 
+  configurationQueryByConfig, 
+  configurationQueryByDomain, 
+  configurationQueryByGroup, 
+  configurationTreeQuery, 
+  snapshotQuery 
+} from '../model/grapthql-schemas';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DomainService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private apollo: Apollo) {
     super();
   }
 
@@ -82,6 +93,55 @@ export class DomainService extends ApiService {
 
   public resetHistory(id: string): Observable<Domain> {
     return this.http.delete<Domain>(`${environment.apiUrl}/domain/history/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public executeSnapshotQuery(domainId: string, env: string, includeStatus: boolean, includeDescription: boolean) {
+    return this.apollo.query<any>({
+      query: snapshotQuery(includeStatus, includeDescription),
+      fetchPolicy: 'network-only',
+      variables: { 
+        id: domainId,
+        environment: env
+      }
+    });
+  }
+
+  public executeConfigurationTreeQuery(domainId: string, switchers: boolean, groups: boolean, components: boolean) {
+    return this.apollo.watchQuery<any>({
+      query: configurationTreeQuery(switchers, groups, components),
+      variables: { 
+        id: domainId,
+      }
+    });
+  }
+
+  public executeConfigurationQuery(domainId: string) {
+    return this.apollo.query<GraphQLConfigurationResultSet>({
+      query: configurationQueryByDomain(),
+      variables: { 
+        domain: domainId
+      }
+    });
+  }
+
+  public executeConfigurationGroupQuery(domainId: string, groupId: string) {
+    return this.apollo.query<GraphQLConfigurationResultSet>({
+      query: configurationQueryByGroup(),
+      variables: { 
+        domain: domainId,
+        groupId: groupId
+      }
+    });
+  }
+
+  public executeConfigurationConfigQuery(domainId: string, configId: string) {
+    return this.apollo.query<GraphQLConfigurationResultSet>({
+      query: configurationQueryByConfig(),
+      variables: { 
+        domain: domainId,
+        configId: configId
+      }
+    });
   }
 
 }

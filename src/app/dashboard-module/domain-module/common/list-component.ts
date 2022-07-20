@@ -5,8 +5,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatSelectionListChange } from '@angular/material/list';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
+import { ActivatedRoute } from '@angular/router';
 
 @Directive()
 export class ListComponent implements AfterViewInit {
@@ -20,12 +19,24 @@ export class ListComponent implements AfterViewInit {
     @Output() environmentSelectionChange: EventEmitter<string> = new EventEmitter();
 
     cardListContainerStyle: string = 'card mt-4 loading';
+    domainId: string;
+    domainName: string;
+    groupId: string;
 
     constructor(
+        private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
-        private envService: EnvironmentService,
-        private drService: DomainRouteService
+        private envService: EnvironmentService
     ) {
+        this.activatedRoute.parent.params.subscribe(params => {
+            this.domainId = params.domainid;
+            this.domainName = params.name;
+        });
+
+        this.activatedRoute.params.subscribe(params => {
+            this.groupId = params.groupid;
+        });
+        
         this.loadOperationSelectionComponent();
     }
 
@@ -36,7 +47,7 @@ export class ListComponent implements AfterViewInit {
     }
 
     loadEnvironments(): void {
-        this.envService.getEnvironmentsByDomainId(this.drService.getPathElement(Types.SELECTED_DOMAIN).id).subscribe(env => {
+        this.envService.getEnvironmentsByDomainId(this.domainId).subscribe(env => {
             this.environments = env;
             this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
             this.environmentSelectionChange.emit(this.setProductionFirst());

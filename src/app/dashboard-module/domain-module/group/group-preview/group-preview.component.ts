@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { GroupListComponent } from '../group-list/group-list.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -10,9 +9,7 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Group } from 'src/app/model/group';
 import { AdminService } from 'src/app/services/admin.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { GroupService } from 'src/app/services/group.service';
-import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-group-preview',
@@ -27,8 +24,10 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
 
   @BlockUI() blockUI: NgBlockUI;
   
+  @Input() domainId: string;
+  @Input() domainName: string;
   @Input() group: Group;
-  @Input() groupListComponent: GroupListComponent;
+  @Input() environmentSelectionChange: EventEmitter<string>;
 
   environmentStatusSelection: FormGroup;
   selectedEnvStatus: boolean;
@@ -46,18 +45,16 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private adminService: AdminService,
-    private domainRouteService: DomainRouteService,
     private groupService: GroupService,
     private toastService: ToastService
   ) { }
 
   ngOnInit() {
+    this.readPermissionToObject();
     this.loadOperationSelectionComponent();
-    this.groupListComponent.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
+    this.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
       this.selectEnvironment(envName);
     });
-
-    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -71,12 +68,9 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  getGroupName() {
-    return this.group.name;
-  }
-
   selectGroup() {
-    this.router.navigate(['/dashboard/domain/group/detail'], { state: { element: JSON.stringify(this.group) } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.group.id}`], 
+      { state: { element: JSON.stringify(this.group) } });
   }
 
   selectEnvironment(envName: string): void {
@@ -96,12 +90,13 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     this.selectEnvironment(this.selectedEnv);
 
     this.groupService.setGroupEnvironmentStatus(this.group.id, this.selectedEnv, event.checked)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.updatePathRoute(data);
-        this.blockUI.stop();
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.group = data;
+          this.blockUI.stop();
+          this.toastService.showSuccess(`Environment updated with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
@@ -109,38 +104,25 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updatePathRoute(group: Group) {
-    const pathRoute = {
-      id: group.id,
-      element: group,
-      name: group.name,
-      path: '/dashboard/domain/group/detail',
-      type: Types.GROUP_TYPE
-    };
-
-    this.domainRouteService.updatePath(pathRoute, false);
-    this.readPermissionToObject();
-  }
-
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      ['UPDATE', 'DELETE'], 'GROUP', 'name', this.getGroupName())
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            
-            if (!this.updatable) {
-              this.environmentStatusSelection.disable({ onlySelf: true });
-            } else {
-              this.toggleSectionStyle = 'toggle-section';
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'GROUP', 'name', this.group.name)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+              
+              if (!this.updatable) {
+                this.environmentStatusSelection.disable({ onlySelf: true });
+              } else {
+                this.toggleSectionStyle = 'toggle-section';
+              }
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
             }
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
+          });
+        }
     });
   }
 

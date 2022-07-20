@@ -25,7 +25,13 @@
     </div>
     <div *ngIf="!loading">
         <div *ngFor="let config of configs">
-            <app-config-preview [config]="config" [configListComponent]="this"></app-config-preview>
+            <app-config-preview 
+                [domainId]="domainId"
+                [domainName]="domainName"
+                [groupId]="groupId"
+                [config]="config" 
+                [environmentSelectionChange]="environmentSelectionChange">
+            </app-config-preview>
         </div>
     </div>
 </div>

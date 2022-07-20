@@ -10,7 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToasterModule } from '../_helpers/toaster/toaster.module';
 import { DomainRouteService } from '../services/domain-route.service';
-import { PathRoute } from '../model/path-route';
 
 @NgModule({
   declarations: [
@@ -31,8 +30,7 @@ import { PathRoute } from '../model/path-route';
     ToasterModule
   ],
   providers: [ 
-    DomainRouteService,
-    PathRoute
+    DomainRouteService
   ]
 })
 export class DashboardModule { }

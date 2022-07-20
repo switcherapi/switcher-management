@@ -3,18 +3,18 @@ import { map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
-import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { GroupService } from 'src/app/services/group.service';
 import { AdminService } from 'src/app/services/admin.service';
-import { PathRoute, Types } from 'src/app/model/path-route';
 import { Group } from 'src/app/model/group';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
+import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-group-detail',
@@ -29,14 +29,18 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   @BlockUI() blockUI: NgBlockUI;
 
-  @ViewChild('envSelectionChange', { static: true })
-  private envSelectionChange: EnvironmentConfigComponent;
-
   @ViewChild('descElement', { static: true }) 
   descElement: ElementRef;
 
   @ViewChild('nameElement', { static: true }) 
   nameElement: ElementRef;
+
+  envEnable = new Subject<boolean>();
+
+  domainId: string;
+  domainName: string;
+  groupId: string;
+  group: Group;
 
   nameFormControl = new FormControl('', [
     Validators.required,
@@ -47,80 +51,38 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     private domainRouteService: DomainRouteService,
     private groupService: GroupService,
     private adminService: AdminService,
-    private pathRoute: PathRoute,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
     private _modalService: NgbModal
   ) { 
     super(adminService);
+    this.route.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = params.name;
+    });
+
+    this.route.params.subscribe(params => {
+      this.groupId = params.groupid;
+    });
   }
 
   ngOnInit() {
     this.loading = true;
-    this.route.paramMap
-      .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
+    this.route.paramMap.pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
         if (data.element) {
-          this.updatePathRoute(JSON.parse(data.element));
+          this.updateData(JSON.parse(data.element));
         } else {
-          this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_GROUP).element);
+          this.loadGroup();
         }
-      });
-
-    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.selectEnvironment(status);
     });
-
-    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.updateEnvironmentStatus(env);
-    });
-
-    this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.removeEnvironmentStatus(env);
-    });
-
-    super.loadAdmin(this.getGroup().owner);
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  selectEnvironment(status: boolean): void {
-    this.currentStatus = status;
-
-    if (this.editing) {
-      this.classStatus = 'header editing';
-    } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-    }
-  }
-
-  getGroup() {
-    return this.pathRoute.element;
-  }
-
-  readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'GROUP', 'name', this.getGroup().name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            this.envSelectionChange.disableEnvChange(!this.updatable);
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
   }
 
   edit() {
@@ -140,7 +102,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         };
 
         if (super.validateEdition(
-            { name: this.pathRoute.name, description: this.pathRoute.element.description },
+            { name: this.group.name, description: this.group.description },
             { name: body.name, description: body.description })) {
           this.blockUI.stop();
           this.editing = false;
@@ -159,12 +121,12 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing group...');
-        this.groupService.deleteGroup(this.getGroup().id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
-          this.blockUI.stop();
-          this.domainRouteService.removePath(Types.GROUP_TYPE);
-          this.domainRouteService.notifyDocumentChange();
-          this.router.navigate(['/dashboard/domain/group']);
-          this.toastService.showSuccess(`Group removed with success`);
+        this.groupService.deleteGroup(this.group.id)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(_data => {
+            this.blockUI.stop();
+            this.router.navigate([this.domainRouteService.getPreviousPath()]);
+            this.toastService.showSuccess(`Group removed with success`);
         }, error => {
           this.blockUI.stop();
           this.toastService.showError(`Unable to remove this group`);
@@ -174,17 +136,75 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
-  private editGroup(body: { name: any; description: any; }) {
-    this.groupService.updateGroup(this.getGroup().id,
-      body.name != this.pathRoute.name ? body.name : undefined,
-      body.description != this.pathRoute.element.description ? body.description : undefined).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.updatePathRoute(data);
-          this.domainRouteService.notifyDocumentChange();
-          this.blockUI.stop();
-          this.toastService.showSuccess(`Group updated with success`);
-          this.editing = false;
+  onEnvChange($event: EnvironmentChangeEvent) {
+    this.selectEnvironment($event);
+  }
+
+  onEnvStatusChanged($event: any) {
+    this.updateEnvironmentStatus($event);
+  }
+
+  onEnvRemoved($event: any) {
+    this.removeEnvironmentStatus($event);
+  }
+
+  private updateData(group: Group) {
+    this.group = group;
+    this.nameFormControl.setValue(this.group.name);
+    this.readPermissionToObject();
+    super.loadAdmin(this.group.owner);
+
+    this.domainRouteService.updateView(this.group.name, 0);
+    this.domainRouteService.updatePath(this.group.id, this.group.name, Types.GROUP_TYPE, 
+      `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.group.id}`);
+  }
+
+  private loadGroup() {
+    this.groupService.getGroupById(this.groupId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(group => {
+        if (group) {
+          this.updateData(group);
         }
+    }, error => {
+      this.toastService.showError(`Unable to load Group`);
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private readPermissionToObject(): void {
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'GROUP', 'name', this.group.name)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+              this.envEnable.next(!this.updatable);
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            }
+          });
+        }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.loading = false;
+      this.detailBodyStyle = 'detail-body ready';
+    });
+  }
+
+  private editGroup(body: { name: any; description: any; }) {
+    this.groupService.updateGroup(this.group.id,
+      body.name != this.group.name ? body.name : undefined,
+      body.description != this.group.description ? body.description : undefined)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => {
+          if (data) {
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Group updated with success`);
+            this.editing = false;
+          }
       }, error => {
         this.blockUI.stop();
         ConsoleLogger.printError(error);
@@ -194,29 +214,16 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       });
   }
 
-  private updatePathRoute(group: Group) {
-    this.pathRoute = {
-      id: group.id,
-      element: group,
-      name: group.name,
-      path: '/dashboard/domain/group/detail',
-      type: Types.GROUP_TYPE
-    };
-
-    this.nameFormControl.setValue(group.name);
-    this.domainRouteService.updatePath(this.pathRoute, true);
-    this.readPermissionToObject();
-  }
-
-  private updateEnvironmentStatus(env : any): void {
+  private updateEnvironmentStatus(env: any): void {
     this.blockUI.start('Updating environment...');
     this.selectEnvironment(env.status);
-    this.groupService.setGroupEnvironmentStatus(this.getGroup().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.selectEnvironment(env.status);
-        this.updatePathRoute(data);
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
+    this.groupService.setGroupEnvironmentStatus(this.group.id, env.environment, env.status)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.selectEnvironment(env);
+          this.toastService.showSuccess(`Environment updated with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
@@ -224,14 +231,15 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     }, () => this.blockUI.stop());
   }
 
-  private removeEnvironmentStatus(env : any): void {
+  private removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
-    this.groupService.removeDomainEnvironmentStatus(this.getGroup().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.blockUI.stop();
-        this.updatePathRoute(data);
-        this.toastService.showSuccess(`Environment removed with success`);
-      }
+    this.groupService.removeDomainEnvironmentStatus(this.group.id, env)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.blockUI.stop();
+          this.toastService.showSuccess(`Environment removed with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);

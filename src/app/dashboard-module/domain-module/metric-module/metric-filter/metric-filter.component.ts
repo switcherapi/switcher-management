@@ -6,8 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
 import { OnElementAutocomplete } from '../../common/element-autocomplete/element-autocomplete.component';
 
 @Component({
@@ -32,11 +30,10 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   selectedFilter: string;
   selectedFilterType: string = 'Switcher';
   lockFilter: boolean = false;
-  selectedDomain: string;
+  domainId: string;
 
   constructor(
     private environmentService: EnvironmentService,
-    private domainRouteService: DomainRouteService,
     private datepipe: DatePipe,
     public dialogRef: MatDialogRef<MetricFilterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -44,7 +41,7 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   ngOnInit(): void {
     this.selectedFilter = this.data.filter || '';
     this.lockFilter = this.data.lockFilter || false;
-    this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id;
+    this.domainId = this.data.domainId;
     this.loadEnvironments();
   }
 
@@ -84,11 +81,11 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   }
 
   getDomainId(): string {
-    return this.selectedDomain;
+    return this.domainId;
   }
 
   private loadEnvironments() {
-    this.environmentService.getEnvironmentsByDomainId(this.selectedDomain)
+    this.environmentService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
       this.environments = env;
       this.environmentSelection.setValue(this.data.environment || 'default');

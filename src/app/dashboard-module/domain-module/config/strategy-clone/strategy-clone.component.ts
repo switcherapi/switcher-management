@@ -5,8 +5,6 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-strategy-clone',
@@ -28,11 +26,10 @@ export class StrategyCloneComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<StrategyCloneComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private environmentService: EnvironmentService,
-    private domainRouteService: DomainRouteService) { }
+    private environmentService: EnvironmentService) { }
 
   ngOnInit() {
-    this.environmentService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+    this.environmentService.getEnvironmentsByDomainId(this.data.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
         this.environments = env;

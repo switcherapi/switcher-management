@@ -2,8 +2,8 @@
 <div class="container" >
     <div class="container, card mt-4">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
-        <h4 class="card-header" *ngIf="getCurrentRoute()">
-            <div *ngIf="getTitle() as title">
+        <h4 class="card-header">
+            <div>
                 <mat-icon *ngIf="icon === 0">receipt</mat-icon>
                 <mat-icon *ngIf="icon === 1"> bar_chart</mat-icon>
                 <mat-icon *ngIf="icon === 2">receipt</mat-icon>
@@ -25,7 +25,7 @@
                         {{ transferLabel }}
                     </button>
                     <div *ngIf="hasSlackIntegration()">
-                        <button *ngIf="hasSlackInstalled()" mat-menu-item routerLink="/dashboard/domain/integration/slack">
+                        <button *ngIf="hasSlackInstalled()" mat-menu-item (click)="gotoSlackIntegration()">
                             <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" alt="Slack" />
                             Slack Integration
                         </button>
@@ -51,11 +51,11 @@
                 <div class="navbar-nav nav-item-hidden">
                     <a class="nav-item nav-link" (click)="gotoDetails()">Details</a>
                     <a class="nav-item nav-link" (click)="gotoListChildren()">{{ getLabelListChildren() }}</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics">Metrics</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log">Change Log</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/components">Components</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/environments">Environments</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/team">Teams</a>
+                    <a class="nav-item nav-link" (click)="gotoMetrics()">Metrics</a>
+                    <a class="nav-item nav-link" (click)="gotoChangeLog()">Change Log</a>
+                    <a class="nav-item nav-link" (click)="gotoComponents()">Components</a>
+                    <a class="nav-item nav-link" (click)="gotoEnvironments()">Environments</a>
+                    <a class="nav-item nav-link" (click)="gotoTeams()">Teams</a>
                 </div>
 
                 <div class="navbar-nav nav-menu-hidden">
@@ -63,33 +63,31 @@
                          data-toggle="collapse" data-target="#navbarContent">Details</a>
                     <a class="nav-item nav-link" (click)="gotoListChildren()" 
                         data-toggle="collapse" data-target="#navbarContent">{{ getLabelListChildren() }}</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/metrics" 
+                    <a class="nav-item nav-link" (click)="gotoMetrics()"
                         data-toggle="collapse" data-target="#navbarContent">Metrics</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/change-log" 
+                    <a class="nav-item nav-link" (click)="gotoChangeLog()" 
                         data-toggle="collapse" data-target="#navbarContent">Change Log</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/components" 
+                    <a class="nav-item nav-link" (click)="gotoComponents()"
                         data-toggle="collapse" data-target="#navbarContent">Components</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/environments" 
+                    <a class="nav-item nav-link" (click)="gotoEnvironments()"
                         data-toggle="collapse" data-target="#navbarContent">Environments</a>
-                    <a class="nav-item nav-link" routerLink="/dashboard/domain/team" 
+                    <a class="nav-item nav-link" (click)="gotoTeams()"
                         data-toggle="collapse" data-target="#navbarContent">Teams</a>
                 </div>
                 <element-autocomplete class="element-filter" [parentComponent]="this"></element-autocomplete>
             </div>
         </nav>
 
-        <div>
-            <div class="div-router-history">
-                <a class="router-history" [routerLink]=selectedDomain?.path [state]="{ element: getDomainElement() }">
-                    <span class="badge"></span>{{ selectedDomain?.name }}
-                </a>
-                <a *ngIf="showPath('Group')" class="router-history" [routerLink]=selectedGroup?.path [state]="{ element: getGroupElement() }">
-                    / <span class="badge"></span>{{ selectedGroup?.name }}
-                </a>
-                <a *ngIf="showPath('Config')"  class="router-history" [routerLink]=selectedConfig?.path [state]="{ element: getConfigElement() }">
-                    / <span class="badge"></span>{{ selectedConfig?.name }}
-                </a>
-            </div>
+        <div class="div-router-history">
+            <a *ngIf="domain" class="router-history" (click)="gotoDetails(selectedDomainPath)">
+                <span class="badge"></span>{{ domain.name }}
+            </a>
+            <a *ngIf="group" class="router-history" (click)="gotoDetails(selectedGroupPath)">
+                / <span class="badge"></span>{{ group.name }}
+            </a>
+            <a *ngIf="config"  class="router-history" (click)="gotoDetails(selectedConfigPath)">
+                / <span class="badge"></span>{{ config.key }}
+            </a>
         </div>
 
         <div class="card-body" style="padding-top: 0px;">

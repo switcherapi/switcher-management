@@ -66,8 +66,15 @@
                     </mat-card>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [configuredEnvironments]="strategy?.activated"
-                        [notSelectableEnvironments]="true"></app-environment-config>
+                    <app-environment-config *ngIf="strategy"
+                        [currentEnvironment]="currentEnvironment"
+                        [enable]="envEnable"
+                        [domainId]="strategyList.parent.domainId" 
+                        [configuredEnvironments]="strategy.activated"
+                        [notSelectableEnvironments]="true"
+                        (outputEnvChanged)="onEnvChange($event)"
+                        (outputStatusChanged)="onEnvStatusChanged($event)">
+                    </app-environment-config>
                 </div>
             </div>
         </section>

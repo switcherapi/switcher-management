@@ -44,8 +44,15 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [configuredEnvironments]="config.relay.activated"
-                        [notSelectableEnvironments]="true" [selectedEnvName]="currentEnvironment"></app-environment-config>
+                    <app-environment-config *ngIf="config.relay"
+                        [currentEnvironment]="currentEnvironment"
+                        [enable]="envEnable"
+                        [domainId]="parent.domainId" 
+                        [configuredEnvironments]="config.relay.activated"
+                        [notSelectableEnvironments]="true"
+                        (outputEnvChanged)="onEnvChange($event)"
+                        (outputStatusChanged)="onEnvStatusChanged($event)">
+                    </app-environment-config>
                 </div>
             </div>
         </section>

@@ -25,7 +25,8 @@ export class DomainPreviewComponent implements OnInit {
   }
 
   selectDomain() {
-    this.router.navigate(['/dashboard/domain/'], { state: { element: JSON.stringify(this.domain) } });
+    this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domain.name)}/${this.domain.id}`], 
+      { state: { element: JSON.stringify(this.domain) } });
   }
 
   updateStatus(): void {

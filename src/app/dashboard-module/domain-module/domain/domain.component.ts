@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { delay, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { PathRoute, Types } from 'src/app/model/path-route';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { GroupService } from 'src/app/services/group.service';
 import { DomainTransferDialogComponent } from './domain-transfer/domain-transfer-dialog.component';
@@ -18,6 +16,13 @@ import { OnElementAutocomplete } from '../common/element-autocomplete/element-au
 import { environment } from 'src/environments/environment';
 import { SlackService } from 'src/app/services/slack.service';
 import { FEATURES } from 'src/app/model/slack';
+import { Domain } from 'src/app/model/domain';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { PathRoute, Types } from 'src/app/model/path-route';
+import { Group } from 'src/app/model/group';
+import { Config } from 'src/app/model/config';
+import { Configuration, GraphQLConfigurationResultSet } from 'src/app/model/configuration';
+import { ApolloQueryResult } from '@apollo/client/core';
 
 @Component({
   selector: 'app-domain',
@@ -29,34 +34,65 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   private unsubscribe: Subject<void> = new Subject();
   @BlockUI() blockUI: NgBlockUI;
 
-  selectedDomain: PathRoute;
-  selectedGroup: PathRoute;
-  selectedConfig: PathRoute;
-  currentPathRoute: PathRoute;
+  title: string;
   icon: number;
 
+  domainId: string;
+  domainName: string;
+
+  domain: Domain;
+  group: Group;
+  config: Config;
+
+  selectedDomainPath: string;
+  selectedGroupPath: string;
+  selectedConfigPath: string;
+  
+  currentPath = new PathRoute();
   prevScrollpos = window.scrollY;
   navControl: boolean = false;
   slackIntegration: boolean = false;
   transferLabel: string = '';
 
   constructor(
-    private domainRouteService: DomainRouteService,
-    private adminService: AdminService,
     private dialog: MatDialog,
     private router: Router,
-    private activeRoute: ActivatedRoute,
+    private route: ActivatedRoute,
+    private adminService: AdminService,
+    private domainRouteService: DomainRouteService,
     private domainService: DomainService,
     private configService: ConfigService,
     private groupService: GroupService,
     private slackService: SlackService,
     private toastService: ToastService
-  ) { }
+  ) {
+    this.route.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = params.name;
+    });
+  }
 
   ngOnInit() {
     this.scrollMenuHandler();
-    this.updateRoute();
-    this.loadDomain();
+    this.domainRouteService.pathChange
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => { 
+        this.currentPath = data;
+        this.loadConfiguration();
+
+        if (environment.slackUrl) {
+          this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(slack => this.slackIntegration = slack?.result);
+        }
+    });
+    
+    this.domainRouteService.viewHeaderEvent
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        this.title = data.title;
+        this.icon = data.icon;
+    });
   }
 
   ngOnDestroy() {
@@ -71,29 +107,33 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.dialog.open(DomainSnapshotComponent, {
       width: '450px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
-      data: { }
+      data: {
+        domainId: this.domainId
+      }
     });
   }
 
   onDomainTransfer() {
     this.blockUI.start('Creating request...');
-    this.domainService.requestDomainTransfer(this.selectedDomain.id).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
-      if (domain) {
-        if (this.transferLabel === 'Transfer Domain') {
-          this.transferLabel = 'Cancel Transfer';
-          this.dialog.open(DomainTransferDialogComponent, {
-            width: '450px',
-            minWidth: window.innerWidth < 450 ? '95vw' : '',
-            data: {
-              request_id: domain.id,
-              domain: domain.name
-            }
-          });
-        } else {
-          this.transferLabel = 'Transfer Domain';
-          this.toastService.showSuccess(`Transfer canceled with success`);
+    this.domainService.requestDomainTransfer(this.currentPath.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(domain => {
+        if (domain) {
+          if (this.transferLabel === 'Transfer Domain') {
+            this.transferLabel = 'Cancel Transfer';
+            this.dialog.open(DomainTransferDialogComponent, {
+              width: '450px',
+              minWidth: window.innerWidth < 450 ? '95vw' : '',
+              data: {
+                request_id: domain.id,
+                domain: domain.name
+              }
+            });
+          } else {
+            this.transferLabel = 'Transfer Domain';
+            this.toastService.showSuccess(`Transfer canceled with success`);
+          }
         }
-      }
     }, error => {
       ConsoleLogger.printError(error);
       this.blockUI.stop();
@@ -103,83 +143,63 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   onSelectElementFilter(value: any): void {
-    if (value.type === 'Group') {
-      this.updateGroupForRedirect(value);
-    } else if (value.type === 'Switcher' || value.type === 'Component') {
-      this.updateConfigForRedirect(value);
+    if (value.type === Types.GROUP_TYPE) {
+      this.redirectToGroup(value);
+    } else if (value.type === Types.CONFIG_TYPE || value.type === Types.COMPONENT_TYPE) {
+      this.redirectToSwitcher(value);
     }
   }
 
   getDomainId(): string {
-    return this.selectedDomain.id;
+    return this.domainId;
   }
 
   getLabelListChildren() {
-    if (this.currentPathRoute) {
-      if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-        return 'Groups';
-      } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
-        this.currentPathRoute.type === Types.CONFIG_TYPE) {
-        return 'Switchers';
-      }
-    } else {
-      return 'Groups';
-    }
+    if (this.currentPath.type === Types.GROUP_TYPE || 
+        this.currentPath.type === Types.CONFIG_TYPE)
+      return 'Switchers';
+    return 'Groups';
   }
 
   gotoListChildren() {
-    if (this.currentPathRoute) {
-      if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-        this.router.navigate(['/dashboard/domain/group']);
-      } else if (this.currentPathRoute.type === Types.GROUP_TYPE || 
-        this.currentPathRoute.type === Types.CONFIG_TYPE) {
-        this.router.navigate(['/dashboard/domain/group/switcher']);
-      }
-    } else {
-      this.currentPathRoute = this.selectedDomain;
-      this.router.navigate(['/dashboard/domain/group']);
+    if (this.currentPath.type === Types.DOMAIN_TYPE) {
+      this.router.navigate([`${this.currentPath.path}/groups`]);
+    } else if (this.currentPath.type === Types.GROUP_TYPE) {
+      this.router.navigate([`${this.currentPath.path}/switchers`]);
+    } else if (this.currentPath.type === Types.CONFIG_TYPE) {
+      this.router.navigate([`${this.currentPath.path.split('switchers')[0]}/switchers`]);
     }
   }
 
-  gotoDetails() {
-    if (this.currentPathRoute) {
-      this.router.navigate([this.currentPathRoute.path], { state: { element: JSON.stringify(this.currentPathRoute.element) } });
+  gotoDetails(path?: string) {
+    if (path) {
+      return this.router.navigate([path]);
     }
+    return this.router.navigate([`${this.currentPath.path}`]);
   }
 
-  getTitle(): string {
-    const components = this.activeRoute.snapshot.routeConfig.children;
-    const uri = this.router.routerState.snapshot.url.split('/domain/');
-    const component = components.filter(comp => comp.path ===  uri[uri.length-1].split('/')[0]);
-
-    if (component.length && component[0].data) {
-      this.icon = component[0].data.icon;
-      
-      if (this.currentPathRoute) {
-        return component[0].data.title.replace('$', this.currentPathRoute.name);
-      } else {
-        return component[0].data.title.replace('$', this.selectedDomain.name);
-      }
-    }
-
-    this.icon = 0;
-    return this.currentPathRoute ? this.currentPathRoute.name : this.selectedDomain.name;
+  gotoMetrics() {
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/metrics`]);
   }
 
-  getCurrentRoute(): PathRoute {
-    return this.currentPathRoute || this.selectedDomain;
+  gotoChangeLog() {
+    this.router.navigate([`${this.currentPath.path}/change-log`], { state: { fetch: false } });
   }
 
-  getDomainElement(): string {
-    return this.selectedDomain ? JSON.stringify(this.selectedDomain.element) : '';
+  gotoComponents() {
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/components`]);
   }
 
-  getGroupElement(): string {
-    return this.selectedGroup ? JSON.stringify(this.selectedGroup.element) : '';
+  gotoEnvironments() {
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/environments`]);
   }
 
-  getConfigElement(): string {
-    return this.selectedConfig ? JSON.stringify(this.selectedConfig.element) : '';
+  gotoTeams() {
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/teams`]);
+  }
+
+  gotoSlackIntegration() {
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/integration/slack`]);
   }
 
   getSlackUrl(): string {
@@ -191,49 +211,54 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   hasSlackInstalled(): boolean {
-    return this.selectedDomain?.element.integrations?.slack;
-  }
-
-  showPath(type: string) {
-    if (this.currentPathRoute) {
-      if (this.currentPathRoute.type === Types.GROUP_TYPE) {
-        return type === Types.DOMAIN_TYPE ? true : type === Types.GROUP_TYPE;
-      } else if (this.currentPathRoute.type === Types.CONFIG_TYPE) {
-        return true;
-      }
-    }
-    return false;
+    return this.domain.integrations?.slack != undefined;
   }
 
   navToggled() {
     this.navControl = !this.navControl;
   }
 
-  private loadDomain() {
-    this.domainRouteService.pathChange.pipe(delay(0), takeUntil(this.unsubscribe)).subscribe(() => {
-      this.updateRoute();
-      this.checkDomainOwner();
+  private loadConfiguration() {
+    const path = this.domainRouteService.getStoredPath();
+    if (path) {
+      this.currentPath = path;
+    }
 
-      if (environment.slackUrl) {
-        this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => this.slackIntegration = data?.result);
+    let query: Observable<ApolloQueryResult<GraphQLConfigurationResultSet>>;
+    if (this.currentPath.type === Types.GROUP_TYPE) {
+      query = this.domainService.executeConfigurationGroupQuery(this.domainId, this.currentPath.id);
+    } else if (this.currentPath.type === Types.CONFIG_TYPE) {
+      query = this.domainService.executeConfigurationConfigQuery(this.domainId, this.currentPath.id);
+    } else {
+      query = this.domainService.executeConfigurationQuery(this.domainId);
+    }
+
+    query.pipe(takeUntil(this.unsubscribe)).subscribe(response => {
+      if (response) {
+        this.updateData(response.data.configuration);
+        this.checkDomainOwner();
       }
+    }, error => {
+      ConsoleLogger.printError(error);
     });
   }
 
-  private updateRoute() {
-    this.selectedDomain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.selectedGroup = this.domainRouteService.getPathElement(Types.SELECTED_GROUP);
-    this.selectedConfig = this.domainRouteService.getPathElement(Types.SELECTED_CONFIG);
-    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE);
+  private updateData(configuration: Configuration) {
+    this.domain = configuration.domain;
+    this.group = configuration.group ? configuration.group[0] : undefined;
+    this.config = configuration.config ? configuration.config[0] : undefined;
+
+    this.selectedDomainPath = `/dashboard/domain/${this.domainName}/${this.domainId}`;
+    this.selectedGroupPath = `${this.selectedDomainPath}/groups/${this.group?.id}`;
+    this.selectedConfigPath = `${this.selectedGroupPath}/switchers/${this.config?.id}`;
   }
 
   private checkDomainOwner() {
     this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
       if (currentUser) {
-        if (currentUser.id == this.selectedDomain.element.owner) {
-          if (this.selectedDomain.element.transfer)
+        this.transferLabel = '';
+        if (currentUser.id == this.domain.owner) {
+          if (this.domain.transfer)
             this.transferLabel = 'Cancel Transfer';
           else
             this.transferLabel = 'Transfer Domain';
@@ -247,7 +272,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   private scrollMenuHandler() {
     window.onscroll = () => {
       if (!this.navControl && window.innerWidth < 1200) {
-        var currentScrollPos = window.scrollY;
+        const currentScrollPos = window.scrollY;
         if (this.prevScrollpos > currentScrollPos) {
             document.getElementById("navbarMenu").style.top = "0";
         } else {
@@ -260,44 +285,31 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     }
   }
 
-  private updateConfigForRedirect(item: any) {
-    this.configService.getConfigById(item._id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        const pathRoute: PathRoute = {
-          id: item._id,
-          element: data,
-          name: item.name,
-          path: '/dashboard/domain/group/switcher/detail',
-          type: Types.CONFIG_TYPE
-        };
-        this.domainRouteService.updatePath(pathRoute, true);
-        this.updateGroupForRedirect(item.parent, true);
-      }
+  private redirectToSwitcher(item: any) {
+    this.configService.getConfigById(item._id, true)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(config => {
+        if (config) {
+          this.currentPath.id = config.id;
+          this.currentPath.type = Types.CONFIG_TYPE;
+          this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${item.parent._id}/switchers/${config.id}`;
+          this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.config) } });
+        }
     }, error => {
       ConsoleLogger.printError(error);
     });
   }
 
-  private updateGroupForRedirect(item: any, parent = false) {
-    this.groupService.getGroupById(item._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        const pathRouteGroup: PathRoute = {
-          id: data.id,
-          element: data,
-          name: data.name,
-          path: '/dashboard/domain/group/detail',
-          type: Types.GROUP_TYPE
-        };
-        this.domainRouteService.updatePath(pathRouteGroup, !parent);
-
-        if (!parent) {
-          this.router.navigate(['/dashboard/domain/group/']).then(_data =>
-            this.router.navigate(['/dashboard/domain/group/detail']));
-        } else {
-          this.router.navigate(['/dashboard/domain/group/switcher']).then(_data =>
-            this.router.navigate(['/dashboard/domain/group/switcher/detail']));
+  private redirectToGroup(item: any) {
+    this.groupService.getGroupById(item._id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(group => {
+        if (group) {
+          this.currentPath.id = group.id;
+          this.currentPath.type = Types.GROUP_TYPE;
+          this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${group.id}`;
+          this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.group) } });
         }
-      }
     });
   }
 

@@ -53,16 +53,11 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  getTeamName() {
-    return this.team.name;
-  }
-
-  getTeam() {
-    return this.team;
-  }
-
   selectTeam() {
-    this.router.navigate(['/dashboard/domain/team/detail'], { state: { team: JSON.stringify(this.team) } });
+    const domainId = this.teamListComponent.domainId;
+    const domainName = encodeURIComponent(this.teamListComponent.domainName);
+    this.router.navigate([`/dashboard/domain/${domainName}/${domainId}/teams/${this.team._id}`], 
+      { state: { team: JSON.stringify(this.team) } });
   }
 
   removeTeam() {

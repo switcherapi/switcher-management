@@ -10,10 +10,14 @@ const routes: Routes = [
     component: TeamComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'detail',
+    path: ':teamid',
     component: TeamDetailComponent, canActivate: [AuthGuard]
   }
 ];
+
+RouterModule.forRoot(routes, { 
+  paramsInheritanceStrategy: 'always' 
+});
 
 @NgModule({
   imports: [

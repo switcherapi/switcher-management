@@ -17,7 +17,11 @@
             <div *ngIf="!loading" class="card-body">
                 <div class="form-group">
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Domain" value="{{ selectedDomain?.name }}" readonly="true">
+                        <mat-select placeholder="Select Domain" [formControl]="domainFormControl">
+                            <mat-option *ngFor="let domain of domains" [value]="domain">
+                                {{ domain.name }}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
                 <div *ngIf="!error">

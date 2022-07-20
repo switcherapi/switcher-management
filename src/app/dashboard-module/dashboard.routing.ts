@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DomainListComponent, canActivate: [AuthGuard] },
 
   { 
-    path: 'dashboard/domain',
+    path: 'dashboard/domain/:name/:domainid',
     loadChildren: () => import('./domain-module/domain.module').then(mod => mod.DomainModule),
     data: { preload: true }
   }

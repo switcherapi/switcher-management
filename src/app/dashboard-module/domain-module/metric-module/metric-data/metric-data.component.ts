@@ -11,10 +11,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MetricData } from 'src/app/model/metric';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { MetricService } from 'src/app/services/metric.service';
-import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-metric-data',
@@ -53,7 +51,6 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   currentPageSize: number = 0;
 
   constructor(
-    private domainRouteService: DomainRouteService,
     private adminService: AdminService,
     private metricService: MetricService,
     private toastService: ToastService,
@@ -95,13 +92,14 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = `Are you sure you want to reset metrics for ${this.switcher}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-        this.metricService.resetMetricsForSwitcher(domain.id, this.switcher).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.parent.switcher = null;
-            this.dataSource = new MatTableDataSource(null);
-            this.toastService.showSuccess(`Metrics reseted with success`);
-          }
+        this.metricService.resetMetricsForSwitcher(this.parent.domainId, this.switcher)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => {
+            if (data) {
+              this.parent.switcher = null;
+              this.dataSource = new MatTableDataSource(null);
+              this.toastService.showSuccess(`Metrics reseted with success`);
+            }
         }, error => {
           this.toastService.showError(`Unable to reset Metrics`);
           ConsoleLogger.printError(error);
@@ -175,16 +173,16 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.parent.domainId, ['DELETE'], 'ADMIN', 'name', this.parent.domainName)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            }
+          });
+        }
     });
   }
 

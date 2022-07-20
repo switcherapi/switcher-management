@@ -12,8 +12,8 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
 import { AdminService } from 'src/app/services/admin.service';
 import { ComponentService } from 'src/app/services/component.service';
+import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-components',
@@ -40,23 +40,32 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   removable: boolean = false;
   creatable: boolean = false;
 
+  domainId: string;
+  domainName: string;
   classStatus = "card mt-4 loading";
   loading = true;
   error = '';
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private domainRouteService: DomainRouteService,
     private adminService: AdminService,
     private compService: ComponentService,
     private errorHandler: RouterErrorHandler,
-    private domainRouteService: DomainRouteService,
     private toastService: ToastService,
     private _modalService: NgbModal,
     public dialog: MatDialog
-  ) { }
+  ) {
+    this.activatedRoute.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = decodeURIComponent(params.name);
+    });
+   }
 
   ngOnInit() {
     this.loadComponents();
     this.readPermissionToObject();
+    this.domainRouteService.updateView('Components', 3);
   }
 
   ngOnDestroy() {
@@ -66,7 +75,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
   private loadComponents(): void {
     this.loading = true;
-    this.compService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+    this.compService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(components => {
         this.components = components;
@@ -81,20 +90,20 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'COMPONENT', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'COMPONENT', 'name', this.domainName)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            } else if (element.action === 'CREATE') {
+              this.creatable = element.result === 'ok';
+            }
+          });
+        }
     });
   }
 
@@ -104,7 +113,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     if (valid) {
       this.loading = true;
       this.compService.createComponent(
-        this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.compFormControl.value, 'Created using Switcher Manager')
+        this.domainId, this.compFormControl.value, 'Created using Switcher Manager')
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
           if (data.component) {
@@ -135,7 +144,6 @@ export class ComponentsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(env => {
           if (env) {
-            this.domainRouteService.notifyDocumentChange();
             this.components.splice(this.components.indexOf(component[0]), 1);
             this.toastService.showSuccess('Component removed with success');
           }
@@ -162,12 +170,13 @@ export class ComponentsComponent implements OnInit, OnDestroy {
           name: componentChanged.name
         };
 
-        this.compService.updateComponent(selectedComponent.id, body.name).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.domainRouteService.notifyDocumentChange();
-            selectedComponent.name = componentChanged.name;
-            this.toastService.showSuccess(`Component updated with success`);
-          }
+        this.compService.updateComponent(selectedComponent.id, body.name)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => {
+            if (data) {
+              selectedComponent.name = componentChanged.name;
+              this.toastService.showSuccess(`Component updated with success`);
+            }
         }, error => {
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update component`);
@@ -183,11 +192,13 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Generating API Key...');
-        this.compService.generateApiKey(selectedComponent.id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-          if (data) {
-            this.blockUI.stop();
-            this.confirmKeyCreated(data.apiKey, selectedComponent.name);
-          }
+        this.compService.generateApiKey(selectedComponent.id)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => {
+            if (data) {
+              this.blockUI.stop();
+              this.confirmKeyCreated(data.apiKey, selectedComponent.name);
+            }
         }, error => {
           this.blockUI.stop();
           this.toastService.showError(`Unable to generate an API Key`);

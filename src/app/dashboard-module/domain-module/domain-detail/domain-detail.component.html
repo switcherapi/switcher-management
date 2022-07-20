@@ -8,10 +8,10 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
-                        <input matInput placeholder="Name" [value]="getDomain()?.name" readonly>
+                        <input matInput placeholder="Name" [value]="domain?.name" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <textarea #descElement matInput placeholder="Description" [value]="domainDescription" maxlength="256"
+                        <textarea #descElement matInput placeholder="Description" [value]="domain?.description" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
@@ -19,17 +19,24 @@
                 </div>
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
-                        <input matInput placeholder="Created At" [value]="getDomain()?.createdAt | date:'medium'" readonly>
+                        <input matInput placeholder="Created At" [value]="domain?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput placeholder="Last Update" [value]="getDomain()?.updatedAt | date:'medium'" readonly>
+                        <input matInput placeholder="Last Update" [value]="domain?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <input matInput placeholder="Created By" [value]="createdBy" readonly>
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [configuredEnvironments]="getDomain()?.activated"></app-environment-config>
+                    <app-environment-config *ngIf="domain"
+                        [enable]="envEnable"
+                        [domainId]="domain.id" 
+                        [configuredEnvironments]="domain.activated"
+                        (outputEnvChanged)="onEnvChange($event)"
+                        (outputStatusChanged)="onEnvStatusChanged($event)"
+                        (outputEnvRemoved)="onEnvRemoved($event)">
+                    </app-environment-config>
                 </div>
             </div>
         </section>

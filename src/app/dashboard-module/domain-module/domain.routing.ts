@@ -1,5 +1,5 @@
 import { NgModule }             from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';
@@ -24,60 +24,48 @@ const routes: Routes = [
         component: DomainDetailComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group',
+        path: 'groups',
         component: GroupListComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group/detail',
+        path: 'groups/:groupid',
         component: GroupDetailComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group/switcher',
+        path: 'groups/:groupid/switchers',
         component: ConfigListComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'group/switcher/detail',
+        path: 'groups/:groupid/switchers/:configid',
         component: ConfigDetailComponent, canActivate: [AuthGuard]
       },
       {
         path: 'metrics',
-        loadChildren: () => import('./metric-module/metric.module').then(mod => mod.MetricModule),
-        data: {
-          title: 'Metrics',
-          icon: 1
-        }
+        loadChildren: () => import('./metric-module/metric.module').then(mod => mod.MetricModule)
       },
       {
         path: 'change-log',
-        component: ChangelogComponent, canActivate: [AuthGuard],
-        data: {
-          title: 'Change Log: $',
-          icon: 2
-        }
+        component: ChangelogComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'groups/:groupid/change-log',
+        component: ChangelogComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'groups/:groupid/switchers/:configid/change-log',
+        component: ChangelogComponent, canActivate: [AuthGuard]
       },
       {
         path: 'components',
-        component: ComponentsComponent, canActivate: [AuthGuard],
-        data: {
-          title: 'Components',
-          icon: 3
-        }
+        component: ComponentsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'environments',
-        component: EnvironmentsComponent, canActivate: [AuthGuard],
-        data: {
-          title: 'Environments',
-          icon: 4
-        }
+        component: EnvironmentsComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'team',
-        loadChildren: () => import('./team-module/team.module').then(mod => mod.TeamModule),
-        data: {
-          title: 'Teams',
-          icon: 6
-        }
+        path: 'teams',
+        loadChildren: () => import('./team-module/team.module').then(mod => mod.TeamModule)
       },
       {
         path: 'integration/slack',
@@ -88,7 +76,10 @@ const routes: Routes = [
   }
 ];
 
-RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
+RouterModule.forRoot(routes, { 
+  scrollPositionRestoration: 'enabled', 
+  paramsInheritanceStrategy: 'always' 
+});
 
 @NgModule({
   imports: [
