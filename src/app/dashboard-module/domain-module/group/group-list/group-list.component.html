@@ -24,6 +24,11 @@
         </div>
     </div>
     <div *ngFor="let group of groups">
-        <app-group-preview [group]="group" [groupListComponent]="this"></app-group-preview>
+        <app-group-preview 
+            [domainId]="domainId"
+            [domainName]="domainName"
+            [group]="group" 
+            [environmentSelectionChange]="environmentSelectionChange">
+        </app-group-preview>
     </div>
 </div>

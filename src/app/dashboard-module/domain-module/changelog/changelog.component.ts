@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { trigger, state, style } from '@angular/animations';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -13,13 +13,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Strategy } from 'src/app/model/strategy';
 import { History } from 'src/app/model/history';
-import { PathRoute, Types } from 'src/app/model/path-route';
 import { AdminService } from 'src/app/services/admin.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { DomainService } from 'src/app/services/domain.service';
 import { GroupService } from 'src/app/services/group.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { StrategyService } from 'src/app/services/strategy.service';
+import { ActivatedRoute } from '@angular/router';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-changelog',
@@ -38,8 +39,9 @@ import { StrategyService } from 'src/app/services/strategy.service';
 export class ChangelogComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
+  @Input() domainId: string;
+  @Input() domainName: string;
   @Input() strategy: Strategy;
-  currentPathRoute: PathRoute;
   removable: boolean = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -63,12 +65,16 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   ];
   expandedElement: History | null;
 
+  configId: string;
+  groupId: string;
   classStatus = "mat-elevation-z8 loading";
   loading = true;
+  fetch = true;
 
   constructor(
-    private adminService: AdminService,
+    private activatedRoute: ActivatedRoute,
     private domainRouteService: DomainRouteService,
+    private adminService: AdminService,
     private domainService: DomainService,
     private groupService: GroupService,
     private configService: ConfigService,
@@ -77,7 +83,22 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     private _modalService: NgbModal,
     private datepipe: DatePipe,
     private errorHandler: RouterErrorHandler
-  ) { }
+  ) { 
+    this.activatedRoute.parent?.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = params.name;
+    });
+
+    this.activatedRoute.params.subscribe(params => {
+      this.groupId = params.groupid;
+      this.configId = params.configid;
+    });
+
+    this.activatedRoute.paramMap
+      .pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.fetch = data.fetch == undefined);
+  }
 
   ngOnInit() {
     this.loadChangeLog();
@@ -90,58 +111,77 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.domainId, ['DELETE'], 'ADMIN', 'name', this.domainName)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            }
+          });
+        }
     });
   }
 
   private loadChangeLog(): void {
-    this.currentPathRoute = this.domainRouteService.getPathElement(Types.CURRENT_ROUTE) || 
-      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-
-    if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-      this.loadDomainHistory(this.currentPathRoute);
-    } else if (this.currentPathRoute.type === Types.GROUP_TYPE) {
-      this.loadGroupHistory(this.currentPathRoute);
-    } else if (this.strategy) {
-      this.loadStrategyHistory(this.strategy);
-    } else if (this.currentPathRoute.type === Types.CONFIG_TYPE) {
-      this.loadConfigHistory(this.currentPathRoute);
+    this.domainRouteService.updateView('Change Log', 2);
+    if (this.strategy) {
+      this.loadStrategyHistory();
+    } else if (this.configId) {
+      this.loadConfigHistory();
+    } else if (this.groupId) {
+      this.loadGroupHistory();
+    } else {
+      this.loadDomainHistory();
     }
   }
 
-  private loadDomainHistory(pathRouteSelection: PathRoute): void {
+  private loadDomainHistory(): void {
     this.loading = true;
-    this.domainService.getHistory(pathRouteSelection.id)
+    this.domainService.getHistory(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+
+    this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+      `/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}`);
   }
 
-  private loadGroupHistory(pathRouteSelection: PathRoute): void {
+  private loadGroupHistory(): void {
     this.loading = true;
-    this.groupService.getHistory(pathRouteSelection.id)
+    this.groupService.getHistory(this.groupId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+
+    if (this.fetch) {
+      this.groupService.getGroupById(this.groupId)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => {
+          this.domainRouteService.updatePath(this.groupId, data.name, Types.GROUP_TYPE, 
+            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}`);
+      });
+    }
   }
 
-  private loadConfigHistory(pathRouteSelection: PathRoute): void {
+  private loadConfigHistory(): void {
     this.loading = true;
-    this.configService.getHistory(pathRouteSelection.id)
+    this.configService.getHistory(this.configId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+
+    if (this.fetch) {
+      this.configService.getConfigById(this.configId, false)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => {
+          this.domainRouteService.updatePath(this.configId, data.key, Types.CONFIG_TYPE, 
+            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.configId}`);
+      });
+    }
   }
 
-  private loadStrategyHistory(selectedStrategy: Strategy): void {
+  private loadStrategyHistory(): void {
     this.loading = true;
-    this.strategyService.getHistory(selectedStrategy.id)
+    this.strategyService.getHistory(this.strategy.id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
@@ -159,19 +199,19 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private resetDomainChangeLog(): void {
-    this.domainService.resetHistory(this.currentPathRoute.id)
+    this.domainService.resetHistory(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
 
   private resetGroupChangeLog(): void {
-    this.groupService.resetHistory(this.currentPathRoute.id)
+    this.groupService.resetHistory(this.groupId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
 
   private resetConfigChangeLog(): void {
-    this.configService.resetHistory(this.currentPathRoute.id)
+    this.configService.resetHistory(this.configId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
   }
@@ -286,16 +326,14 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = 'Are you sure you want to reset the change log?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        if (this.currentPathRoute) {
-          if (this.currentPathRoute.type === Types.DOMAIN_TYPE) {
-            this.resetDomainChangeLog();
-          } else if (this.currentPathRoute.type === Types.GROUP_TYPE) {
-            this.resetGroupChangeLog();
-          } else if (this.strategy) {
-            this.resetStrategyChangeLog();
-          } else if (this.currentPathRoute.type === Types.CONFIG_TYPE) {
-            this.resetConfigChangeLog();
-          }
+        if (this.strategy) {
+          this.resetStrategyChangeLog();
+        } else if (this.configId) {
+          this.resetConfigChangeLog();
+        } else if (this.groupId) {
+          this.resetGroupChangeLog();
+        } else {
+          this.resetDomainChangeLog();
         }
       }
     });

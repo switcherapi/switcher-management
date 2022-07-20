@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class DocumentationComponent implements OnInit, OnDestroy {
   sideBarTopPos: number;
-  prevScrollpos = window.pageYOffset;
+  prevScrollpos = window.scrollY;
 
   constructor(
     private router: Router,
@@ -19,7 +19,9 @@ export class DocumentationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.onscroll = function () {};
+    window.onscroll = () => {
+      return;
+    };
   }
 
   toggleMenu(): void {
@@ -42,7 +44,7 @@ export class DocumentationComponent implements OnInit, OnDestroy {
 
   scrollMenuHandler() {
     window.onscroll = function () {
-      var currentScrollPos = window.pageYOffset;
+      const currentScrollPos = window.scrollY;
       if (this.prevScrollpos > currentScrollPos) {
           document.getElementById("sidebarCollapse").style.top = "0";
       } else {

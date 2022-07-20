@@ -17,7 +17,12 @@
 <div *ngIf="!error">
     <div *ngIf="!loading">
         <div *ngFor="let team of teams">
-            <app-team-preview [team]="team" [teamListComponent]="this" [removable]="removable" [updatable]="updatable"></app-team-preview>
+            <app-team-preview 
+                [team]="team" 
+                [teamListComponent]="this" 
+                [removable]="removable" 
+                [updatable]="updatable">
+            </app-team-preview>
         </div>
     </div>
 </div>

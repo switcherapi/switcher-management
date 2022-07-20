@@ -1,20 +1,20 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailComponent } from '../common/detail-component';
-import { EnvironmentConfigComponent } from '../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
-import { PathRoute, Types } from 'src/app/model/path-route';
 import { Domain } from 'src/app/model/domain';
+import { Types } from 'src/app/model/path-route';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-domain-detail',
@@ -29,14 +29,13 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   @BlockUI() blockUI: NgBlockUI;
 
-  @ViewChild('envSelectionChange', { static: true })
-  private envSelectionChange: EnvironmentConfigComponent;
-
   @ViewChild('descElement', { static: true }) 
   private descElement: ElementRef;
+  
+  envEnable = new Subject<boolean>();
 
-  state$: Observable<object>;
-  domainDescription: string;
+  domain: Domain;
+  domainId: string;
   domainForm: FormGroup;
 
   collabUser: boolean = false;
@@ -45,13 +44,13 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     private domainRouteService: DomainRouteService,
     private domainService: DomainService,
     private adminService: AdminService,
-    private pathRoute: PathRoute,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
     private _modalService: NgbModal
   ) {
     super(adminService);
+    this.route.params.subscribe(params => this.domainId = params.domainid);
   }
 
   ngOnInit() {
@@ -59,23 +58,11 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.route.paramMap
       .pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data.element) {
-          this.updatePathRoute(JSON.parse(data.element));
+          this.updateData(JSON.parse(data.element));
         } else {
-          this.updatePathRoute(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).element);
+          this.loadDomain();
         }
       });
-    
-    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.selectEnvironment(status);
-    });
-
-    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.updateEnvironmentStatus(env);
-    });
-
-    this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.removeEnvironmentStatus(env);
-    });
   }
 
   ngOnDestroy() {
@@ -90,7 +77,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Leaving...');
-        this.adminService.leaveDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(admin => {
+        this.adminService.leaveDomain(this.domain.id).pipe(takeUntil(this.unsubscribe)).subscribe(admin => {
           this.blockUI.stop();
           if (admin) {
             this.toastService.showSuccess(`Left with success`);
@@ -106,41 +93,26 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  selectEnvironment(status: boolean): void {
-    this.currentStatus = status;
-
-    if (this.editing) {
-      this.classStatus = 'header editing';
-    } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-    }
-  }
-
-  getDomain() {
-    return this.pathRoute.element;
-  }
-
   edit() {
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
     } else {
       this.blockUI.start('Saving changes...');
-      this.domainDescription = this.descElement.nativeElement.value;
-
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+
+      const newValue = this.descElement.nativeElement.value;
       if (super.validateEdition(
-          { description: this.pathRoute.element.description }, 
-          { description: this.domainDescription})) {
+          { description: this.domain.description }, 
+          { description: newValue})) {
         this.blockUI.stop();
         this.editing = false;
         return;
       }
 
-      this.domainService.updateDomain(this.getDomain().id, this.domainDescription).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      this.domainService.updateDomain(this.domain.id, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
-          this.updatePathRoute(data);
-          this.domainRouteService.notifyDocumentChange();
+          this.updateData(data);
           this.blockUI.stop();
           this.toastService.showSuccess(`Domain updated with success`);
           this.editing = false;
@@ -148,7 +120,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       }, error => {
         this.blockUI.stop();
         ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update '${this.getDomain().name}' domain`);
+        this.toastService.showError(`Unable to update '${this.domain.name}' domain`);
         this.editing = false;
       });
     }
@@ -161,11 +133,9 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing domain...');
-        this.domainService.deleteDomain(this.getDomain().id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
+        this.domainService.deleteDomain(this.domain.id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
           this.blockUI.stop();
-          this.domainRouteService.removePath(Types.GROUP_TYPE);
-          this.domainRouteService.notifyDocumentChange();
-          this.router.navigate(['/dashboard/']);
+          this.router.navigate(['/dashboard']);
           this.toastService.showSuccess(`Domain removed with success`);
         }, error => {
           this.blockUI.stop();
@@ -176,32 +146,53 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updatePathRoute(domain: Domain) {
-    this.pathRoute = {
-      id: domain.id,
-      element: domain,
-      name: domain.name,
-      path: '/dashboard/domain/',
-      type: Types.DOMAIN_TYPE
-    };
+  onEnvChange($event: EnvironmentChangeEvent) {
+    this.selectEnvironment($event);
+  }
 
-    this.domainDescription = domain.description;
-    this.domainRouteService.updatePath(this.pathRoute, true);
+  onEnvStatusChanged($event: any) {
+    this.updateEnvironmentStatus($event);
+  }
+
+  onEnvRemoved($event: any) {
+    this.removeEnvironmentStatus($event);
+  }
+
+  private loadDomain() {
+    this.domainService.getDomain(this.domainId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(domain => {
+        if (domain) {
+          this.updateData(domain);
+        }
+    }, error => {
+      this.toastService.showError(`Unable to load Domain`);
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private updateData(domain: Domain) {
+    this.domain = domain;
     this.readPermissionToObject();
     this.checkDomainOwner();
 
-    super.loadAdmin(this.getDomain().owner);
+    super.loadAdmin(this.domain.owner);
+    this.domainRouteService.updateView(this.domain.name, 0);
+    this.domainRouteService.updatePath(this.domain.id, this.domain.name, Types.DOMAIN_TYPE, 
+      `/dashboard/domain/${encodeURIComponent(this.domain.name)}/${this.domainId}`);
   }
 
-  private updateEnvironmentStatus(env : any): void {
+  private updateEnvironmentStatus(env: any): void {
     this.blockUI.start('Updating environment...');
-    this.domainService.setDomainEnvironmentStatus(this.getDomain().id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.selectEnvironment(env.status);
-        this.updatePathRoute(data);
-        this.blockUI.stop();
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
+    this.domainService.setDomainEnvironmentStatus(this.domain.id, env.environment, env.status)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.selectEnvironment(env);
+          this.updateData(data);
+          this.blockUI.stop();
+          this.toastService.showSuccess(`Environment updated with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
@@ -209,14 +200,16 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private removeEnvironmentStatus(env : any): void {
+  private removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
-    this.domainService.removeDomainEnvironmentStatus(this.getDomain().id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.blockUI.stop();
-        this.updatePathRoute(data);
-        this.toastService.showSuccess(`Environment removed with success`);
-      }
+    this.domainService.removeDomainEnvironmentStatus(this.domain.id, env)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.blockUI.stop();
+          this.updateData(data);
+          this.toastService.showSuccess(`Environment removed with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
@@ -227,24 +220,25 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   private checkDomainOwner(): void {
     this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
       if (currentUser) {
-        this.collabUser = currentUser.id != this.getDomain().owner;
+        this.collabUser = currentUser.id != this.domain.owner;
       }
     });
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.getDomain().id, ['UPDATE', 'DELETE'], 'DOMAIN', 'name', this.getDomain().name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            this.envSelectionChange.disableEnvChange(!this.updatable);
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.domain.id, ['UPDATE', 'DELETE'], 'DOMAIN', 'name', this.domain.name)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+              this.envEnable.next(!this.updatable);
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            }
+          });
+        }
     }, error => {
       ConsoleLogger.printError(error);
     }, () => {

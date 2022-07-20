@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { ConfigListComponent } from '../config-list/config-list.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -9,9 +8,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { AdminService } from 'src/app/services/admin.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { ConfigService } from 'src/app/services/config.service';
-import { Types } from 'src/app/model/path-route';
 import { Config } from 'protractor';
 
 @Component({
@@ -27,8 +24,11 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
 
   @BlockUI() blockUI: NgBlockUI;
 
+  @Input() domainId: string;
+  @Input() domainName: string;
+  @Input() groupId: string;
   @Input() config: Config;
-  @Input() configListComponent: ConfigListComponent;
+  @Input() environmentSelectionChange: EventEmitter<string>;
 
   environmentStatusSelection: FormGroup;
   selectedEnvStatus: boolean;
@@ -46,18 +46,16 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private adminService: AdminService,
-    private domainRouteService: DomainRouteService,
     private configService: ConfigService,
     private toastService: ToastService
   ) { }
 
   ngOnInit() {
+    this.readPermissionToObject();
     this.loadOperationSelectionComponent();
-    this.configListComponent.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
+    this.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
       this.selectEnvironment(envName);
     });
-
-    this.readPermissionToObject();
   }
 
   ngOnDestroy() {
@@ -65,12 +63,9 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  getConfig() {
-    return this.config;
-  }
-
   selectConfig() {
-    this.router.navigate(['/dashboard/domain/group/switcher/detail'], { state: { element: JSON.stringify(this.config) } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`], 
+      { state: { element: JSON.stringify(this.config) } });
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
@@ -78,12 +73,14 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     this.config.activated[this.selectedEnv] = event.checked;
     this.selectEnvironment(this.selectedEnv);
 
-    this.configService.setConfigEnvironmentStatus(this.getConfig().id, this.selectedEnv, event.checked).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.updatePathRoute(data);
-        this.blockUI.stop();
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
+    this.configService.setConfigEnvironmentStatus(this.config.id, this.selectedEnv, event.checked)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.config = data;
+          this.blockUI.stop();
+          this.toastService.showSuccess(`Environment updated with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
@@ -95,18 +92,6 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     this.environmentStatusSelection = this.fb.group({
       environmentStatusSelection: [null, Validators.required]
     });
-  }
-
-  private updatePathRoute(config: Config) {
-    const pathRoute = {
-      id: config.id,
-      element: config,
-      name: config.key,
-      path: '/dashboard/domain/group/switcher/detail',
-      type: Types.CONFIG_TYPE
-    };
-
-    this.domainRouteService.updatePath(pathRoute, false);
   }
 
   private selectEnvironment(envName: string): void {
@@ -121,24 +106,24 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, 
-      ['UPDATE', 'DELETE'], 'SWITCHER', 'name', this.getConfig().name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            
-            if (!this.updatable) {
-              this.environmentStatusSelection.disable({ onlySelf: true });
-            } else {
-              this.toggleSectionStyle = 'toggle-section';
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'SWITCHER', 'name', this.config.key)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+              
+              if (!this.updatable) {
+                this.environmentStatusSelection.disable({ onlySelf: true });
+              } else {
+                this.toggleSectionStyle = 'toggle-section';
+              }
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
             }
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
+          });
+        }
     });
   }
 

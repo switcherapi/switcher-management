@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { takeUntil, startWith, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
-import { QueryRef, Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
+import { QueryRef } from 'apollo-angular';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { DomainService } from 'src/app/services/domain.service';
 
 @Component({
   selector: 'element-autocomplete',
@@ -29,19 +28,15 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   private query: QueryRef<any>;
 
   constructor(
-    private apollo: Apollo,
-    private domainRouteService: DomainRouteService
+    private domainService: DomainService
   ) { }
 
   ngOnInit() {
     if (this.value) {
       this.smartSearchFormControl.setValue(this.value);
-      this.loadKeys(this.parentComponent.getDomainId());
     }
-    
-    this.domainRouteService.documentChange.pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
-      this.loadKeys(this.parentComponent.getDomainId());
-    });
+
+    this.loadKeys(this.parentComponent.getDomainId());
   }
 
   ngOnDestroy() {
@@ -52,26 +47,26 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   loadComponent() {
     if (!this.query) {
       this.loadKeys(this.parentComponent.getDomainId());
+    } else {
+      this.query?.refetch();
     }
   }
 
-  private loadKeys(domain: string): void {
-    if (!domain)
+  private loadKeys(domainId: string): void {
+    if (!domainId)
       return;
 
-    this.searchListItems = [];
-    this.query = this.apollo.watchQuery({
-      query: this.generateGql(),
-      variables: { 
-        id: domain,
-      }
-    });
+    this.query = this.domainService.executeConfigurationTreeQuery(
+      domainId, this.switchers, this.groups, this.components);
 
     this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-      if (result && result.data) {        
+      if (result && result.data) {
+        this.searchListItems = [];
         this.loadByGroup(result.data.domain.group);
         this.loadBySwitcher(result.data.domain.group);
         this.loadByComponent(result.data.domain.group);
+        
+        this.searchListItems = this.searchListItems.filter(item => item != undefined);
       }
     }, error => {
       ConsoleLogger.printError(error);
@@ -83,12 +78,12 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     );
   }
 
-  private loadByComponent(groups: any) {
+  private loadByComponent(groups?: any) {
     if (!this.components)
       return;
 
-    let filtered = groups.map(
-      group => group.config.map(config => {
+    let filtered = groups?.map(
+      group => group.config?.map(config => {
         return {
           type: 'Component',
           _id: config._id,
@@ -97,15 +92,17 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
           name: config.key
         };
       }).filter(comp => comp.description.length));
-    this.searchListItems.push(...filtered.flat());
+
+    if (filtered)
+      this.searchListItems.push(...filtered.flat());
   }
 
   private loadBySwitcher(groups: any) {
-    if (!this.switchers)
+    if (!this.switchers || !groups)
       return;
 
     let filtered = groups.map(
-      group => group.config.map(config => {
+      group => group.config?.map(config => {
         return {
           type: 'Switcher',
           _id: config._id,
@@ -114,11 +111,13 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
           name: config.key
         };
       }));
-    this.searchListItems.push(...filtered.flat());
+
+    if (filtered)
+      this.searchListItems.push(...filtered.flat());
   }
 
   private loadByGroup(groups: any) {
-    if (!this.groups)
+    if (!this.groups || !groups)
       return;
       
     let filtered = groups.map(group => {
@@ -130,6 +129,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
         name: group.name
       };
     });
+
     this.searchListItems.push(...filtered);
   }
 
@@ -168,25 +168,6 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     if (prefix === 's') return 'switcher';
     if (prefix === 'c') return 'component';
     return 'group';
-  }
-
-  private generateGql(): any {
-    return gql`
-      query domain($id: String!) {
-        domain(_id: $id) {
-          group {
-            ${this.groups ? '_id name description' : ''}
-            config {
-                ${this.switchers ? '_id key description' : ''}
-                ${this.components ? 'components' : ''}
-                strategies {
-                    values
-                }
-            }
-          }
-        }
-      }
-  `;
   }
 }
 

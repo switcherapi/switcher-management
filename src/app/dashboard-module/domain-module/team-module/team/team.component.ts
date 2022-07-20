@@ -7,8 +7,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { Team } from 'src/app/model/team';
 import { AdminService } from 'src/app/services/admin.service';
 import { TeamService } from 'src/app/services/team.service';
+import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-team',
@@ -26,6 +26,8 @@ export class TeamComponent implements OnInit, OnDestroy {
     Validators.minLength(2)
   ]);
 
+  domainId: string;
+  domainName: string;
   teams: Team[];
   loading = false;
   error = '';
@@ -36,14 +38,21 @@ export class TeamComponent implements OnInit, OnDestroy {
   creatable: boolean = false;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private domainRouteService: DomainRouteService,
     private adminService: AdminService,
     private teamService: TeamService,
-    private domainRouteService : DomainRouteService,
     private toastService: ToastService
-  ) { }
+  ) { 
+    this.activatedRoute.parent.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = decodeURIComponent(params.name);
+    });
+  }
 
   ngOnInit() {
     this.loadTeams();
+    this.domainRouteService.updateView('Teams', 6);
   }
 
   ngOnDestroy() {
@@ -56,7 +65,7 @@ export class TeamComponent implements OnInit, OnDestroy {
 
     if (valid) {
       this.loading = true;
-      this.teamService.createTeam(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.teamFormControl.value)
+      this.teamService.createTeam(this.domainId, this.teamFormControl.value)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(team => {
           if (team) {
@@ -82,12 +91,12 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
     this.readPermissionToObject();
-    this.teamService.getTeamsByDomain(
-      this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      
-      if (data) {
-        this.teams = data;
-      }
+    this.teamService.getTeamsByDomain(this.domainId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.teams = data;
+        }
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
@@ -99,22 +108,22 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['READ', 'CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          } else if (element.action === 'READ') {
-            this.readable = element.result === 'ok';
-          } 
-        });
-      }
+    this.adminService.readCollabPermission(this.domainId, ['READ', 'CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', this.domainName)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            } else if (element.action === 'CREATE') {
+              this.creatable = element.result === 'ok';
+            } else if (element.action === 'READ') {
+              this.readable = element.result === 'ok';
+            } 
+          });
+        }
     });
   }
 

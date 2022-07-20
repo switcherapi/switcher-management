@@ -1,5 +1,7 @@
+import { E } from '@angular/cdk/keycodes';
 import { AdminService } from 'src/app/services/admin.service';
 import { DataUtils } from 'src/app/_helpers/data-utils';
+import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
 
 export class DetailComponent {
     detailBodyStyle: string = 'detail-body loading';
@@ -8,6 +10,7 @@ export class DetailComponent {
     classStatus: string;
     editing: boolean;
     currentStatus: boolean;
+    currentEnvironment: string = 'default';
     loading: boolean;
 
     updatable: boolean = false;
@@ -22,13 +25,14 @@ export class DetailComponent {
         }, () => this.createdBy = '')
     }
 
-    selectEnvironment(status: boolean): void {
-        this.currentStatus = status;
-    
+    selectEnvironment(event: EnvironmentChangeEvent): void {
+        this.currentEnvironment = event.environmentName;
+        this.currentStatus = event.status;
+        
         if (this.editing) {
-          this.classStatus = 'header editing';
+            this.classStatus = 'header editing';
         } else {
-          this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+            this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
         }
     }
 

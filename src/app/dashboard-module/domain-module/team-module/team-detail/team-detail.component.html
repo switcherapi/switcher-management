@@ -1,5 +1,5 @@
 <block-ui>
-    <div style="padding-top: 20px;">
+    <div *ngIf="!loading" style="padding-top: 20px;">
         <section [ngClass]="classStatus">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
@@ -16,14 +16,14 @@
                         Name is <strong>required</strong>
                     </mat-error>
                     <mat-form-field>
-                        <input matInput placeholder="Domain Name" [value]="domain?.name" readonly>
+                        <input matInput placeholder="Domain Name" [value]="domainName" readonly>
                     </mat-form-field>
                 </div>
             </div>
         </section>
         <section class="options-section">
             <div class="toggle-section">
-                <mat-slide-toggle [checked]="getTeam().active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
+                <mat-slide-toggle [checked]="team.active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
                     (change)="changeStatus($event)" [disabled]="!updatable">
                 </mat-slide-toggle>
             </div>
@@ -46,21 +46,21 @@
                     <ng-container ngbNavItem>
                         <a ngbNavLink>Members</a>
                         <ng-template ngbNavContent>
-                            <app-team-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable"
+                            <app-team-members [team]="team" [creatable]="creatable" [updatable]="updatable"
                                 [removable]="removable"></app-team-members>
                         </ng-template>
                     </ng-container>
                     <ng-container ngbNavItem>
                         <a ngbNavLink>Permissions</a>
                         <ng-template ngbNavContent>
-                            <app-team-permissions [team]="getTeam()" [creatable]="creatable" [updatable]="updatable"
+                            <app-team-permissions [team]="team" [creatable]="creatable" [updatable]="updatable"
                                 [removable]="removable"></app-team-permissions>
                         </ng-template>
                     </ng-container>
                     <ng-container ngbNavItem>
                         <a ngbNavLink>Pending</a>
                         <ng-template ngbNavContent>
-                            <app-team-pending-members [team]="getTeam()" [creatable]="creatable" [updatable]="updatable"
+                            <app-team-pending-members [team]="team" [creatable]="creatable" [updatable]="updatable"
                                 [removable]="removable"></app-team-pending-members>
                         </ng-template>
                     </ng-container>

@@ -202,6 +202,5 @@ export class AuthService {
 
   private removeTokens() {
     localStorage.clear();
-    sessionStorage.clear();
   }
 }

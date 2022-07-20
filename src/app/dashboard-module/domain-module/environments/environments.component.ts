@@ -10,8 +10,8 @@ import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { Environment } from 'src/app/model/environment';
 import { AdminService } from 'src/app/services/admin.service';
 import { EnvironmentService } from 'src/app/services/environment.service';
+import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-environments',
@@ -36,22 +36,31 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   removable: boolean = false;
   creatable: boolean = false;
 
+  domainId: string;
+  domainName: string;
   classStatus = "card mt-4 loading";
   loading = true;
   error = '';
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private domainRouteService: DomainRouteService,
     private adminService: AdminService,
     private envService: EnvironmentService,
-    private domainRouteService: DomainRouteService,
     private toastService: ToastService,
     private _modalService: NgbModal,
     private errorHandler: RouterErrorHandler
-  ) { }
+  ) { 
+    this.activatedRoute.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = decodeURIComponent(params.name);
+    });
+  }
 
   ngOnInit() {
     this.loadEnvironments();
     this.readPermissionToObject();
+    this.domainRouteService.updateView('Environments', 4);
   }
 
   ngOnDestroy() {
@@ -64,7 +73,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
     if (valid) {
       this.loading = true;
-      this.envService.createEnvironment(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id, this.envFormControl.value)
+      this.envService.createEnvironment(this.domainId, this.envFormControl.value)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(env => {
           if (env) {
@@ -128,7 +137,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   
   private loadEnvironments(): void {
     this.loading = true;
-    this.envService.getEnvironmentsByDomainId(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+    this.envService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
         this.environments = env.filter(e => e.name != 'default');
@@ -143,20 +152,20 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT', 'name', this.domainName)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            } else if (element.action === 'CREATE') {
+              this.creatable = element.result === 'ok';
+            }
+          });
+        }
     });
   }
 

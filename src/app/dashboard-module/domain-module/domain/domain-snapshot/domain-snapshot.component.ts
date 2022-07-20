@@ -2,23 +2,14 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import { Apollo, QueryRef } from 'apollo-angular';
-import gql from 'graphql-tag';
+import { QueryRef } from 'apollo-angular';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { Types } from 'src/app/model/path-route';
-
-const STATUS_BY_ENV = `
-  statusByEnv {
-    env
-    value
-  }
-`;
+import { DomainService } from 'src/app/services/domain.service';
 
 @Component({
   selector: 'app-domain-snapshot',
@@ -51,12 +42,13 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<DomainSnapshotComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private environmentService: EnvironmentService,
-    private domainRouteService: DomainRouteService,
-    private toastService: ToastService,
-    private apollo: Apollo) { }
+    private domainService: DomainService,
+    private toastService: ToastService
+  ) { 
+    this.domainId = data.domainId;
+  }
 
   ngOnInit() {
-    this.domainId = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id;
     this.environmentService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
@@ -85,22 +77,17 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     if (valid) {
       this.blockUI.start('Downloading...');
       this.snapshot = null;
-      this.query = this.apollo.watchQuery({
-        query: this.generateGql(this.includeStatus, this.includeDescription),
-        variables: { 
-          id: this.domainId,
-          environment: this.environmentSelection.value
-        }
-      });
-
-      this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-        if (result) {
-          const omitTypename = (key: any, value: any) => key === "__typename" ? undefined : value;
-          this.snapshot = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
-          this.lockEnvSelection();
-          this.toastService.showSuccess(`Snapshot downloaded with success`);
-        }
-        this.blockUI.stop();
+      this.domainService.executeSnapshotQuery(
+        this.domainId, this.environmentSelection.value, this.includeStatus, this.includeDescription)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(result => {
+          if (result) {
+            const omitTypename = (key: any, value: any) => key === "__typename" ? undefined : value;
+            this.snapshot = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
+            this.lockEnvSelection();
+            this.toastService.showSuccess(`Snapshot downloaded with success`);
+          }
+          this.blockUI.stop();
       }, error => {
         ConsoleLogger.printError(error);
         this.blockUI.stop();
@@ -120,40 +107,6 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     } else {
       this.environmentSelection.enable({ onlySelf: true });
     }
-  }
-
-  private generateGql(includeStatusByEnv: boolean = true, includeDescription: boolean = true): any {
-    return gql`
-      query domain($id: String!, $environment: String!) {
-        domain(_id: $id, environment: $environment) {
-          name
-          version
-          ${includeDescription ? 'description' : ''}
-          ${includeStatusByEnv ? STATUS_BY_ENV : ''}
-          activated
-          group {
-            name
-            ${includeDescription ? 'description' : ''}
-            activated
-            ${includeStatusByEnv ? STATUS_BY_ENV : ''}
-            config {
-              key
-              ${includeDescription ? 'description' : ''}
-              activated
-              ${includeStatusByEnv ? STATUS_BY_ENV : ''}
-              strategies {
-                strategy
-                activated
-                ${includeStatusByEnv ? STATUS_BY_ENV : ''}
-                operation
-                values
-              }
-              components
-            }
-          }
-        }
-      }
-  `;
   }
 
 }

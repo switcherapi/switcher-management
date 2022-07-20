@@ -8,13 +8,10 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DetailComponent } from '../../common/detail-component';
-import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { Team } from 'src/app/model/team';
-import { DomainService } from 'src/app/services/domain.service';
 import { TeamService } from 'src/app/services/team.service';
-import { Types } from 'src/app/model/path-route';
-import { Domain } from 'src/app/model/domain';
+import { DomainRouteService } from 'src/app/services/domain-route.service';
 
 @Component({
   selector: 'app-team-detail',
@@ -35,45 +32,52 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     Validators.minLength(2)
   ]);
 
-  domain: Domain;
+  domainId: string;
+  domainName: string;
+  teamId: string;
+  team: Team;
   loading: boolean = false;
 
   constructor(
-    private domainRouteService: DomainRouteService,
     private adminService: AdminService,
-    private route: ActivatedRoute,
-    private team: Team,
-    private domainService: DomainService,
+    private domainRouteService: DomainRouteService,
+    private activatedRoute: ActivatedRoute,
     private teamService: TeamService,
     private toastService: ToastService,
     private router: Router
   ) {
     super(adminService);
+    this.activatedRoute.parent.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = decodeURIComponent(params.name);
+    });
+
+    this.activatedRoute.params.subscribe(params => {
+      this.teamId = params.teamid;
+    });
    }
 
   ngOnInit() {
     this.loading = true;
-    this.route.paramMap.pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.team) {
-        sessionStorage.setItem(Types.SELECTED_TEAM, data.team);
-        this.team = JSON.parse(data.team);
-        this.readPermissionToObject();
-        this.loadDomain(this.team.domain);
-      } else {
-        this.team = JSON.parse(sessionStorage.getItem(Types.SELECTED_TEAM))
-        this.readPermissionToObject();
-        this.loadDomain(this.team.domain);
-      }
-    })
+    this.readPermissionToObject();
+    this.domainRouteService.updateView('Teams', 6);
+    this.activatedRoute.paramMap.pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.team) {
+          this.team = JSON.parse(data.team);
+          this.nameFormControl.setValue(this.team.name);
+          this.setHeaderStyle();
+          this.loading = false;
+        } else {
+          this.loadTeam();
+        }
+    });
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  getTeam(): Team {
-    return this.team;
   }
 
   edit() {
@@ -113,7 +117,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
         if (team) {
           this.blockUI.stop();
-          this.router.navigate(['/dashboard/domain/team']);
+          this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}/teams`]);
           this.toastService.showSuccess(`Team removed with success`);
         }
       }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
@@ -134,13 +138,15 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.toastService.showError(message);
   }
 
-  private loadDomain(domainId: string): void {
-    this.nameFormControl.setValue(this.team.name);
-    this.setHeaderStyle();
-    this.domainService.getDomain(domainId).pipe(takeUntil(this.unsubscribe)).subscribe(domain => {
-      if (domain) {
-        this.domain = domain;
-      }
+  private loadTeam(): void {
+    this.teamService.getTeam(this.teamId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(team => {
+        if (team) {
+          this.team = team;
+          this.nameFormControl.setValue(this.team.name);
+          this.setHeaderStyle();
+        }
     }, error => {
       ConsoleLogger.printError(error);
       this.loading = false;
@@ -150,20 +156,20 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   }
 
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', domain.name)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          } else if (element.action === 'CREATE') {
-            this.creatable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', this.domainName)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            } else if (element.action === 'CREATE') {
+              this.creatable = element.result === 'ok';
+            }
+          });
+        }
     });
   }
 

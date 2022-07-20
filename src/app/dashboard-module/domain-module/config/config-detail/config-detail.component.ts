@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
-import { EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
+import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -18,7 +18,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Strategy } from 'src/app/model/strategy';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { PathRoute, Types } from 'src/app/model/path-route';
+import { Types } from 'src/app/model/path-route';
 import { ConfigService } from 'src/app/services/config.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { StrategyService } from 'src/app/services/strategy.service';
@@ -38,9 +38,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   @BlockUI() blockUI: NgBlockUI;
 
-  @ViewChild('envSelectionChange', { static: true })
-  private envSelectionChange: EnvironmentConfigComponent;
-
   @ViewChild('descElement', { static: true }) 
   descElement: ElementRef;
 
@@ -53,6 +50,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   @ViewChild('auto') 
   matAutocomplete: MatAutocomplete;
 
+  envEnable = new Subject<boolean>();
+
   keyFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3)
@@ -62,8 +61,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   classStrategySection: string;
   disableMetrics: boolean;
   
+  domainId: string;
+  domainName: string;
+  groupId: string;
+  configId: string;
   config: Config;
   strategies:  Strategy[];
+
   loading = true;
   loadingStrategies = true;
   hasStrategies = false;
@@ -84,7 +88,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   constructor(
     private domainRouteService: DomainRouteService,
-    private pathRoute: PathRoute,
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
@@ -96,78 +99,30 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private dialog: MatDialog
   ) { 
     super(adminService);
+    this.route.parent.params.subscribe(params => {
+      this.domainId = params.domainid;
+      this.domainName = params.name;
+    });
+
+    this.route.params.subscribe(params => {
+      this.groupId = params.groupid;
+      this.configId = params.configid;
+    });
   }
 
   ngOnInit() {
-    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "1100px";
+    (document.getElementsByClassName('container')[0] as HTMLElement).style.minHeight = '1100px';
 
     this.loading = true;
     this.hasNewStrategy = false;
-    this.route.paramMap
-      .pipe(takeUntil(this.unsubscribe), map(() => window.history.state)).subscribe(data => {
-        if (data.element) {
-          this.loadConfig(JSON.parse(data.element));
-        } else {
-          this.loadConfig(this.domainRouteService.getPathElement(Types.SELECTED_CONFIG).element);
-        }
-      });
-
-    this.envSelectionChange.outputEnvChanged.pipe(takeUntil(this.unsubscribe)).subscribe(status => {
-      this.selectEnvironment(status);
-      this.initStrategies();
-      this.disableMetrics = this.getConfig().disable_metrics ? 
-        this.getConfig().disable_metrics[this.envSelectionChange.selectedEnvName] : false;
-    });
-
-    this.envSelectionChange.outputStatusChanged.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.updateEnvironmentStatus(env);
-    });
-
-    this.envSelectionChange.outputEnvRemoved.pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.removeEnvironmentStatus(env);
-    });
-
+    this.loadConfig();
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
 
-    (document.getElementsByClassName("container")[0] as HTMLElement).style.minHeight = "";
-  }
-
-  getConfig(): Config {
-    return this.pathRoute.element;
-  }
-
-  loadConfig(config: Config) {
-    this.updatePathRoute(config);
-    this.configService.getConfigById(config.id, true).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.config = data;
-        this.disableMetrics = this.config.disable_metrics ? 
-          this.config.disable_metrics[this.envSelectionChange.selectedEnvName] : false;
-        this.loadComponents();
-        super.loadAdmin(this.config.owner);
-        this.keyFormControl.setValue(config.key);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load this Switcher`);
-    });
-  }
-
-  updatePathRoute(config: Config): void {
-    this.pathRoute = {
-      id: config.id,
-      element: config,
-      name: config.key,
-      path: '/dashboard/domain/group/switcher/detail',
-      type: Types.CONFIG_TYPE
-    };
-
-    this.domainRouteService.updatePath(this.pathRoute, true);
-    this.readPermissionToObject();
+    (document.getElementsByClassName('container')[0] as HTMLElement).style.minHeight = '';
   }
 
   edit() {
@@ -187,11 +142,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         };
         
         if (super.validateEdition({ 
-              key: this.pathRoute.name, 
-              description: this.pathRoute.element.description,
+              key: this.config.key, 
+              description: this.config.description,
               components: String(this.config.components.map(component => component.name)),
-              disable_metrics: this.pathRoute.element.disable_metrics != undefined ? 
-                this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] : false
+              disable_metrics: this.config.disable_metrics != undefined ? 
+                this.config.disable_metrics[this.currentEnvironment] : false
             },
             { 
               key: body.key, 
@@ -216,12 +171,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.result.then((result) => {
       if (result) {
         this.blockUI.start('Removing switcher...');
-        this.configService.deleteConfig(this.config.id).pipe(takeUntil(this.unsubscribe)).subscribe(_data => {
-          this.domainRouteService.removePath(Types.CONFIG_TYPE);
-          this.domainRouteService.notifyDocumentChange();
-          this.blockUI.stop();
-          this.router.navigate(['/dashboard/domain/group/detail']);
-          this.toastService.showSuccess(`Switcher removed with success`);
+        this.configService.deleteConfig(this.config.id)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(_data => {
+            this.blockUI.stop();
+            this.router.navigate([this.domainRouteService.getPreviousPath()]);
+            this.toastService.showSuccess(`Switcher removed with success`);
         }, error => {
           this.blockUI.stop();
           this.toastService.showError(`Unable to remove this switcher`);
@@ -248,7 +203,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             result.description, 
             result.strategy, 
             result.operation, 
-            this.envSelectionChange.selectedEnvName, 
+            this.currentEnvironment, 
             result.values).subscribe(_data => {
               this.initStrategies();
               this.toastService.showSuccess('Strategy created with success');
@@ -262,27 +217,27 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   addRelay() {
     this.currentTab = 2;
-    if (!this.getConfig().relay || !this.getConfig().relay.activated) {
+    if (!this.config.relay || !this.config.relay.activated) {
       this.config.relay = new ConfigRelay();
       this.config.relay.type = 'VALIDATION';
       this.config.relay.method = 'GET';
     }
 
-    this.config.relay.activated[this.envSelectionChange.selectedEnvName] = true;
-    this.updatePathRoute(this.config);
+    this.config.relay.activated[this.currentEnvironment] = true;
+    this.updateData(this.config);
 
     this.classStrategySection = 'strategy-section relay';
     setTimeout(() => this.currentTab = 2, 500);
   }
 
   hasRelay() {
-    return this.getConfig().relay.activated ? 
-      this.getConfig().relay.activated[this.envSelectionChange.selectedEnvName] != undefined : false;
+    return this.config?.relay.activated ? 
+      this.config.relay.activated[this.currentEnvironment] != undefined : false;
   }
 
   addComponent(event: MatChipInputEvent): void {
     if (!this.matAutocomplete.isOpen) {
-      const input = event.input;
+      const input = event.chipInput.inputElement;
       const value = event.value;
 
       if (!this.listComponents.includes(value)) {
@@ -334,20 +289,64 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
   }
 
+  onEnvChange($event: EnvironmentChangeEvent) {
+    this.selectEnvironment($event);
+    this.initStrategies();
+    this.updateNavTab(3);
+    this.disableMetrics = this.config.disable_metrics ? 
+      this.config.disable_metrics[this.currentEnvironment] : false;
+  }
+
+  onEnvStatusChanged($event: any) {
+    this.updateEnvironmentStatus($event);
+  }
+
+  onEnvRemoved($event: any) {
+    this.removeEnvironmentStatus($event);
+  }
+
+  private loadConfig() {
+    this.configService.getConfigById(this.configId, true)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(config => {
+        if (config) {
+          this.updateData(config);
+        }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to load this Switcher`);
+    });
+  }
+
+  updateData(config: Config): void {
+    this.config = config;
+    this.disableMetrics = this.config.disable_metrics ? 
+      this.config.disable_metrics[this.currentEnvironment] : false;
+    this.loadComponents();
+    this.keyFormControl.setValue(config.key);
+
+    this.readPermissionToObject();
+    super.loadAdmin(this.config.owner);
+
+    this.domainRouteService.updateView(this.config.key, 0);
+    this.domainRouteService.updatePath(this.config.id, this.config.key, Types.CONFIG_TYPE, 
+      `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`);
+  }
+
   private readPermissionToObject(): void {
-    const domain = this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN);
-    this.adminService.readCollabPermission(domain.id, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.getConfig().key)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data.length) {
-        data.forEach(element => {
-          if (element.action === 'UPDATE') {
-            this.updatable = element.result === 'ok';
-            this.envSelectionChange.disableEnvChange(!this.updatable);
-          } else if (element.action === 'DELETE') {
-            this.removable = element.result === 'ok';
-          }
-        });
-      }
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.config.key)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          data.forEach(element => {
+            if (element.action === 'UPDATE') {
+              this.updatable = element.result === 'ok';
+              this.envEnable.next(!this.updatable);
+            } else if (element.action === 'DELETE') {
+              this.removable = element.result === 'ok';
+            }
+          });
+        }
     }, error => {
       ConsoleLogger.printError(error);
     }, () => {
@@ -356,14 +355,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updateEnvironmentStatus(env : any): void {
+  private updateEnvironmentStatus(env: any): void {
     this.blockUI.start('Updating environment...');
-    this.selectEnvironment(env.status);
-    this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.loadConfig(data);
-        this.toastService.showSuccess(`Environment updated with success`);
-      }
+    this.selectEnvironment(env);
+    this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.updateData(data);
+          this.toastService.showSuccess(`Environment updated with success`);
+        }
     }, error => {
       ConsoleLogger.printError(error);
       this.blockUI.stop();
@@ -371,14 +372,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }, () => this.blockUI.stop());
   }
 
-  private removeEnvironmentStatus(env : any): void {
+  private removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
-    this.configService.removeDomainEnvironmentStatus(this.config.id, env).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.updatePathRoute(data);
-        this.blockUI.stop();
-        this.toastService.showSuccess(`Environment removed with success`);
-      }
+    this.configService.removeDomainEnvironmentStatus(this.config.id, env)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.updateData(data);
+          this.blockUI.stop();
+          this.toastService.showSuccess(`Environment removed with success`);
+        }
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
@@ -389,7 +392,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private loadComponents(): void {
     this.components = this.config.components.map(component => component.name);
     
-    this.componentService.getComponentsByDomain(this.domainRouteService.getPathElement(Types.SELECTED_DOMAIN).id)
+    this.componentService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(values => {
         this.availableComponents = values;
@@ -407,12 +410,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private editConfig(body: { key: any; description: any; }): void {
     const updateDisableMetrics = this.getDisableMetricsChange();
     this.configService.updateConfig(this.config.id,
-      body.key != this.pathRoute.name ? body.key : undefined,
-      body.description != this.pathRoute.element.description ? body.description : undefined, updateDisableMetrics)
+      body.key != this.config.key ? body.key : undefined,
+      body.description != this.config.description ? body.description : undefined, updateDisableMetrics)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
           this.updateConfigComponents(data);
-          this.domainRouteService.notifyDocumentChange();
           this.toastService.showSuccess(`Switcher updated with success`);
           this.editing = false;
         }
@@ -428,10 +430,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private getDisableMetricsChange(): any {
-    if (this.pathRoute.element.disable_metrics === undefined || 
-      this.pathRoute.element.disable_metrics[this.envSelectionChange.selectedEnvName] != this.disableMetrics) {
+    if (this.config.disable_metrics === undefined || 
+      this.config.disable_metrics[this.currentEnvironment] != this.disableMetrics) {
       return {
-        [this.envSelectionChange.selectedEnvName]: this.disableMetrics
+        [this.currentEnvironment]: this.disableMetrics
       }
     }
     return undefined;
@@ -443,19 +445,24 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if (this.components.length != currentConfigComponents.length || 
       this.components.every((u, i) => u != currentConfigComponents[i])
     ) {
-      const componentsToUpdate = this.availableComponents.filter(c => this.components.includes(c.name)).map(c => c.id);
-      this.configService.updateConfigComponents(this.config.id, componentsToUpdate).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.config = data;
-          this.loadConfig(data);
-        }
+      const componentsToUpdate = this.availableComponents
+        .filter(c => this.components.includes(c.name))
+        .map(c => c.id);
+
+      this.configService.updateConfigComponents(this.config.id, componentsToUpdate)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => {
+          if (data) {
+            this.config = data;
+            this.updateData(data);
+          }
       }, error => {
         this.blockUI.stop();
         this.toastService.showError(error ? error.error : 'Something went wront when updating components');
         ConsoleLogger.printError(error);
       });
     } else {
-      this.loadConfig(config);
+      this.updateData(config);
     }
   }
 
@@ -463,14 +470,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private initStrategies() {
     this.loadingStrategies = true;
     this.error = '';
-    this.strategyService.getStrategiesByConfig(this.pathRoute.id, this.envSelectionChange.selectedEnvName).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.hasStrategies = data.length > 0;
-        this.strategies = data;
+    this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.hasStrategies = data.length > 0;
+          this.strategies = data;
 
-        if (this.hasStrategies)
-          this.updateNavTab(1);
-      }
+          if (this.hasStrategies)
+            this.updateNavTab(1);
+        }
     }, error => {
       ConsoleLogger.printError(error);
       this.loadingStrategies = false;

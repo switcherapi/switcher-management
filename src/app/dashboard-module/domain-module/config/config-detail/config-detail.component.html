@@ -38,7 +38,15 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config #envSelectionChange [configuredEnvironments]="getConfig().activated"></app-environment-config>
+                    <app-environment-config *ngIf="config"
+                        [currentEnvironment]="currentEnvironment"
+                        [enable]="envEnable"
+                        [domainId]="domainId" 
+                        [configuredEnvironments]="config.activated"
+                        (outputEnvChanged)="onEnvChange($event)"
+                        (outputStatusChanged)="onEnvStatusChanged($event)"
+                        (outputEnvRemoved)="onEnvRemoved($event)">
+                    </app-environment-config>
                     <mat-checkbox [(ngModel)]="disableMetrics" [color]="'primary'" style="margin: auto;" [disabled]="!editing">
                         Disable metrics
                     </mat-checkbox>
@@ -96,7 +104,7 @@
         <section #strategysection *ngIf="!loadingStrategies" [ngClass]="classStrategySection" style="padding-top: 10px;">
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
 
             <nav ngbNav #nav="ngbNav" [activeId]="currentTab" class="nav-pills" (navChange)="onNavChange($event)">
@@ -118,8 +126,11 @@
                     </a>
                     <ng-template ngbNavContent>
                         <hr>
-                        <app-relay-detail [config]="getConfig()" [currentEnvironment]="envSelectionChange.selectedEnvName" 
-                            [parent]="this"></app-relay-detail>
+                        <app-relay-detail 
+                            [config]="config" 
+                            [currentEnvironment]="currentEnvironment" 
+                            [parent]="this">
+                        </app-relay-detail>
                     </ng-template>
                 </ng-container>
                 <ng-container [ngbNavItem]="3">
@@ -129,7 +140,10 @@
                     </a>
                     <ng-template ngbNavContent>
                         <hr>
-                        <app-metric [switcher]="getConfig().key" [environment]="envSelectionChange.selectedEnvName"></app-metric>
+                        <app-metric 
+                            [switcher]="config.key" 
+                            [environment]="currentEnvironment">
+                        </app-metric>
                     </ng-template>
                 </ng-container>
             </nav>
