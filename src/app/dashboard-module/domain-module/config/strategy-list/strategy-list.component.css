@@ -1,9 +1,17 @@
 @media only screen and (max-width: 600px) {
   :host ::ng-deep .mat-tab-labels {
-    display: block !important;
+    display: grid !important;
   }
 
   :host ::ng-deep .mat-tab-header {
     padding-top: 12px;
+  }
+
+  :host ::ng-deep .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+    display: none;
+  }
+
+  :host ::ng-deep .mat-ink-bar {
+    display: none;
   }
 }

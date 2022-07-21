@@ -73,10 +73,6 @@
 }
 
 @media only screen and (max-width: 430px) {
-  .header {
-    columns: 1;
-  }
-
   .description {
     display: grid;
     align-self: start;
