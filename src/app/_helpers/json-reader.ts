@@ -18,11 +18,11 @@ export class JsonReader {
 
     public static isValidJSONString(value: string): boolean {
         try {
-            JSON.parse(value);
+            const parsed = JSON.parse(value);
+            return parsed && typeof parsed === "object";
         } catch (e) {
             return false;
         }
-        return true;
     }
     
 }
