@@ -28,4 +28,8 @@ export class DataUtils {
     };
   }
 
+  public static isArrDiff(oldArr: any[], newArr: any[]): boolean {
+    return oldArr.join(',') !== newArr.join(',')
+  }
+
 }

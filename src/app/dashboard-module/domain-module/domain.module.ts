@@ -37,6 +37,7 @@ import { SpecialCharacterDirective } from './common/special.char.directive';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
 import { RelayDetailComponent } from './config/relay-detail/relay-detail.component';
 import { ExtSlackComponent } from './ext-slack/ext-slack.component';
+import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-settings.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
     DomainSnapshotComponent,
     DomainTransferDialogComponent,
     SpecialCharacterDirective,
-    ExtSlackComponent
+    ExtSlackComponent,
+    SlackSettingsComponent
   ],
   entryComponents: [
     GroupCreateComponent,

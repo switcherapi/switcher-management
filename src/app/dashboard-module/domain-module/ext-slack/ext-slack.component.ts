@@ -1,15 +1,16 @@
-import { OnDestroy, Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { OnDestroy, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FEATURES, Slack } from 'src/app/model/slack';
+import { FEATURES, SETTINGS_PARAM, Slack } from 'src/app/model/slack';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { SlackService } from 'src/app/services/slack.service';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { DataUtils } from 'src/app/_helpers/data-utils';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { SlackSettingsComponent } from './slack-settings/slack-settings.component';
 
 @Component({
   selector: 'app-ext-slack',
@@ -21,17 +22,15 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
-  
+
+  @ViewChild(SlackSettingsComponent) 
+  slackSettings: SlackSettingsComponent;
+
   domainId: string;
   domainName: string;
-  slackUpdate: boolean = false;
+  slackUpdate: boolean = true;
   loading: boolean = true;
   slack: Slack;
-
-  formQtyApprovals = new FormControl({ value: 1, disabled: true }, [
-    Validators.max(50), 
-    Validators.min(0)
-  ]);
 
   constructor(
     private route: ActivatedRoute,
@@ -58,10 +57,26 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(): void {
-    const { valid } = this.formQtyApprovals;
+    if (DataUtils.isArrDiff(
+      this.slackSettings.settings.ignored_environments, this.slackSettings.ignoredEnvironments)) {
+      this.slackService.updateEnvironments(
+        this.domainId, SETTINGS_PARAM.IGNORED_ENVIRONMENT, this.slackSettings.ignoredEnvironments)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(_data => this.toastService.showSuccess('Ignored Environments updated'));
+    }
 
-    if (valid)
-      console.log('Updating approvals to: ', this.slack.settings.approvals);
+    if (DataUtils.isArrDiff(
+      this.slackSettings.settings.frozen_environments, this.slackSettings.frozenEnvironments)) {
+      this.slackService.updateEnvironments(
+        this.domainId, SETTINGS_PARAM.FROZEN_ENVIRONMENT, this.slackSettings.frozenEnvironments)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(_data => this.toastService.showSuccess('Frozen Environments updated'));
+    }
+
+    this.slackSettings.updateSettings({ 
+      ignored_environments: this.slackSettings.ignoredEnvironments,
+      frozen_environments: this.slackSettings.frozenEnvironments
+    });
   }
 
   onUninstall(): void {
@@ -114,6 +129,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(slack => {
         this.slack = slack;
+        this.slackSettings.loadSettings(this.slack);
         this.loadSlackAvailability();
     }, (error) => {
       ConsoleLogger.printError(error);
@@ -128,9 +144,8 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(data => {
       this.slackUpdate = data?.result;
-      if (this.slackUpdate)
-        this.formQtyApprovals.enable({ onlySelf: true });
+      this.slackSettings.updatable = this.slackUpdate;
     });
   }
-
+  
 }
