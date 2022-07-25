@@ -8,10 +8,10 @@
         <h3>Slack Integration</h3>
     </div>
     <div class="container-fluid content-row">
-        <div *ngIf="slack" class="row">
+        <div class="row">
             <div class="col-sm-6">
                 <div class="card h-100">
-                    <div class="card-body">
+                    <div *ngIf="slack" class="card-body">
                         <h5 class="card-title">Details</h5>
                         <div class="description">
                             <mat-form-field>
@@ -43,12 +43,7 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Settings</h5>
-                        <div class="description">
-                            <mat-form-field>
-                                <input matInput type="number" placeholder="Required approvals" min="1" max="50" maxlength="2"
-                                    [formControl]="formQtyApprovals" [(ngModel)]="slack.settings.approvals">
-                            </mat-form-field>
-                        </div>
+                        <app-slack-settings></app-slack-settings>
 
                         <div class="options-section">
                             <button *ngIf="slackUpdate" mat-button class="btn-element" (click)="onUpdate()">

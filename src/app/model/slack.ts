@@ -17,10 +17,16 @@ export class SlackInstallation {
 }
 
 export class Settings {
-    approvals: number;
+    ignored_environments: string[];
+    frozen_environments: string[];
 }
 
 export enum FEATURES {
     SLACK_INTEGRATION = 'SLACK_INTEGRATION',
     SLACK_UPDATE = 'SLACK_UPDATE'
 }
+
+export enum SETTINGS_PARAM {
+    IGNORED_ENVIRONMENT = 'IGNORED_ENVIRONMENT',
+    FROZEN_ENVIRONMENT = 'FROZEN_ENVIRONMENT'
+};

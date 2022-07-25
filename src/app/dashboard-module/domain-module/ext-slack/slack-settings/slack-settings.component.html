@@ -1,0 +1,39 @@
+<div class="description">
+    <mat-form-field appearance="fill">
+        <mat-label>Ingored Environments</mat-label>
+        <mat-chip-list #ignoredList aria-label="Ingored Environments">
+            <mat-chip *ngFor="let env of ignoredEnvironments" 
+                (removed)="remove(env, 'ignored')"
+                [removable]="true">{{env}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            <input placeholder="Environment name..."
+                [readonly]="!updatable"
+                [matChipInputFor]="ignoredList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" 
+                [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="add($event, 'ignored')">
+        </mat-chip-list>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Frozen Environments</mat-label>
+        <mat-chip-list #frozenList aria-label="Frozen Environments">
+            <mat-chip *ngFor="let env of frozenEnvironments" 
+                (removed)="remove(env, 'frozen')"
+                [removable]="true">{{env}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            <input placeholder="Environment name..."
+                [readonly]="!updatable"
+                [matChipInputFor]="frozenList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" 
+                [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="add($event, 'frozen')">
+        </mat-chip-list>
+    </mat-form-field>
+</div>

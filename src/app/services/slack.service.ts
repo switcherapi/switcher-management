@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { FEATURES, Slack, SlackInstallation } from '../model/slack';
+import { FEATURES, Settings, SETTINGS_PARAM, Slack, SlackInstallation } from '../model/slack';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +50,12 @@ export class SlackService extends ApiService {
     return this.http.delete(
       `${environment.apiUrl}/slack/v1/installation/decline?enterprise_id=${enterprise_id}&team_id=${team_id}`)
       .pipe(catchError(this.handleError));
+  }
+
+  public updateEnvironments(domainid: string, param: SETTINGS_PARAM, environments: string[]): Observable<Settings> {
+    return this.http.patch<Settings>(`${environment.apiUrl}/slack/v1/settings/${param}/${domainid}`, {
+      environments
+    }).pipe(catchError(this.handleError));
   }
 
 }
