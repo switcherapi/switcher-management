@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject, HostListener } from '@angular/core';
-import { Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
+import { Validators, FormControl } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
 import { takeUntil } from 'rxjs/operators';
@@ -17,6 +17,7 @@ import { Strategy } from 'src/app/model/strategy';
 import { StrategyReq } from 'src/app/model/strategy_req';
 import { StrategyService } from 'src/app/services/strategy.service';
 import { AdminService } from 'src/app/services/admin.service';
+import { DataUtils } from 'src/app/_helpers/data-utils';
 
 @Component({
   selector: 'app-strategy-detail',
@@ -296,7 +297,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
         this.valueSelectionFormControl.setValidators([
           Validators.required,
-          valueInputValidator(this.strategyReq.operationsAvailable.validator)
+          DataUtils.valueInputValidator(this.strategyReq.operationsAvailable.validator)
         ]);
     });
   }
@@ -334,15 +335,6 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       ConsoleLogger.printError(error);
     }, () => this.blockUI.stop());
   }
-}
-
-function valueInputValidator(format: string): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    if (!control.value.match(format)) {
-      return [control.value]
-    }
-    return null;
-  };
 }
 
 @Component({
