@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: ['', Validators.required]
         });
         
-        this.inviteLink();
         this.isAlive();
     }
 
@@ -155,13 +154,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authService.loginWithBitBucket(code)
             .pipe(takeUntil(this.unsubscribe))
             .subscribe(success => this.onSuccess(success), error => this.onError(error));
-    }
-
-    private inviteLink() {
-        const queryUrl: string = this.route.snapshot.queryParams['returnUrl'];
-        if (queryUrl && queryUrl.includes('/collab/join?request')) {
-            this.returnUrl = queryUrl;
-        }
     }
 
     private onError(error: any) {
