@@ -20,7 +20,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     loginForm: FormGroup;
     loading = false;
     forgotPassword = false;
-    returnUrl: string;
     apiVersion: string;
     error: string = '';
     success: string = '';
@@ -42,7 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.route.queryParams.subscribe(params => {
             const platform =  params['platform'];
             const code =  params['code'];
-            this.returnUrl = '/dashboard';
             
             if (code) {
                 if (platform === 'github') {
@@ -164,7 +162,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     private onSuccess(success: any) {
         if (success) {
-            this.router.navigateByUrl(this.returnUrl);
+            this.router.navigate(['/dashboard']);
             this.authService.releaseOldSessions.emit(true);
         }
         this.loading = false;
