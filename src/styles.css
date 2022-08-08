@@ -10,13 +10,13 @@ body {
 /* Start - Dark theme setup */
 
 html.dark-mode {
-  filter: invert(100%) hue-rotate(180deg);
+  filter: invert(100%) hue-rotate(180deg) contrast(0.9);
   top: 0 !important; /*fix cdk modal issues*/
   transition: all 1s;
 }
 
 html.dark-mode h4, html.dark-mode, html.dark-mode .navbar-toggler-icon, html.dark-mode .link {
-  filter: invert(100%) hue-rotate(180deg);
+  filter: invert(100%) hue-rotate(180deg) contrast(0.8) saturate(0.9);
 }
 
 html.dark-mode body, html.dark-mode .backgroud-style, html.dark-mode h4 {
@@ -39,7 +39,7 @@ html.dark-mode .doc-icon,
 html.dark-mode .home-image,
 html.dark-mode .carousel-images,
 html.dark-mode .collab-image  {
-  filter: invert(100%) hue-rotate(180deg);
+  filter: invert(100%) hue-rotate(180deg) saturate(1);
 }
 
 html.dark-mode .image-style {
