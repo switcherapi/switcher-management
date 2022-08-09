@@ -19,15 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
       private authService: AuthService,
       private pwaService: PwaService
   ) {
-    this.authService.currentToken.subscribe(x => {
-      this.currentToken = x;
-    });
-
-    this.authService.currentUser.subscribe(_ => {
-      this.loggedUserName = this.authService.getUserInfo('name');
-      const avatar = this.authService.getUserInfo('avatar');
-      this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
-    });
+    this.loadUserSettings();
   }
 
   ngOnInit() {
@@ -42,8 +34,36 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-      this.authService.logout();
-      this.router.navigate(['/']);
+    this.toggleDarkMode(true);
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
+
+  toggleDarkMode(logoff?: boolean) {
+    if (logoff) {
+      document.documentElement.classList.remove("dark-mode");
+      this.authService.setUserInfo("dark-mode", String(false));
+    } else {
+      const darkMode = document.documentElement.classList.toggle("dark-mode");
+      this.authService.setUserInfo("dark-mode", String(darkMode));
+    }
+  }
+
+  private loadUserSettings(): void {
+    this.authService.currentToken.subscribe(x => {
+      this.currentToken = x;
+    });
+
+    this.authService.currentUser.subscribe(_ => {
+      this.loggedUserName = this.authService.getUserInfo("name");
+      const avatar = this.authService.getUserInfo("avatar");
+      this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
+    });
+
+    const darkMode = this.authService.getUserInfo("dark-mode");
+    if (darkMode === "true") {
+      document.documentElement.classList.add("dark-mode");
+    }
   }
   
 }
