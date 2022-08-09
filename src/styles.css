@@ -12,7 +12,6 @@ body {
 html.dark-mode {
   filter: invert(100%) hue-rotate(180deg) contrast(0.9);
   top: 0 !important; /*fix cdk modal issues*/
-  transition: all 1s;
 }
 
 html.dark-mode h4, html.dark-mode, html.dark-mode .navbar-toggler-icon, html.dark-mode .link {
