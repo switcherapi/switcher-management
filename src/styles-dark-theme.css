@@ -39,8 +39,16 @@ html.dark-mode .label-env-name {
     color: black !important;
 }
 
+html.dark-mode .btn-element {
+    background-color: #eee;
+}
+
 html.dark-mode .mat-button:hover:not([disabled]) {
     color: rgb(46, 46, 46) !important;
+}
+
+html.dark-mode .nav-pills .nav-link.active {
+    background-color: #eee;
 }
 
 html.dark-mode #sidebar,

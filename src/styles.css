@@ -39,7 +39,6 @@ body {
 
 .mat-button:hover:not([disabled]) {
   transition: all .2s;
-  transform: scale(1.05);
   box-shadow: 0 0 5px #757575;
 }
 
