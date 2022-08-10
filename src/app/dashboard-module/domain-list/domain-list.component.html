@@ -4,7 +4,7 @@
         <h4 class="card-header">
             <div>
                 Domains
-                <button mat-button [matMenuTriggerFor]="belowMenu" style="float: right; outline: none;">
+                <button id="domainList" mat-button [matMenuTriggerFor]="belowMenu" style="float: right; outline: none;">
                     <mat-icon> list_alt</mat-icon>
                 </button>
                 <mat-menu #belowMenu="matMenu" yPosition="below">
@@ -18,7 +18,7 @@
         <div class="card-body">
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
             <div *ngIf="!loading">
