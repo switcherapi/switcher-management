@@ -1,3 +1,5 @@
+@import url("styles-dark-theme.css");
+
 a {
   cursor: pointer
 }
@@ -6,87 +8,6 @@ html,
 body {
   height: 100%;
 }
-
-/* Start - Dark theme setup */
-
-html.dark-mode {
-  filter: invert(100%) hue-rotate(180deg) contrast(0.9);
-  top: 0 !important; /*fix cdk modal issues*/
-}
-
-html.dark-mode h4, html.dark-mode, html.dark-mode .navbar-toggler-icon, html.dark-mode .link {
-  filter: invert(100%) hue-rotate(180deg) contrast(0.8) saturate(0.9);
-}
-
-html.dark-mode body, html.dark-mode .backgroud-style, html.dark-mode .card-header {
-  background: black !important;
-}
-
-html.dark-mode .backgroud-style, html.dark-mode #footer, html.dark-mode .home-section {
-  background: #eee !important;
-}
-
-html.dark-mode #main-menu, html.dark-mode #footer {
-  box-shadow: 0px 0px 10px 10px #eee !important;
-}
-
-html.dark-mode .mat-toolbar, html.dark-mode #modal-title {
-  color: white;
-}
-
-html.dark-mode button, 
-html.dark-mode .doc-title, 
-html.dark-mode .label-env-name {
-  color: black !important;
-}
-
-html.dark-mode button:hover:not([disabled]) {
-  color: rgb(46, 46, 46) !important;
-  cursor: pointer;
-  transition: all 1s;
-}
-
-html.dark-mode #sidebar,
-html.dark-mode .profile-avatar, 
-html.dark-mode .avatar, 
-html.dark-mode .switcher-logo,
-html.dark-mode .doc-icon, 
-html.dark-mode .home-image,
-html.dark-mode .carousel-images,
-html.dark-mode .collab-image  {
-  filter: invert(100%) hue-rotate(180deg) saturate(1);
-}
-
-html.dark-mode .image-style {
-  filter: invert(100%) hue-rotate(180deg);
-}
-
-html.dark-mode .card {
-  box-shadow: none;
-}
-
-html.dark-mode .nav-item.nav-link, html.dark-mode p, html.dark-mode #iconListChildren {
-  color: black !important;
-}
-
-html.dark-mode .nav-item.nav-link:hover {
-  color: #9d92ea !important;
-}
-
-html.dark-mode .block-ui-wrapper {
-  filter: invert(100%) hue-rotate(180deg);
-}
-
-html.dark-mode .carousel-images {
-  border-radius: 10px;
-}
-
-html.dark-mode .home-section, html.dark-mode #page-container {
-  background: white !important;
-  box-shadow: none !important;
-}
-
-/* End - Dark theme setup */
 
 body {
   margin: 0;
@@ -114,6 +35,12 @@ body {
 
 .switcher-logo.transition {
   transition: all .2s cubic-bezier(0.100, 0.50, 0.30, 1);
+}
+
+.mat-button:hover:not([disabled]) {
+  transition: all .2s;
+  transform: scale(1.05);
+  box-shadow: 0 0 5px #757575;
 }
 
 @media only screen and (max-width: 600px) {

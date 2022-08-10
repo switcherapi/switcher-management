@@ -12,7 +12,7 @@
                 <mat-icon *ngIf="icon === 6"> people</mat-icon>
                 {{ title }}
 
-                <button mat-button [matMenuTriggerFor]="belowMenu" style="float:right">
+                <button id="domainOptions" mat-button [matMenuTriggerFor]="belowMenu" style="float:right">
                     <mat-icon> list_alt</mat-icon>
                 </button>
                 <mat-menu #belowMenu="matMenu" yPosition="below">
@@ -26,12 +26,12 @@
                     </button>
                     <div *ngIf="hasSlackIntegration()">
                         <button *ngIf="hasSlackInstalled()" mat-menu-item (click)="gotoSlackIntegration()">
-                            <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" alt="Slack" />
+                            <img src="assets\slack.svg" class="slack-img" style="width: 25px; margin-right: 16px;" alt="Slack" />
                             Slack Integration
                         </button>
                         <a *ngIf="!hasSlackInstalled()" mat-menu-item style="text-decoration: none;"
                             href="{{ getSlackUrl() }}" target="_parent">
-                            <img src="assets\slack.svg" style="width: 25px; margin-right: 16px;" alt="Slack" />
+                            <img src="assets\slack.svg" class="slack-img" style="width: 25px; margin-right: 16px;" alt="Slack" />
                             Install Slack App
                         </a>
                     </div>
