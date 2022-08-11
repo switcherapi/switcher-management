@@ -86,7 +86,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   ) { 
     this.activatedRoute.parent?.params.subscribe(params => {
       this.domainId = params.domainid;
-      this.domainName = params.name;
+      this.domainName = decodeURIComponent(params.name);
     });
 
     this.activatedRoute.params.subscribe(params => {
