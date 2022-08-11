@@ -1,9 +1,23 @@
-[![Build Status](https://travis-ci.com/switcherapi/switcher-client-master.svg?branch=master)](https://travis-ci.com/github/switcherapi/switcher-client-master)
+***
+
+<div align="center">
+<b>Switcher Client SDK</b><br>
+A JavaScript SDK for Switcher API
+</div>
+
+<div align="center">
+
+[![Master CI](https://github.com/switcherapi/switcher-client-master/actions/workflows/master.yml/badge.svg)](https://github.com/switcherapi/switcher-client-master/actions/workflows/master.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-client-master&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-client-master)
-[![Coverage Status](https://coveralls.io/repos/github/switcherapi/switcher-client-master/badge.svg?branch=master)](https://coveralls.io/github/switcherapi/switcher-client-master?branch=master)
 [![npm version](https://badge.fury.io/js/switcher-client.svg)](https://badge.fury.io/js/switcher-client)
+[![install size](https://packagephobia.com/badge?p=switcher-client)](https://packagephobia.com/result?p=switcher-client)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-client-master/badge.svg?targetFile=package.json)](https://snyk.io/test/github/switcherapi/switcher-client-master?targetFile=package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
+
+</div>
+
+***
 
 ### Features
 - Flexible and robust functions that will keep your code clean and maintainable.
@@ -163,36 +177,6 @@ For convenience, an implementation of a domain version checker is available if y
 ```js
 switcher.checkSnapshot();
 ```
-
-* * *
-
-### Change Log
-- 3.1.0:
-    - Added throttling for critical and async calls
-    - Improved SDK size by replacing axios by node-fetch
-    - Fixes Silent mode that was invoking checkHealth operation when it shouldn't
-- 3.0.1:
-    - Fixes class definition: removed snapshopAutoload
-    - Fixes silent mode
-    - Adds Smoke test
-- 3.0.0:
-    - Improved client inicialization
-    - Improved Snapshop data lookup
-    - Added compatibility with ES6
-    - Fixed built-in log manager
-- 2.0.9:
-    - Added Test Mode feature
-    - Security patch: Axios updated from 0.21.0 to 0.21.1
-    - Improved API resource handling
-- 2.0.5: Added Snapshot Autoload
-- 2.0.2: Added a built-in execution logger
-- 2.0.0:
-    - Improved performance when loading snapshot file.
-    - Snapshot file auto load when updated.
-    - Re-worked built-in mock implementation
-- 1.0.0: Working release
-
-* * *
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[libjavascript.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
