@@ -20,6 +20,7 @@
   /* columns: 2; */
   /* display: inline-table; */
   padding: 5px;
+  background-color: #0000 !important;
 }
 
 .btn-element.create {

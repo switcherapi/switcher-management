@@ -16,8 +16,8 @@
                         siteKey="{{getRecaptchaPublicKey()}}">  
                     </re-captcha>
                     <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
-                        <img src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
-                        <span style="color: white; padding-left: 5px;">Reset</span>
+                        <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
+                        <span class="label-color" style="color: white; padding-left: 5px;">Reset</span>
                     </button>
                     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
                 </form>

@@ -111,7 +111,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
           this.toastService.showError('Unable to remove this Environment');
         });
       }
-    })
+    });
   }
 
   resetEnvironment(selectedEnvironment: Environment) {
@@ -132,7 +132,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
           this.toastService.showError('Unable to reset this Environment');
         });
       }
-    })
+    });
   }
   
   private loadEnvironments(): void {

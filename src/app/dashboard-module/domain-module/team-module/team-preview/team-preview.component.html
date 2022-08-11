@@ -30,7 +30,7 @@
                         <mat-icon style="font-size: large;">build</mat-icon>
                         <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
                     </button>
-                    <button mat-button class="btn-element btn-remove" (click)="removeTeam()" [disabled]="!removable">
+                    <button mat-button class="btn-element btn-remove btn-red" (click)="removeTeam()" [disabled]="!removable">
                         <mat-icon>delete</mat-icon>
                         <div class="options-section-label">Remove</div>
                     </button>

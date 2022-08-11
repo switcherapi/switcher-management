@@ -24,13 +24,13 @@
                     {{ environment.name }}
                 </label>
                 <div class="toggle-section">
+                    <button mat-button class="btn-element btn-red remove" style="order: 1;" (click)="removeEnvironment(environment)" [disabled]="!removable">
+                        <mat-icon>delete</mat-icon>
+                        Remove
+                    </button>
                     <button mat-button class="btn-element reset" (click)="resetEnvironment(environment)" [disabled]="!updatable">
                         <mat-icon>restore</mat-icon>
                         Reset
-                    </button>
-                    <button mat-button class="btn-element remove" (click)="removeEnvironment(environment)" [disabled]="!removable">
-                        <mat-icon>delete</mat-icon>
-                        Remove
                     </button>
                 </div>
             </div>  

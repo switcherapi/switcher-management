@@ -24,6 +24,10 @@
                     {{ component.name }}
                 </label>
                 <div class="toggle-section">
+                    <button mat-button class="btn-element btn-red remove" style="order: 1;" (click)="removeComponent(component)" [disabled]="!removable">
+                        <mat-icon>delete</mat-icon>
+                        <div class="options-section-label">Remove</div>
+                    </button>
                     <button mat-button class="btn-element reset" (click)="generateApiKey(component)" [disabled]="!updatable">
                         <mat-icon> vpn_key</mat-icon>
                         <div class="options-section-label">Generate API Key</div>
@@ -31,10 +35,6 @@
                     <button mat-button class="btn-element reset" (click)="editComponent(component)" [disabled]="!updatable">
                         <mat-icon style="font-size: large;">build</mat-icon>
                         <div class="options-section-label">Edit</div>
-                    </button>
-                    <button mat-button class="btn-element remove" (click)="removeComponent(component)" [disabled]="!removable">
-                        <mat-icon>delete</mat-icon>
-                        <div class="options-section-label">Remove</div>
                     </button>
                 </div>
             </div>  

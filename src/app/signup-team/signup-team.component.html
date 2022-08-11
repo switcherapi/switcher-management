@@ -2,7 +2,7 @@
     <div class="col-md-6 offset-md-3 mt-5">
         <div class="card">
             <h4 class="card-header">
-                <img src="assets\switcherapi_management_white.png" style="width: 220px;"/>
+                <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher Management"/>
             </h4>
             <div *ngIf="!loading" class="card-body">
                 <div class="form-group">
@@ -16,14 +16,14 @@
                     </mat-form-field>
                 </div>
                 <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">
-                    <img src="assets\switcherapi_mark_white.png" style="width: 20px;"/>
-                    <span style="color: white; padding-left: 5px;">Accept</span>
+                    <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API logo"/>
+                    <span class="label-color" style="color: white; padding-left: 5px;">Accept</span>
                 </button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
             </div>
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);"/>
+                <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API logo"/>
             </div>
         </div>
     </div>

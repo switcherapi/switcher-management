@@ -9,12 +9,6 @@ mat-icon {
   color: white;
 }
 
-.btn-element:hover {
-  transition: .1s transform;
-  transform: scale(105%);
-  box-shadow: 0 0 5px #9bc5fd;
-}
-
 .div-btn-new {
   width: 100%; 
   margin: auto;

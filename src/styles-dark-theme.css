@@ -35,19 +35,24 @@ html.dark-mode #modal-title {
 
 html.dark-mode .mat-button:not(#domainOptions):not(#domainList),
 html.dark-mode .doc-title,
-html.dark-mode .label-env-name {
+html.dark-mode .label-env-name,
+html.dark-mode .label-color {
     color: black !important;
-}
-
-html.dark-mode .btn-element {
-    background-color: #eee;
 }
 
 html.dark-mode .mat-button:hover:not([disabled]) {
     color: rgb(46, 46, 46) !important;
 }
 
-html.dark-mode .nav-pills .nav-link.active {
+html.dark-mode .btn-element {
+    border: 1px solid black;
+}
+
+html.dark-mode .grid-container,
+html.dark-mode .nav-pills .nav-link.active,
+html.dark-mode .btn-element,
+html.dark-mode .btn-element.remove,
+html.dark-mode .btn-red {
     background-color: #eee;
 }
 

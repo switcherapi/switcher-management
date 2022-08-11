@@ -88,8 +88,14 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   }
 
   removeEnvironment() {
+    delete this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value];
     this.outputEnvRemoved.emit(this.selectedEnvName);
-    this.loadEnvironments();
+
+    // select production
+    this.selectedEnvName = 'default';
+    this.selectedEnvStatus = this.configuredEnvironments[this.selectedEnvName];
+    this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
+    this.outputEnvChanged.emit(new EnvironmentChangeEvent(this.selectedEnvName, this.selectedEnvStatus));
   }
 
   isDisableToRemove(): boolean {

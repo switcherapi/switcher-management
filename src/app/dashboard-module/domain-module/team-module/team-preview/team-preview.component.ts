@@ -10,6 +10,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 
 @Component({
   selector: 'app-team-preview',
@@ -40,6 +42,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
+    private _modalService: NgbModal,
     private teamService: TeamService,
     private toastService: ToastService
   ) { }
@@ -61,14 +64,21 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   }
 
   removeTeam() {
-    this.blockUI.start('Removing team...');
-    this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-        if (team) {
-          this.teamListComponent.removeTeamFromList(team);
-          this.blockUI.stop();
-          this.toastService.showSuccess(`Team removed with success`);
-        }
-    }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
+    const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
+    modalConfirmation.componentInstance.title = 'Team Removal';
+    modalConfirmation.componentInstance.question = `Are you sure you want to remove ${this.team.name}?`;
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.blockUI.start('Removing team...');
+        this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
+            if (team) {
+              this.teamListComponent.removeTeamFromList(team);
+              this.blockUI.stop();
+              this.toastService.showSuccess(`Team removed with success`);
+            }
+        }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
+      }
+    });
   }
   
   edit() {

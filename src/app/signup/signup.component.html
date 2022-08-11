@@ -29,12 +29,12 @@
                     </re-captcha>
                     <div style="padding-top: 20px;">
                         <button *ngIf="getRecaptchaPublicKey()" mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
-                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
-                            <span style="color: white; padding-left: 5px;">Create</span>
+                            <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
+                            <span class="label-color" style="color: white; padding-left: 5px;">Create</span>
                         </button>
                         <button *ngIf="!getRecaptchaPublicKey()" mat-button class="btn-element" [disabled]="loading">
-                            <img src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
-                            <span style="color: white; padding-left: 5px;">Create</span>
+                            <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
+                            <span class="label-color" style="color: white; padding-left: 5px;">Create</span>
                         </button>
                         <button *ngIf="hasGithubIntegration()" type="button" 
                             mat-button class="btn-element white" [disabled]="loading || !recaptcha_token" (click)="onGitHubLogin()">
