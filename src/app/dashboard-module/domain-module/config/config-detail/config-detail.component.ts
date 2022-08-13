@@ -305,19 +305,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.removeEnvironmentStatus($event);
   }
 
-  private loadConfig() {
-    this.configService.getConfigById(this.configId, true)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(config => {
-        if (config) {
-          this.updateData(config);
-        }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load this Switcher`);
-    });
-  }
-
   updateData(config: Config): void {
     this.config = config;
     this.disableMetrics = this.config.disable_metrics ? 
@@ -331,6 +318,19 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.domainRouteService.updateView(this.config.key, 0);
     this.domainRouteService.updatePath(this.config.id, this.config.key, Types.CONFIG_TYPE, 
       `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`);
+  }
+
+  private loadConfig() {
+    this.configService.getConfigById(this.configId, true)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(config => {
+        if (config) {
+          this.updateData(config);
+        }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to load this Switcher`);
+    });
   }
 
   private readPermissionToObject(): void {

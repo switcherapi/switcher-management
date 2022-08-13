@@ -14,6 +14,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-group-list',
@@ -53,6 +54,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
 
     this.readPermissionToObject();
     this.loadGroups();
+    this.updateData();
   }
 
   ngOnDestroy() {
@@ -83,6 +85,11 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
         });
       }
     });
+  }
+
+  private updateData() {
+    this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+      `/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}`);
   }
 
   private loadGroups() {

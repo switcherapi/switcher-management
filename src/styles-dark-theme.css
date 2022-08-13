@@ -34,8 +34,10 @@ html.dark-mode #modal-title {
 }
 
 html.dark-mode .mat-button:not(#domainOptions):not(#domainList),
+html.dark-mode .nav-item.nav-link:hover,
 html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
+html.dark-mode .new-feature-text,
 html.dark-mode .label-env-name,
 html.dark-mode .label-color {
     color: black !important;
@@ -103,10 +105,6 @@ html.dark-mode .nav-item.nav-link,
 html.dark-mode p,
 html.dark-mode #iconListChildren {
     color: #5a5a5a !important;
-}
-
-html.dark-mode .nav-item.nav-link:hover {
-    color: black !important;
 }
 
 html.dark-mode .block-ui-wrapper {

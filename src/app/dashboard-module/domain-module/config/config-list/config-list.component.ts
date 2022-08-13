@@ -15,6 +15,7 @@ import { Config } from 'src/app/model/config';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { GroupService } from 'src/app/services/group.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-config-list',
@@ -128,6 +129,8 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
       .subscribe(data => {
         if (data) {
           this.domainRouteService.updateView(data.name, 0);
+          this.domainRouteService.updatePath(data.id, data.name, Types.GROUP_TYPE, 
+            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${data.id}`);
         }
     }, error => {
       ConsoleLogger.printError(error);
