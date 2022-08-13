@@ -28,28 +28,28 @@
             </ol>
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img class="carousel-images" src="assets\home_showcase.png" alt="Home Showcase" />
+                <img class="carousel-images" [src]="getImage('home_showcase')" alt="Home Showcase" />
                 <div class="home-carousel-caption">
                     <h3>Control & Metrics</h3>
                     <p>Simple and straightforward controllers which allow you to manipulate and monitor every aspect of your eco-system.</p>
                 </div>
               </div>
               <div class="carousel-item">
-                <img class="carousel-images" src="assets\home_showcase_collab.png" alt="Home Showcase Collab" />
+                <img class="carousel-images" [src]="getImage('home_showcase_collab')" alt="Home Showcase Collab" />
                 <div class="home-carousel-caption">
                     <h3>Collaborate</h3>
                     <p>Create autonomy and a collaborative environment using our team management.</p>
                 </div>
               </div>
               <div class="carousel-item">
-                <img class="carousel-images" src="assets\home_showcase_tracking.png" alt="Tracking" />
+                <img class="carousel-images" [src]="getImage('home_showcase_tracking')" alt="Tracking" />
                 <div class="home-carousel-caption">
                     <h3>Tracking</h3>
                     <p>Knows exactly who and when a specific feature of your project is being used, monitoring them throughout our analytics dashboard.</p>
                 </div>
               </div>
               <div class="carousel-item">
-                <img class="carousel-images" src="assets\home_showcase_environment.png" alt="Environment" />
+                <img class="carousel-images" [src]="getImage('home_showcase_environment')" alt="Environment" />
                 <div class="home-carousel-caption">
                     <h3>Multi-environment</h3>
                     <p>Run multiple environments with just a few settings and enable your team to work freely on your next feature.</p>
@@ -124,12 +124,17 @@
             <img src="assets\github.svg" style="width: 30px; filter: invert(1);" alt="GitHub" />
         </a>
     </div>
-    <div class="footer-left">
-        <p class="footer-links">
-            <a class="link" 
-                title="Email Switcher API support" rel="noopener noreferrer" 
-                target="_blank" href="mailto:switcher.project@gmail.com">Contact</a>
-        </p>
-        <p>Created by Roger Floriano - 2022</p>
+    <div class="footer-left" style="display: flex">
+        <div class="footer-left">
+            <img class="trackerforce-logo" src="assets\trackerforce.png" alt="Trackerfoce logo" />
+        </div>
+        <div>
+            <p class="footer-links">
+                <a class="link" 
+                    title="Email Switcher API support" rel="noopener noreferrer" 
+                    target="_blank" href="mailto:switcher.project@gmail.com">Contact</a>
+            </p>
+            <p>Powered by Trackerforce - 2022</p>
+        </div>
     </div>
 </footer>

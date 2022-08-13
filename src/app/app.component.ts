@@ -42,10 +42,10 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleDarkMode(logoff?: boolean) {
     if (logoff) {
       document.documentElement.classList.remove("dark-mode");
-      this.authService.setUserInfo("dark-mode", String(false));
+      this.authService.setUserInfo("darkMode", String(false));
     } else {
       const darkMode = document.documentElement.classList.toggle("dark-mode");
-      this.authService.setUserInfo("dark-mode", String(darkMode));
+      this.authService.setUserInfo("darkMode", String(darkMode));
     }
   }
 
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
     });
 
-    const darkMode = this.authService.getUserInfo("dark-mode");
+    const darkMode = this.authService.getUserInfo("darkMode");
     if (darkMode === "true") {
       document.documentElement.classList.add("dark-mode");
     }
