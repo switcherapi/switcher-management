@@ -247,11 +247,15 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   private customFilterPredicate(data: History, filter: string): boolean {
     if (data.updatedBy.indexOf(filter) >= 0) {
       return true;
-    } else if (data.date.toString().indexOf(filter) >= 0) {
-      return true;
-    } else {
-      return Object.keys(data.newValue).filter(key => key.indexOf(filter) >= 0).length > 0;
     }
+    
+    if (data.date.toString().indexOf(filter) >= 0) {
+      return true;
+    }
+
+    return Object.keys(data.newValue).filter(key => key.indexOf(filter) >= 0).length > 0 ||
+      Object.values(data.newValue).filter(value => value.indexOf(filter) >= 0).length > 0 ||
+      Object.values(data.oldValue).filter(value => value.indexOf(filter) >= 0).length > 0;
   }
 
   private compare(a: number | string, b: number | string, isAsc: boolean) {

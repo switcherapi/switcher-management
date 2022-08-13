@@ -196,14 +196,17 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   private customFilterPredicate(data: MetricData, filter: string): boolean {
-    if (data.config.key.toLowerCase().indexOf(filter) >= 0 ||
+    return data.config.key.toLowerCase().indexOf(filter) >= 0 ||
       data.component.toLowerCase().indexOf(filter) >= 0 ||
       data.result && 'true'.indexOf(filter) >= 0 ||
       !data.result && 'false'.indexOf(filter) >= 0 ||
       data.date.toString().indexOf(filter) >= 0 ||
-      data.reason.toLowerCase().toString().indexOf(filter) >= 0)
-      return true;
-    return false;
+      data.reason.toLowerCase().toString().indexOf(filter) >= 0 ||
+      data.message?.toLowerCase().toString().indexOf(filter) >= 0 ||
+      data.entry?.filter(e => {
+        return e.input.toLowerCase().toString().indexOf(filter) >= 0 ||
+          e.strategy.toLowerCase().toString().indexOf(filter) >= 0;
+      }).length > 0;
   }
   
 }

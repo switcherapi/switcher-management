@@ -21,7 +21,7 @@ export class AuthService {
   private currentTokenSubject: BehaviorSubject<string>;
   public currentToken: Observable<string>;
 
-  private userInfoSubject: BehaviorSubject<any>;
+  public userInfoSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
   loggedUser: string;
