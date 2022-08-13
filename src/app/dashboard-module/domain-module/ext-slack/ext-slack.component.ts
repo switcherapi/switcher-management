@@ -28,7 +28,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
 
   domainId: string;
   domainName: string;
-  slackUpdate: boolean = true;
+  slackUpdate: boolean = false;
   loading: boolean = true;
   slack: Slack;
 
