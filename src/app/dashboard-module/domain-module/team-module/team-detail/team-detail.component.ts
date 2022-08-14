@@ -12,6 +12,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-team-detail',
@@ -60,10 +61,11 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   ngOnInit() {
     this.loading = true;
     this.readPermissionToObject();
-    this.domainRouteService.updateView('Teams', 6);
     this.activatedRoute.paramMap.pipe(map(() => window.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
+        this.updateRoute(data.fetch == undefined);
+
         if (data.team) {
           this.team = JSON.parse(data.team);
           this.nameFormControl.setValue(this.team.name);
@@ -178,6 +180,15 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
       this.classStatus = 'header editing';
     } else {
       this.classStatus = this.team.active ? 'header activated' : 'header deactivated';
+    }
+  }
+
+  private updateRoute(updateBreadcrumbs: boolean): void {
+    this.domainRouteService.updateView('Teams', 6);
+
+    if (updateBreadcrumbs) {
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+        `/dashboard/domain/${this.domainName}/${this.domainId}`);
     }
   }
 

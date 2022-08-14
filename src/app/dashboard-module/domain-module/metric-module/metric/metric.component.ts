@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { MetricService } from 'src/app/services/metric.service';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-metric',
@@ -34,6 +35,7 @@ export class MetricComponent implements OnInit, OnDestroy {
   classStatus = "loading";
   loading = true;
   error = '';
+  fetch = true;
 
   metrics: Metric;
 
@@ -48,6 +50,11 @@ export class MetricComponent implements OnInit, OnDestroy {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
     });
+
+    this.activatedRoute.paramMap
+      .pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.fetch = data.fetch == undefined);
    }
 
   ngOnInit() {
@@ -56,8 +63,8 @@ export class MetricComponent implements OnInit, OnDestroy {
       this.loadMetrics(1);
       this.lockFilter = true;
     } else {
-      this.domainRouteService.updateView('Metrics', 1);
       this.loadMetricStatistics();
+      this.updateRoute();
     }
   }
 
@@ -155,5 +162,14 @@ export class MetricComponent implements OnInit, OnDestroy {
     ConsoleLogger.printError(error);
     this.errorHandler.doError(error);
     this.loading = false;
+  }
+
+  private updateRoute(): void {
+    this.domainRouteService.updateView('Metrics', 1);
+
+    if (this.fetch) {
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+        `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    }
   }
 }

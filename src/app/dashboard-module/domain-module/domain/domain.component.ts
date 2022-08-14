@@ -179,27 +179,33 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   gotoMetrics() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/metrics`]);
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/metrics`], 
+      { state: { fetch: false } });
   }
 
   gotoChangeLog() {
-    this.router.navigate([`${this.currentPath.path}/change-log`], { state: { fetch: false } });
+    this.router.navigate([`${this.currentPath.path}/change-log`], 
+      { state: { fetch: false } });
   }
 
   gotoComponents() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/components`]);
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/components`], 
+      { state: { fetch: false } });
   }
 
   gotoEnvironments() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/environments`]);
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/environments`], 
+      { state: { fetch: false } });
   }
 
   gotoTeams() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/teams`]);
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/teams`], 
+      { state: { fetch: false } });
   }
 
   gotoSlackIntegration() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/integration/slack`]);
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/integration/slack`], 
+      { state: { fetch: false } });
   }
 
   getSlackUrl(): string {

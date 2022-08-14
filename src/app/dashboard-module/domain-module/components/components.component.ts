@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
@@ -14,6 +14,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { ComponentService } from 'src/app/services/component.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-components',
@@ -45,6 +46,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   classStatus = "card mt-4 loading";
   loading = true;
   error = '';
+  fetch = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,12 +62,17 @@ export class ComponentsComponent implements OnInit, OnDestroy {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
     });
+
+    this.activatedRoute.paramMap
+      .pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.fetch = data.fetch == undefined);
    }
 
   ngOnInit() {
     this.loadComponents();
     this.readPermissionToObject();
-    this.domainRouteService.updateView('Components', 3);
+    this.updateRoute();
   }
 
   ngOnDestroy() {
@@ -213,6 +220,15 @@ export class ComponentsComponent implements OnInit, OnDestroy {
       width: '400px',
       data: { apiKey, componentName }
     });
+  }
+
+  private updateRoute(): void {
+    this.domainRouteService.updateView('Components', 3);
+
+    if (this.fetch) {
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+        `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    }
   }
 
 }
