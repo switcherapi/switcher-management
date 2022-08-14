@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-environments',
@@ -41,6 +42,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   classStatus = "card mt-4 loading";
   loading = true;
   error = '';
+  fetch = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -55,12 +57,17 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
     });
+
+    this.activatedRoute.paramMap
+      .pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.fetch = data.fetch == undefined);
   }
 
   ngOnInit() {
     this.loadEnvironments();
     this.readPermissionToObject();
-    this.domainRouteService.updateView('Environments', 4);
+    this.updateRoute();
   }
 
   ngOnDestroy() {
@@ -167,6 +174,15 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
           });
         }
     });
+  }
+
+  private updateRoute(): void {
+    this.domainRouteService.updateView('Environments', 4);
+
+    if (this.fetch) {
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+        `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    }
   }
 
 }

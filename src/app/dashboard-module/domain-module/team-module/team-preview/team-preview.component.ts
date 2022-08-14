@@ -60,7 +60,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
     const domainId = this.teamListComponent.domainId;
     const domainName = encodeURIComponent(this.teamListComponent.domainName);
     this.router.navigate([`/dashboard/domain/${domainName}/${domainId}/teams/${this.team._id}`], 
-      { state: { team: JSON.stringify(this.team) } });
+      { state: { team: JSON.stringify(this.team), fetch: false } });
   }
 
   removeTeam() {

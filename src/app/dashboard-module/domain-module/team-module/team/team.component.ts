@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -9,6 +9,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { TeamService } from 'src/app/services/team.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-team',
@@ -31,6 +32,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   teams: Team[];
   loading = false;
   error = '';
+  fetch = true;
 
   readable: boolean = false;
   updatable: boolean = false;
@@ -48,11 +50,16 @@ export class TeamComponent implements OnInit, OnDestroy {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
     });
+
+    this.activatedRoute.paramMap
+      .pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.fetch = data.fetch == undefined);
   }
 
   ngOnInit() {
     this.loadTeams();
-    this.domainRouteService.updateView('Teams', 6);
+    this.updateRoute();
   }
 
   ngOnDestroy() {
@@ -125,6 +132,15 @@ export class TeamComponent implements OnInit, OnDestroy {
           });
         }
     });
+  }
+
+  private updateRoute(): void {
+    this.domainRouteService.updateView('Teams', 6);
+
+    if (this.fetch) {
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+        `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    }
   }
 
 }
