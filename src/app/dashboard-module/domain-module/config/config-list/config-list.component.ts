@@ -16,6 +16,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { GroupService } from 'src/app/services/group.service';
 import { Types } from 'src/app/model/path-route';
+import { PermissionService } from 'src/app/services/permission.service';
+import { Permissions } from 'src/app/model/permission';
 
 @Component({
   selector: 'app-config-list',
@@ -28,6 +30,7 @@ import { Types } from 'src/app/model/path-route';
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
+  permissions: Permissions[];
   configs: Config[];
   loading = false;
   error = '';
@@ -43,6 +46,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     private adminService: AdminService,
     private configService: ConfigService,
     private groupService: GroupService,
+    private permissionService: PermissionService,
     private toastService: ToastService,
     private errorHandler: RouterErrorHandler
   ) { 
@@ -55,8 +59,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     this.error = '';
 
     this.readPermissionToObject();
-    this.loadConfigs();
-    this.loadGroup();
+    this.readChildPermissions();
   }
 
   ngOnDestroy() {
@@ -120,6 +123,19 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
             }
           });
         }
+    });
+  }
+
+  private readChildPermissions(): void {
+    this.permissionService.executePermissionQuery(this.domainId, 'SWITCHER', ['UPDATE', 'DELETE'])
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(response => {
+      if (response.data.permission.length) {
+        this.permissions = response.data.permission;
+      }
+
+      this.loadConfigs();
+      this.loadGroup();
     });
   }
 

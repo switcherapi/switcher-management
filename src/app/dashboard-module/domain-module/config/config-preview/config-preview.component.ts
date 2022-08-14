@@ -7,9 +7,9 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { AdminService } from 'src/app/services/admin.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { Config } from 'protractor';
+import { Permissions } from 'src/app/model/permission';
 
 @Component({
   selector: 'app-config-preview',
@@ -29,6 +29,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   @Input() groupId: string;
   @Input() config: Config;
   @Input() environmentSelectionChange: EventEmitter<string>;
+  @Input() permissions: Permissions[];
 
   environmentStatusSelection: FormGroup;
   selectedEnvStatus: boolean;
@@ -45,7 +46,6 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private adminService: AdminService,
     private configService: ConfigService,
     private toastService: ToastService
   ) { }
@@ -106,24 +106,21 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'SWITCHER', 'name', this.config.key)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-              
-              if (!this.updatable) {
-                this.environmentStatusSelection.disable({ onlySelf: true });
-              } else {
-                this.toggleSectionStyle = 'toggle-section';
-              }
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+    this.loadOperationSelectionComponent();
+
+    const element = this.permissions.filter(p => p.id === this.config.id)[0];
+    element.permissions.forEach(p => {
+      if (p.action === 'UPDATE') {
+        this.updatable = p.result === 'ok';
+
+        if (!this.updatable) {
+          this.environmentStatusSelection.disable({ onlySelf: true });
+        } else {
+          this.toggleSectionStyle = 'toggle-section';
         }
+      } else if (p.action === 'DELETE') {
+        this.removable = p.result === 'ok';
+      }
     });
   }
 

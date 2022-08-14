@@ -119,3 +119,18 @@ export const configurationQueryByConfig = () => {
       }
   `;
 };
+
+export const permissionQuery = () => {
+  return gql`
+    query permission($domain: String!, $router: String!, $actions: [String]!, $parent: String) {
+      permission(domain: $domain, router: $router, actions: $actions, parent: $parent) {
+        id
+        name
+        permissions {
+            action
+            result
+        }
+      }
+    }
+`;
+};

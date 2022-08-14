@@ -8,8 +8,8 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Group } from 'src/app/model/group';
-import { AdminService } from 'src/app/services/admin.service';
 import { GroupService } from 'src/app/services/group.service';
+import { Permissions } from 'src/app/model/permission';
 
 @Component({
   selector: 'app-group-preview',
@@ -28,6 +28,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   @Input() domainName: string;
   @Input() group: Group;
   @Input() environmentSelectionChange: EventEmitter<string>;
+  @Input() permissions: Permissions[];
 
   environmentStatusSelection: FormGroup;
   selectedEnvStatus: boolean;
@@ -44,14 +45,12 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private adminService: AdminService,
     private groupService: GroupService,
     private toastService: ToastService
   ) { }
 
   ngOnInit() {
     this.readPermissionToObject();
-    this.loadOperationSelectionComponent();
     this.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
       this.selectEnvironment(envName);
     });
@@ -60,12 +59,6 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  loadOperationSelectionComponent(): void {
-    this.environmentStatusSelection = this.fb.group({
-      environmentStatusSelection: [null, Validators.required]
-    });
   }
 
   selectGroup() {
@@ -104,25 +97,28 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  private loadOperationSelectionComponent(): void {
+    this.environmentStatusSelection = this.fb.group({
+      environmentStatusSelection: [null, Validators.required]
+    });
+  }
+
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'GROUP', 'name', this.group.name)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-              
-              if (!this.updatable) {
-                this.environmentStatusSelection.disable({ onlySelf: true });
-              } else {
-                this.toggleSectionStyle = 'toggle-section';
-              }
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+    this.loadOperationSelectionComponent();
+
+    const element = this.permissions.filter(p => p.id === this.group.id)[0];
+    element.permissions.forEach(p => {
+      if (p.action === 'UPDATE') {
+        this.updatable = p.result === 'ok';
+
+        if (!this.updatable) {
+          this.environmentStatusSelection.disable({ onlySelf: true });
+        } else {
+          this.toggleSectionStyle = 'toggle-section';
         }
+      } else if (p.action === 'DELETE') {
+        this.removable = p.result === 'ok';
+      }
     });
   }
 

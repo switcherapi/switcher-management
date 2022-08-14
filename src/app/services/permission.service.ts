@@ -4,14 +4,18 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { Permission } from '../model/permission';
+import { GraphQLPermissionResultSet, Permission } from '../model/permission';
+import { Apollo } from 'apollo-angular';
+import { permissionQuery } from '../model/graphql-schemas';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PermissionService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private apollo: Apollo) {
     super();
   }
 
@@ -59,6 +63,19 @@ export class PermissionService extends ApiService {
 
   public deletePermission(id: string): Observable<Permission> {
     return this.http.delete<Permission>(`${environment.apiUrl}/permission/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public executePermissionQuery(domainId: string, router: string, actions: string[], parentId?: string) {
+    return this.apollo.query<GraphQLPermissionResultSet>({
+      query: permissionQuery(),
+      fetchPolicy: 'network-only',
+      variables: { 
+        domain: domainId,
+        router,
+        actions,
+        parent: parentId
+      }
+    });
   }
 
 }

@@ -14,7 +14,7 @@ import {
   configurationQueryByGroup, 
   configurationTreeQuery, 
   snapshotQuery 
-} from '../model/grapthql-schemas';
+} from '../model/graphql-schemas';
 
 @Injectable({
   providedIn: 'root'
