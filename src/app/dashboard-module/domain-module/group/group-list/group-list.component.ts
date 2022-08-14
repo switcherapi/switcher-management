@@ -15,6 +15,8 @@ import { EnvironmentService } from 'src/app/services/environment.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { PermissionService } from 'src/app/services/permission.service';
+import { Permissions } from 'src/app/model/permission';
 
 @Component({
   selector: 'app-group-list',
@@ -27,6 +29,7 @@ import { Types } from 'src/app/model/path-route';
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   
+  permissions: Permissions[];
   groups: Group[];
   loading = false;
   error = '';
@@ -37,10 +40,11 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     protected fb: FormBuilder,
     protected route: ActivatedRoute,
     protected environmentService: EnvironmentService,
-    private domainRouteService: DomainRouteService,
     private dialog: MatDialog,
+    private domainRouteService: DomainRouteService,
     private adminService: AdminService,
     private groupService: GroupService,
+    private permissionService: PermissionService,
     private toastService: ToastService,
     private errorHandler: RouterErrorHandler
   ) {
@@ -53,7 +57,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     this.error = '';
 
     this.readPermissionToObject();
-    this.loadGroups();
+    this.readChildPermissions();
     this.updateData();
   }
 
@@ -125,6 +129,18 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
           });
         }
     });
+  }
+
+  private readChildPermissions(): void {
+    this.permissionService.executePermissionQuery(this.domainId, 'GROUP', ['UPDATE', 'DELETE'])
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(response => {
+        if (response.data.permission.length) {
+          this.permissions = response.data.permission;
+        }
+
+        this.loadGroups();
+      });
   }
 
 }

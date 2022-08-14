@@ -6,3 +6,18 @@ export class Permission {
   identifiedBy: string;
   values: string[];
 }
+
+export class GraphQLPermissionResultSet {
+  permission: Permissions[];
+}
+
+export class Permissions {
+  id: string;
+  name: string;
+  permissions: ResultPermission[];
+}
+
+export class ResultPermission {
+  action: string;
+  result: string;
+}
