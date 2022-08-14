@@ -46,7 +46,7 @@ export class DocumentationComponent implements OnInit, OnDestroy {
     window.onscroll = function () {
       const currentScrollPos = window.scrollY;
       if (this.prevScrollpos > currentScrollPos) {
-          document.getElementById("sidebarCollapse").style.top = "0";
+          document.getElementById("sidebarCollapse").style.top = "0px";
       } else {
           document.getElementById("sidebarCollapse").style.top = "-60px";
       }

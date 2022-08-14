@@ -96,6 +96,11 @@ a[data-toggle="collapse"] {
   transform: translateY(-50%);
 }
 
+.dropdown-toggle:hover {
+  color: #24292E !important;
+  background: #fff !important;
+}
+
 #searchBox {
   width: 220px;
   margin: auto;
@@ -157,6 +162,10 @@ a[data-toggle="collapse"] {
   padding-bottom: 20px;
   position: sticky;
   top: 10px;
+}
+
+.form-control {
+  height: auto;
 }
 
 @media only screen and (max-width: 990px) {

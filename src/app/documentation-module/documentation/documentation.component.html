@@ -4,7 +4,7 @@
             <div class="sticky">
                 <div class="sidebar-header">
                     <a routerLink="/documentation" (click)="toggleMenu()">
-                        <img src="assets\switcherapi_management_white.png" style="width: 200px;" />
+                        <img src="assets\switcherapi_management_white.png" style="width: 200px;" alt="Switcher Management logo" />
                     </a>
                 </div>
                 <div class="spacer"></div>
@@ -12,55 +12,29 @@
                     <li class="active">
                         <a href="#quickstartSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quickstart</a>
                         <ul class="collapse list-unstyled" id="quickstartSubmenu">
-                            <li>
-                                <a routerLink="/documentation/setup" (click)="toggleMenu()">- Setup</a>
-                            </li>
-                            <li>
-                                <a routerLink="/documentation/environment" (click)="toggleMenu()">- Environment</a>
-                            </li>
-                            <li>
-                                <a routerLink="/documentation/components" (click)="toggleMenu()">- Components</a>
-                            </li>
-                            <li>
-                                <a routerLink="/documentation/shortcuts" (click)="toggleMenu()">- Shortcuts</a>
-                            </li>
+                            <li><a routerLink="/documentation/setup" (click)="toggleMenu()">- Setup</a></li>
+                            <li><a routerLink="/documentation/environment" (click)="toggleMenu()">- Environment</a></li>
+                            <li><a routerLink="/documentation/components" (click)="toggleMenu()">- Components</a></li>
+                            <li><a routerLink="/documentation/shortcuts" (click)="toggleMenu()">- Shortcuts</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a routerLink="/documentation/team" (click)="toggleMenu()">Teams</a>
-                    </li>
-                    <li>
-                        <a routerLink="/documentation/metrics" (click)="toggleMenu()">Metrics</a>
-                    </li>
-                    <li>
-                        <a routerLink="/documentation/strategies" (click)="toggleMenu()">Strategies</a>
-                    </li>
-                    <li>
-                        <a routerLink="/documentation/api" (click)="toggleMenu()">Switcher API</a>
-                    </li>
-                    <li>
-                        <a routerLink="/documentation/relay" (click)="toggleMenu()">Switcher Relay</a>
-                    </li>
+                    <li><a routerLink="/documentation/team" (click)="toggleMenu()">Teams</a></li>
+                    <li><a routerLink="/documentation/metrics" (click)="toggleMenu()">Metrics</a></li>
+                    <li><a routerLink="/documentation/strategies" (click)="toggleMenu()">Strategies</a></li>
+                    <li><a routerLink="/documentation/api" (click)="toggleMenu()">Switcher API</a></li>
+                    <li><a routerLink="/documentation/relay" (click)="toggleMenu()">Switcher Relay</a></li>
                     <li class="active">
                         <a href="#librariesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher SDK</a>
                         <ul class="collapse list-unstyled" id="librariesSubmenu">
-                            <li>
-                                <a routerLink="/documentation/libjava" (click)="toggleMenu()">- Java</a>
-                            </li>
-                            <li>
-                                <a routerLink="/documentation/libjavascript" (click)="toggleMenu()">- JavaScript</a>
-                            </li>
+                            <li><a routerLink="/documentation/libjava" (click)="toggleMenu()">- Java</a></li>
+                            <li><a routerLink="/documentation/libjavascript" (click)="toggleMenu()">- JavaScript</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#slackSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Slack App</a>
                         <ul class="collapse list-unstyled" id="slackSubmenu">
-                            <li>
-                                <a routerLink="/documentation/slackinstallation" (click)="toggleMenu()">- Installation</a>
-                            </li>
-                            <li>
-                                <a routerLink="/documentation/slackfeatures" (click)="toggleMenu()">- Features</a>
-                            </li>
+                            <li><a routerLink="/documentation/slackinstallation" (click)="toggleMenu()">- Installation</a></li>
+                            <li><a routerLink="/documentation/slackfeatures" (click)="toggleMenu()">- Features</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -73,10 +47,10 @@
                         maxlength="20">
                     <div class="input-group-append">
                         <button class="input-group-text red lighten-3" (click)="onSearch(searchQuery.value)">
-                            <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                            <mat-icon>search</mat-icon>
                         </button>
                         <button type="button" id="sidebarCollapseBtn" class="btn btn-info" (click)="toggleMenu()">
-                            <i class="fas fa-align-left"></i>
+                            <mat-icon>menu</mat-icon>
                         </button>
                     </div>
                 </div>
@@ -85,9 +59,9 @@
 
         <div id="content">
             <div id="sidebarCollapse" class="container-fluid sticky">
-                <img class="doc-icon" src="assets\switcherapi_management_white.png" style="width: 120px; float: left;" />
+                <img class="doc-icon" src="assets\switcherapi_management_white.png" style="width: 120px; float: left;" alt="Switcher Management logo" />
                 <button type="button" id="sidebarCollapseBtn" class="btn btn-info" (click)="toggleMenu()">
-                    <i class="fas fa-align-left"></i>
+                    <mat-icon class="icon-color">menu</mat-icon>
                 </button>
             </div>
             <div id="docContainer" class="container-fluid">

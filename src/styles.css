@@ -46,6 +46,10 @@ body {
   background: #fb5454 !important;
 }
 
+.icon-color {
+  color: white;
+}
+
 @media only screen and (max-width: 600px) {
   .divider-style {
     display: contents !important;

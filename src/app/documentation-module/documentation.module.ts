@@ -20,6 +20,7 @@ import { ShortcutsComponent } from './docs/shortcuts.component';
 import { RelayComponent } from './docs/relay.component';
 import { SlackInstallationDocsComponent } from './docs/slack-installation.component';
 import { SlackFeaturesDocsComponent } from './docs/slack-features.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { SlackFeaturesDocsComponent } from './docs/slack-features.component';
     CommonModule,
     DocumentationRoutingModule,
     HttpClientModule,
+    MatIconModule,
     MarkdownModule.forRoot({
       sanitize: SecurityContext.NONE
     }),

@@ -39,7 +39,8 @@ html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
 html.dark-mode .new-feature-text,
 html.dark-mode .label-env-name,
-html.dark-mode .label-color {
+html.dark-mode .label-color,
+html.dark-mode .icon-color {
     color: black !important;
 }
 
@@ -49,6 +50,17 @@ html.dark-mode .mat-button:hover:not([disabled]) {
 
 html.dark-mode .btn-element {
     border: 1px solid black;
+}
+
+html.dark-mode #sidebar,
+html.dark-mode .sidebar-header,
+html.dark-mode .dropdown-toggle {
+    background: #151515 !important;
+}
+
+html.dark-mode .doc-header,
+html.dark-mode #sidebarCollapse {
+    background: #e3e3e3;
 }
 
 html.dark-mode .grid-container,

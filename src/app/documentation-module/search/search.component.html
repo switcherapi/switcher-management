@@ -1,11 +1,11 @@
 <div class="doc-header">
     <h3 class="doc-title">Search</h3>
-    <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
+    <img src="assets/switcherapi_mark_white.png" class="doc-icon" alt="Switcher API logo" />
 </div>
 
 <div *ngIf="loading" class="loader-wrapper">
     <div class="loader"></div>
-    <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);"/>
+    <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API logo"/>
 </div>
 <label *ngIf="!loading && skimmingResponse?.result.length === 0">No results found for <strong>{{ query }}</strong></label>
 <div *ngFor="let skimmmingResult of skimmingResponse?.result">

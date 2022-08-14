@@ -12,8 +12,8 @@
         <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
         <a class="nav-item nav-link menu-border-left" routerLink="/signup" *ngIf="!currentToken">Sign up</a>
         <div id="menuProfile" *ngIf="currentToken" class="profile-btn menu-border-left">
-            <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="">
-            <mat-icon style="color: white; transform: translateY(6px);">keyboard_arrow_down</mat-icon>
+            <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="User avatar">
+            <mat-icon class="icon-color" style="transform: translateY(6px);">keyboard_arrow_down</mat-icon>
         </div>
         <ul id="profileMenu" *ngIf="currentToken" class="navigation-nested">
             <li class="username navigation-nested__header">
