@@ -430,13 +430,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private getDisableMetricsChange(): any {
-    if (this.config.disable_metrics === undefined || 
-      this.config.disable_metrics[this.currentEnvironment] != this.disableMetrics) {
-      return {
-        [this.currentEnvironment]: this.disableMetrics
-      }
-    }
-    return undefined;
+    if (!this.config.disable_metrics)
+      this.config.disable_metrics = new Map<string, boolean>();
+    
+    this.config.disable_metrics[this.currentEnvironment] = this.disableMetrics;
+    return this.config.disable_metrics;
   }
 
   private updateConfigComponents(config: Config): void {
