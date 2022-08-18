@@ -172,7 +172,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.selectEnvironment($event);
   }
 
-  onEnvStatusChanged($event: any) {
+  onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
   }
 
@@ -219,9 +219,9 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
-  private updateEnvironmentStatus(env: any): void {
+  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     const configRelayStatus = new ConfigRelayStatus();
-    configRelayStatus.activated[env.environment] = env.status;
+    configRelayStatus.activated[env.environmentName] = env.status;
 
     this.blockUI.start('Updating environment...');
     this.configService.updateConfigRelayStatus(this.config.id, configRelayStatus)
@@ -235,7 +235,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
           this.blockUI.stop();
         }
     }, error => {
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
       this.blockUI.stop();
       ConsoleLogger.printError(error);
     });

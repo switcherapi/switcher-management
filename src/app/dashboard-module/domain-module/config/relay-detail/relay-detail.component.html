@@ -45,7 +45,7 @@
                 </div>
                 <div class="description">
                     <app-environment-config *ngIf="config.relay"
-                        [currentEnvironment]="currentEnvironment"
+                        [selectedEnvName]="currentEnvironment"
                         [enable]="envEnable"
                         [domainId]="parent.domainId" 
                         [configuredEnvironments]="config.relay.activated"

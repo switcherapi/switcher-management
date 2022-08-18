@@ -26,7 +26,7 @@
         </section>
     </div>
     <div mat-dialog-actions style="float: right;">
-        <button class="btn-save" mat-button (click)="onDownload()">
+        <button *ngIf="!snapshot" class="btn-save" mat-button (click)="onDownload()">
             <mat-icon>cloud_download</mat-icon>
             <div class="options-section-label"> Download</div>
         </button>

@@ -80,11 +80,8 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
   changeStatus(event: MatSlideToggleChange) {
     this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value] = event.checked;
-    const envChanged = {
-      environment: this.environmentSelection.get('environmentSelection').value,
-      status: event.checked
-    };
-    this.outputStatusChanged.emit(envChanged);
+    this.outputStatusChanged.emit(
+      new EnvironmentChangeEvent(this.environmentSelection.get('environmentSelection').value, event.checked));
   }
 
   removeEnvironment() {

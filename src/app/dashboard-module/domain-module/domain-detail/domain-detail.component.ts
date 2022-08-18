@@ -150,7 +150,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.selectEnvironment($event);
   }
 
-  onEnvStatusChanged($event: any) {
+  onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
   }
 
@@ -182,9 +182,9 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       `/dashboard/domain/${encodeURIComponent(this.domain.name)}/${this.domainId}`);
   }
 
-  private updateEnvironmentStatus(env: any): void {
+  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
-    this.domainService.setDomainEnvironmentStatus(this.domain.id, env.environment, env.status)
+    this.domainService.setDomainEnvironmentStatus(this.domain.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
@@ -196,7 +196,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
     });
   }
 
