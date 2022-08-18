@@ -140,7 +140,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     this.selectEnvironment($event);
   }
 
-  onEnvStatusChanged($event: any) {
+  onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
   }
 
@@ -214,10 +214,10 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       });
   }
 
-  private updateEnvironmentStatus(env: any): void {
+  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
-    this.selectEnvironment(env.status);
-    this.groupService.setGroupEnvironmentStatus(this.group.id, env.environment, env.status)
+    this.selectEnvironment(env);
+    this.groupService.setGroupEnvironmentStatus(this.group.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
@@ -227,7 +227,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     }, error => {
       this.blockUI.stop();
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
     }, () => this.blockUI.stop());
   }
 

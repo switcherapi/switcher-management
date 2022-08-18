@@ -253,7 +253,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.selectEnvironment($event);
   }
 
-  onEnvStatusChanged($event: any) {
+  onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
   }
 
@@ -320,10 +320,10 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     });
   }
 
-  private updateEnvironmentStatus(env: any): void {
+  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.selectEnvironment(env);
-    this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environment, env.status)
+    this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
@@ -331,7 +331,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         }
     }, error => {
       this.blockUI.stop();
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
       ConsoleLogger.printError(error);
     }, () => this.blockUI.stop());
   }

@@ -297,7 +297,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.config.disable_metrics[this.currentEnvironment] : false;
   }
 
-  onEnvStatusChanged($event: any) {
+  onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
   }
 
@@ -355,10 +355,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updateEnvironmentStatus(env: any): void {
+  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.selectEnvironment(env);
-    this.configService.setConfigEnvironmentStatus(this.config.id, env.environment, env.status)
+    this.configService.setConfigEnvironmentStatus(this.config.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
@@ -368,7 +368,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }, error => {
       ConsoleLogger.printError(error);
       this.blockUI.stop();
-      this.toastService.showError(`Unable to update the environment '${env.environment}'`);
+      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
     }, () => this.blockUI.stop());
   }
 
