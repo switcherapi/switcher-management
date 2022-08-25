@@ -5,7 +5,7 @@ Find here all the necessary steps to install Switcher Slack App to your Slack Wo
 
 The app was developed primarily to improve visibility and actions taken by your team, hence, in order to provide a secure and restricted environment, the app installation requires that the Domain owner acknowledge the necessary permissions to both Slack and Switcher API interact with each other.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/switcherapi_slack_banner.png" class="image-style center width-70" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/switcherapi_slack_banner.png" class="image-style center width-70 dark-invert" alt=""/><p>
 
 #### Requirements
 * * *
@@ -21,7 +21,7 @@ Make sure you have a channel created beforehand that will be used to publish all
 
 After being logged to the Switcher Management, select the Domain that you want to link your Slack Workspace then select the drill down located at the upper right of the Domain detail view.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_install.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_install.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -30,7 +30,7 @@ After being logged to the Switcher Management, select the Domain that you want t
 A new page will be loaded to confirm that you want to add the Slack App to your workspace.</br>
 When this page is loaded, a temporary token access is generated under the hood that will be linked later on with the installation.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_app_install.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_app_install.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -41,7 +41,7 @@ Switcher Slack App works with minimum access to Workspaces as shown in the image
 
 After verifying all accesses and permissions, select the channel in which the app will use to publish change requests.</br>
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_app_auth.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_app_auth.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -50,7 +50,7 @@ After verifying all accesses and permissions, select the channel in which the ap
 As well as for Switcher API, it requires you to authorize that Slack App can perform requests to the API through the platform.</br>
 The two-hands shaking guarantee that both platforms can interact with each other. 
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_switcher_auth.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/slack_switcher_auth.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -58,13 +58,13 @@ The two-hands shaking guarantee that both platforms can interact with each other
 
 Now that both platforms are linked, you can add the app to your workspace by selecting Add app on your sidebar, then selecting Switcher API.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_select_app.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_select_app.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br>
 
 After selecting the app, the Home view will load with all available features.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_home.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_home.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -73,11 +73,11 @@ After selecting the app, the Home view will load with all available features.
 The last step consists of including the app in the channel that was chosen during the Slack Authorization step.</br>
 To add the channel, you can click on the app title at the Home view. It will open the app settings view.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_settings.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_settings.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 Select the channel using the drill down box, then click on Add.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_settings_channel.jpg" class="image-style center shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/install/ext_slack_settings_channel.jpg" class="image-style center shadow dark-invert" alt=""/><p>
 
 </br></br>
 

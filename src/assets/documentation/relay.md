@@ -6,7 +6,7 @@ Not only can applications make use of all the built-in strategy validations, but
 
 This document will show you the different ways you can configure it and how to implement the REST API receptor, which will be responsible for receiving and processing the information provided by the Switcher Relay.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_relay.jpg" class="image-style center width-70" alt=""/>
+<img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_relay.jpg" class="image-style center width-70 dark-invert" alt=""/>
 
 </br></br>
 
@@ -19,7 +19,7 @@ Below you will learn how to configure a Switcher Relay and its results after it 
 
 After creating a Switcher, you can add one Relay per-environment by clicking on *Add Relay*. A new view will be showed right below your switcher main view. This panel must contains all the related information regarding how to access your REST receptor.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_setup.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_setup.jpg" class="image-style shadow dark-invert" alt=""/><p>
 
 This view is composed by the settings:
 
@@ -125,7 +125,7 @@ router.post('/validate', (req, res) => {
 
   Defining strategies before Relays are the best way to keep the consistency of all external validation. It creates a smart gateway between your application and the external API used to validate or being notified. 
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_stack.jpg" class="image-style center width-70" alt=""/>
+  <img src="[$ASSETS_LOCATION]/documentation/images/relay/macro_stack.jpg" class="image-style center width-70 dark-invert" alt=""/>
 
 </br></br>
 
@@ -134,7 +134,7 @@ router.post('/validate', (req, res) => {
 
   Below you can access the result given a possible execution of this validation made via Switcher Relay where the user on the context is not allowed to access the feature.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_datametrics.jpg" class="image-style shadow" alt=""/>
+  <img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_datametrics.jpg" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 

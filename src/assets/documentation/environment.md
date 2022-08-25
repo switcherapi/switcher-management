@@ -7,7 +7,7 @@ You can benefit from working with different environments when using Switcher API
 - Decrease the impact of your either productive or other sensitive environments when switching features.
 - Set up exclusive variables (strategies) that will be used to run the switcher criteria.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/environment/environment.jpg" class="image-style shadow" alt=""/>
+<img src="[$ASSETS_LOCATION]/documentation/images/environment/environment.jpg" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 
@@ -21,7 +21,7 @@ After registering a new environment, it will become available as an option for:
 - Strategies
 - Snapshot download (for zero-latency library usage)
 
-<img src="[$ASSETS_LOCATION]/documentation/images/environment/env_selection.jpg" class="image-style" alt=""/>
+<img src="[$ASSETS_LOCATION]/documentation/images/environment/env_selection.jpg" class="image-style dark-invert" alt=""/>
 
 **default** is your productive environment
 
@@ -30,11 +30,11 @@ Environment settings can be also be reset using two different options.
 1. Removing the environment setting inside your Domain, Group, Switcher, or Strategy, by selecting the trach icon.
 In case your application uses the removed environment, then it will automatically use the default environment settings.
 
-   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_remove.jpg" class="image-style shadow" alt=""/><p>
+   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_remove.jpg" class="image-style shadow dark-invert" alt=""/><p>
 
 2. Resetting the entire environment to use the default settings. This action will also remove strategies since they are created per environment.
 
-   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_reset.jpg" class="image-style shadow" alt=""/><p>
+   <img src="[$ASSETS_LOCATION]/documentation/images/environment/env_reset.jpg" class="image-style shadow dark-invert" alt=""/><p>
 
 </br></br>
 

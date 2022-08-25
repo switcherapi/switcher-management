@@ -1,4 +1,4 @@
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/switcher_slack_app_logo.png" class="image-style center width-70" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/switcher_slack_app_logo.png" class="image-style center width-70 dark-invert" alt=""/><p>
 
 #### Change Request
 * * *
@@ -12,7 +12,7 @@ Change Request is available to everyone that has access to the Workspace and pro
 
 Opening a ticket is simple and requires you to select environments, features, and groups of features that you want to change.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/change_request_modal.png" class="image-style center" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/change_request_modal.png" class="image-style center dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -21,7 +21,7 @@ Opening a ticket is simple and requires you to select environments, features, an
 After selecting the components of your ticket, you can review and add an observation that is useful to describe why this change is important.</br>
 The app is fully capable to identify an already opened ticket and republish it to the approval channel. Validations are also executed behind the scenes to make sure that the ticket is consistent and coherent.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/change_request_review.png" class="image-style center" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/change_request_review.png" class="image-style center dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -30,7 +30,7 @@ The app is fully capable to identify an already opened ticket and republish it t
 When submitted, the ticket is automatically published for approval.</br>
 Once the ticket is approved or denied, the message is updated with the action taken, and the event is sent to Switcher API.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/slack/change_request_approval.png" class="image-style center" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/slack/change_request_approval.png" class="image-style center dark-invert" alt=""/><p>
 
 </br></br>
 

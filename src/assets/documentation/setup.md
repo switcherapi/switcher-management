@@ -4,7 +4,7 @@
 The 5 steps show the minimum configuration necessary to start using Switcher API on your projects.
 </br>As you complete all these steps, take a look at the Java or JavaScript modules to start setting up your application to communicate with the Switcher API.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/setup/5steps.jpg" class="image-style shadow" alt=""/>
+<img src="[$ASSETS_LOCATION]/documentation/images/setup/5steps.jpg" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 
@@ -23,7 +23,7 @@ This is going to be your workspace which will contain:
 - Environment and application settings
 - Team management
 
-<img src="[$ASSETS_LOCATION]/documentation/images/setup/domain_create.jpg" class="image-style shadow" alt=""/>
+<img src="[$ASSETS_LOCATION]/documentation/images/setup/domain_create.jpg" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 
@@ -32,12 +32,12 @@ This is going to be your workspace which will contain:
 Configure here all your projects/applications that will make use of this API. This step is required for you to keep track of everything and access Switcher API.
 <p>After registering your component, it will be available for you to link with any switcher.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/setup/components.jpg" class="image-style shadow" alt=""/><p><br/>
+<img src="[$ASSETS_LOCATION]/documentation/images/setup/components.jpg" class="image-style shadow dark-invert" alt=""/><p><br/>
 
 <p>At the end of this step, you'll be given an API Key that will be used exclusively for the registered component. 
 For security purposes, this key cannot be reclaimed, so keep it in a safe place.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/components/component_key.jpg" class="image-style shadow" alt=""/><p>
+<img src="[$ASSETS_LOCATION]/documentation/images/components/component_key.jpg" class="image-style shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -62,7 +62,7 @@ Finally, define your switcher by giving a key value and a brief description.
 - Alphanumeric
 - No spaces
 
-<img src="[$ASSETS_LOCATION]/documentation/images/setup/switchers.jpg" class="image-style shadow" alt=""/>
+<img src="[$ASSETS_LOCATION]/documentation/images/setup/switchers.jpg" class="image-style shadow dark-invert" alt=""/>
 
 * * *
 
