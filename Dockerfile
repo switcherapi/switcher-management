@@ -1,6 +1,9 @@
 # ---------- Base ----------
 FROM node:gallium-alpine as builder
 
+# Required for @parcel/watcher
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+
 WORKDIR /usr/local/app
 
 # Copy the source files
