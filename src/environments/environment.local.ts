@@ -1,6 +1,9 @@
+import { environment_global } from "./environment.global";
+
 export const environment = {
-  version: 'v1.2.5',
   production: true,
+  version: environment_global.version,
+  releaseTime: window["env"]["RELEASE_TIME"] || undefined,
   recaptchaPublicKey: window["env"]["GOOGLE_RECAPTCHA"] || undefined,
   githubApiClientId: window["env"]["GITHUB_CLIENTID"] || undefined,
   bitbucketApiClientId: window["env"]["BITBUCKET_CLIENTID"] || undefined,

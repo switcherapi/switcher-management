@@ -1,4 +1,5 @@
 echo "Applying settings..."
+echo "RELEASE_TIME = ${RELEASE_TIME}"
 echo "SWITCHERAPI_URL = ${SWITCHERAPI_URL}"
 echo "SM_IP = ${SM_IP}"
 echo "GOOGLE_RECAPTCHA = ${GOOGLE_RECAPTCHA}"

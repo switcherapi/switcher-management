@@ -14,7 +14,9 @@ export class AppVersionComponent implements OnInit {
   private unsubscribe: Subject<void> = new Subject();
 
   @Input() apiVersion: string;
+  apiReleaseTime: string;
   smVersion: string = environment.version;
+  smReleaseTime: string = environment.releaseTime;
 
   constructor(private authService: AuthService) { }
 
@@ -27,6 +29,7 @@ export class AppVersionComponent implements OnInit {
     this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.apiVersion = data.attributes.version;
+        this.apiReleaseTime = data.attributes.release_time;
       }
     }, error => {
       ConsoleLogger.printError(error);

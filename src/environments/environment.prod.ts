@@ -1,8 +1,9 @@
 import { environment_global } from "./environment.global";
 
 export const environment = {
-  version: environment_global.version,
   production: true,
+  version: environment_global.version,
+  releaseTime: environment_global.releaseTime,
   recaptchaPublicKey: environment_global.recaptchaPublicKey,
   githubApiClientId: environment_global.githubApiClientId,
   bitbucketApiClientId: environment_global.bitbucketApiClientId,
