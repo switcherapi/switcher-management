@@ -35,4 +35,4 @@ Join us on Slack if you have questions about your account. [![Slack: Switcher-HQ
 Donations for cookies and pizza are extremely welcomed.
 [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/switcherapi)
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9FKW64V67RKXW&source=url)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=A5R6K3JAD8SW4&no_recurring=0&item_name=Thank+you+for+supporting+the+Open+Source+Community&currency_code=CAD)
