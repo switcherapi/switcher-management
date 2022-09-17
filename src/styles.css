@@ -50,6 +50,10 @@ body {
   color: white;
 }
 
+ngb-modal-backdrop {
+  z-index: 0 !important;
+}
+
 @media only screen and (max-width: 600px) {
   .divider-style {
     display: contents !important;

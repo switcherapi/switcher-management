@@ -21,7 +21,7 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
   private enterprise_id: string;
   private team_id: string;
 
-  domainFormControl = new FormControl('');
+  domainFormControl = new FormControl(undefined);
   
   domains: Domain[];
   selectedDomain: Domain;
@@ -96,7 +96,7 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
       return 'Please, select a Domain to proceed with the Slack installation';
 
     if (!this.enterprise_id && !this.team_id)
-        return 'Unable to load Slack Authorization from the given URL';
+      return 'Unable to load Slack Authorization from the given URL';
   }
 
   onAuthorize(): void {
