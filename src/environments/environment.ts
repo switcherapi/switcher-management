@@ -11,7 +11,7 @@ export const environment = {
   domainTransferLink: 'http://localhost:4200/domain/transfer',
   apiUrl: 'http://localhost:3000',
   skimmingApi: 'https://dance-0m7-staging.begin.app',
-  slackUrl: 'https://switcher-slack-app.herokuapp.com/slack/install',
+  slackUrl: 'https://slack.switcherapi.com/slack/install',
   docsUrl: 'assets/',
   timeout: environment_global.timeout
 };

@@ -7,11 +7,11 @@ export const environment = {
   recaptchaPublicKey: environment_global.recaptchaPublicKey,
   githubApiClientId: environment_global.githubApiClientId,
   bitbucketApiClientId: environment_global.bitbucketApiClientId,
-  teamInviteLink: 'https://switcherapi.github.io/switcher-management/collab/join',
-  domainTransferLink: 'https://switcherapi.github.io/switcher-management/domain/transfer',
-  apiUrl: 'https://switcher-api.herokuapp.com',
+  teamInviteLink: 'https://cloud.switcherapi.com/collab/join',
+  domainTransferLink: 'https://cloud.switcherapi.com/domain/transfer',
+  apiUrl: 'https://switcherapi.com/api',
   skimmingApi: 'https://dance-0m7.begin.app',
-  slackUrl: 'https://switcher-slack-app.herokuapp.com/slack/install',
+  slackUrl: 'https://slack.switcherapi.com/slack/install',
   docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/', 
   timeout: environment_global.timeout
 };
