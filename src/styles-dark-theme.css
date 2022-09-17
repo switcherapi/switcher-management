@@ -94,7 +94,8 @@ html.dark-mode .dark-invert {
 }
 
 html.dark-mode .carousel-images,
-html.dark-mode :not(pre) > code[class*="language-"], pre[class*="language-"] {
+html.dark-mode :not(pre) > code[class*="language-"], 
+html.dark-mode pre[class*="language-"] {
     filter: invert(100%) hue-rotate(180deg) contrast(1.3);
 }
 

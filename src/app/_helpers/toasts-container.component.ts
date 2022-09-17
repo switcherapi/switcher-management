@@ -8,7 +8,7 @@ import { ToastService } from './toast.service';
       *ngFor="let toast of toastService.toasts"
       [class]="toast.classname"
       [autohide]="true"
-      [delay]="toast.delay || 5000"
+      [delay]="toast.delay || 3000"
       (hidden)="toastService.remove(toast)"
     >
       <ng-template [ngIf]="isTemplate(toast)" [ngIfElse]="text">
@@ -18,7 +18,10 @@ import { ToastService } from './toast.service';
       <ng-template #text>{{ toast.textOrTpl }}</ng-template>
     </ngb-toast>
   `,
-  host: { '[class.ngb-toasts]': 'true' }
+  host: {
+    'class': 'toast-container position-fixed top-0 end-0 p-3', 
+    'style': 'z-index: 1200; top: 0; right: 0;'
+  }
 })
 export class ToastsContainerComponent {
   constructor(public toastService: ToastService) { }
