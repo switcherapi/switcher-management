@@ -6277,11 +6277,6 @@
         "d3-path": "1"
       }
     },
-    "node_modules/dagre-d3/node_modules/d3-color": {
-      "version": "3.1.0",
-      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
-      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
-    },
     "node_modules/dagre-d3/node_modules/d3-contour": {
       "version": "1.3.2",
       "resolved": "https://registry.npmjs.org/d3-contour/-/d3-contour-1.3.2.tgz",
@@ -6375,6 +6370,11 @@
         "d3-color": "1"
       }
     },
+    "node_modules/dagre-d3/node_modules/d3-interpolate/node_modules/d3-color": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+    },
     "node_modules/dagre-d3/node_modules/d3-path": {
       "version": "1.0.9",
       "resolved": "https://registry.npmjs.org/d3-path/-/d3-path-1.0.9.tgz",
@@ -6416,6 +6416,11 @@
         "d3-color": "1",
         "d3-interpolate": "1"
       }
+    },
+    "node_modules/dagre-d3/node_modules/d3-scale-chromatic/node_modules/d3-color": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
     },
     "node_modules/dagre-d3/node_modules/d3-selection": {
       "version": "1.4.2",
@@ -6461,6 +6466,11 @@
         "d3-timer": "1"
       }
     },
+    "node_modules/dagre-d3/node_modules/d3-transition/node_modules/d3-color": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+    },
     "node_modules/dagre-d3/node_modules/d3-zoom": {
       "version": "1.8.3",
       "resolved": "https://registry.npmjs.org/d3-zoom/-/d3-zoom-1.8.3.tgz",
@@ -6472,6 +6482,11 @@
         "d3-selection": "1",
         "d3-transition": "1"
       }
+    },
+    "node_modules/dagre-d3/node_modules/d3/node_modules/d3-color": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
     },
     "node_modules/dashdash": {
       "version": "1.14.1",
@@ -20941,6 +20956,12 @@
             "d3-transition": "1",
             "d3-voronoi": "1",
             "d3-zoom": "1"
+          },
+          "dependencies": {
+            "d3-color": {
+              "version": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+              "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+            }
           }
         },
         "d3-array": {
@@ -20973,10 +20994,6 @@
             "d3-array": "1",
             "d3-path": "1"
           }
-        },
-        "d3-color": {
-          "version": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
-          "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
         },
         "d3-contour": {
           "version": "1.3.2",
@@ -21058,6 +21075,12 @@
           "integrity": "sha512-V9znK0zc3jOPV4VD2zZn0sDhZU3WAE2bmlxdIwwQPPzPjvyLkd8B3JUVdS1IDUFDkWZ72c9qnv1GK2ZagTZ8EA==",
           "requires": {
             "d3-color": "1"
+          },
+          "dependencies": {
+            "d3-color": {
+              "version": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+              "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+            }
           }
         },
         "d3-path": {
@@ -21100,6 +21123,12 @@
           "requires": {
             "d3-color": "1",
             "d3-interpolate": "1"
+          },
+          "dependencies": {
+            "d3-color": {
+              "version": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+              "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+            }
           }
         },
         "d3-selection": {
@@ -21144,6 +21173,12 @@
             "d3-interpolate": "1",
             "d3-selection": "^1.1.0",
             "d3-timer": "1"
+          },
+          "dependencies": {
+            "d3-color": {
+              "version": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
+              "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+            }
           }
         },
         "d3-zoom": {
