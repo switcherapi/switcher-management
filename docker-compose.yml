@@ -14,9 +14,10 @@ services:
     networks:
       - backend
     environment: 
-      - SWITCHERAPI_URL=https://switcher-api.herokuapp.com
+      - SWITCHERAPI_URL=https://switcherapi.com/api
       - SM_IP=localhost
       # - GOOGLE_RECAPTCHA=
+      # - ALLOW_INTERNAL_AUTH=
       # - GITHUB_CLIENTID=
       # - BITBUCKET_CLIENTID=
       # - SWITCHERSLACKAPP_URL=[ENDPOINT]/slack/install

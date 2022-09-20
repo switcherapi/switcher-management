@@ -126,6 +126,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     hasBitbucketIntegration(): boolean {
         return environment.bitbucketApiClientId != undefined;
     }
+
+    hasInternalAuthEnabled(): boolean {
+        return environment.allowInternalAuth;
+    }
     
     private isAlive(): void {
         this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {

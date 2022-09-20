@@ -8,19 +8,19 @@
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div *ngIf="!success" class="form-group">
                         <p *ngIf="forgotPassword">To reset your password, please provide your email so we can send you the reset instructions.</p>
-                        <mat-form-field>
+                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50"
                                 placeholder="E-mail" autocomplete="off" formControlName="email" required>
                         </mat-form-field>
                     </div>
                     <div *ngIf="!forgotPassword" class="form-group">
-                        <mat-form-field>
+                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
                                 placeholder="Password" formControlName="password" required>
                         </mat-form-field>
                     </div>
                     <div *ngIf="!forgotPassword" class="btn-container">
-                        <button mat-button class="btn-element" [disabled]="loading">
+                        <button *ngIf="hasInternalAuthEnabled()" mat-button class="btn-element" [disabled]="loading">
                             <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
                             <span class="label-color" style="color: white; padding-left: 5px;">Login</span>
                         </button>
@@ -44,7 +44,7 @@
                             <span style="color: white; padding-left: 5px;" title="Send reset instructions">Reset</span>
                         </button>
                     </div>
-                    <a *ngIf="!forgotPassword" class="label-link" (click)="onForgotPassword()">Forgot password?</a>
+                    <a *ngIf="!forgotPassword && hasInternalAuthEnabled()" class="label-link" (click)="onForgotPassword()">Forgot password?</a>
                     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
                     <div *ngIf="status" class="alert alert-danger mt-3 mb-0">{{status}}</div>
                     <div *ngIf="success">

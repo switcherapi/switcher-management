@@ -5,6 +5,7 @@ export const environment = {
   version: environment_global.version,
   releaseTime: window["env"]["RELEASE_TIME"] || undefined,
   recaptchaPublicKey: window["env"]["GOOGLE_RECAPTCHA"] || undefined,
+  allowInternalAuth: window["env"]["ALLOW_INTERNAL_AUTH"] || true,
   githubApiClientId: window["env"]["GITHUB_CLIENTID"] || undefined,
   bitbucketApiClientId: window["env"]["BITBUCKET_CLIENTID"] || undefined,
   teamInviteLink: `http://${window["env"]["SM_IP"] || 'localhost'}/collab/join`,

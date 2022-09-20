@@ -6,6 +6,7 @@ export const environment = {
   releaseTime: environment_global.releaseTime,
   recaptchaPublicKey: environment_global.recaptchaPublicKey,
   githubApiClientId: environment_global.githubApiClientId,
+  allowInternalAuth: environment_global.allowInternalAuth,
   bitbucketApiClientId: environment_global.bitbucketApiClientId,
   teamInviteLink: 'http://localhost:4200/collab/join',
   domainTransferLink: 'http://localhost:4200/domain/transfer',

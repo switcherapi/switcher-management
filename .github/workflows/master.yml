@@ -24,7 +24,7 @@ jobs:
 
       - name: Build & Lint
         run: |
-          npm install
+          npm ci
           npm run lint
 
       - name: Deploy
