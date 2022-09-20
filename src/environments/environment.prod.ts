@@ -6,6 +6,7 @@ export const environment = {
   releaseTime: environment_global.releaseTime,
   recaptchaPublicKey: environment_global.recaptchaPublicKey,
   githubApiClientId: environment_global.githubApiClientId,
+  allowInternalAuth: environment_global.allowInternalAuth,
   bitbucketApiClientId: environment_global.bitbucketApiClientId,
   teamInviteLink: 'https://cloud.switcherapi.com/collab/join',
   domainTransferLink: 'https://cloud.switcherapi.com/domain/transfer',
