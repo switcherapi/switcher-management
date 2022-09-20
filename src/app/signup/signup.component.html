@@ -7,19 +7,19 @@
             <div *ngIf="!loading && !waitingConfirmation" class="card-body">
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
-                        <mat-form-field>
+                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <input matInput type="text" id="name" (keyup)="onKey($event)" maxlength="50"
                                 placeholder="Name" autocomplete="off" formControlName="name" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
-                        <mat-form-field>
+                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50"
                                 placeholder="E-mail" autocomplete="off" formControlName="email" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
-                        <mat-form-field>
+                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <input matInput type="password" id="password" (keyup)="onKey($event)" placeholder="Password" formControlName="password" required>
                         </mat-form-field>
                     </div>
@@ -28,11 +28,11 @@
                         siteKey="{{getRecaptchaPublicKey()}}">  
                     </re-captcha>
                     <div style="padding-top: 20px;">
-                        <button *ngIf="getRecaptchaPublicKey()" mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
+                        <button *ngIf="getRecaptchaPublicKey() && hasInternalAuthEnabled()" mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
                             <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
                             <span class="label-color" style="color: white; padding-left: 5px;">Create</span>
                         </button>
-                        <button *ngIf="!getRecaptchaPublicKey()" mat-button class="btn-element" [disabled]="loading">
+                        <button *ngIf="!getRecaptchaPublicKey() && hasInternalAuthEnabled()" mat-button class="btn-element" [disabled]="loading">
                             <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API"/>
                             <span class="label-color" style="color: white; padding-left: 5px;">Create</span>
                         </button>

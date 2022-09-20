@@ -108,6 +108,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         return environment.bitbucketApiClientId != undefined;
     }
 
+    hasInternalAuthEnabled(): boolean {
+        return environment.allowInternalAuth;
+    }
+
     private isAlive(): void {
         this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
             if (data) {
