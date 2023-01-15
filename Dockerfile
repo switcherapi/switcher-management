@@ -19,7 +19,7 @@ RUN npm run build:local
 RUN npm prune --production
 
 # ---------- Release ----------
-FROM nginx:1.23.2-alpine
+FROM nginx:1.23.3-alpine
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf
