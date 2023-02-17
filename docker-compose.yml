@@ -6,7 +6,7 @@ networks:
 
 services:
   switchermanagement:
-    image: trackerforce/switcher-management
+    image: trackerforce/switcher-management:latest
     container_name: switchermanagement
     command: /bin/sh -c "setup.sh"
     ports:
