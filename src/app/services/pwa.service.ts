@@ -23,7 +23,6 @@ export class PwaService {
             .subscribe(() => {
                 const snack = this.snackbar.open('Update Available', 'Reload');
                 snack.onAction().subscribe(() => window.location.reload());
-                snack._dismissAfter(10000);
             });
         }
     }
