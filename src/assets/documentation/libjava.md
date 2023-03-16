@@ -96,6 +96,12 @@ switcher.snapshot.location
 # true/false Automated lookup for snapshot when loading the application
 switcher.snapshot.auto
 
+# true/false Skip snapshotValidation() that can be used for UT executions
+switcher.snapshot.skipvalidation
+
+# Enable the Snapshot Auto Update given an interval of time - e.g. 1s (s: seconds, m: minutes)
+switcher.snapshot.updateinterval
+
 # true/false Contingency in case of some problem with connectivity with the API
 switcher.silent
 
@@ -231,7 +237,7 @@ switcher.isItOn();
 ```
 </br>
 
-##### - Real-time snapshot reloader
+##### - Real-time snapshot updater
 Let the Switcher Client manage your application local snapshot file.
 
 In order to minimize roundtrips and unnecessary file parsing, try to use one of these features to improve the overall performance when accessing snapshots locally.
@@ -245,6 +251,16 @@ SwitcherFactory.stopWatchingSnapshot();
 2. You can also perform snapshot update validation to verify if there are changes to be pulled. This will ensure that your application is running the most recent version of your remote configuration.
 ```java
 SwitcherFactory.validateSnapshot();
+```
+
+3. Enable the Client SDK to execute Snapshot Auto Updates in the background using configuration. It basically encapsulates the validateSnapshot feature into a scheduled task managed by the SDK.
+It requires to set either snapshotFile or snapshotLocation. 
+
+```java
+// It will check and update the local/in-memory snapshot to the latest version
+SwitcherFactory.configure(ContextBuilder.builder()
+	.snapshotAutoUpdateInterval("1s")
+	.snapshotLocation("/src/resources"));
 ```
 
 </br>

@@ -56,8 +56,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     Validators.required,
     Validators.minLength(3)
   ]);
-
-  classStatus: string;
+  
   classStrategySection: string;
   disableMetrics: boolean;
   

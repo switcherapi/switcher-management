@@ -45,8 +45,6 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   envEnable = new Subject<boolean>();
 
-  classStatus: string;
-
   valueSelectionFormControl = new FormControl('');
   operationCategoryFormControl = new FormControl('');
 
