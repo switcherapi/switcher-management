@@ -29,7 +29,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   @Input() config: Config;
   @Input() parent: ConfigDetailComponent;
-  @Input() currentEnvironment: string;
+  @Input() declare currentEnvironment: string;
 
   @ViewChild('descElement', { static: true })
   descElement: ElementRef;
@@ -49,8 +49,6 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   relayTypeFormControl = new FormControl('');
   relayMethodFormControl = new FormControl('');
-
-  classStatus: string;
 
   constructor(
     private adminService: AdminService,
