@@ -1,51 +1,71 @@
 html.dark-mode {
-    filter: invert(100%) hue-rotate(180deg) contrast(0.8) saturate(0.9);
     top: 0 !important;
     /*fix cdk modal issues*/
 }
 
-html.dark-mode h4,
-html.dark-mode,
-html.dark-mode .navbar-toggler-icon,
-html.dark-mode .link {
-    filter: invert(100%) hue-rotate(180deg) contrast(0.8) saturate(0.9);
+html.dark-mode .mat-menu-panel {
+    filter: invert(100%) hue-rotate(180deg) contrast(0.7);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px -1px #35353533,0 4px 5px #ffffff24,0 1px 10px #ffffff1f;
+}
+
+html.dark-mode .link:hover {
+    filter: invert(50%) hue-rotate(180deg) contrast(0.8) saturate(0.9);
+}
+
+html.dark-mode a:hover {
+    text-decoration: none;
 }
 
 html.dark-mode body,
 html.dark-mode .backgroud-style,
 html.dark-mode .card-header {
-    background: black !important;
+    background: #2e2e2e !important;
 }
 
 html.dark-mode .backgroud-style,
 html.dark-mode #footer,
 html.dark-mode .home-section {
-    background: #eee !important;
+    background: #191919 !important;
+}
+
+html.dark-mode .username {
+    background: #2e2e2e !important;
+}
+
+html.dark-mode #profileMenu {
+    background: #191919 !important;
+    border: 1px solid #2b2b2b;
+}
+
+html.dark-mode #profileMenu a:hover {
+    color: #b7b7b7;
+    background: #2e2e2e !important;
 }
 
 html.dark-mode #main-menu,
 html.dark-mode #footer {
-    box-shadow: 0px 0px 10px 10px #eee !important;
+    box-shadow: 0px 0px 10px 10px #191919 !important;
 }
 
 html.dark-mode .mat-toolbar,
+html.dark-mode .mat-tab-label .mat-tab-label-content,
+html.dark-mode .mat-select-arrow,
 html.dark-mode #modal-title {
     color: white;
 }
 
 html.dark-mode .mat-button:not(#domainOptions):not(#domainList),
-html.dark-mode .nav-item.nav-link:hover,
 html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
 html.dark-mode .new-feature-text,
 html.dark-mode .label-env-name,
-html.dark-mode .label-color,
-html.dark-mode .icon-color {
-    color: black !important;
+html.dark-mode .label-color {
+    color: #000;
 }
 
-html.dark-mode .mat-button:hover:not([disabled]) {
-    color: rgb(46, 46, 46) !important;
+html.dark-mode .mat-dialog-actions .mat-button {
+    color: white !important;
 }
 
 html.dark-mode .btn-element {
@@ -65,27 +85,32 @@ html.dark-mode #sidebarCollapse {
 
 html.dark-mode .grid-container,
 html.dark-mode .nav-pills .nav-link.active,
+html.dark-mode .div-btn-new .btn-element,
+html.dark-mode app-config-detail app-metric-statistics .btn-element {
+    background-color: #eee;
+    filter: invert(100%) hue-rotate(180deg) contrast(0.7);
+    color: black;
+}
+
+html.dark-mode .strategy-section .mt-2,
+html.dark-mode app-config-detail .chartjs-render-monitor {
+    filter: invert(100%) hue-rotate(180deg) contrast(1.3);
+}
+
 html.dark-mode .btn-element,
 html.dark-mode .btn-element.remove,
 html.dark-mode .btn-red {
     background-color: #eee;
 }
 
-html.dark-mode #sidebar,
 html.dark-mode #switcher-slack-banner,
-html.dark-mode .slack-img,
-html.dark-mode .profile-avatar,
-html.dark-mode .avatar,
-html.dark-mode .switcher-logo,
-html.dark-mode .trackerforce-logo,
 html.dark-mode .doc-icon,
-html.dark-mode .home-image,
-html.dark-mode .carousel-indicators,
-html.dark-mode .carousel-control-next-icon,
-html.dark-mode .carousel-control-prev-icon,
-html.dark-mode .ngb-toasts,
-html.dark-mode .collab-image {
+html.dark-mode .ngb-toasts {
     filter: invert(100%) hue-rotate(180deg) saturate(1.5);
+}
+
+html.dark-mode .collab-patreon {
+    filter: invert(100%) hue-rotate(180deg);
 }
 
 html.dark-mode .dark-invert {
@@ -93,24 +118,46 @@ html.dark-mode .dark-invert {
     border-radius: 10px;
 }
 
-html.dark-mode .carousel-images,
 html.dark-mode :not(pre) > code[class*="language-"], 
 html.dark-mode pre[class*="language-"] {
     filter: invert(100%) hue-rotate(180deg) contrast(1.3);
 }
 
+html.dark-mode app-metric,
+html.dark-mode app-changelog,
+html.dark-mode app-team-detail,
+html.dark-mode app-config-detail app-metric-data,
+html.dark-mode .mat-dialog-content,
+html.dark-mode .mat-autocomplete-panel.mat-autocomplete-visible,
+html.dark-mode .detail-body,
+html.dark-mode .mat-focus-indicator.btn-element.create,
+html.dark-mode #docContainer {
+    filter: invert(80%) hue-rotate(180deg) contrast(1.3);
+}
+
+html.dark-mode .mat-dialog-container app-changelog {
+    filter: invert(0%) hue-rotate(0deg);
+}
+
 html.dark-mode .card {
     box-shadow: none;
+    background: #191919 !important;
+    border: 1px solid rgba(255, 254, 254, 0.13);
 }
 
 html.dark-mode .modal-open .modal, 
 html.dark-mode .cdk-overlay-backdrop {
-    background: #ffffffde;
+    background: black;
 }
 
 html.dark-mode .mat-dialog-container {
     box-shadow: none;
-    border: 1px solid rgba(0,0,0,.2);
+    border: 1px solid rgba(255, 254, 254, 0.2);
+    background: #191919 !important;
+}
+
+html.dark-mode .card-body hr {
+    border-top: 1px solid rgba(179, 179, 179, 0.1);
 }
 
 html.dark-mode .fade {
@@ -118,13 +165,21 @@ html.dark-mode .fade {
 }
 
 html.dark-mode .nav-item.nav-link,
+html.dark-mode .router-history,
+html.dark-mode .mat-select-value,
+html.dark-mode .mat-form-field-infix,
 html.dark-mode p,
 html.dark-mode #iconListChildren {
-    color: #5a5a5a !important;
+    color: #959393;
 }
 
-html.dark-mode .block-ui-wrapper {
-    filter: invert(100%) hue-rotate(180deg);
+html.dark-mode .router-history:hover {
+    color: #e0e0e0;
+}
+
+html.dark-mode .mat-select-panel,
+html.dark-mode .btn-element .create {
+    filter: invert(80%) hue-rotate(180deg) contrast(1.3);
 }
 
 html.dark-mode .carousel-images {
@@ -133,6 +188,6 @@ html.dark-mode .carousel-images {
 
 html.dark-mode .home-section,
 html.dark-mode #page-container {
-    background: white !important;
+    background: #191919 !important;
     box-shadow: none !important;
 }

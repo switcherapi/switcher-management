@@ -1,7 +1,7 @@
 <div class="description">
     <mat-form-field appearance="fill">
-        <mat-label>Ingored Environments</mat-label>
-        <mat-chip-list #ignoredList aria-label="Ingored Environments">
+        <mat-label>Ignored Environments</mat-label>
+        <mat-chip-list #ignoredList aria-label="Ignored Environments">
             <mat-chip *ngFor="let env of ignoredEnvironments" 
                 (removed)="remove(env, 'ignored')"
                 [removable]="true">{{env}}
