@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSelectionList } from '@angular/material/list';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PermissionService } from 'src/app/services/permission.service';
 import { Permission } from 'src/app/model/permission';
@@ -42,9 +41,6 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
     Validators.required
   ]);
 
-  @ViewChild(MatSelectionList, { static: true })
-  private componentValueSelection: MatSelectionList;
-
   constructor(
     public dialogRef: MatDialogRef<TeamPermissionCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -62,24 +58,8 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       actionFormControl: this.actionFormControl
     });
 
-    this.routerFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
-      this.data.router = value;
-      this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(permissionValue => {
-        if (permissionValue && permissionValue.key) {
-          this.key = permissionValue.key;
-          this.validKeyOnly = true;
-        }
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.validKeyOnly = false;
-        this.valueSelectionFormControl.setValue(null);
-        this.data.values = [];
-      });
-    });
-
-    this.actionFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
-      this.data.action = value;
-    });
+    this.onRouterChange();
+    this.onActionChange();
   }
 
   ngOnDestroy() {
@@ -148,8 +128,10 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
     }
 
     const foundPermission = this.data.permissions.filter((permission: Permission) => 
-    permission.router === data.router || permission.router === 'ALL' || permission.router === 'ALL');
-    const foundPermissionAction = foundPermission.filter((permission: Permission) => permission.action === data.action || permission.action === 'ALL');
+      permission.router === data.router || permission.router === 'ALL' || permission.router === 'ALL');
+
+    const foundPermissionAction = foundPermission.filter((permission: Permission) => 
+      permission.action === data.action || permission.action === 'ALL');
 
     if (foundPermissionAction.length) {
       this.toastService.showError(`This permission has conflicted with an existing permission: ${foundPermissionAction[0].router} - ${foundPermissionAction[0].action}`);
@@ -166,6 +148,27 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       this.data.identifiedBy = '';
       this.data.values = [];
     }
+  }
+  
+  private onRouterChange() {
+    this.routerFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
+      this.data.router = value;
+      this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(permissionValue => {
+        this.key = permissionValue.key;
+        this.validKeyOnly = permissionValue && permissionValue.key;
+      }, error => {
+        ConsoleLogger.printError(error);
+        this.validKeyOnly = false;
+        this.valueSelectionFormControl.setValue(null);
+        this.data.values = [];
+      });
+    });
+  }
+
+  private onActionChange() {
+    this.actionFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
+      this.data.action = value;
+    });
   }
 
 }
