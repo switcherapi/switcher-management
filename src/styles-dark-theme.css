@@ -4,9 +4,9 @@ html.dark-mode {
 }
 
 html.dark-mode .mat-menu-panel {
-    filter: invert(100%) hue-rotate(180deg) contrast(0.7);
     border-radius: 10px;
     box-shadow: 0 2px 4px -1px #35353533,0 4px 5px #ffffff24,0 1px 10px #ffffff1f;
+    background: #1c1b1c;
 }
 
 html.dark-mode .link:hover {
@@ -48,11 +48,13 @@ html.dark-mode #footer {
     box-shadow: 0px 0px 10px 10px #191919 !important;
 }
 
+html.dark-mode .mat-menu-panel .mat-menu-item,
+html.dark-mode .mat-menu-panel .mat-icon,
 html.dark-mode .mat-toolbar,
 html.dark-mode .mat-tab-label .mat-tab-label-content,
 html.dark-mode .mat-select-arrow,
 html.dark-mode #modal-title {
-    color: white;
+    color: #959393;
 }
 
 html.dark-mode .mat-button:not(#domainOptions):not(#domainList),
@@ -61,7 +63,7 @@ html.dark-mode .svg-inline--fa,
 html.dark-mode .new-feature-text,
 html.dark-mode .label-env-name,
 html.dark-mode .label-color {
-    color: #000;
+    color: #000 !important;
 }
 
 html.dark-mode .mat-dialog-actions .mat-button {
@@ -109,7 +111,8 @@ html.dark-mode .ngb-toasts {
     filter: invert(100%) hue-rotate(180deg) saturate(1.5);
 }
 
-html.dark-mode .collab-patreon {
+html.dark-mode .collab-patreon,
+html.dark-mode app-ext-slack .slack-img {
     filter: invert(100%) hue-rotate(180deg);
 }
 
@@ -168,6 +171,7 @@ html.dark-mode .nav-item.nav-link,
 html.dark-mode .router-history,
 html.dark-mode .mat-select-value,
 html.dark-mode .mat-form-field-infix,
+html.dark-mode .panel-slack-detail,
 html.dark-mode p,
 html.dark-mode #iconListChildren {
     color: #959393;
@@ -177,8 +181,19 @@ html.dark-mode .router-history:hover {
     color: #e0e0e0;
 }
 
+html.dark-mode .mat-menu-item:hover:not([disabled]) {
+    background: rgba(251, 251, 251, 0.04);
+}
+
 html.dark-mode .mat-select-panel,
-html.dark-mode .btn-element .create {
+html.dark-mode .btn-element .create,
+html.dark-mode app-version .app-version-style,
+html.dark-mode app-login .card-body,
+html.dark-mode app-signup .card-body,
+html.dark-mode signup-domain .card-body,
+html.dark-mode app-slack-auth .card-body,
+html.dark-mode app-signup-auth .card-body,
+html.dark-mode app-signup-team .card-body {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);
 }
 
@@ -190,4 +205,25 @@ html.dark-mode .home-section,
 html.dark-mode #page-container {
     background: #191919 !important;
     box-shadow: none !important;
+}
+
+html.dark-mode app-ext-slack .container-fluid,
+html.dark-mode app-ext-slack .options-section,
+html.dark-mode app-login .switcher-logo,
+html.dark-mode app-signup .switcher-logo,
+html.dark-mode signup-domain .switcher-logo,
+html.dark-mode app-signup-auth .switcher-logo,
+html.dark-mode app-signup-team .switcher-logo {
+    filter: invert(100%) hue-rotate(180deg) contrast(1);
+    color: white;
+}
+
+html.dark-mode ngb-modal-window .modal-content {
+    filter: invert(100%) hue-rotate(180deg) contrast(0.8);
+}
+
+html.dark-mode app-slack-auth mat-icon,
+html.dark-mode app-login span,
+html.dark-mode app-slack-auth span {
+    color: black !important;
 }
