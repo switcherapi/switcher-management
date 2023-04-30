@@ -29,6 +29,7 @@ html.dark-mode .home-section {
     background: #191919 !important;
 }
 
+html.dark-mode app-settings-account .mat-form-field-underline,
 html.dark-mode .username {
     background: #2e2e2e !important;
 }
@@ -66,6 +67,7 @@ html.dark-mode .label-color {
     color: #000 !important;
 }
 
+html.dark-mode app-settings-account .settings-title,
 html.dark-mode .mat-dialog-actions .mat-button {
     color: white !important;
 }
@@ -95,6 +97,7 @@ html.dark-mode app-config-detail app-metric-statistics .btn-element {
 }
 
 html.dark-mode .strategy-section .mt-2,
+html.dark-mode app-settings-account .platform,
 html.dark-mode app-config-detail .chartjs-render-monitor {
     filter: invert(100%) hue-rotate(180deg) contrast(1.3);
 }
@@ -167,6 +170,8 @@ html.dark-mode .fade {
     transition: none;
 }
 
+html.dark-mode app-settings-account .mat-form-field-label,
+html.dark-mode app-settings-account .description,
 html.dark-mode .nav-item.nav-link,
 html.dark-mode .router-history,
 html.dark-mode .mat-select-value,
@@ -185,6 +190,7 @@ html.dark-mode .mat-menu-item:hover:not([disabled]) {
     background: rgba(251, 251, 251, 0.04);
 }
 
+html.dark-mode #sidebarCollapse,
 html.dark-mode .mat-select-panel,
 html.dark-mode .btn-element .create,
 html.dark-mode app-version .app-version-style,
