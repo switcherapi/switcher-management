@@ -89,14 +89,12 @@ html.dark-mode #sidebarCollapse {
 
 html.dark-mode .grid-container,
 html.dark-mode .nav-pills .nav-link.active,
-html.dark-mode .div-btn-new .btn-element,
-html.dark-mode app-config-detail app-metric-statistics .btn-element {
+html.dark-mode .div-btn-new .btn-element {
     background-color: #eee;
     filter: invert(100%) hue-rotate(180deg) contrast(0.7);
     color: black;
 }
 
-html.dark-mode .strategy-section .mt-2,
 html.dark-mode app-settings-account .platform,
 html.dark-mode app-config-detail .chartjs-render-monitor {
     filter: invert(100%) hue-rotate(180deg) contrast(1.3);
@@ -129,13 +127,20 @@ html.dark-mode pre[class*="language-"] {
     filter: invert(100%) hue-rotate(180deg) contrast(1.3);
 }
 
-html.dark-mode app-metric,
 html.dark-mode app-changelog,
 html.dark-mode app-team-detail,
-html.dark-mode app-config-detail app-metric-data,
+html.dark-mode app-metric-data,
+html.dark-mode app-metric .header-filter,
+html.dark-mode app-metric .nav-tabs,
+html.dark-mode app-metric #metric-statistics-buttons,
+html.dark-mode app-metric-statistics canvas,
 html.dark-mode .mat-dialog-content,
 html.dark-mode .mat-autocomplete-panel.mat-autocomplete-visible,
-html.dark-mode .detail-body,
+html.dark-mode .detail-body .header,
+html.dark-mode .detail-body .mat-chip-list,
+html.dark-mode app-domain-detail .detail-body .options-section,
+html.dark-mode app-group-detail .detail-body .options-section,
+html.dark-mode app-config-detail .detail-body .options-section,
 html.dark-mode .mat-focus-indicator.btn-element.create,
 html.dark-mode #docContainer {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);

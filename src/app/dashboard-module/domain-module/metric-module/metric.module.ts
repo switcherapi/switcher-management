@@ -5,7 +5,7 @@ import { MetricStatisticsComponent, SwitcherDataStatsDialogComponent } from './m
 import { MetricDataComponent } from './metric-data/metric-data.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ChartsModule } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { MetricRoutingModule } from './metric.routing';
 import { MetricFilterComponent } from './metric-filter/metric-filter.component';
 import { Metric } from 'src/app/model/metric';
@@ -37,7 +37,7 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     ReactiveFormsModule,
     NgbModule,
     AppMaterialModule,
-    ChartsModule
+    NgChartsModule
   ],
   providers: [Metric],
 })
