@@ -44,7 +44,7 @@
 @media only screen and (max-width: 1200px) {
   .options-section {
     float: right;
-    display: contents;
+    display: inherit;
   }
 
   .strategy-control-style {
@@ -56,7 +56,7 @@
   }
 }
 
-@media only screen and (max-width: 430px) {
+@media only screen and (max-width: 540px) {
   .options-section-label {
     display: none;
   }
