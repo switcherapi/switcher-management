@@ -3,16 +3,16 @@
         <mat-tab *ngIf="switcher" label="Switchers Date/Time View">
             <div style="display: block">
                 <canvas baseChart
-                    [chartType]="getSwitcherDateTimeGroupStats().chartType"
+                    [type]="getSwitcherDateTimeGroupStats().chartType"
                     [datasets]="getSwitcherDateTimeGroupStats().chartDatasets"
                     [labels]="getSwitcherDateTimeGroupStats().showLabel() ? 
                         getSwitcherDateTimeGroupStats().chartLabels : getSwitcherDateTimeGroupStats().chartShortLabels"
-                    [colors]="getSwitcherDateTimeGroupStats().chartColors"
                     [options]="getSwitcherDateTimeGroupStats().chartOptions"
-                    [legend]="true">
+                    [legend]="true"
+                    (chartClick)="getSwitcherDateTimeGroupStats().onClick($event)">
                 </canvas>
             </div>
-            <div style="display: flex;">
+            <div id="metric-statistics-buttons" style="display: flex;">
                 <button mat-button class="btn-element" 
                     (click)="getSwitcherDateTimeGroupStats().onPrevious()" 
                     [disabled]="!getSwitcherDateTimeGroupStats().hasPrevious()">
@@ -32,7 +32,8 @@
                     [labels]="getSwitcherStats().barChartLabels" 
                     [options]="getSwitcherStats().barChartOptions"
                     [legend]="getSwitcherStats().barChartLegend" 
-                    [chartType]="getSwitcherStats().barChartType">
+                    [type]="getSwitcherStats().barChartType"
+                    (chartClick)="getSwitcherStats().onClick($event)">
                 </canvas>
             </div>
         </mat-tab>
@@ -43,7 +44,7 @@
                     [labels]="getComponentsStats().barChartLabels" 
                     [options]="getComponentsStats().barChartOptions"
                     [legend]="getComponentsStats().barChartLegend" 
-                    [chartType]="getComponentsStats().barChartType">
+                    [type]="getComponentsStats().barChartType">
                 </canvas>
             </div>
         </mat-tab>
@@ -52,9 +53,8 @@
                 <canvas baseChart
 					[data]="getReasonsStats().chartData"
 					[labels]="getReasonsStats().chartLabels"
-					[chartType]="getReasonsStats().chartType"
+					[type]="getReasonsStats().chartType"
 					[options]="getReasonsStats().chartOptions"
-					[colors]="getReasonsStats().chartColors"
 					[legend]="getReasonsStats().chartLegend">
                 </canvas>
             </div>

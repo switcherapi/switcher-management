@@ -8,8 +8,8 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ConfigService } from 'src/app/services/config.service';
-import { Config } from 'protractor';
 import { Permissions } from 'src/app/model/permission';
+import { Config } from 'src/app/model/config';
 
 @Component({
   selector: 'app-config-preview',

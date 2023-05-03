@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM node:gallium-alpine as builder
+FROM node:hydrogen-alpine AS builder
 
 # Required for @parcel/watcher
 RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*

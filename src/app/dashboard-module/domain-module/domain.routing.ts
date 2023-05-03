@@ -1,5 +1,5 @@
 import { NgModule }             from '@angular/core';
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';

@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { ChartOptions, ChartType, ChartDataset, ChartData } from 'chart.js';
 import { MetricComponent } from '../metric/metric.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
@@ -89,32 +88,32 @@ export class SwitchersStatisticsTab {
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
 
-  public barChartLabels: Label[] = [];
-  public barChartData: ChartDataSets[] = [];
+  public barChartLabels: string[] = [];
+  public barChartData: ChartDataset[] = [];
 
   public barChartOptions: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [{
-          ticks: {
-            min: 0
-          }
-      }]
-    },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
+      y: {
+        ticks: {
+          display: true
+        },
       }
     },
-    onClick : (_evt, array: any) => {
-      if (array.length)
-        this.selectSwitcherKey(array[0]._index);
+    plugins: {
+      legend: {
+        display: true,
+      }
     }
   };
 
+  onClick(event: any) {
+    if (event.active.length)
+      this.selectSwitcherKey(event.active[0].index);
+  }
+
   selectSwitcherKey(index: number) {
-    this.parent.setSwitcherKeyInput(this.barChartLabels[index].toString());
+    this.parent.setSwitcherKeyInput(this.barChartLabels[index]);
   }
 
   public loadSwitchersView(): void {
@@ -139,22 +138,21 @@ export class ComponentsStatisticsTab {
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
 
-  public barChartLabels: Label[] = [];
-  public barChartData: ChartDataSets[] = [];
+  public barChartLabels: string[] = [];
+  public barChartData: ChartDataset[] = [];
 
   public barChartOptions: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [{
-          ticks: {
-            min: 0
-          }
-      }]
+      y: {
+        ticks: {
+          display: true
+        },
+      }
     },
     plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
+      legend: {
+        display: false,
       }
     }
   };
@@ -178,31 +176,19 @@ export class ComponentsStatisticsTab {
 export class ReasonsStatisticsTab {
   constructor(private statistics: MetricStatistics) {}
 
-  public chartType: ChartType = 'horizontalBar';
+  public chartType: ChartType = 'bar';
   public chartLegend = false;
 
-  public chartLabels: Label[] = [];
-  public chartData: number[] = [];
-
-  public chartColors = [
-    {
-      backgroundColor: ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)'],
-    },
-  ];
+  public chartLabels: string[] = [];
+  public chartData: ChartData<'bar'>;
 
   public chartOptions: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [{
-          ticks: {
-            min: 0
-          }
-      }]
-    },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
+      y: {
+        ticks: {
+          display: true
+        }
       }
     }
   };
@@ -210,13 +196,23 @@ export class ReasonsStatisticsTab {
   public loadReasonsView(): void {
     const reasonsStatistics = this.statistics.reasons;
 
+    this.chartData = {
+      labels: [''],
+      datasets: []
+    };
+
     reasonsStatistics.forEach(reasonStats => {
       if (window.innerWidth < 450) {
-        this.chartLabels.push(this.showResumed(reasonStats.reason, 5));
+        this.chartData.datasets.push({ 
+          data: [reasonStats.total], 
+          label: this.showResumed(reasonStats.reason, 5) 
+        });
       } else {
-        this.chartLabels.push(reasonStats.reason);
+        this.chartData.datasets.push({ 
+          data: [reasonStats.total], 
+          label: reasonStats.reason 
+        });
       }
-      this.chartData.push(reasonStats.total);
     });
   }
 
@@ -232,7 +228,7 @@ export class SwitcherDateTimeGroupedTab {
       this.total_content = 0;
   }
 
-  public chartType: string = 'line';
+  public chartType: ChartType = 'line';
   public chartLegend = true;
 
   public selectedData: MetricData[][] = [];
@@ -240,24 +236,12 @@ export class SwitcherDateTimeGroupedTab {
   public chartLabels: Array<any> = [];
   public chartShortLabels: Array<any> = [];
 
-  public chartColors: Array<any> = [
-    {
-      backgroundColor: 'rgba(105, 0, 132, .2)',
-      borderColor: 'rgba(200, 99, 132, .7)',
-      borderWidth: 2,
-    },
-    {
-      backgroundColor: 'rgba(0, 137, 132, .2)',
-      borderColor: 'rgba(0, 10, 130, .7)',
-      borderWidth: 2,
-    }
-  ];
-
-  public chartOptions: any = {
+  public chartOptions: ChartOptions = {
     responsive: true,
-    onClick : (_evt, array) => {
-      if (array.length)
-        this.expandSelectedData(array[0]._index);
+    elements: {
+      line: {
+        tension: 0.5
+      }
     }
   };
 
@@ -272,8 +256,18 @@ export class SwitcherDateTimeGroupedTab {
     this.chartShortLabels = [];
     
     const switcherStatistics = this.parent.data.statistics.switchers;
-    let negative = { data: [], label: 'Negative' };
-    let positive = { data: [], label: 'Positive' };
+    let negative = { data: [], label: 'Negative', 
+      backgroundColor: 'rgba(105, 0, 132, .2)',
+      borderColor: 'rgba(200, 99, 132, .7)',
+      borderWidth: 2,
+      fill: 'origin'
+    };
+    let positive = { data: [], label: 'Positive',
+      backgroundColor: 'rgba(0, 137, 132, .2)',
+      borderColor: 'rgba(0, 10, 130, .7)',
+      borderWidth: 2,
+      fill: 'origin'
+    };
 
     switcherStatistics.forEach(switcherStats => {
       this.total_content = switcherStats.dateTimeStatistics.length;
@@ -303,6 +297,11 @@ export class SwitcherDateTimeGroupedTab {
 
   hasPrevious(): boolean {
     return (this.content_index - this.MAX_CONTENT) > 0;
+  }
+
+  onClick(event: any) {
+    if (event.active.length)
+        this.expandSelectedData(event.active[0].index);
   }
 
   onPrevious(): void {
