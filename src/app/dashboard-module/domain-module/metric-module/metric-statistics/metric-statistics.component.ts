@@ -5,7 +5,6 @@ import { MetricComponent } from '../metric/metric.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { DataUtils } from 'src/app/_helpers/data-utils';
 
 @Component({
   selector: 'app-metric-statistics',
@@ -102,7 +101,7 @@ export class SwitchersStatisticsTab {
     },
     plugins: {
       legend: {
-        display: true,
+        display: true
       }
     }
   };
@@ -152,7 +151,7 @@ export class ComponentsStatisticsTab {
     },
     plugins: {
       legend: {
-        display: false,
+        display: false
       }
     }
   };
@@ -202,23 +201,13 @@ export class ReasonsStatisticsTab {
     };
 
     reasonsStatistics.forEach(reasonStats => {
-      if (window.innerWidth < 450) {
-        this.chartData.datasets.push({ 
-          data: [reasonStats.total], 
-          label: this.showResumed(reasonStats.reason, 5) 
-        });
-      } else {
-        this.chartData.datasets.push({ 
-          data: [reasonStats.total], 
-          label: reasonStats.reason 
-        });
-      }
+      this.chartData.datasets.push({ 
+        data: [reasonStats.total], 
+        label: reasonStats.reason 
+      });
     });
   }
 
-  showResumed(value: string, length: number): string {
-    return DataUtils.showResumed(value, length);
-  }
 }
 
 export class SwitcherDateTimeGroupedTab {

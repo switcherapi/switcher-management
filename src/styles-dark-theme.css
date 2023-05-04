@@ -82,6 +82,10 @@ html.dark-mode .dropdown-toggle {
     background: #151515 !important;
 }
 
+html.dark-mode app-ext-slack .card-body {
+    background: white;
+}
+
 html.dark-mode .doc-header,
 html.dark-mode #sidebarCollapse {
     background: #e3e3e3;
@@ -113,7 +117,7 @@ html.dark-mode .ngb-toasts {
 }
 
 html.dark-mode .collab-patreon,
-html.dark-mode app-ext-slack .slack-img {
+html.dark-mode .mat-ripple {
     filter: invert(100%) hue-rotate(180deg);
 }
 
@@ -134,6 +138,7 @@ html.dark-mode app-metric .header-filter,
 html.dark-mode app-metric .nav-tabs,
 html.dark-mode app-metric #metric-statistics-buttons,
 html.dark-mode app-metric-statistics canvas,
+html.dark-mode app-ext-slack .card-body,
 html.dark-mode .mat-dialog-content,
 html.dark-mode .mat-autocomplete-panel.mat-autocomplete-visible,
 html.dark-mode .detail-body .header,
@@ -152,7 +157,7 @@ html.dark-mode .mat-dialog-container app-changelog {
 
 html.dark-mode .card {
     box-shadow: none;
-    background: #191919 !important;
+    background: #191919;
     border: 1px solid rgba(255, 254, 254, 0.13);
 }
 
@@ -202,7 +207,7 @@ html.dark-mode app-version .app-version-style,
 html.dark-mode app-login .card-body,
 html.dark-mode app-signup .card-body,
 html.dark-mode signup-domain .card-body,
-html.dark-mode app-slack-auth .card-body,
+html.dark-mode app-slack-auth .card-body .form-group,
 html.dark-mode app-signup-auth .card-body,
 html.dark-mode app-signup-team .card-body {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);
@@ -218,8 +223,6 @@ html.dark-mode #page-container {
     box-shadow: none !important;
 }
 
-html.dark-mode app-ext-slack .container-fluid,
-html.dark-mode app-ext-slack .options-section,
 html.dark-mode app-login .switcher-logo,
 html.dark-mode app-signup .switcher-logo,
 html.dark-mode signup-domain .switcher-logo,
