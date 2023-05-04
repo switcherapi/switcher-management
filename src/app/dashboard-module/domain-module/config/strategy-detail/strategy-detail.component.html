@@ -57,7 +57,7 @@
                                 <mat-icon style="vertical-align: text-bottom;">sync</mat-icon>
                                 <div class="options-section-label"> Update</div>
                             </button>
-                            <button mat-button class="btn-element" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
+                            <button mat-button class="btn-element btn-red" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
                                 [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
                                 <mat-icon style="vertical-align: text-bottom;">remove_from_queue</mat-icon>
                                 <div class="options-section-label"> Remove</div>

@@ -20,7 +20,7 @@ import { ToastService } from './toast.service';
   `,
   host: {
     'class': 'toast-container position-fixed top-0 end-0 p-3', 
-    'style': 'z-index: 1200; top: 0; right: 0;'
+    'style': 'z-index: 1200; bottom: 0; right: 0;'
   }
 })
 export class ToastsContainerComponent {
