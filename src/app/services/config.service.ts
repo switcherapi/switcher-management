@@ -69,7 +69,9 @@ export class ConfigService extends ApiService {
   }
 
   public updateConfigRelay(config: Config): Observable<Config> {
-    return this.http.patch<Config>(`${environment.apiUrl}/config/updateRelay/${config.id}`, config.relay)
+    const { activated, auth_prefix, auth_token, description, endpoint, method, type } = config.relay;
+    return this.http.patch<Config>(`${environment.apiUrl}/config/updateRelay/${config.id}`, 
+      { activated, auth_prefix, auth_token, description, endpoint, method, type })
       .pipe(catchError(super.handleError));
   }
 
