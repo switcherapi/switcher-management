@@ -65,15 +65,15 @@ export class PermissionService extends ApiService {
     return this.http.delete<Permission>(`${environment.apiUrl}/permission/${id}`).pipe(catchError(super.handleError));
   }
 
-  public executePermissionQuery(domainId: string, router: string, actions: string[], parentId?: string) {
+  public executePermissionQuery(domainId: string, parentId: string, router: string, actions: string[]) {
     return this.apollo.query<GraphQLPermissionResultSet>({
       query: permissionQuery(),
       fetchPolicy: 'network-only',
       variables: { 
         domain: domainId,
+        parent: parentId,
         router,
         actions,
-        parent: parentId
       }
     });
   }

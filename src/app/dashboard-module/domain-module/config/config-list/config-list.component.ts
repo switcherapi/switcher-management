@@ -127,16 +127,16 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   }
 
   private readChildPermissions(): void {
-    this.permissionService.executePermissionQuery(this.domainId, 'SWITCHER', ['UPDATE', 'DELETE'])
-    .pipe(takeUntil(this.unsubscribe))
-    .subscribe(response => {
-      if (response.data.permission.length) {
-        this.permissions = response.data.permission;
-      }
+    this.permissionService.executePermissionQuery(this.domainId, this.groupId, 'SWITCHER', ['UPDATE', 'DELETE'])
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(response => {
+        if (response.data.permission.length) {
+          this.permissions = response.data.permission;
+        }
 
-      this.loadConfigs();
-      this.loadGroup();
-    });
+        this.loadConfigs();
+        this.loadGroup();
+      });
   }
 
   private loadGroup(): void {
