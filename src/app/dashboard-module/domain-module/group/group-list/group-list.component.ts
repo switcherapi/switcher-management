@@ -132,7 +132,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   private readChildPermissions(): void {
-    this.permissionService.executePermissionQuery(this.domainId, 'GROUP', ['UPDATE', 'DELETE'])
+    this.permissionService.executePermissionQuery(this.domainId, this.domainId, 'GROUP', ['UPDATE', 'DELETE'])
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(response => {
         if (response.data.permission.length) {
