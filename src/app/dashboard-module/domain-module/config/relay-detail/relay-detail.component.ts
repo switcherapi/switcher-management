@@ -46,6 +46,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   authTokenElement: ElementRef;
 
   envEnable = new Subject<boolean>();
+  relayOld: string;
 
   relayTypeFormControl = new FormControl('');
   relayMethodFormControl = new FormControl('');
@@ -71,6 +72,9 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   edit() {
+    // stores old state in case of error
+    this.relayOld = JSON.stringify(this.config.relay);
+
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
@@ -119,9 +123,11 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     if (!this.config.relay.auth_token) {
       this.config.relay.auth_token = new Map<string, string>();
     }
+    
     this.config.relay.auth_token[this.currentEnvironment] = this.authTokenElement.nativeElement.value;
     this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
 
+    this.blockUI.start('Updating relay...');
     this.configService.updateConfigRelay(this.config)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
@@ -131,10 +137,16 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
           this.editing = false;
           this.parent.updateData(data);
         }
+
+        this.blockUI.stop();
     }, error => {
       ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update relay`);
+      this.toastService.showError(`Unable to update relay: ${error.error}`);
       this.editing = false;
+      this.blockUI.stop();
+
+      this.config.relay = JSON.parse(this.relayOld);
+      this.loadRelay();
     });
   }
 
