@@ -1,0 +1,25 @@
+<h4 mat-dialog-title>
+    <mat-toolbar role="toolbar" class="dialog-header">
+        <span>Verify Relay</span>
+        <span class="fx-spacer"></span>
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon mat-list-icon>close</mat-icon>
+        </button>
+    </mat-toolbar>
+</h4>
+<div mat-dialog-content>
+    <mat-form-field>
+        <input matInput placeholder="Relay verification code" 
+            [(ngModel)]="data.verification_code" style="color: black" readonly>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions style="float: right;">
+    <button class="btn-save" mat-button (click)="onVerify(data)">
+        <mat-icon>verified_user</mat-icon>
+        <div class="options-section-label"> Verify</div>
+    </button>
+    <button class="btn-cancel" mat-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+        <div class="options-section-label"> Close</div>
+    </button>
+</div>

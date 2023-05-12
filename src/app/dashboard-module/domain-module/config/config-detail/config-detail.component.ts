@@ -79,7 +79,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   // Component attributes
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  componentForm = new FormControl();
+  componentForm = new FormControl<string>('');
   filteredComponents: Observable<string[]>;
   components: string[] = [];
   availableComponents: SwitcherComponent[];
@@ -399,7 +399,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         values = values.filter(value => !this.components.includes(value.name));
         this.listComponents = values.map(value => value.name);
         this.filteredComponents = this.componentForm.valueChanges.pipe(
-          startWith(null),
+          startWith(null as string),
           map((component: string | null) => component ? this.filterComponent(component) : this.listComponents.slice()));
 
         this.blockUI.stop();

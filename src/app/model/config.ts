@@ -19,6 +19,8 @@ export class ConfigRelay {
   method: string;
   auth_prefix: string = '';
   auth_token: Map<string, string> = new Map<string, string>();
+  verified: boolean = false;
+  verification_code: string;
 }
 
 export class ConfigRelayStatus {

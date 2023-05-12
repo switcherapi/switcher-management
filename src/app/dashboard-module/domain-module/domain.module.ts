@@ -35,7 +35,7 @@ import { DomainTransferDialogComponent } from './domain/domain-transfer/domain-t
 import { MetricModule } from './metric-module/metric.module';
 import { SpecialCharacterDirective } from './common/special.char.directive';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
-import { RelayDetailComponent } from './config/relay-detail/relay-detail.component';
+import { RelayDetailComponent, RelayVerificationDialogComponent } from './config/relay-detail/relay-detail.component';
 import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-settings.component';
 
@@ -64,6 +64,7 @@ import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-setting
     ComponentEditDialogComponent,
     TeamInviteDialogComponent,
     ChangeLogDialogComponent,
+    RelayVerificationDialogComponent,
     DomainSnapshotComponent,
     DomainTransferDialogComponent,
     SpecialCharacterDirective,
