@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
@@ -10,9 +10,11 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AdminService } from 'src/app/services/admin.service';
-import { Config, ConfigRelayStatus } from 'src/app/model/config';
+import { Config, ConfigRelay, ConfigRelayStatus } from 'src/app/model/config';
 import { ConfigService } from 'src/app/services/config.service';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-relay-detail',
@@ -51,11 +53,15 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   relayTypeFormControl = new FormControl('');
   relayMethodFormControl = new FormControl('');
 
+  relayVerificationEnabled: boolean = false;
+
   constructor(
     private adminService: AdminService,
     private configService: ConfigService,
+    private authService: AuthService,
     private toastService: ToastService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    public dialog: MatDialog
   ) {
     super(adminService);
   }
@@ -64,6 +70,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     super.loadAdmin(this.config.owner);
     this.loadRelay();
     this.readPermissionToObject();
+    this.loadRelaySettings();
   }
 
   ngOnDestroy() {
@@ -113,40 +120,19 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     }
   }
 
-  private editRelay() {
-    this.envEnable.next(!this.editing);
-    this.config.relay.type = this.relayTypeFormControl.value;
-    this.config.relay.method = this.relayMethodFormControl.value;
-    this.config.relay.description = this.descElement.nativeElement.value;
-    this.config.relay.endpoint[this.currentEnvironment] = this.endpointFormControl.value;
+  verifyRelay(): void {
+    const dialogRef = this.dialog.open(RelayVerificationDialogComponent, {
+      width: '350px',
+      data: {
+        verified: this.config.relay.verified,
+        verification_code: this.config.relay.verification_code
+      }
+    });
 
-    if (!this.config.relay.auth_token) {
-      this.config.relay.auth_token = new Map<string, string>();
-    }
-    
-    this.config.relay.auth_token[this.currentEnvironment] = this.authTokenElement.nativeElement.value;
-    this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
-
-    this.blockUI.start('Updating relay...');
-    this.configService.updateConfigRelay(this.config)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.toastService.showSuccess(`Relay saved with success`);
-          this.config = data;
-          this.editing = false;
-          this.parent.updateData(data);
-        }
-
-        this.blockUI.stop();
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update relay: ${error.error}`);
-      this.editing = false;
-      this.blockUI.stop();
-
-      this.config.relay = JSON.parse(this.relayOld);
-      this.loadRelay();
+    dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        ConsoleLogger.printError(data);
+      }
     });
   }
 
@@ -184,6 +170,43 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
+  }
+
+  private editRelay() {
+    this.envEnable.next(!this.editing);
+    this.config.relay.type = this.relayTypeFormControl.value;
+    this.config.relay.method = this.relayMethodFormControl.value;
+    this.config.relay.description = this.descElement.nativeElement.value;
+    this.config.relay.endpoint[this.currentEnvironment] = this.endpointFormControl.value;
+
+    if (!this.config.relay.auth_token) {
+      this.config.relay.auth_token = new Map<string, string>();
+    }
+    
+    this.config.relay.auth_token[this.currentEnvironment] = this.authTokenElement.nativeElement.value;
+    this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
+
+    this.blockUI.start('Updating relay...');
+    this.configService.updateConfigRelay(this.config)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.toastService.showSuccess(`Relay saved with success`);
+          this.config = data;
+          this.editing = false;
+          this.parent.updateData(data);
+        }
+
+        this.blockUI.stop();
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to update relay: ${error.error}`);
+      this.editing = false;
+      this.blockUI.stop();
+
+      this.config.relay = JSON.parse(this.relayOld);
+      this.loadRelay();
+    });
   }
 
   private loadRelay(): void {
@@ -229,6 +252,12 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
+  private loadRelaySettings(): void {
+    this.authService.isAlive()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.relayVerificationEnabled = !data.attributes.relay_bypass_verification);
+  }
+
   private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     const configRelayStatus = new ConfigRelayStatus();
     configRelayStatus.activated[env.environmentName] = env.status;
@@ -265,6 +294,30 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     if (this.config.relay[field] && this.config.relay[field][this.currentEnvironment])
       return this.config.relay[field][this.currentEnvironment];
     return '';
+  }
+
+}
+
+@Component({
+  selector: 'relay-detail.verify-dialog',
+  templateUrl: './relay-detail.verify-dialog.html',
+  styleUrls: [
+    '../../common/css/create.component.css',
+    './relay-detail.component.css'
+  ]
+})
+export class RelayVerificationDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<RelayVerificationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ConfigRelay) { }
+
+  onVerify(data: ConfigRelay): void {
+    this.dialogRef.close(data);
+  }
+
+  onCancel() {
+    this.dialogRef.close();
   }
 
 }

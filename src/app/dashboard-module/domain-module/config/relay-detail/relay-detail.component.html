@@ -58,6 +58,12 @@
         </section>
         <section class="strategy-control-style">
             <div class="options-section">
+                <div *ngIf="relayVerificationEnabled && !config.relay.verified">
+                    <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable">
+                        <mat-icon>verified_user</mat-icon>
+                        <div class="options-section-label">Verify</div>
+                    </button>
+                </div>
                 <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
                     <mat-icon style="font-size: large;">build</mat-icon>
                     <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
