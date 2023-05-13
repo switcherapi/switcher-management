@@ -58,7 +58,7 @@
         </section>
         <section class="strategy-control-style">
             <div class="options-section">
-                <div *ngIf="relayVerificationEnabled && !config.relay.verified">
+                <div *ngIf="relayVerificationEnabled && !isVerified() && !editing">
                     <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable">
                         <mat-icon>verified_user</mat-icon>
                         <div class="options-section-label">Verify</div>
