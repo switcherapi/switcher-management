@@ -12,11 +12,20 @@
   display: contents;
 }
 
-.invisible{
+.invisible {
   display: block;
   visibility: hidden;
   height: 0;
   width: 0;
+}
+
+.relay-url {
+  background: gray;
+  color: white;
+  margin: 1rem;
+  padding: 2px;
+  border-radius: 10px;
+  font-size: small;
 }
 
 @media only screen and (max-width: 430px) {

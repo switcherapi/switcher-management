@@ -58,7 +58,7 @@ html.dark-mode #modal-title {
     color: #959393;
 }
 
-html.dark-mode .mat-button:not(#domainOptions):not(#domainList),
+html.dark-mode .mat-button:not(#domainOptions):not(#domainList):not(.mat-button-disabled),
 html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
 html.dark-mode .new-feature-text,
@@ -91,9 +91,9 @@ html.dark-mode #sidebarCollapse {
     background: #e3e3e3;
 }
 
+html.dark-mode .mat-dialog-actions .mat-button,
 html.dark-mode .grid-container,
-html.dark-mode .nav-pills .nav-link.active,
-html.dark-mode .div-btn-new .btn-element {
+html.dark-mode .nav-pills .nav-link.active {
     background-color: #eee;
     filter: invert(100%) hue-rotate(180deg) contrast(0.7);
     color: black;
