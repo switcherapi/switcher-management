@@ -121,19 +121,25 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   verifyRelay(): void {
-    const dialogRef = this.dialog.open(RelayVerificationDialogComponent, {
-      width: '350px',
-      data: {
-        verified: this.config.relay.verified,
-        verification_code: this.config.relay.verification_code
-      }
-    });
+    if (this.config.relay.verification_code) {
+      this.openRelayVerificationDialog();
+      return;
+    }
 
-    dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        ConsoleLogger.printError(data);
-      }
-    });
+    this.blockUI.start('Generating verification code...');
+    this.configService.getVerificationCode(this.config.id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        this.blockUI.stop();
+        if (data?.code) {
+          this.config.relay.verification_code = data.code;
+          this.openRelayVerificationDialog();
+        }
+      }, error => {
+        this.blockUI.stop();
+        this.toastService.showError(`Unable to generate a verification code`);
+        ConsoleLogger.printError(error);
+      });
   }
 
   delete() {
@@ -170,6 +176,10 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   onEnvStatusChanged($event: EnvironmentChangeEvent) {
     this.updateEnvironmentStatus($event);
+  }
+
+  isVerified(): boolean {
+    return this.config.relay.verified && this.config.relay.verified[this.currentEnvironment];
   }
 
   private editRelay() {
@@ -288,6 +298,38 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     delete this.config.relay.endpoint[this.currentEnvironment];
     this.parent.updateData(data);
     this.parent.updateNavTab(3);
+  }
+
+  private openRelayVerificationDialog(): void {
+    const dialogRef = this.dialog.open(RelayVerificationDialogComponent, {
+      width: '380px',
+      data: {
+        verified: this.config.relay.verified,
+        verification_code: this.config.relay.verification_code
+      }
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+
+        this.blockUI.start('Verifying Relay...');
+        this.configService.verifyRelay(this.config.id, this.currentEnvironment)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(response => {
+            this.blockUI.stop();
+            if (response.status === 'verified') {
+              this.toastService.showSuccess(`Relay verified with success`);
+              this.config.relay.verified[this.currentEnvironment] = true;
+            } else {
+              this.toastService.showError(`Failed to verify Relay`);
+            }
+          }, error => {
+            this.blockUI.stop();
+            this.toastService.showError(`Unable to verify Relay`);
+            ConsoleLogger.printError(error);
+          });
+      }
+    });
   }
 
   private getRelayAttribute(field: string): string {

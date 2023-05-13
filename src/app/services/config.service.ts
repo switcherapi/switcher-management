@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Strategy } from '../model/strategy';
-import { Config, ConfigRelayStatus } from '../model/config';
+import { Config, ConfigRelayStatus, ConfigRelayVerification } from '../model/config';
 import { History } from '../model/history';
 
 @Injectable({
@@ -111,6 +111,16 @@ export class ConfigService extends ApiService {
 
   public resetHistory(id: string): Observable<Config> {
     return this.http.delete<Config>(`${environment.apiUrl}/config/history/${id}`)
+      .pipe(catchError(super.handleError));
+  }
+
+  public getVerificationCode(id: string): Observable<ConfigRelayVerification> {
+    return this.http.patch<ConfigRelayVerification>(`${environment.apiUrl}//config/relay/verificationCode/${id}`, null)
+      .pipe(catchError(super.handleError));
+  }
+
+  public verifyRelay(id: string, envName: string): Observable<ConfigRelayVerification> {
+    return this.http.patch<ConfigRelayVerification>(`${environment.apiUrl}/config/relay/verify/${id}/${envName}`, null)
       .pipe(catchError(super.handleError));
   }
   
