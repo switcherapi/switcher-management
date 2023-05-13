@@ -47,6 +47,16 @@ This view is composed by the settings:
 
   This value is combined with the Authorization Prefix that will compose the Authorization header.
 
+##### 1.1. Verify Relay
+
+Verifying your Relay endpoint adds a new layer of security, which help us to guarantee that you own the Relay API.</br>
+This option will make sure that any Relay endpoint in use belongs to the organization.
+
+When this option is enabled on Switcher API using [`RELAY_BYPASS_VERIFICATION = false`], Switcher Management will display the Verify button at the bottom of the Relay details view.</br>
+A generated code will be provided and further details will be shown on how to implement your Relay verification in simple 3 steps.
+
+<img src="[$ASSETS_LOCATION]/documentation/images/relay/relay_verification.jpg" class="image-style shadow dark-invert" alt=""/><p>
+
 </br></br>
 
 #### 2. Implementing the API receptor
@@ -67,8 +77,8 @@ This view is composed by the settings:
 
   ```java
   Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01")
-        .prepareEntry(new Entry(Entry.VALUE, "Roger"))
-        .prepareEntry(new Entry(Entry.NETWORK, "10.0.0.3"));
+    .checkValue("Roger")
+    .checkNetwork("10.0.0.3");
       
   switcher.isItOn();
   ```

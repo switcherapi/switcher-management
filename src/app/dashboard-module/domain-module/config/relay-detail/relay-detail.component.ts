@@ -304,8 +304,8 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     const dialogRef = this.dialog.open(RelayVerificationDialogComponent, {
       width: '380px',
       data: {
-        verified: this.config.relay.verified,
-        verification_code: this.config.relay.verification_code
+        relay: this.config.relay,
+        environment: this.currentEnvironment
       }
     });
 
@@ -352,14 +352,19 @@ export class RelayVerificationDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<RelayVerificationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfigRelay) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  onVerify(data: ConfigRelay): void {
+  onVerify(data: any): void {
     this.dialogRef.close(data);
   }
 
   onCancel() {
     this.dialogRef.close();
+  }
+
+  getVerificationUrl(): string {
+    const endpoint = this.data.relay.endpoint[this.data.environment].replace(/\/$/, '');
+    return `${endpoint?.substring(0, endpoint.lastIndexOf('/'))}/verify`;
   }
 
 }

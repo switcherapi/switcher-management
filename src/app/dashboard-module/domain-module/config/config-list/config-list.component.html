@@ -6,7 +6,7 @@
 <div *ngIf="!loading && !error" [ngClass]="cardListContainerStyle" style="border: 0px; margin: 0px !important;">
     <div class="header-style">
         <div class="div-btn-new">
-            <button mat-button class="btn-element" (click)="createConfig()" [disabled]="!creatable">
+            <button mat-button class="btn-element create" (click)="createConfig()" [disabled]="!creatable">
                 <mat-icon style="font-size: large;">build</mat-icon>
                 <div class="options-section-label">Create New</div>
             </button>

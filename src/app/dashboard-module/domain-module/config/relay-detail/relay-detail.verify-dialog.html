@@ -8,9 +8,24 @@
     </mat-toolbar>
 </h4>
 <div mat-dialog-content>
+    <div>
+        <p class="card-text">
+            Follow the instructions bellow to verify the ownership of this endpoint.
+        </p>
+        <p class="card-text">
+            1. Expose a [GET] route at:<br>
+            <span class="relay-url">{{ getVerificationUrl() }}</span><br><br>
+            2. The response should return:<br>
+            <code ng-non-bindable>
+                {{ '{ code: [relay verification code] }' }}
+            </code><br><br>
+            3. Click on Verify<br>
+        </p>
+        <br>
+    </div>
     <mat-form-field>
         <input matInput placeholder="Relay verification code" 
-            [(ngModel)]="data.verification_code" style="color: black" readonly>
+            [(ngModel)]="data.relay.verification_code" style="color: black" readonly>
     </mat-form-field>
 </div>
 <div mat-dialog-actions style="float: right;">
