@@ -8,6 +8,7 @@ import { History } from '../model/history';
 import { Domain } from '../model/domain';
 import { Apollo } from 'apollo-angular';
 import { GraphQLConfigurationResultSet } from '../model/configuration';
+import { ConfigRelayVerification } from '../model/config';
 import { 
   configurationQueryByConfig, 
   configurationQueryByDomain, 
@@ -93,6 +94,11 @@ export class DomainService extends ApiService {
 
   public resetHistory(id: string): Observable<Domain> {
     return this.http.delete<Domain>(`${environment.apiUrl}/domain/history/${id}`).pipe(catchError(super.handleError));
+  }
+
+  public getVerificationCode(id: string): Observable<ConfigRelayVerification> {
+    return this.http.patch<ConfigRelayVerification>(`${environment.apiUrl}/domain/relay/verificationCode/${id}`, null)
+      .pipe(catchError(super.handleError));
   }
 
   public executeSnapshotQuery(domainId: string, env: string, includeStatus: boolean, includeDescription: boolean) {

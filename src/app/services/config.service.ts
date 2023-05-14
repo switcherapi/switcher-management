@@ -114,11 +114,6 @@ export class ConfigService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
-  public getVerificationCode(id: string): Observable<ConfigRelayVerification> {
-    return this.http.patch<ConfigRelayVerification>(`${environment.apiUrl}//config/relay/verificationCode/${id}`, null)
-      .pipe(catchError(super.handleError));
-  }
-
   public verifyRelay(id: string, envName: string): Observable<ConfigRelayVerification> {
     return this.http.patch<ConfigRelayVerification>(`${environment.apiUrl}/config/relay/verify/${id}/${envName}`, null)
       .pipe(catchError(super.handleError));
