@@ -15,4 +15,9 @@ export class Domain {
 
 export class Integrations {
   slack: string;
+  relay: RelaySettings;
+}
+
+export class RelaySettings {
+  verification_code: string;
 }

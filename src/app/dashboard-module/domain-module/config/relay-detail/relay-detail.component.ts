@@ -10,11 +10,12 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AdminService } from 'src/app/services/admin.service';
-import { Config, ConfigRelay, ConfigRelayStatus } from 'src/app/model/config';
+import { Config, ConfigRelayStatus } from 'src/app/model/config';
 import { ConfigService } from 'src/app/services/config.service';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DomainService } from 'src/app/services/domain.service';
 
 @Component({
   selector: 'app-relay-detail',
@@ -54,9 +55,11 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   relayMethodFormControl = new FormControl('');
 
   relayVerificationEnabled: boolean = false;
+  relayVerificationCode: string;
 
   constructor(
     private adminService: AdminService,
+    private domainService: DomainService,
     private configService: ConfigService,
     private authService: AuthService,
     private toastService: ToastService,
@@ -71,6 +74,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.loadRelay();
     this.readPermissionToObject();
     this.loadRelaySettings();
+    this.loadIntegrationSettings();
   }
 
   ngOnDestroy() {
@@ -121,18 +125,18 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   verifyRelay(): void {
-    if (this.config.relay.verification_code) {
+    if (this.relayVerificationCode) {
       this.openRelayVerificationDialog();
       return;
     }
 
     this.blockUI.start('Generating verification code...');
-    this.configService.getVerificationCode(this.config.id)
+    this.domainService.getVerificationCode(this.parent.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         this.blockUI.stop();
         if (data?.code) {
-          this.config.relay.verification_code = data.code;
+          this.relayVerificationCode = data.code;
           this.openRelayVerificationDialog();
         }
       }, error => {
@@ -265,7 +269,13 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   private loadRelaySettings(): void {
     this.authService.isAlive()
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.relayVerificationEnabled = !data.attributes.relay_bypass_verification);
+      .subscribe(data => this.relayVerificationEnabled = data.attributes.relay_bypass_verification !== 'true');
+  }
+
+  private loadIntegrationSettings(): void {
+    this.domainService.getDomain(this.parent.domainId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.relayVerificationCode = data.integrations.relay.verification_code);
   }
 
   private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
@@ -305,6 +315,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       width: '380px',
       data: {
         relay: this.config.relay,
+        code: this.relayVerificationCode,
         environment: this.currentEnvironment
       }
     });
