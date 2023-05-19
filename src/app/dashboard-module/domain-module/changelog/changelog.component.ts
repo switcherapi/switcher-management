@@ -9,7 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Strategy } from 'src/app/model/strategy';
 import { History } from 'src/app/model/history';
@@ -49,6 +49,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   
   dataSource: MatTableDataSource<History>;
   dataColumns = ['newValue', 'date', 'updatedBy'];
+  pageLimit = 11;
+  pageLength = 11;
+  pageSkip = 0;
+  pageFetch = true;
   columnsToDisplay = [
     {
       data: 'newValue',
@@ -110,6 +114,15 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
+  onPage(event: PageEvent) {
+    this.pageSkip = (event.pageSize * (event.pageIndex + 1)) - event.pageSize;
+    this.pageSkip = this.pageSkip + (this.pageLength - this.pageSkip);
+    
+    if (this.pageFetch) {
+      this.loadChangeLog();
+    }
+  }
+
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainId, ['DELETE'], 'ADMIN', 'name', this.domainName)
       .pipe(takeUntil(this.unsubscribe))
@@ -125,7 +138,9 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadChangeLog(): void {
+    this.loading = true;
     this.domainRouteService.updateView('Change Log', 2);
+
     if (this.strategy) {
       this.loadStrategyHistory();
     } else if (this.configId) {
@@ -139,7 +154,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   private loadDomainHistory(): void {
     this.loading = true;
-    this.domainService.getHistory(this.domainId)
+    this.domainService.getHistory(this.domainId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
 
@@ -149,7 +164,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   private loadGroupHistory(): void {
     this.loading = true;
-    this.groupService.getHistory(this.groupId)
+    this.groupService.getHistory(this.groupId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
 
@@ -165,7 +180,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   private loadConfigHistory(): void {
     this.loading = true;
-    this.configService.getHistory(this.configId)
+    this.configService.getHistory(this.configId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
 
@@ -187,15 +202,17 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadDataSource(data: History[]): void {
+    if (this.dataSource) {
+      data = this.dataSource.data.concat(data);
+      this.pageLength = data.length;
+    }
+      
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = (dataHistory: History, filter: string) => {
       return this.customFilterPredicate(dataHistory, filter);
     };
-
-    this.loading = false;
-    this.classStatus = "mat-elevation-z8 ready";
   }
 
   private resetDomainChangeLog(): void {
@@ -225,6 +242,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   private changeLogSuccess(data: any): void {
     if (data) {
       this.dataSource = new MatTableDataSource(null);
+      this.pageLength = 0;
       this.toastService.showSuccess(`Change Log reseted with success`);
     }
   }
@@ -235,7 +253,14 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadSuccess(data: History[]): void {
-    if (data) this.loadDataSource(data);
+    if (data?.length) {
+      this.loadDataSource(data);
+    } else {
+      this.pageFetch = false;
+    }
+
+    this.loading = false;
+    this.classStatus = "mat-elevation-z8 ready";
   }
 
   private loadError(error: any): void {
