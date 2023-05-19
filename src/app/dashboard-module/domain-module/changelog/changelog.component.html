@@ -7,7 +7,7 @@
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
 <div [ngClass]="classStatus">
-    <table *ngIf="dataSource" mat-table [dataSource]="dataSource" aria-describedby="changelog-table"
+    <table *ngIf="!loading && dataSource" mat-table [dataSource]="dataSource" aria-describedby="changelog-table"
         multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="newValue">
@@ -64,6 +64,10 @@
             [disabled]="!dataSource?.data?.length || !removable">
             Reset
         </button>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+        <mat-paginator 
+            [pageSizeOptions]="[5, 10, 25, 50]"
+            [length]="pageLength"
+            (page)="onPage($event)">
+        </mat-paginator>
     </div>
 </div>

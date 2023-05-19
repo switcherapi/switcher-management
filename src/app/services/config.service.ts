@@ -100,11 +100,13 @@ export class ConfigService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
-  public getHistory(id: string): Observable<History[]> {
+  public getHistory(id: string, limit: number, skip: number): Observable<History[]> {
     return this.http.get<History[]>(`${environment.apiUrl}/config/history/${id}`, 
       { 
         params: {
-          sortBy: 'date:desc'
+          sortBy: 'date:desc',
+          limit,
+          skip
       }
     }).pipe(catchError(super.handleError));
   }

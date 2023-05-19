@@ -60,11 +60,13 @@ export class GroupService extends ApiService {
     return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/${id}`).pipe(catchError(super.handleError));
   }
 
-  public getHistory(id: string): Observable<History[]> {
+  public getHistory(id: string, limit: number, skip: number): Observable<History[]> {
     return this.http.get<History[]>(`${environment.apiUrl}/groupconfig/history/${id}`, 
       { 
         params: {
-          sortBy: 'date:desc'
+          sortBy: 'date:desc',
+          limit,
+          skip
       }
     }).pipe(catchError(super.handleError));
   }
