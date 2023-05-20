@@ -196,7 +196,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   private loadStrategyHistory(): void {
     this.loading = true;
-    this.strategyService.getHistory(this.strategy.id)
+    this.strategyService.getHistory(this.strategy.id, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
