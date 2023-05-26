@@ -47,6 +47,10 @@ A Java SDK for Switcher API
 implementation 'com.github.switcherapi:switcher-client:[VERSION]'
 ```
 
+###### Compatibility with Jakarta EE 9
+Use SDK v1.x for applications not using Jakarta EE 9.<br>
+Use SDK v2.x for Jakarta EE 9 based applications.
+
 </br>
 
 ##### - Client Context Properties

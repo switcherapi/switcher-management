@@ -61,21 +61,23 @@ You can also activate features such as offline and silent mode:
 const offline = true;
 const logger = true;
 const snapshotLocation = './snapshot/';
+const snapshotAutoUpdateInterval = 3000;
 const silentMode = true;
 const retryAfter = '5m';
 
 Switcher.buildContext({ url, apiKey, domain, component, environment }, {
-    offline, logger, snapshotLocation, silentMode, retryAfter
+    offline, logger, snapshotLocation, snapshotAutoUpdateInterval, silentMode, retryAfter
 });
 
 let switcher = Switcher.factory();
 ```
 
-- **offline**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'.
+- **offline**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'
 - **logger**: If activated, it is possible to retrieve the last results from a given Switcher key using Switcher.getLogger('KEY')
-- **snapshotLocation**: Location of snapshot files. The default value is './snapshot/'.
-- **silentMode**: If activated, all connectivity issues will be ignored and the client will automatically fetch the configuration into your snapshot file.
-- **retryAfter** : Time given to the module to re-establish connectivity with the API - e.g. 5s (s: seconds - m: minutes - h: hours).
+- **snapshotLocation**: Location of snapshot files. The default value is './snapshot/'
+- **snapshotAutoUpdateInterval**: Enable Snapshot Auto Update given an interval in ms (default: 0 disabled).
+- **silentMode**: If activated, all connectivity issues will be ignored and the client will automatically fetch the configuration into your snapshot file
+- **retryAfter**: Time given to the module to re-establish connectivity with the API - e.g. 5s (s: seconds - m: minutes - h: hours)
 - **regexMaxBlackList**: Number of entries cached when REGEX Strategy fails to perform (reDOS safe) - default: 50
 - **regexMaxTimeLimit**: Time limit (ms) used by REGEX workers (reDOS safe) - default - 3000ms
 
@@ -171,6 +173,15 @@ This step is optional if you want to load a copy of the configuration that can b
 
 ```js
 Switcher.loadSnapshot();
+```
+
+##### Watch for Snapshot file changes
+Activate and monitor snapshot changes using this feature. Optionally, you can implement any action based on the callback response.
+
+```js
+Switcher.watchSnapshot(
+    () =>  console.log('In-memory snapshot updated'), 
+    (err) => console.log(err));
 ```
 
 ##### - Snapshot version check

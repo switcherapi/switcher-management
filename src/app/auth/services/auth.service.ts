@@ -120,7 +120,7 @@ export class AuthService {
   }
 
   isAlive(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/check`).pipe(catchError(this.handleError));
+    return this.http.get<any>(`${environment.apiUrl}/check`, { params: { details: 1 } }).pipe(catchError(this.handleError));
   }
 
   getJwtToken() {
