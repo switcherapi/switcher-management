@@ -19,10 +19,9 @@ export class ComponentService extends ApiService {
     return this.http.get<SwitcherComponent[]>(`${environment.apiUrl}/component`, { params: { domain: id } }).pipe(catchError(super.handleError));
   }
 
-  public createComponent(domain: string, name: string, description: string): Observable<any> {
+  public createComponent(domain: string, name: string): Observable<any> {
     const body = {
       name,
-      description,
       domain
     }
     return this.http.post<SwitcherComponent>(`${environment.apiUrl}/component/create`, body).pipe(catchError(super.handleError));

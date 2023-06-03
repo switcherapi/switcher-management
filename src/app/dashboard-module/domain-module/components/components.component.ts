@@ -120,7 +120,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     if (valid) {
       this.loading = true;
       this.compService.createComponent(
-        this.domainId, this.compFormControl.value, 'Created using Switcher Manager')
+        this.domainId, this.compFormControl.value)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
           if (data.component) {
