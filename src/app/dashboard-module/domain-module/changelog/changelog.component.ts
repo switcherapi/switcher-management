@@ -201,8 +201,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
   }
 
-  private loadDataSource(data: History[]): void {
-    if (this.dataSource) {
+  private loadDataSource(data: History[], refresh: boolean): void {
+    if (this.dataSource && refresh) {
       data = this.dataSource.data.concat(data);
       this.pageLength = data.length;
     }
@@ -254,7 +254,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   private loadSuccess(data: History[]): void {
     if (data?.length) {
-      this.loadDataSource(data);
+      this.loadDataSource(data, true);
     } else {
       this.pageFetch = false;
     }
@@ -304,7 +304,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       }
     });
     
-    this.loadDataSource(sortedData);
+    this.loadDataSource(sortedData, false);
   }
 
   getColumnLabel(dataColumn: string): string {
