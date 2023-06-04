@@ -27,13 +27,6 @@ jobs:
           npm ci
           npm run lint
 
-      - name: Deploy
-        if: success() && github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npm run ng -- deploy --base-href=/switcher-management/ --name="switcherapi" --email="switcher.project@gmail.com" --no-silent
-
   docker:
     name: Publish Docker Image
     needs: [ build-lint-deploy ]
