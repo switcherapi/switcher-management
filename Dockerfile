@@ -23,12 +23,11 @@ FROM nginx:1.25-alpine-slim
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf nginx-no-ssl.conf nginx-ssl.conf /etc/nginx/
 
 # Copy dynamic env setup script
 COPY ./docker/setup.sh /setup.sh
 RUN chmod +x /setup.sh
-ENTRYPOINT "/setup.sh"
 
 # Copy the production dependencies
 COPY --from=builder /usr/local/app/dist/switcher-management /usr/share/nginx/html

@@ -1,4 +1,13 @@
 echo "Applying settings..."
+
+if [[ "$1" != "true" ]]; then
+    rm "/etc/nginx/nginx-ssl.conf"
+    echo "SSL disabled"
+else
+    rm "/etc/nginx/nginx-no-ssl.conf"
+    echo "SSL enabled"
+fi
+
 echo "RELEASE_TIME = ${RELEASE_TIME}"
 echo "SWITCHERAPI_URL = ${SWITCHERAPI_URL}"
 echo "SM_IP = ${SM_IP}"
