@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -65,7 +65,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   groupId: string;
   configId: string;
   config: Config;
-  strategies:  Strategy[];
+  strategies = new BehaviorSubject<Strategy[]>([]);
 
   loading = true;
   loadingStrategies = true;
@@ -190,7 +190,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       width: '700px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
-        currentStrategies: this.strategies
+        currentStrategies: this.strategies.getValue()
       }
     });
 
@@ -216,7 +216,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   addRelay() {
     this.currentTab = 2;
-    if (!this.config.relay || !this.config.relay.activated) {
+    if (!this.config.relay?.activated) {
       this.config.relay = new ConfigRelay();
       this.config.relay.type = 'VALIDATION';
       this.config.relay.method = 'GET';
@@ -463,7 +463,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
   }
 
-
   private initStrategies() {
     this.loadingStrategies = true;
     this.error = '';
@@ -472,7 +471,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       .subscribe(data => {
         if (data) {
           this.hasStrategies = data.length > 0;
-          this.strategies = data;
+          this.strategies.next(data);
 
           if (this.hasStrategies)
             this.updateNavTab(1);
@@ -481,7 +480,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       ConsoleLogger.printError(error);
       this.loadingStrategies = false;
     }, () => {
-      if (!this.strategies) {
+      if (!this.strategies.getValue().length) {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loadingStrategies = false;
@@ -491,7 +490,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private filterComponent(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.listComponents.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+    return this.listComponents.filter(component => component.toLowerCase().startsWith(filterValue));
   }
   
 }

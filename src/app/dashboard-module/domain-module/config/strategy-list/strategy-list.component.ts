@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
 import { Strategy } from 'src/app/model/strategy';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-strategy-list',
@@ -8,7 +9,7 @@ import { Strategy } from 'src/app/model/strategy';
   styleUrls: ['./strategy-list.component.css']
 })
 export class StrategyListComponent {
-  @Input() strategies: Strategy[];
+  @Input() strategies: BehaviorSubject<Strategy[]>;
   @Input() moveToEnd: boolean;
   @Input() parent: ConfigDetailComponent;
 
@@ -19,11 +20,23 @@ export class StrategyListComponent {
   }
 
   reloadStrategies(strategy: Strategy) {
-    this.strategies.splice(this.strategies.indexOf(strategy), 1);
-    this.parent.hasStrategies = this.strategies.length > 0;
+    const strategies = this.strategies.getValue();
+    strategies.splice(strategies.indexOf(strategy), 1);
+    this.parent.hasStrategies = strategies.length > 0;
 
     if (!this.parent.hasStrategies)
       this.parent.updateNavTab(3);
+  }
+
+  updateStrategies(strategy: Strategy) {
+    const strategies = this.strategies.getValue();
+    strategies.forEach(s => {
+      if (s.id === strategy.id) {
+        Object.assign(s, strategy);
+      }
+    });
+
+    this.strategies.next(strategies);
   }
 
 }
