@@ -1,6 +1,6 @@
 <div #tabstrategies>
-    <mat-tab-group (selectedTabChange)="scrollToElement(tabstrategies)" [selectedIndex]="moveToEnd ? strategies.length : 0">
-        <div *ngFor="let strategy of strategies">
+    <mat-tab-group (selectedTabChange)="scrollToElement(tabstrategies)" [selectedIndex]="moveToEnd ? strategies.getValue().length : 0">
+        <div *ngFor="let strategy of strategies.getValue()">
             <mat-tab label="{{strategy.strategy}}">
                 <app-strategy-detail [strategy]="strategy" [strategyList]="this"></app-strategy-detail>
             </mat-tab>

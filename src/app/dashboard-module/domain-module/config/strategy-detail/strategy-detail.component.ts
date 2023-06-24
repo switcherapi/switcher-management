@@ -140,7 +140,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             this.blockUI.stop();
             this.toastService.showSuccess(`Strategy removed with success`);
 
-            if (!this.strategyList.strategies.length)
+            if (!this.strategyList.strategies.getValue().length)
               this.scrollToElement(document.getElementById('page-container'));
         }, error => {
           this.blockUI.stop();
@@ -197,9 +197,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         .subscribe(data => {
           if (data) {
             this.strategyValueSelection.deselectAll();
-            this.strategy = data;
-            this.loadStrategyRequirements();
-            this.toastService.showSuccess(`Strategy updated with success`);
+            this.updateValueSuccess(data);
           }
       }, error => this.updateValueError(error, 'Unable to add this value'), 
       () => this.blockUI.stop());
@@ -258,6 +256,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   private updateValueSuccess(data: Strategy) {
     if (data) {
       this.strategy = data;
+      this.strategyList.updateStrategies(data);
       this.loadStrategyRequirements();
       this.toastService.showSuccess(`Strategy updated with success`);
     }
