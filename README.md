@@ -22,8 +22,8 @@
 **Switcher Management** is a complete GUI to manage Switcher API
 
  - **Switcher API**: (https://github.com/switcherapi/switcher-api)
- - **JavaScript SDK**: (https://github.com/switcherapi/switcher-client-master)
- - **Java SDK**: (https://github.com/switcherapi/switcher-client)
+ - **JavaScript SDK**: (https://github.com/switcherapi/switcher-client-js)
+ - **Java SDK**: (https://github.com/switcherapi/switcher-client-java)
  - **Deno SDK**: (https://github.com/switcherapi/switcher-client-deno)
 
 # Cloud Hosted API

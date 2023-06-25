@@ -21,6 +21,7 @@ jobs:
       - name: Build & Lint
         run: |
           npm ci
+          npm update
           npm run lint
   
   docker:
