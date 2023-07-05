@@ -17,8 +17,16 @@ export class ConfigService extends ApiService {
     super();
   }
 
-  public getConfigsByGroup(id: string): Observable<Config[]> {
-    return this.http.get<Config[]>(`${environment.apiUrl}/config`, { params: { group: id } })
+  public getConfigsByGroup(id: string, fields?: string): Observable<Config[]> {
+    const params: any = {
+      group: id
+    };
+
+    if (fields) {
+      params.fields = fields;
+    }
+
+    return this.http.get<Config[]>(`${environment.apiUrl}/config`, { params })
       .pipe(catchError(super.handleError));
   }
 

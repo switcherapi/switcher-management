@@ -93,7 +93,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   }
 
   private loadConfigs() {
-    this.configService.getConfigsByGroup(this.groupId)
+    this.configService.getConfigsByGroup(this.groupId, 'id,key,activated')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
