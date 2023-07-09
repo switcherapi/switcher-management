@@ -8,7 +8,6 @@ import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
 import { AdminService } from 'src/app/services/admin.service';
 import { DomainService } from 'src/app/services/domain.service';
-import { Team } from 'src/app/model/team';
 import { Domain } from 'src/app/model/domain';
 
 @Component({
@@ -104,17 +103,12 @@ export class DomainListComponent implements OnInit, OnDestroy {
           }, error => {
             ConsoleLogger.printError(error);
             this.loadingCollab = false;
-            this.error = this.errorHandler.doError(error);
           }, () => {
             this.loadingCollab = false;
           });
         });
       }
     });
-  }
-
-  private getTeamDomains(teams: Team[]): string[] {
-    return teams.map(team => team.domain);
   }
 
 }
