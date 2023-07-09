@@ -20,8 +20,8 @@ export class RouterErrorHandler {
             }
             this.authService.cleanSession();
             this.router.navigate(['/login']);
-        } else {
-            return error;
         }
+        
+        return error.error || 'Something went wrong';
     }
 }

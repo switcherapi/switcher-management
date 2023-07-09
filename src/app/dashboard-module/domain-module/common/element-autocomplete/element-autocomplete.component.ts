@@ -60,7 +60,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       domainId, this.switchers, this.groups, this.components);
 
     this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-      if (result && result.data) {
+      if (result?.data?.domain?.group) {
         this.searchListItems = [];
         this.loadByGroup(result.data.domain.group);
         this.loadBySwitcher(result.data.domain.group);
