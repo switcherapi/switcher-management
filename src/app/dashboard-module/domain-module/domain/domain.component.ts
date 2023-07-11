@@ -296,6 +296,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(config => {
         if (config) {
+          this.config = config;
           this.currentPath.id = config.id;
           this.currentPath.type = Types.CONFIG_TYPE;
           this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${item.parent._id}/switchers/${config.id}`;
@@ -311,6 +312,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(group => {
         if (group) {
+          this.group = group;
           this.currentPath.id = group.id;
           this.currentPath.type = Types.GROUP_TYPE;
           this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${group.id}`;
