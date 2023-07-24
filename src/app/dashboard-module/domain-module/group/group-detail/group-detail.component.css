@@ -2,3 +2,8 @@
   vertical-align: baseline !important;
   display: contents;
 }
+
+.config-list {
+  width: 100%;
+  display: inline-block;
+}

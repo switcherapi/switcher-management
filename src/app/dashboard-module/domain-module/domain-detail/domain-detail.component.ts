@@ -15,6 +15,8 @@ import { Domain } from 'src/app/model/domain';
 import { Types } from 'src/app/model/path-route';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { FeatureService } from 'src/app/services/feature.service';
 
 @Component({
   selector: 'app-domain-detail',
@@ -31,7 +33,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   @ViewChild('descElement', { static: true }) 
   private descElement: ElementRef;
-  
+
   envEnable = new Subject<boolean>();
 
   domain: Domain;
@@ -39,11 +41,14 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   domainForm: FormGroup;
 
   collabUser: boolean = false;
+  featureDetailsv2 = false;
 
   constructor(
     private domainRouteService: DomainRouteService,
     private domainService: DomainService,
     private adminService: AdminService,
+    private authService: AuthService,
+    private featureService: FeatureService,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
@@ -63,6 +68,10 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           this.loadDomain();
         }
       });
+
+    this.featureService.isEnabled({ feature: 'DETAIL_V2' })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.featureDetailsv2 = data?.status);
   }
 
   ngOnDestroy() {
@@ -218,11 +227,8 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private checkDomainOwner(): void {
-    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
-      if (currentUser) {
-        this.collabUser = currentUser.id != this.domain.owner;
-      }
-    });
+    const currentUserId = this.authService.getUserInfo('sessionid');
+    this.collabUser = currentUserId != this.domain.owner;
   }
 
   private readPermissionToObject(): void {

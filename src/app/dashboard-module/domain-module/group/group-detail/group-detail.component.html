@@ -61,3 +61,7 @@
         </section>
     </div>
 </block-ui>
+<div *ngIf="featureDetailsv2" class="config-list">
+    <hr>
+    <app-config-list [childEnvironmentEmitter]="childEnvironmentEmitter"></app-config-list>
+</div>

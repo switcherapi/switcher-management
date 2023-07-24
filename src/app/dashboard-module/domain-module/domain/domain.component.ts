@@ -9,7 +9,6 @@ import { ConfigService } from 'src/app/services/config.service';
 import { GroupService } from 'src/app/services/group.service';
 import { DomainTransferDialogComponent } from './domain-transfer/domain-transfer-dialog.component';
 import { DomainService } from 'src/app/services/domain.service';
-import { AdminService } from 'src/app/services/admin.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
@@ -23,6 +22,7 @@ import { Group } from 'src/app/model/group';
 import { Config } from 'src/app/model/config';
 import { Configuration, GraphQLConfigurationResultSet } from 'src/app/model/configuration';
 import { ApolloQueryResult } from '@apollo/client/core';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-domain',
@@ -58,7 +58,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    private adminService: AdminService,
+    private authService: AuthService,
     private domainRouteService: DomainRouteService,
     private domainService: DomainService,
     private configService: ConfigService,
@@ -260,19 +260,15 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   private checkDomainOwner() {
-    this.adminService.getAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(currentUser => {
-      if (currentUser) {
-        this.transferLabel = '';
-        if (currentUser.id == this.domain.owner) {
-          if (this.domain.transfer)
-            this.transferLabel = 'Cancel Transfer';
-          else
-            this.transferLabel = 'Transfer Domain';
-        } else {
-          this.transferLabel = '';
-        }
-      }
-    });
+    const currentUserId = this.authService.getUserInfo('sessionid');
+    if (currentUserId == this.domain.owner) {
+      if (this.domain.transfer)
+        this.transferLabel = 'Cancel Transfer';
+      else
+        this.transferLabel = 'Transfer Domain';
+    } else {
+      this.transferLabel = '';
+    }
   }
 
   private scrollMenuHandler() {

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
@@ -27,8 +26,6 @@ import { Permissions } from 'src/app/model/permission';
   ]
 })
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
-  
   permissions: Permissions[];
   groups: Group[];
   loading = false;
@@ -93,7 +90,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
 
   private updateData() {
     this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
-      `/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}`);
+      `/dashboard/domain/${this.domainName}/${this.domainId}`);
   }
 
   private loadGroups() {

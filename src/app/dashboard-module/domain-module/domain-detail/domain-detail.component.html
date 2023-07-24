@@ -60,3 +60,7 @@
         </section>
     </div>
 </block-ui>
+<div *ngIf="featureDetailsv2" class="group-list">
+    <hr>
+    <app-group-list [childEnvironmentEmitter]="childEnvironmentEmitter"></app-group-list>
+</div>
