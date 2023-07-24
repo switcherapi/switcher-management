@@ -11,7 +11,7 @@
                 <div class="options-section-label">Create New</div>
             </button>
         </div>
-        <div class="environment-style">
+        <div *ngIf="!childEnvironmentEmitter" class="environment-style">
             <form [formGroup]="environmentSelection">
                 <mat-form-field>
                     <mat-select #envSelectionChange placeholder="Environment selection" formControlName="environmentSelection">

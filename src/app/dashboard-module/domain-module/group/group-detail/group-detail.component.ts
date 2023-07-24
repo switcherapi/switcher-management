@@ -15,6 +15,7 @@ import { Group } from 'src/app/model/group';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
+import { FeatureService } from 'src/app/services/feature.service';
 
 @Component({
   selector: 'app-group-detail',
@@ -42,6 +43,8 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   groupId: string;
   group: Group;
 
+  featureDetailsv2 = false;
+
   nameFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(5)
@@ -51,6 +54,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     private domainRouteService: DomainRouteService,
     private groupService: GroupService,
     private adminService: AdminService,
+    private featureService: FeatureService,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
@@ -78,6 +82,10 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           this.loadGroup();
         }
     });
+
+    this.featureService.isEnabled({ feature: 'DETAIL_V2' })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.featureDetailsv2 = data?.status);
   }
 
   ngOnDestroy() {

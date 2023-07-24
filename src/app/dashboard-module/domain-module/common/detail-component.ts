@@ -2,8 +2,10 @@ import { E } from '@angular/cdk/keycodes';
 import { AdminService } from 'src/app/services/admin.service';
 import { DataUtils } from 'src/app/_helpers/data-utils';
 import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
+import { EventEmitter } from '@angular/core';
 
 export class DetailComponent {
+    childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent> = new EventEmitter();
     detailBodyStyle: string = 'detail-body loading';
 
     createdBy: string = '';
@@ -28,6 +30,7 @@ export class DetailComponent {
     selectEnvironment(event: EnvironmentChangeEvent): void {
         this.currentEnvironment = event.environmentName;
         this.currentStatus = event.status;
+        this.childEnvironmentEmitter.emit(event);
         
         if (this.editing) {
             this.classStatus = 'header editing';

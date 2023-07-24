@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
@@ -28,8 +27,6 @@ import { Permissions } from 'src/app/model/permission';
   ]
 })
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
-
   permissions: Permissions[];
   configs: Config[];
   loading = false;

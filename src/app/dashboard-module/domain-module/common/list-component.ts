@@ -1,4 +1,4 @@
-import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit } from '@angular/core';
+import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { MatSelect } from '@angular/material/select';
@@ -6,9 +6,14 @@ import { MatSelectionListChange } from '@angular/material/list';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { ActivatedRoute } from '@angular/router';
+import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Directive()
 export class ListComponent implements AfterViewInit {
+    protected unsubscribe: Subject<void> = new Subject();
+    
     @ViewChildren("envSelectionChange")
     public component: QueryList<MatSelect>
     private envSelectionChange: MatSelect;
@@ -16,6 +21,7 @@ export class ListComponent implements AfterViewInit {
     environmentSelection: FormGroup;
 
     environments: Environment[];
+    @Input() childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent>;
     @Output() environmentSelectionChange: EventEmitter<string> = new EventEmitter();
 
     cardListContainerStyle: string = 'card mt-4 loading';
@@ -56,6 +62,7 @@ export class ListComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+        this.onEnvironmentChange();
         this.component.changes.subscribe((comps: QueryList<MatSelect>) => {
             if (comps.first) {
                 this.envSelectionChange = comps.first;
@@ -75,4 +82,14 @@ export class ListComponent implements AfterViewInit {
 
         return this.environments[0].name;
     }
+
+    private onEnvironmentChange(): void {
+        if (!this.childEnvironmentEmitter) {
+          return;
+        }
+    
+        this.childEnvironmentEmitter
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => this.environmentSelectionChange.emit(data.environmentName));
+      }
 }
