@@ -20,11 +20,11 @@ A Java SDK for Switcher API
 ***
 
 ### Features
-- Flexible and robust functions that will keep your code clean and maintainable.
-- Able to work offline using a snapshot file downloaded from your remote Switcher-API Domain.
-- Silent mode is a hybrid configuration that automatically enables a contingent sub-process in case of any connectivity issue.
+- Flexible and robust SDK that will keep your code clean and maintainable.
+- Able to work offline using a snapshot file pulled from your remote Switcher-API Domain.
+- Silent mode is a hybrid configuration that automatically enables contingent sub-processes in case of any connectivity issue.
 - Built-in mock implementation for clear and easy implementation of automated testing.
-- Easy to setup. Switcher Context is responsible to manage all the complexity between your application and API.
+- Easy to setup. Switcher Context is responsible to manage all the configuration complexity between your application and API.
 
 * * *
 
@@ -54,9 +54,9 @@ Use SDK v2.x for Jakarta EE 9 based applications.
 </br>
 
 ##### - Client Context Properties
-Define a feature class that extends SwitcherContext. This implementation will centralize all features in a single place of your application and will have all the operations and features available to access the API remotely as well local snapshots.
+Define a feature class that extends SwitcherContext. This implementation will centralize all features in a single place of your application and will have all the operations and features available to access the API either remotely or locally from the snapshot files.
 
-The Client SDK configuration must be defined in a properties file that contains all settings for your application to start communicating with the API.
+The Client SDK configuration must be defined in a properties file that contains all parameters for your application to start communicating with the API.
 
 1. Inside a resources folder, create a file called: switcherapi.properties.
 
@@ -69,35 +69,32 @@ You can also use environment variables using the standard notation ${VALUE:DEFAU
 # Path of the feature class that extends SwitcherContext
 switcher.context
 
+# Swither-API endpoint (default value uses Switcher API cloud endpoint)
+switcher.url
+
 # Switcher-API key generated for the application/component
 switcher.apikey
 
-# Domain name
-switcher.domain
-
 # Application/component name
 switcher.component
+
+# Domain name
+switcher.domain
 ```
 
 **Optional**
 
 ```properties
-# Swither-API endpoint (default value uses Switcher API cloud endpoint)
-switcher.url
-
 # Environment name. Production environment is named as 'default'
 switcher.environment
 
 # true/false When offline, it will only use a local snapshot file
 switcher.offline
 
-# Snapshot file path
-switcher.snapshot.file
-
 # Folder from where snapshots will be saved/read
 switcher.snapshot.location
 
-# true/false Automated lookup for snapshot when loading the application
+# true/false Automated lookup for snapshot when initializing the client
 switcher.snapshot.auto
 
 # true/false Skip snapshotValidation() that can be used for UT executions
@@ -106,15 +103,20 @@ switcher.snapshot.skipvalidation
 # Enable the Snapshot Auto Update given an interval of time - e.g. 1s (s: seconds, m: minutes)
 switcher.snapshot.updateinterval
 
-# true/false Contingency in case of some problem with connectivity with the API
+# Enable contigency given the time for the client to retry - e.g. 5s (s: seconds - m: minutes - h: hours)
 switcher.silent
 
-# Time given to the module to re-establish connectivity with the API
-# e.g. 5s (s: seconds - m: minutes - h: hours)
-switcher.retry
+# Path to the truststore file
+switcher.truststore.path -> Path to the truststore file
+
+# Truststore password
+switcher.truststore.password -> Truststore password
+
+# Time in ms given to the API to respond - 3000 default value
+switcher.timeout -> Time in ms given to the API to respond - 3000 default value
 ```
 
-The Base Context provides with a more flexible way to configure the Client SDK.</br>
+The Base Context provides with a more flexible way to configure the Client SDK.<br>
 Instead of using SwitcherContext, which is used to automatically load from the switcherapi.properties, you can also use SwitcherContextBase and supply the ContextBuilder to include the settings.
 
 ```java
@@ -162,13 +164,12 @@ switcher.isItOn();
 
 2. **Strategy validation - preparing input**
 
-Loading values into the switcher can be done by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
+Loading information into the switcher can be made by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
 
 ```java
-switcher.prepareEntry(Arrays.asList(
-	Entry.build(StrategyValidator.DATE, "2019-12-10"),
-	Entry.build(StrategyValidator.VALUE, "user1")
-));
+List<Entry> entries = new ArrayList<>();
+entries.add(Entry.build(StrategyValidator.DATE, "2019-12-10"));
+entries.add(Entry.build(StrategyValidator.DATE, "2020-12-10"));
 
 switcher.prepareEntry(entries);
 switcher.isItOn();
@@ -188,7 +189,7 @@ Strategy validators can be specified as:
 
 3. **Strategy validation - Fluent style**
 
-Create a chained call using check functions.
+Create chained calls using 'getSwitcher' then 'prepareEntry' then 'isItOn' functions.
 
 ```java
 import static **.MyAppFeatures.*;
@@ -228,12 +229,14 @@ switcher.throttle(1000).isItOn();
 </br>
 
 ##### - Offline settings
-You can also force the Switcher library to work offline. In this case, the snapshot location must be set up, so the context can be re-built using the offline configuration.
-Or you can just configure the Client SDK using the properties file.
+You can also set the Switcher library to work offline. It will use a local snapshot file to retrieve the switchers configuration.<br>
+This feature is useful for testing purposes or when you need to run your application without internet access.
 
 ```java
-MyAppFeatures.getProperties().setOfflineMode(true);
-MyAppFeatures.getProperties().setSnapshotLocation("/src/resources");
+MyAppFeatures.configure(ContextBuilder.builder()
+	.offline(true)
+	.snapshotLocation("/src/resources"));
+
 MyAppFeatures.initializeClient();
 
 Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
@@ -242,9 +245,8 @@ switcher.isItOn();
 </br>
 
 ##### - Real-time snapshot updater
-Let the Switcher Client manage your application local snapshot file.
-
-In order to minimize roundtrips and unnecessary file parsing, try to use one of these features to improve the overall performance when accessing snapshots locally.
+Let the Switcher Client manage your application local snapshot.<br>
+These features allow you to configure the SDK to automatically update the snapshot in the background.
 
 1. This feature will update the in-memory Snapshot every time the file is modified.
 ```java
@@ -252,16 +254,15 @@ SwitcherFactory.watchSnapshot();
 SwitcherFactory.stopWatchingSnapshot();
 ```
 
-2. You can also perform snapshot update validation to verify if there are changes to be pulled. This will ensure that your application is running the most recent version of your remote configuration.
+2. You can also perform snapshot update validation to verify if there are changes to be pulled.
 ```java
 SwitcherFactory.validateSnapshot();
 ```
 
 3. Enable the Client SDK to execute Snapshot Auto Updates in the background using configuration. It basically encapsulates the validateSnapshot feature into a scheduled task managed by the SDK.
-It requires to set either snapshotFile or snapshotLocation. 
 
 ```java
-// It will check and update the local/in-memory snapshot to the latest version
+// It will check and update the local/in-memory snapshot to the latest version every second
 SwitcherFactory.configure(ContextBuilder.builder()
 	.snapshotAutoUpdateInterval("1s")
 	.snapshotLocation("/src/resources"));
@@ -300,7 +301,7 @@ void testSwitchers() {
 ```
 
 #### SwitcherMock annotation - Requires JUnit 5 Jupiter
-Predefine Switchers result outside your test methods via Parametrized Test.
+Predefine Switchers result outside your test methods via Parameterized Test.
 </br>It encapsulates the test and makes sure that the Switcher returns to its original state after concluding the test.
 
 ```java

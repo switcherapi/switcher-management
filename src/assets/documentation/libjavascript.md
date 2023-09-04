@@ -52,7 +52,7 @@ const url = 'https://switcherapi.com/api';
 - **environment**: (optional) Environment name. Production environment is named as 'default'.
 - **domain**: Domain name.
 - **component**: Application name.
-- **url**: Swither-API endpoint.
+- **url**: (optional) Swither-API endpoint.
 
 ##### - Options
 You can also activate features such as offline and silent mode:
@@ -61,12 +61,12 @@ You can also activate features such as offline and silent mode:
 const offline = true;
 const logger = true;
 const snapshotLocation = './snapshot/';
-const snapshotAutoUpdateInterval = 3000;
-const silentMode = true;
-const retryAfter = '5m';
+const snapshotAutoUpdateInterval = 3;
+const silentMode = '5m';
+const certPath = './certs/ca.pem';
 
 Switcher.buildContext({ url, apiKey, domain, component, environment }, {
-    offline, logger, snapshotLocation, snapshotAutoUpdateInterval, silentMode, retryAfter
+    offline, logger, snapshotLocation, snapshotAutoUpdateInterval, silentMode, certPath
 });
 
 let switcher = Switcher.factory();
@@ -75,11 +75,14 @@ let switcher = Switcher.factory();
 - **offline**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'
 - **logger**: If activated, it is possible to retrieve the last results from a given Switcher key using Switcher.getLogger('KEY')
 - **snapshotLocation**: Location of snapshot files. The default value is './snapshot/'
-- **snapshotAutoUpdateInterval**: Enable Snapshot Auto Update given an interval in ms (default: 0 disabled).
-- **silentMode**: If activated, all connectivity issues will be ignored and the client will automatically fetch the configuration into your snapshot file
-- **retryAfter**: Time given to the module to re-establish connectivity with the API - e.g. 5s (s: seconds - m: minutes - h: hours)
+- **snapshotAutoUpdateInterval**: Enable Snapshot Auto Update given an interval in seconds (default: 0 disabled).
+- **silentMode**: Enable contigency given the time for the client to retry - e.g. 5s (s: seconds - m: minutes - h: hours)
+- **regexSafe**: Enable REGEX Safe mode - Prevent agaist reDOS attack (default: true).
 - **regexMaxBlackList**: Number of entries cached when REGEX Strategy fails to perform (reDOS safe) - default: 50
 - **regexMaxTimeLimit**: Time limit (ms) used by REGEX workers (reDOS safe) - default - 3000ms
+- **certPath**: Path to the certificate file used to establish a secure connection with the API.
+
+(*) regexSafe is a feature that prevents your application from being exposed to a reDOS attack. It is recommended to keep this feature enabled.<br>
 
 </br>
 
@@ -91,7 +94,7 @@ Here are some examples:
 Invoking the API can be done by instantiating the switcher and calling *isItOn* passing its key as a parameter.
 
 ```js
-const switcher = new Switcher(url, apiKey, domain, component, environment);
+const switcher = Switcher.factory();
 await switcher.isItOn('FEATURE01');
 ```
 
@@ -138,14 +141,14 @@ await switcher
 </br>
 
 ##### - Built-in mock feature
-You can also bypass your switcher configuration by invoking 'Switcher.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false. For example, assume that you had configured FEATURE01 to be false. You can do the following to test both scenarios:
+You can also bypass your switcher configuration by invoking 'Switcher.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false.
 
 ```js
 Switcher.assume('FEATURE01').true();
 switcher.isItOn('FEATURE01'); // true
 
 Switcher.forget('FEATURE01');
-switcher.isItOn('FEATURE01'); // false
+switcher.isItOn('FEATURE01'); // Now, it's going to return the result retrieved from the API or the Snaopshot file
 ```
 
 **Enabling Test Mode**
@@ -163,13 +166,14 @@ Switcher Keys may not be configured correctly and can cause your code to have un
 
 This feature will validate using the context provided to check if everything is up and running.
 In case something is missing, this operation will throw an exception pointing out which Switcher Keys are not configured.
-
 ```js
 Switcher.checkSwitchers(['FEATURE01', 'FEATURE02'])
 ```
 
 ##### Loading Snapshot from the API
-This step is optional if you want to load a copy of the configuration that can be used to eliminate latency when offline mode is activated.
+This step is optional if you want to load a copy of the configuration that can be used to eliminate latency when offline mode is activated.<br>
+Activate watchSnapshot optionally passing true in the arguments.<br>
+Auto load Snapshot from API passing true as second argument.
 
 ```js
 Switcher.loadSnapshot();
@@ -188,7 +192,15 @@ Switcher.watchSnapshot(
 For convenience, an implementation of a domain version checker is available if you have external processes that manage snapshot files.
 
 ```js
-switcher.checkSnapshot();
+Switcher.checkSnapshot();
+```
+
+##### Snapshot Update Scheduler
+You can also schedule a snapshot update using the method below.<br>
+It allows you to run the Client SDK in offline mode (zero latency) and still have the snapshot updated automatically.
+
+```js
+Switcher.scheduleSnapshotAutoUpdate(1 * 60 * 60 * 24); // 24 hours
 ```
 
 *Did you find an error? Please, open an issue*
