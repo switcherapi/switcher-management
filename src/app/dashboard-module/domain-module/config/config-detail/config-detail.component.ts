@@ -98,6 +98,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private dialog: MatDialog
   ) { 
     super(adminService);
+  }
+
+  ngOnInit() {
+    (document.getElementsByClassName('container')[0] as HTMLElement).style.minHeight = '1100px';
+
+    this.loading = true;
+
     this.route.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = params.name;
@@ -106,15 +113,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.route.params.subscribe(params => {
       this.groupId = params.groupid;
       this.configId = params.configid;
+      this.loadConfig();
     });
-  }
 
-  ngOnInit() {
-    (document.getElementsByClassName('container')[0] as HTMLElement).style.minHeight = '1100px';
-
-    this.loading = true;
     this.hasNewStrategy = false;
-    this.loadConfig();
   }
 
   ngOnDestroy() {
@@ -204,7 +206,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             result.operation, 
             this.currentEnvironment, 
             result.values).subscribe(_data => {
-              this.initStrategies();
+              this.loadStrategies(true);
               this.toastService.showSuccess('Strategy created with success');
             }, error => {
               this.toastService.showError(error ? error.error : 'Unable to add strategy');
@@ -290,7 +292,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   onEnvChange($event: EnvironmentChangeEvent) {
     this.selectEnvironment($event);
-    this.initStrategies();
+    this.loadStrategies();
     this.updateNavTab(3);
     this.disableMetrics = this.config.disable_metrics ? 
       this.config.disable_metrics[this.currentEnvironment] : false;
@@ -309,6 +311,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.disableMetrics = this.config.disable_metrics ? 
       this.config.disable_metrics[this.currentEnvironment] : false;
     this.loadComponents();
+    this.loadStrategies();
     this.keyFormControl.setValue(config.key);
 
     this.readPermissionToObject();
@@ -463,7 +466,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
   }
 
-  private initStrategies() {
+  private loadStrategies(focus?: boolean) {
     this.loadingStrategies = true;
     this.error = '';
     this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment)
@@ -473,7 +476,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.hasStrategies = data.length > 0;
           this.strategies.next(data);
 
-          if (this.hasStrategies)
+          if (this.hasStrategies && focus)
             this.updateNavTab(1);
         }
     }, error => {
