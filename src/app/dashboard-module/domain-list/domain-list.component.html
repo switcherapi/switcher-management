@@ -1,5 +1,5 @@
 <div class="container" >
-    <div class="card mt-4">
+    <div [ngClass]="cardListContainerStyle">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="collabDomains.length" class="card mt-4">
+    <div *ngIf="collabDomains.length" [ngClass]="cardListContainerStyle">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
@@ -38,7 +38,7 @@
         <div class="card-body">
             <div *ngIf="loadingCollab" class="card-body loader-div">
                 <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo"/>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher APIU logo"/>
             </div>
             <div *ngIf="errorCollab" class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
             <div *ngIf="!loadingCollab">

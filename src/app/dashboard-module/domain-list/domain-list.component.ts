@@ -23,6 +23,8 @@ export class DomainListComponent implements OnInit, OnDestroy {
 
   domains: Domain[];
   collabDomains: Domain[] = [];
+
+  cardListContainerStyle: string = 'card mt-4 loading';
   loading = false;
   loadingCollab = false;
   error = '';
@@ -88,6 +90,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
         this.error = 'Failed to connect to Switcher API';
       }
       this.loading = false;
+      this.cardListContainerStyle = 'card mt-4 ready';
     });
   }
 
@@ -105,6 +108,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
             this.loadingCollab = false;
           }, () => {
             this.loadingCollab = false;
+            this.cardListContainerStyle = 'card mt-4 ready';
           });
         });
       }

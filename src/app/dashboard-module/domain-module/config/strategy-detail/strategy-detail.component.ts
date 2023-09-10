@@ -314,6 +314,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             }
           });
         }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.blockUI.stop();
+      this.detailBodyStyle = 'detail-body ready';
     });
   }
 
