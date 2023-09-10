@@ -146,16 +146,15 @@ export class AuthService {
     let errorMessage = '';
     if (result.error instanceof ErrorEvent) {
       errorMessage = `Error: ${result.error.message}`;
+    } else if (result.status === 401 || result.status === 422) {
+      errorMessage = 'Invalid email/password';
+    } else if (result.status === 400) {
+      errorMessage = result.error.error;
     } else {
-      if (result.status === 401 || result.status === 422) {
-        errorMessage = 'Invalid email/password';
-      } else if (result.status === 400) {
-        errorMessage = result.error.error;
-      } else {
-        ConsoleLogger.printError(result);
-        errorMessage = `Switcher API is offline`;
-      }
+      ConsoleLogger.printError(result);
+      errorMessage = `Switcher API is offline`;
     }
+    
     return throwError(errorMessage);
   }
 

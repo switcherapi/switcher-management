@@ -33,7 +33,7 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if(!this.data || !this.data.statistics)
+    if(!this.data?.statistics)
       return;
 
     this.loading = true;
