@@ -183,7 +183,9 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   isVerified(): boolean {
-    return this.config.relay.verified && this.config.relay.verified[this.currentEnvironment];
+    if (this.config.relay.verified)
+      return this.config.relay.verified[this.currentEnvironment];
+    return false;
   }
 
   private editRelay() {
@@ -344,8 +346,10 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   private getRelayAttribute(field: string): string {
-    if (this.config.relay[field] && this.config.relay[field][this.currentEnvironment])
-      return this.config.relay[field][this.currentEnvironment];
+    if (this.config.relay[field]) {
+      if (this.config.relay[field][this.currentEnvironment])
+        return this.config.relay[field][this.currentEnvironment];
+    }
     return '';
   }
 
