@@ -314,6 +314,8 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
           this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${group.id}`;
           this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.group) } });
         }
+    }, error => {
+      ConsoleLogger.printError(error);
     });
   }
 

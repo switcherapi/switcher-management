@@ -61,6 +61,11 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     private _modalService: NgbModal
   ) { 
     super(adminService);
+  }
+
+  ngOnInit() {
+    this.loading = true;
+
     this.route.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = params.name;
@@ -68,11 +73,13 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
     this.route.params.subscribe(params => {
       this.groupId = params.groupid;
-    });
-  }
 
-  ngOnInit() {
-    this.loading = true;
+      this.featureDetailsv2 = false;
+      this.featureService.isEnabled({ feature: 'DETAIL_V2' })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(data => this.featureDetailsv2 = data?.status);
+    });
+
     this.route.paramMap.pipe(map(() => window.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
@@ -82,10 +89,6 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           this.loadGroup();
         }
     });
-
-    this.featureService.isEnabled({ feature: 'DETAIL_V2' })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.featureDetailsv2 = data?.status);
   }
 
   ngOnDestroy() {

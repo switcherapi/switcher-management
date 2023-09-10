@@ -155,7 +155,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       this.data.router = value;
       this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(permissionValue => {
         this.key = permissionValue.key;
-        this.validKeyOnly = permissionValue && permissionValue.key;
+        this.validKeyOnly = permissionValue?.key;
       }, error => {
         ConsoleLogger.printError(error);
         this.validKeyOnly = false;
