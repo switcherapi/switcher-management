@@ -41,6 +41,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   domainName: string;
   classStatus = "card mt-4 loading";
   loading = true;
+  creating = false;
   error = '';
   fetch = true;
 
@@ -79,8 +80,11 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     const { valid } = this.envFormControl;
 
     if (valid) {
-      this.loading = true;
-      this.envService.createEnvironment(this.domainId, this.envFormControl.value)
+      const envName = this.envFormControl.value;
+      this.envFormControl.reset();
+      this.creating = true;
+
+      this.envService.createEnvironment(this.domainId, envName)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(env => {
           if (env) {
@@ -88,10 +92,10 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Environment created with success');
           }
         }, error => {
-          this.loading = false;
           this.toastService.showError(error.error);
+          ConsoleLogger.printError(error);
         }, () => {
-          this.loading = false;
+          this.creating = false;
         });
     } else {
       this.toastService.showError('Unable to create this Environment');

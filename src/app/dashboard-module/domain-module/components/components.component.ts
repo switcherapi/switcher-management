@@ -45,6 +45,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   domainName: string;
   classStatus = "card mt-4 loading";
   loading = true;
+  creating = false;
   error = '';
   fetch = true;
 
@@ -82,6 +83,8 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
   private loadComponents(): void {
     this.loading = true;
+    this.classStatus = "card mt-4 loading";
+
     this.compService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(components => {
@@ -118,9 +121,11 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     const { valid } = this.compFormControl;
 
     if (valid) {
-      this.loading = true;
-      this.compService.createComponent(
-        this.domainId, this.compFormControl.value)
+      const componentName = this.compFormControl.value;
+      this.compFormControl.reset();
+      this.creating = true;
+
+      this.compService.createComponent(this.domainId, componentName)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
           if (data.component) {
@@ -128,11 +133,10 @@ export class ComponentsComponent implements OnInit, OnDestroy {
             this.confirmKeyCreated(data.apiKey, data.component.name);
           }
         }, error => {
-          this.loading = false;
           this.toastService.showError(error.error);
           ConsoleLogger.printError(error);
         }, () => {
-          this.loading = false;
+          this.creating = false;
         });
     } else {
       this.toastService.showError('Unable to create this Component');

@@ -2,7 +2,6 @@
   display: grid;
   grid-template-areas: 'header none toggle';
   grid-gap: 2px;
-  background-color: rgba(0, 0, 0, .03);
   padding: 2px;
   margin-bottom: 10px;
   background: #549bfb94
@@ -31,15 +30,11 @@
 .btn-element.remove {
   background: #fb5454;
   float: right;
-  margin: auto;
-  margin-left: 0px;
   margin: 2px;
 }
 
 .btn-element.reset {
   float: right;
-  margin: auto;
-  margin-left: 0px;
   margin: 2px;
 }
 
@@ -54,6 +49,11 @@
 
 .options-section-label {
   display: contents;
+}
+
+.card.mt-4 {
+  border: 0px; 
+  margin: 0px !important;
 }
 
 .card.mt-4.loading {
