@@ -3,11 +3,12 @@
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!error && !loading" [ngClass]="classStatus" style="border: 0px; margin: 0px !important;">
+<div [ngClass]="classStatus">
     <div class="header-style">
         <div style="display: flex;">
             <button mat-button class="btn-element create" (click)="createComponent()" [disabled]="inputComponentName.value.length < 2 || !creatable">
-                <mat-icon style="font-size: large;">build</mat-icon>
+                <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
+                <mat-icon *ngIf="!creating"style="font-size: large;">build</mat-icon>
                 Create
             </button>
             <mat-form-field style="padding-left: 14px;">
