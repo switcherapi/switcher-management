@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="collabDomains.length" [ngClass]="cardListContainerStyle">
+    <div [ngClass]="cardCollabListContainerStyle">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
@@ -38,7 +38,7 @@
         <div class="card-body">
             <div *ngIf="loadingCollab" class="card-body loader-div">
                 <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher APIU logo"/>
+                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
             <div *ngIf="errorCollab" class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
             <div *ngIf="!loadingCollab">

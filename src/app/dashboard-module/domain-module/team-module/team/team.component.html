@@ -1,21 +1,22 @@
-<div *ngIf="teams && !loading" class="header-style">
-    <div style="display: flex;">
-        <button mat-button class="btn-element create" (click)="createTeam()" [disabled]="inputTeamName.value.length < 2 || !creatable">
-            <mat-icon style="font-size: large;">build</mat-icon>
-            Create
-        </button>
-        <mat-form-field style="padding-left: 14px;">
-            <input #inputTeamName matInput placeholder="Team name" maxlength="30" [formControl]="teamFormControl">
-        </mat-form-field>
-    </div>
-</div>
 <div *ngIf="loading" class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!error">
+<div *ngIf="!error" [ngClass]="classStatus">
     <div *ngIf="!loading">
+        <div *ngIf="teams" class="header-style">
+            <div style="display: flex;">
+                <button mat-button class="btn-element create" (click)="createTeam()" [disabled]="inputTeamName.value.length < 2 || !creatable">
+                    <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
+                    <mat-icon *ngIf="!creating"style="font-size: large;">build</mat-icon>
+                    Create
+                </button>
+                <mat-form-field style="padding-left: 14px;">
+                    <input #inputTeamName matInput placeholder="Team name" maxlength="30" [formControl]="teamFormControl">
+                </mat-form-field>
+            </div>
+        </div>
         <div *ngFor="let team of teams">
             <app-team-preview 
                 [team]="team" 

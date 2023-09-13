@@ -25,6 +25,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
   collabDomains: Domain[] = [];
 
   cardListContainerStyle: string = 'card mt-4 loading';
+  cardCollabListContainerStyle: string = 'card mt-4 loading';
   loading = false;
   loadingCollab = false;
   error = '';
@@ -108,7 +109,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
             this.loadingCollab = false;
           }, () => {
             this.loadingCollab = false;
-            this.cardListContainerStyle = 'card mt-4 ready';
+            this.cardCollabListContainerStyle = 'card mt-4 ready';
           });
         });
       }
