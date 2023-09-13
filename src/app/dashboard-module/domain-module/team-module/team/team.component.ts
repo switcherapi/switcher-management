@@ -30,6 +30,9 @@ export class TeamComponent implements OnInit, OnDestroy {
   domainId: string;
   domainName: string;
   teams: Team[];
+
+  classStatus = "card mt-4 loading";
+  creating = false;
   loading = false;
   error = '';
   fetch = true;
@@ -71,8 +74,11 @@ export class TeamComponent implements OnInit, OnDestroy {
     const { valid } = this.teamFormControl;
 
     if (valid) {
-      this.loading = true;
-      this.teamService.createTeam(this.domainId, this.teamFormControl.value)
+      const teamName = this.teamFormControl.value;
+      this.teamFormControl.reset();
+      this.creating = true;
+
+      this.teamService.createTeam(this.domainId, teamName)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(team => {
           if (team) {
@@ -80,10 +86,10 @@ export class TeamComponent implements OnInit, OnDestroy {
             this.toastService.showSuccess('Team created with success');
           }
         }, error => {
-          this.loading = false;
           this.toastService.showError(error.error);
+          ConsoleLogger.printError(error);
         }, () => {
-          this.loading = false;
+          this.creating = false;
         });
     } else {
       this.toastService.showError('Unable to create this team');
@@ -109,6 +115,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       this.loading = false;
     }, () => {
       this.loading = false;
+      this.classStatus = "card mt-4 ready";
       if (!this.teams)
         this.error = 'Failed to connect to Switcher API';
     });
