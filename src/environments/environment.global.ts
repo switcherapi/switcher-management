@@ -6,4 +6,5 @@ export const environment_global = {
     githubApiClientId: '5745650fe81a1f1f3486',
     bitbucketApiClientId: 'JNfFteJqcjcDytFAh5',
     timeout: 5000,
+    apiSearchDocsUrl: 'https://docs.switcherapi.com'
 }

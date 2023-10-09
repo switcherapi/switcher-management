@@ -1,10 +1,10 @@
-<div class="header activated skimming-item">
+<div class="header activated searchdocs-item">
     <h3 class="doc-title"><strong>File: </strong>
-        - <a (click)="gotoDocument(skimmmingResult.file)">{{ skimmmingResult.file }}</a> -
-        <strong>Found: </strong>{{ skimmmingResult.found }}</h3>
+        - <a (click)="gotoDocument(searchDocsResult.file)">{{ searchDocsResult.file }}</a> -
+        <strong>Found: </strong>{{ searchDocsResult.found }}</h3>
     <div class="spacer"></div>
-    <div class="segment-list" *ngFor="let segment of skimmmingResult?.segment; let i = index">
-        <markdown>{{renderSegment(segment, skimmmingResult.file)}}</markdown>
-        <div *ngIf="i < skimmmingResult?.segment.length - 1" class="spacer-segment"></div>
+    <div class="segment-list" *ngFor="let segment of searchDocsResult?.segment; let i = index">
+        <markdown>{{renderSegment(segment, searchDocsResult.file)}}</markdown>
+        <div *ngIf="i < searchDocsResult?.segment.length - 1" class="spacer-segment"></div>
     </div>
 </div>

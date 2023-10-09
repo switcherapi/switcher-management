@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SkimmingResult } from '../model/skimming-response';
+import { SearchDocsResult } from '../model/searchdocs-response';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 export class SearchItemComponent {
 
   @Input()
-  skimmmingResult: SkimmingResult;
+  searchDocsResult: SearchDocsResult;
 
   constructor(
     private router: Router

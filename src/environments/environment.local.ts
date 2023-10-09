@@ -11,7 +11,7 @@ export const environment = {
   teamInviteLink: `${window["env"]["SM_IP"] || 'localhost'}/collab/join`,
   domainTransferLink: `${window["env"]["SM_IP"] || 'localhost'}/domain/transfer`,
   apiUrl: window["env"]["SWITCHERAPI_URL"] || "http://localhost:3000",
-  skimmingApi: 'https://dance-0m7.begin.app',
+  apiSearchDocsUrl: environment_global.apiSearchDocsUrl,
   slackUrl: window["env"]["SWITCHERSLACKAPP_URL"] || undefined,
   docsUrl: 'assets/',
   timeout: 5000
