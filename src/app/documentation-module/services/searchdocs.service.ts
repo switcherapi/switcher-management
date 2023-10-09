@@ -3,14 +3,14 @@ import { HttpClient, HttpBackend } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { SkimmingResponse } from '../model/skimming-response';
-import { SkimmingRequest } from '../model/skimming-request';
+import { SearchDocsResponse } from '../model/searchdocs-response';
+import { SearchDocsRequest } from '../model/searchdocs-request';
 import { ApiService } from 'src/app/services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SkimmingService extends ApiService {
+export class SearchDocsService extends ApiService {
 
   private http: HttpClient;
 
@@ -19,20 +19,18 @@ export class SkimmingService extends ApiService {
     this.http = new HttpClient(handler);
   }
 
-  public skim(query: string): Observable<SkimmingResponse> {
-    const request = new SkimmingRequest();
+  public search(query: string): Observable<SearchDocsResponse> {
+    const request = new SearchDocsRequest();
     request.query = query;
 
     const params = {
       query: request.query,
-      url: request.url,
-      files: request.files,
       previewLength: `${request.previewLength}`,
       ignoreCase: `${request.ignoreCase}`,
       trimContent: `${request.trimContent}`
     }
 
-    return this.http.get<SkimmingResponse>(`${environment.skimmingApi}/skim`, { params }).pipe(catchError(super.handleError));
+    return this.http.get<SearchDocsResponse>(`${environment.apiSearchDocsUrl}/`, { params }).pipe(catchError(super.handleError));
   }
 
 }

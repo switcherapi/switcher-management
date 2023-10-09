@@ -1,2 +1,0 @@
-export const url = "https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/documentation/";
-export const files = "components.md,environment.md,libjava.md,libjavascript.md,metrics.md,overview.md,setup.md,strategies.md,team.md,api.md,shortcuts.md,relay.md,slack_installation.md,slack_features.md";

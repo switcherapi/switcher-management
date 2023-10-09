@@ -7,7 +7,7 @@
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API logo"/>
 </div>
-<label *ngIf="!loading && skimmingResponse?.result.length === 0">No results found for <strong>{{ query }}</strong></label>
-<div *ngFor="let skimmmingResult of skimmingResponse?.result">
-    <app-search-item [skimmmingResult]="skimmmingResult"></app-search-item>
+<label *ngIf="!loading && searchDocsResponse?.results.length === 0">No results found for <strong>{{ query }}</strong></label>
+<div *ngFor="let searchDocsResult of searchDocsResponse?.results">
+    <app-search-item [searchDocsResult]="searchDocsResult"></app-search-item>
 </div>

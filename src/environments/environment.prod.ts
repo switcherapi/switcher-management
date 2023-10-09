@@ -11,7 +11,7 @@ export const environment = {
   teamInviteLink: 'https://cloud.switcherapi.com/collab/join',
   domainTransferLink: 'https://cloud.switcherapi.com/domain/transfer',
   apiUrl: 'https://switcherapi.com/api',
-  skimmingApi: 'https://dance-0m7.begin.app',
+  apiSearchDocsUrl: environment_global.apiSearchDocsUrl,
   slackUrl: 'https://slack.switcherapi.com/slack/install',
   docsUrl: 'https://raw.githubusercontent.com/switcherapi/switcher-management/master/src/assets/', 
   timeout: environment_global.timeout

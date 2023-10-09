@@ -11,7 +11,7 @@ export const environment = {
   teamInviteLink: 'http://localhost:4200/collab/join',
   domainTransferLink: 'http://localhost:4200/domain/transfer',
   apiUrl: 'https://switcherapi.com/api',
-  skimmingApi: 'https://dance-0m7-staging.begin.app',
+  apiSearchDocsUrl: environment_global.apiSearchDocsUrl,
   slackUrl: 'https://slack.switcherapi.com/slack/install',
   docsUrl: 'assets/',
   timeout: environment_global.timeout

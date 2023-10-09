@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { SkimmingService } from '../services/skimming.service';
-import { SkimmingResponse } from '../model/skimming-response';
+import { SearchDocsService } from '../services/searchdocs.service';
+import { SearchDocsResponse } from '../model/searchdocs-response';
 
 @Component({
   selector: 'app-search',
@@ -17,11 +17,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   query: string;
-  skimmingResponse: SkimmingResponse;
+  searchDocsResponse: SearchDocsResponse;
   loading: boolean = true;
 
   constructor(
-    private skimmingService: SkimmingService,
+    private searchDocsService: SearchDocsService,
     private route: ActivatedRoute
   ) { }
 
@@ -30,8 +30,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe(params => {
       this.query = params.get("query");
       if (this.query) {
-        this.skimmingService.skim(this.query).pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-          this.skimmingResponse = result;
+        this.searchDocsService.search(this.query).pipe(takeUntil(this.unsubscribe)).subscribe(result => {
+          this.searchDocsResponse = result;
           this.loading = false;
         });
       }
