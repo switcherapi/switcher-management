@@ -115,7 +115,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'GROUP', 'name', this.domainName)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'GROUP', 'name', decodeURIComponent(this.domainName))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {

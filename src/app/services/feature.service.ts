@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "./api.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpBackend, HttpClient } from "@angular/common/http";
 import { FeatureRequest, FeatureResponse } from "../model/feature";
 import { environment } from "src/environments/environment";
 import { catchError } from "rxjs/operators";
@@ -11,12 +11,15 @@ import { Observable } from "rxjs";
 })
 export class FeatureService extends ApiService {
 
-    constructor(private http: HttpClient) {
-        super();
+    private http: HttpClient;
+
+    constructor(handler: HttpBackend) {
+      super();
+      this.http = new HttpClient(handler);
     }
 
     public isEnabled(featureRequest: FeatureRequest): Observable<FeatureResponse> {
-        return this.http.post<FeatureResponse>(`${environment.apiUrl}/api-management/feature`, featureRequest)
+        return this.http.post<FeatureResponse>(`${environment.apiFeatureUrl}`, featureRequest)
             .pipe(catchError(super.handleError));
     }
 

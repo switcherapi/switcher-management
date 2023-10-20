@@ -13,8 +13,6 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
 import { environment } from 'src/environments/environment';
-import { SlackService } from 'src/app/services/slack.service';
-import { FEATURES } from 'src/app/model/slack';
 import { Domain } from 'src/app/model/domain';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { PathRoute, Types } from 'src/app/model/path-route';
@@ -23,6 +21,7 @@ import { Config } from 'src/app/model/config';
 import { Configuration, GraphQLConfigurationResultSet } from 'src/app/model/configuration';
 import { ApolloQueryResult } from '@apollo/client/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { FeatureService } from 'src/app/services/feature.service';
 
 @Component({
   selector: 'app-domain',
@@ -63,7 +62,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     private domainService: DomainService,
     private configService: ConfigService,
     private groupService: GroupService,
-    private slackService: SlackService,
+    private featureService: FeatureService,
     private toastService: ToastService
   ) {
     this.route.params.subscribe(params => {
@@ -81,9 +80,9 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
         this.loadConfiguration();
 
         if (environment.slackUrl) {
-          this.slackService.getSlackAvailability(FEATURES.SLACK_INTEGRATION)
+          this.featureService.isEnabled({ feature: 'SLACK_INTEGRATION' })
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(slack => this.slackIntegration = slack?.result);
+            .subscribe(feature => this.slackIntegration = feature?.status);
         }
     });
     
