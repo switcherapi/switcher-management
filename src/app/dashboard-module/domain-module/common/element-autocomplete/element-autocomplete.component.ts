@@ -35,8 +35,6 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     if (this.value) {
       this.smartSearchFormControl.setValue(this.value);
     }
-
-    this.loadKeys(this.parentComponent.getDomainId());
   }
 
   ngOnDestroy() {

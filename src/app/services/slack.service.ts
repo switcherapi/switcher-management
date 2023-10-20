@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { FEATURES, Settings, SETTINGS_PARAM, Slack, SlackInstallation } from '../model/slack';
+import { Settings, SETTINGS_PARAM, Slack, SlackInstallation } from '../model/slack';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +24,6 @@ export class SlackService extends ApiService {
   public getSlackInstallation(domainId: string): Observable<Slack> {
     return this.http.get<Slack>(`${environment.apiUrl}/slack/v1/installation/${domainId}`)
       .pipe(catchError(super.handleError));
-  }
-
-  public getSlackAvailability(feature: FEATURES): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/slack/v1/availability`, { feature })
-      .pipe(catchError(this.handleError));
   }
 
   public authorizeInstallation(domain: string, team_id: string): Observable<any> {

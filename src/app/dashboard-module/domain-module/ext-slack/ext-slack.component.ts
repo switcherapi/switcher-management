@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FEATURES, SETTINGS_PARAM, Slack } from 'src/app/model/slack';
+import { SETTINGS_PARAM, Slack } from 'src/app/model/slack';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { SlackService } from 'src/app/services/slack.service';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
@@ -11,6 +11,7 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DataUtils } from 'src/app/_helpers/data-utils';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { SlackSettingsComponent } from './slack-settings/slack-settings.component';
+import { FeatureService } from 'src/app/services/feature.service';
 
 @Component({
   selector: 'app-ext-slack',
@@ -36,6 +37,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private domainRouteService: DomainRouteService,
     private slackService: SlackService,
+    private featureService: FeatureService,
     private toastService: ToastService,
     private router: Router,
     private _modalService: NgbModal
@@ -140,10 +142,10 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   }
 
   private loadSlackAvailability(): void {
-    this.slackService.getSlackAvailability(FEATURES.SLACK_UPDATE)
+    this.featureService.isEnabled({ feature: 'SLACK_UPDATE' })
     .pipe(takeUntil(this.unsubscribe))
-    .subscribe(data => {
-      this.slackUpdate = data?.result;
+    .subscribe(feature => {
+      this.slackUpdate = feature?.status;
       this.slackSettings.updatable = this.slackUpdate;
     });
   }

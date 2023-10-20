@@ -12,6 +12,7 @@ export const environment = {
   domainTransferLink: 'http://localhost:4200/domain/transfer',
   apiUrl: 'https://switcherapi.com/api',
   apiSearchDocsUrl: environment_global.apiSearchDocsUrl,
+  apiFeatureUrl: environment_global.apiFeatureUrl,
   slackUrl: 'https://slack.switcherapi.com/slack/install',
   docsUrl: 'assets/',
   timeout: environment_global.timeout

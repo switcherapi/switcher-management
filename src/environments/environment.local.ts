@@ -12,6 +12,7 @@ export const environment = {
   domainTransferLink: `${window["env"]["SM_IP"] || 'localhost'}/domain/transfer`,
   apiUrl: window["env"]["SWITCHERAPI_URL"] || "http://localhost:3000",
   apiSearchDocsUrl: environment_global.apiSearchDocsUrl,
+  apiFeatureUrl: environment_global.apiFeatureUrl,
   slackUrl: window["env"]["SWITCHERSLACKAPP_URL"] || undefined,
   docsUrl: 'assets/',
   timeout: 5000
