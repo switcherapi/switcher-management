@@ -60,7 +60,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     private toastService: ToastService,
     private _modalService: NgbModal
   ) { 
-    super(adminService);
+    super();
   }
 
   ngOnInit() {
@@ -163,7 +163,6 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     this.group = group;
     this.nameFormControl.setValue(this.group.name);
     this.readPermissionToObject();
-    super.loadAdmin(this.group.owner);
 
     this.domainRouteService.updateView(this.group.name, 0);
     this.domainRouteService.updatePath(this.group.id, this.group.name, Types.GROUP_TYPE, 

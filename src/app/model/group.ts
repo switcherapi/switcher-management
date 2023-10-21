@@ -1,3 +1,4 @@
+import { Admin } from './admin';
 import { Config } from './config';
 
 export class Group {
@@ -9,4 +10,5 @@ export class Group {
   updatedAt: Date;
   activated: Map<string, boolean>;
   config: Config[];
+  admin: Admin;
 }

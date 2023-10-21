@@ -1,4 +1,3 @@
-import { AdminService } from 'src/app/services/admin.service';
 import { DataUtils } from 'src/app/_helpers/data-utils';
 import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
 import { EventEmitter } from '@angular/core';
@@ -6,8 +5,7 @@ import { EventEmitter } from '@angular/core';
 export class DetailComponent {
     childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent> = new EventEmitter();
     detailBodyStyle: string = 'detail-body loading';
-
-    createdBy: string = '';
+    
     classStatus: string;
     editing: boolean;
     currentStatus: boolean;
@@ -17,14 +15,6 @@ export class DetailComponent {
     updatable: boolean = false;
     removable: boolean = false;
     creatable: boolean = false;
-
-    constructor(private service: AdminService) { }
-
-    loadAdmin(id: string): void {
-        this.service.getAdminById(id).subscribe(adm => {
-            this.createdBy = adm.name;
-        }, () => this.createdBy = '')
-    }
 
     selectEnvironment(event: EnvironmentChangeEvent): void {
         this.currentEnvironment = event.environmentName;

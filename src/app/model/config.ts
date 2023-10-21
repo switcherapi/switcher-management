@@ -1,3 +1,5 @@
+import { Admin } from "./admin";
+
 export class Config {
   id: string;
   key: string;
@@ -9,6 +11,7 @@ export class Config {
   disable_metrics: Map<string, boolean>;
   components: any[];
   relay: ConfigRelay;
+  admin: Admin;
 }
 
 export class ConfigRelay {

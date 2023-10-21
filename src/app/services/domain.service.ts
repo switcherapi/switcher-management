@@ -32,6 +32,10 @@ export class DomainService extends ApiService {
     return this.http.get<Domain[]>(`${environment.apiUrl}/domain`).pipe(catchError(super.handleError));
   }
 
+  public getDomainsCollab(): Observable<Domain[]> {
+    return this.http.get<Domain[]>(`${environment.apiUrl}/domain/collaboration`).pipe(catchError(super.handleError));
+  }
+
   public getDomain(id: string): Observable<Domain> {
     return this.http.get<Domain>(`${environment.apiUrl}/domain/${id}`).pipe(catchError(super.handleError));
   }

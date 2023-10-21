@@ -47,7 +47,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     private toastService: ToastService,
     private router: Router
   ) {
-    super(adminService);
+    super();
     this.activatedRoute.parent.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);

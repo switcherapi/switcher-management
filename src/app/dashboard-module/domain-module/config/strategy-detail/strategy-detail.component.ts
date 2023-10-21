@@ -59,7 +59,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     private _modalService: NgbModal,
     private dialog: MatDialog
   ) {
-    super(adminService);
+    super();
     this.onResize();
   }
 
@@ -69,8 +69,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.loadOperationSelectionComponent();
       this.loadStrategyRequirements();
     }
-
-    super.loadAdmin(this.strategy.owner);
+    
     this.readPermissionToObject();
   }
 

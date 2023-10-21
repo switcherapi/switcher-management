@@ -24,7 +24,7 @@
                         <input matInput class="readonly-fields" placeholder="Last Update" [value]="strategy.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="readonly-fields" placeholder="Created By" [value]="createdBy" readonly>
+                        <input matInput class="readonly-fields" placeholder="Created By" [value]="strategy.admin.name" readonly>
                     </mat-form-field>
                 </div>
                 <div id="srategyValueSection">

@@ -54,7 +54,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     private toastService: ToastService,
     private _modalService: NgbModal
   ) {
-    super(adminService);
+    super();
     this.route.params.subscribe(params => this.domainId = params.domainid);
   }
 
@@ -184,8 +184,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     this.domain = domain;
     this.readPermissionToObject();
     this.checkDomainOwner();
-
-    super.loadAdmin(this.domain.owner);
+    
     this.domainRouteService.updateView(this.domain.name, 0);
     this.domainRouteService.updatePath(this.domain.id, this.domain.name, Types.DOMAIN_TYPE, 
       `/dashboard/domain/${encodeURIComponent(this.domain.name)}/${this.domainId}`);
