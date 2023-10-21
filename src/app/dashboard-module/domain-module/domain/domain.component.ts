@@ -78,13 +78,13 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       .subscribe(data => { 
         this.currentPath = data;
         this.loadConfiguration();
-
-        if (environment.slackUrl) {
-          this.featureService.isEnabled({ feature: 'SLACK_INTEGRATION' })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(feature => this.slackIntegration = feature?.status);
-        }
     });
+
+    if (environment.slackUrl) {
+      this.featureService.isEnabled({ feature: 'SLACK_INTEGRATION' })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(feature => this.slackIntegration = feature?.status);
+    }
     
     this.domainRouteService.viewHeaderEvent
       .pipe(takeUntil(this.unsubscribe))
