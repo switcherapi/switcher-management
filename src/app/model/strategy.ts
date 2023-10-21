@@ -1,3 +1,5 @@
+import { Admin } from "./admin";
+
 export class Strategy {
     id: string;
     description: string;
@@ -9,4 +11,5 @@ export class Strategy {
     owner: string;
     config: string;
     values: string[];
+    admin: Admin;
 }

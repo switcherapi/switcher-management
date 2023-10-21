@@ -1,3 +1,4 @@
+import { Admin } from './admin';
 import { Group } from './group';
 
 export class Domain {
@@ -11,6 +12,7 @@ export class Domain {
   group: Group[];
   transfer: boolean;
   integrations: Integrations;
+  admin: Admin;
 }
 
 export class Integrations {

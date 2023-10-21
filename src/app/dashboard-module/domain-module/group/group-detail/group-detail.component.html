@@ -32,7 +32,7 @@
                         <input matInput placeholder="Last Update" [value]="group?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput placeholder="Created By" [value]="createdBy" readonly>
+                        <input matInput placeholder="Created By" [value]="group?.admin.name" readonly>
                     </mat-form-field>
                 </div>
                 <div class="description">

@@ -66,11 +66,10 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     private _modalService: NgbModal,
     public dialog: MatDialog
   ) {
-    super(adminService);
+    super();
   }
 
   ngOnInit() {
-    super.loadAdmin(this.config.owner);
     this.loadRelay();
     this.readPermissionToObject();
     this.loadRelaySettings();

@@ -97,7 +97,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private _modalService: NgbModal,
     private dialog: MatDialog
   ) { 
-    super(adminService);
+    super();
   }
 
   ngOnInit() {
@@ -315,7 +315,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.keyFormControl.setValue(config.key);
 
     this.readPermissionToObject();
-    super.loadAdmin(this.config.owner);
 
     this.domainRouteService.updateView(this.config.key, 0);
     this.domainRouteService.updatePath(this.config.id, this.config.key, Types.CONFIG_TYPE, 

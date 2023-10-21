@@ -97,22 +97,16 @@ export class DomainListComponent implements OnInit, OnDestroy {
 
   private loadCollabDomain(): void {
     this.collabDomains = [];
-    this.adminService.getAdminCollab().pipe(takeUntil(this.unsubscribe)).subscribe(domains => {
-      if (domains.length) {
-        domains.forEach(domain => {
-          this.domainService.getDomain(domain).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-            if (data) {
-              this.collabDomains.push(data);
-            }
-          }, error => {
-            ConsoleLogger.printError(error);
-            this.loadingCollab = false;
-          }, () => {
-            this.loadingCollab = false;
-            this.cardCollabListContainerStyle = 'card mt-4 ready';
-          });
-        });
+    this.domainService.getDomainsCollab().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data?.length) {
+        this.collabDomains = data;
+        this.cardCollabListContainerStyle = 'card mt-4 ready';
       }
+    }, error => {
+      ConsoleLogger.printError(error);
+      this.loadingCollab = false;
+    }, () => {
+      this.loadingCollab = false;
     });
   }
 

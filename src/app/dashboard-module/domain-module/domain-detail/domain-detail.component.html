@@ -25,7 +25,7 @@
                         <input matInput placeholder="Last Update" [value]="domain?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput placeholder="Created By" [value]="createdBy" readonly>
+                        <input matInput placeholder="Created By" [value]="domain?.admin.name" readonly>
                     </mat-form-field>
                 </div>
                 <div class="description">
