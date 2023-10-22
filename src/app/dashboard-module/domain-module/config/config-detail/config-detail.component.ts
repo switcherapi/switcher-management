@@ -363,14 +363,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
-          this.updateData(data);
+          this.blockUI.stop();
           this.toastService.showSuccess(`Environment updated with success`);
         }
     }, error => {
       ConsoleLogger.printError(error);
       this.blockUI.stop();
       this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
-    }, () => this.blockUI.stop());
+    });
   }
 
   private removeEnvironmentStatus(env: any): void {
@@ -408,14 +408,18 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       });
   }
 
-  private editConfig(body: { key: any; description: any; }): void {
+  private editConfig(body: { key: string; description: string; }): void {
     const updateDisableMetrics = this.getDisableMetricsChange();
     this.configService.updateConfig(this.config.id,
       body.key != this.config.key ? body.key : undefined,
       body.description != this.config.description ? body.description : undefined, updateDisableMetrics)
       .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data) {
-          this.updateConfigComponents(data);
+          this.config.key = body.key;
+          this.config.description = body.description;
+          this.updateConfigComponents();
+
+          this.blockUI.stop();
           this.toastService.showSuccess(`Switcher updated with success`);
           this.editing = false;
         }
@@ -425,8 +429,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.toastService.showError(`Unable to update switcher`);
         this.classStatus = 'header editing';
         this.editing = true;
-      }, () => {
-        this.blockUI.stop();
       });
   }
 
@@ -438,31 +440,29 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     return this.config.disable_metrics;
   }
 
-  private updateConfigComponents(config: Config): void {
+  private updateConfigComponents() {
     const currentConfigComponents = this.config.components.map(component => component.name);
-
-    if (this.components.length != currentConfigComponents.length || 
-      this.components.every((u, i) => u != currentConfigComponents[i])
-    ) {
-      const componentsToUpdate = this.availableComponents
-        .filter(c => this.components.includes(c.name))
-        .map(c => c.id);
-
-      this.configService.updateConfigComponents(this.config.id, componentsToUpdate)
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => {
-          if (data) {
-            this.config = data;
-            this.updateData(data);
-          }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(error ? error.error : 'Something went wront when updating components');
-        ConsoleLogger.printError(error);
-      });
-    } else {
-      this.updateData(config);
+    
+    if (this.components.length == currentConfigComponents.length &&
+      this.components.every((u, i) => u == currentConfigComponents[i])) {
+      return;
     }
+
+    const componentsToUpdate = this.availableComponents
+      .filter(c => this.components.includes(c.name))
+      .map(c => c.id);
+
+    this.configService.updateConfigComponents(this.config.id, componentsToUpdate)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.config.components = data.components;
+          this.toastService.showSuccess(`Switcher Components updated with success`);
+        }
+    }, error => {
+      this.toastService.showError(error ? error.error : 'Something went wront when updating components');
+      ConsoleLogger.printError(error);
+    });
   }
 
   private loadStrategies(focus?: boolean) {

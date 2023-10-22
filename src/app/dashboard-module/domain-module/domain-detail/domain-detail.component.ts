@@ -110,28 +110,16 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.blockUI.start('Saving changes...');
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
-      const newValue = this.descElement.nativeElement.value;
+      const newDescription = this.descElement.nativeElement.value;
       if (super.validateEdition(
           { description: this.domain.description }, 
-          { description: newValue})) {
+          { description: newDescription})) {
         this.blockUI.stop();
         this.editing = false;
         return;
       }
 
-      this.domainService.updateDomain(this.domain.id, newValue).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.updateData(data);
-          this.blockUI.stop();
-          this.toastService.showSuccess(`Domain updated with success`);
-          this.editing = false;
-        }
-      }, error => {
-        this.blockUI.stop();
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update '${this.domain.name}' domain`);
-        this.editing = false;
-      });
+      this.editDomain(newDescription);
     }
   }
 
@@ -190,6 +178,23 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       `/dashboard/domain/${encodeURIComponent(this.domain.name)}/${this.domainId}`);
   }
 
+  private editDomain(newDescription: string) {
+    this.domainService.updateDomain(this.domain.id, newDescription).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      if (data) {
+        this.domain.description = newDescription;
+        
+        this.blockUI.stop();
+        this.toastService.showSuccess(`Domain updated with success`);
+        this.editing = false;
+      }
+    }, error => {
+      this.blockUI.stop();
+      ConsoleLogger.printError(error);
+      this.toastService.showError(`Unable to update '${this.domain.name}' domain`);
+      this.editing = false;
+    });
+  }
+
   private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.domainService.setDomainEnvironmentStatus(this.domain.id, env.environmentName, env.status)
@@ -197,7 +202,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       .subscribe(data => {
         if (data) {
           this.selectEnvironment(env);
-          this.updateData(data);
           this.blockUI.stop();
           this.toastService.showSuccess(`Environment updated with success`);
         }
@@ -215,7 +219,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       .subscribe(data => {
         if (data) {
           this.blockUI.stop();
-          this.updateData(data);
           this.toastService.showSuccess(`Environment removed with success`);
         }
     }, error => {
