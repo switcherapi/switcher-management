@@ -109,19 +109,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         return;
       }
 
-      this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation)
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => {
-          if (data) {
-            this.toastService.showSuccess(`Strategy updated with success`);
-            this.strategy = data;
-            this.editing = false;
-          }
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
-        this.editing = false;
-      });
+      this.editStrategy(body);
     }
   }
 
@@ -254,7 +242,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   private updateValueSuccess(data: Strategy) {
     if (data) {
-      this.strategy = data;
+      this.strategy.values = data.values;
+
       this.strategyList.updateStrategies(data);
       this.loadStrategyRequirements();
       this.toastService.showSuccess(`Strategy updated with success`);
@@ -319,6 +308,24 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.blockUI.stop();
       this.detailBodyStyle = 'detail-body ready';
     });
+  }
+
+  private editStrategy(body: { operation: string; description: any; }) {
+    this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.strategy.operation = body.operation;
+          this.strategy.description = body.description;
+
+          this.toastService.showSuccess(`Strategy updated with success`);
+          this.editing = false;
+        }
+      }, error => {
+        ConsoleLogger.printError(error);
+        this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
+        this.editing = false;
+      });
   }
 
   private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {

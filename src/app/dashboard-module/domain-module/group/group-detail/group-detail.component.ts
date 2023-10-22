@@ -204,13 +204,16 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
-  private editGroup(body: { name: any; description: any; }) {
+  private editGroup(body: { name: string; description: string; }) {
     this.groupService.updateGroup(this.group.id,
       body.name != this.group.name ? body.name : undefined,
       body.description != this.group.description ? body.description : undefined)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
           if (data) {
+            this.group.name = body.name;
+            this.group.description = body.description;
+            
             this.blockUI.stop();
             this.toastService.showSuccess(`Group updated with success`);
             this.editing = false;
