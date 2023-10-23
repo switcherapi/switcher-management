@@ -20,7 +20,7 @@ export class ListComponent implements AfterViewInit {
 
     environmentSelection: FormGroup;
 
-    environments: Environment[];
+    @Input() environments: Environment[];
     @Input() childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent>;
     @Output() environmentSelectionChange: EventEmitter<string> = new EventEmitter();
 
@@ -53,12 +53,14 @@ export class ListComponent implements AfterViewInit {
     }
 
     loadEnvironments(): void {
-        this.envService.getEnvironmentsByDomainId(this.domainId).subscribe(env => {
-            this.environments = env;
-            this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
-            this.environmentSelectionChange.emit(this.setProductionFirst());
-            this.cardListContainerStyle = 'card mt-4 ready';
-        });
+        if (this.environments) {
+            setTimeout(() => this.initEnvironmentComponent(), 100);
+        } else {
+            this.envService.getEnvironmentsByDomainId(this.domainId).subscribe(env => {
+                this.environments = env;
+                this.initEnvironmentComponent();
+            });
+        }
     }
 
     ngAfterViewInit(): void {
@@ -81,6 +83,12 @@ export class ListComponent implements AfterViewInit {
         }
 
         return this.environments[0].name;
+    }
+
+    private initEnvironmentComponent(): void {
+        this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
+        this.environmentSelectionChange.emit(this.setProductionFirst());
+        this.cardListContainerStyle = 'card mt-4 ready';
     }
 
     private onEnvironmentChange(): void {

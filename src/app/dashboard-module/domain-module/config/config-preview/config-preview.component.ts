@@ -77,7 +77,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
-          this.config = data;
+          this.config.activated = data.activated;
           this.blockUI.stop();
           this.toastService.showSuccess(`Environment updated with success`);
         }
@@ -96,7 +96,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
 
   private selectEnvironment(envName: string): void {
     this.selectedEnv = envName;
-    const status = this.config.activated[envName] == undefined ? this.config.activated['default'] : this.config.activated[envName];
+    const status = this.config.activated[envName] ?? this.config.activated['default'];
 
     this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
     this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';

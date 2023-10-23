@@ -26,6 +26,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   @Output() outputEnvChanged: EventEmitter<EnvironmentChangeEvent> = new EventEmitter();
   @Output() outputStatusChanged: EventEmitter<any> = new EventEmitter();
   @Output() outputEnvRemoved: EventEmitter<any> = new EventEmitter();
+  @Output() outputEnvLoaded: EventEmitter<Environment[]> = new EventEmitter();
 
   @ViewChild(MatSelect, { static: true })
   private envSelectionChange: MatSelect;
@@ -113,6 +114,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
         this.environments = env;
+        this.outputEnvLoaded.emit(env);
 
         if (!this.notSelectableEnvironments)
           this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());

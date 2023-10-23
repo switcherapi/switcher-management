@@ -173,14 +173,6 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
-  onEnvChange($event: EnvironmentChangeEvent) {
-    this.selectEnvironment($event);
-  }
-
-  onEnvStatusChanged($event: EnvironmentChangeEvent) {
-    this.updateEnvironmentStatus($event);
-  }
-
   isVerified(): boolean {
     if (this.config.relay.verified)
       return this.config.relay.verified[this.currentEnvironment];
@@ -279,7 +271,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       .subscribe(data => this.relayVerificationCode = data.integrations.relay.verification_code);
   }
 
-  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
+  public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     const configRelayStatus = new ConfigRelayStatus();
     configRelayStatus.activated[env.environmentName] = env.status;
 
