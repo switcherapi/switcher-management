@@ -232,14 +232,6 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     });
   }
 
-  onEnvChange($event: EnvironmentChangeEvent) {
-    this.selectEnvironment($event);
-  }
-
-  onEnvStatusChanged($event: EnvironmentChangeEvent) {
-    this.updateEnvironmentStatus($event);
-  }
-
   private updateValueSuccess(data: Strategy) {
     if (data) {
       this.strategy.values = data.values;
@@ -328,7 +320,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       });
   }
 
-  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
+  public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.selectEnvironment(env);
     this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environmentName, env.status)

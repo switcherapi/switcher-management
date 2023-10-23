@@ -298,14 +298,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.config.disable_metrics[this.currentEnvironment] : false;
   }
 
-  onEnvStatusChanged($event: EnvironmentChangeEvent) {
-    this.updateEnvironmentStatus($event);
-  }
-
-  onEnvRemoved($event: any) {
-    this.removeEnvironmentStatus($event);
-  }
-
   updateData(config: Config): void {
     this.config = config;
     this.disableMetrics = this.config.disable_metrics ? 
@@ -356,7 +348,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
+  public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.selectEnvironment(env);
     this.configService.setConfigEnvironmentStatus(this.config.id, env.environmentName, env.status)
@@ -373,7 +365,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private removeEnvironmentStatus(env: any): void {
+  public removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
     this.configService.removeDomainEnvironmentStatus(this.config.id, env)
       .pipe(takeUntil(this.unsubscribe))

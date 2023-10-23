@@ -147,18 +147,6 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
-  onEnvChange($event: EnvironmentChangeEvent) {
-    this.selectEnvironment($event);
-  }
-
-  onEnvStatusChanged($event: EnvironmentChangeEvent) {
-    this.updateEnvironmentStatus($event);
-  }
-
-  onEnvRemoved($event: any) {
-    this.removeEnvironmentStatus($event);
-  }
-
   private updateData(group: Group) {
     this.group = group;
     this.nameFormControl.setValue(this.group.name);
@@ -227,7 +215,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       });
   }
 
-  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
+  public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.selectEnvironment(env);
     this.groupService.setGroupEnvironmentStatus(this.group.id, env.environmentName, env.status)
@@ -244,7 +232,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     }, () => this.blockUI.stop());
   }
 
-  private removeEnvironmentStatus(env: any): void {
+  public removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
     this.groupService.removeDomainEnvironmentStatus(this.group.id, env)
       .pipe(takeUntil(this.unsubscribe))

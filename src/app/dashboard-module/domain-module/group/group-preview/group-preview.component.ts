@@ -68,7 +68,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
 
   selectEnvironment(envName: string): void {
     this.selectedEnv = envName;
-    const status = this.group.activated[envName] == undefined ? this.group.activated['default'] : this.group.activated[envName];
+    const status = this.group.activated[envName] ?? this.group.activated['default'];
 
     this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
     this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';
@@ -86,7 +86,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
-          this.group = data;
+          this.group.activated = data.activated;
           this.blockUI.stop();
           this.toastService.showSuccess(`Environment updated with success`);
         }

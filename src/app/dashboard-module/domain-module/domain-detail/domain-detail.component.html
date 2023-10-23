@@ -35,7 +35,8 @@
                         [configuredEnvironments]="domain.activated"
                         (outputEnvChanged)="onEnvChange($event)"
                         (outputStatusChanged)="onEnvStatusChanged($event)"
-                        (outputEnvRemoved)="onEnvRemoved($event)">
+                        (outputEnvRemoved)="onEnvRemoved($event)"
+                        (outputEnvLoaded)="onEnvLoaded($event)">
                     </app-environment-config>
                 </div>
             </div>
@@ -60,7 +61,7 @@
         </section>
     </div>
 </block-ui>
-<div *ngIf="featureDetailsv2" class="group-list">
+<div *ngIf="featureDetailsv2 && environments" class="group-list">
     <hr>
-    <app-group-list [childEnvironmentEmitter]="childEnvironmentEmitter"></app-group-list>
+    <app-group-list [childEnvironmentEmitter]="childEnvironmentEmitter" [environments]="environments"></app-group-list>
 </div>

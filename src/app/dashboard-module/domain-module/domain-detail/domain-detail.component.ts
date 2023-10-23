@@ -143,18 +143,6 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  onEnvChange($event: EnvironmentChangeEvent) {
-    this.selectEnvironment($event);
-  }
-
-  onEnvStatusChanged($event: EnvironmentChangeEvent) {
-    this.updateEnvironmentStatus($event);
-  }
-
-  onEnvRemoved($event: any) {
-    this.removeEnvironmentStatus($event);
-  }
-
   private loadDomain() {
     this.domainService.getDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
@@ -195,7 +183,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
+  public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
     this.blockUI.start('Updating environment...');
     this.domainService.setDomainEnvironmentStatus(this.domain.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
@@ -212,7 +200,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
-  private removeEnvironmentStatus(env: any): void {
+  public removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
     this.domainService.removeDomainEnvironmentStatus(this.domain.id, env)
       .pipe(takeUntil(this.unsubscribe))
