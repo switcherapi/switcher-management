@@ -19,6 +19,13 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <mat-form-field>
+                        <mat-select #componentSelectionChange placeholder="Component selection" [formControl]="componentSelection">
+                            <mat-option *ngFor="let component of components" [value]="component.name">
+                                {{component.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                     <mat-checkbox color="primary" [(ngModel)]="includeStatus" [disabled]="snapshot">Environment Status</mat-checkbox>
                     <mat-checkbox color="primary" [(ngModel)]="includeDescription" [disabled]="snapshot">Description</mat-checkbox>
                 </div>

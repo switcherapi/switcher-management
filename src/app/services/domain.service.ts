@@ -107,13 +107,14 @@ export class DomainService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
-  public executeSnapshotQuery(domainId: string, env: string, includeStatus: boolean, includeDescription: boolean) {
+  public executeSnapshotQuery(domainId: string, env: string, component: string, includeStatus: boolean, includeDescription: boolean) {
     return this.apollo.query<any>({
       query: snapshotQuery(includeStatus, includeDescription),
       fetchPolicy: 'network-only',
       variables: { 
         id: domainId,
-        environment: env
+        environment: env,
+        _component: component
       }
     });
   }
