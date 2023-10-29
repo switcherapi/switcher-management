@@ -33,10 +33,10 @@ const SWITCHER = `
   }
 `;
 
-export const snapshotQuery = (includeStatusByEnv: boolean = true, includeDescription: boolean = true) => {
+export const snapshotQuery = (includeStatusByEnv = true, includeDescription = true) => {
   return gql`
-      query domain($id: String!, $environment: String!) {
-        domain(_id: $id, environment: $environment) {
+      query domain($id: String!, $environment: String!, $_component: String) {
+        domain(_id: $id, environment: $environment, _component: $_component) {
           name
           version
           ${includeDescription ? 'description' : ''}

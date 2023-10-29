@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import { QueryRef } from 'apollo-angular';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -10,6 +9,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { DomainService } from 'src/app/services/domain.service';
+import { ComponentService } from 'src/app/services/component.service';
+import { SwitcherComponent } from 'src/app/model/switcher-component';
 
 @Component({
   selector: 'app-domain-snapshot',
@@ -24,15 +25,17 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   @BlockUI() blockUI: NgBlockUI;
-
-  environmentSelection = new FormControl('', [
+  
+  componentSelection = new FormControl('-', []);
+  environmentSelection = new FormControl('default', [
     Validators.required
   ]);
 
+
+  components: SwitcherComponent[];
   environments: Environment[];
 
   private domainId: string;
-  private query: QueryRef<any>;
 
   includeStatus: boolean = true;
   includeDescription: boolean = true;
@@ -42,6 +45,7 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<DomainSnapshotComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private environmentService: EnvironmentService,
+    private componentService: ComponentService,
     private domainService: DomainService,
     private toastService: ToastService
   ) { 
@@ -51,15 +55,25 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.environmentService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(env => {
-        this.environments = env;
+      .subscribe(environments => {
+        this.environments = environments;
         this.environments = this.environments.filter(environment => environment.name !== this.data.currentEnvironment);
-        this.environmentSelection.setValue('default');
+      });
+
+    this.componentService.getComponentsByDomain(this.domainId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(components => {
+        this.components = [{ name: '-' } as SwitcherComponent];
+        this.components.push(...components);
       });
 
     this.environmentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.environment = value;
-    })
+    });
+    
+    this.componentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
+      this.data.component = value;
+    });
   }
 
   ngOnDestroy() {
@@ -75,10 +89,13 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     const { valid } = this.environmentSelection;
 
     if (valid) {
+      const component = this.componentSelection.value === '-' ? null : this.componentSelection.value;
+      const environment = this.environmentSelection.value;
+
       this.blockUI.start('Downloading...');
       this.snapshot = null;
       this.domainService.executeSnapshotQuery(
-        this.domainId, this.environmentSelection.value, this.includeStatus, this.includeDescription)
+        this.domainId, environment, component, this.includeStatus, this.includeDescription)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(result => {
           if (result) {
@@ -104,8 +121,10 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
   private lockEnvSelection(): void {
     if (this.snapshot) {
       this.environmentSelection.disable({ onlySelf: true });
+      this.componentSelection.disable({ onlySelf: true });
     } else {
       this.environmentSelection.enable({ onlySelf: true });
+      this.componentSelection.enable({ onlySelf: true });
     }
   }
 
