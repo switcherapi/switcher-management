@@ -51,14 +51,13 @@ h4 {
   background: white;
   border: 1px solid black;
   border-radius: 5px;
-  margin-top: 10px;
 }
 
 .new-feature {
   position: absolute;
   top: 0;
   right: 0;
-  transform: translate(50%,-50%);
+  transform: translate(90%,-70%);
   padding-left: .5rem;
   padding-right: .5rem;
   background-color: #5298ff;

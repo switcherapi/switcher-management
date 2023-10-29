@@ -27,9 +27,6 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     MetricDataComponent,
     ElementAutocompleteComponent
   ],
-  entryComponents: [
-    SwitcherDataStatsDialogComponent
-  ],
   imports: [
     MetricRoutingModule,
     CommonModule,

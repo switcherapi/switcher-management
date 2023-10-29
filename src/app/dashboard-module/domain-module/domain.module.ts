@@ -71,18 +71,6 @@ import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-setting
     ExtSlackComponent,
     SlackSettingsComponent
   ],
-  entryComponents: [
-    GroupCreateComponent,
-    ConfigCreateComponent,
-    StrategyCreateComponent,
-    NgbdModalConfirmComponent,
-    StrategyCloneComponent,
-    ComponentEditDialogComponent,
-    TeamInviteDialogComponent,
-    ChangeLogDialogComponent,
-    DomainSnapshotComponent,
-    DomainTransferDialogComponent
-  ],
   imports: [
     FormsModule,
     ReactiveFormsModule,

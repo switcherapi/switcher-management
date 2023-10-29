@@ -8,9 +8,11 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
+                        <mat-label>Name</mat-label>
                         <input matInput placeholder="Name" [value]="domain?.name" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Description</mat-label>
                         <textarea #descElement matInput placeholder="Description" [value]="domain?.description" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
@@ -19,12 +21,15 @@
                 </div>
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
+                        <mat-label>Created At</mat-label>
                         <input matInput placeholder="Created At" [value]="domain?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Last Update</mat-label>
                         <input matInput placeholder="Last Update" [value]="domain?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Created By</mat-label>
                         <input matInput placeholder="Created By" [value]="domain?.admin.name" readonly>
                     </mat-form-field>
                 </div>

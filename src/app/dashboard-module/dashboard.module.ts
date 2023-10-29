@@ -17,9 +17,6 @@ import { DomainRouteService } from '../services/domain-route.service';
     DomainPreviewComponent,
     DomainCreateComponent
   ],
-  entryComponents: [
-    DomainCreateComponent
-  ],
   imports: [
     FormsModule,
     CommonModule,

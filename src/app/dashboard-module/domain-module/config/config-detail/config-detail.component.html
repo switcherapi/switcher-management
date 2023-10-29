@@ -8,6 +8,7 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
+                        <mat-label>Name</mat-label>
                         <input #keyElement matInput placeholder="Name" [value]="config?.key" maxlength="30"
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" 
                             special-chars [autoUpper]="true" [autoUnderscore]="true"
@@ -20,6 +21,7 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Description</mat-label>
                         <textarea #descElement matInput placeholder="Description" [value]="config?.description" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
@@ -28,12 +30,15 @@
                 </div>
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
+                        <mat-label>Created At</mat-label>
                         <input matInput placeholder="Created At" [value]="config?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Last Update</mat-label>
                         <input matInput placeholder="Last Update" [value]="config?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Created By</mat-label>
                         <input matInput placeholder="Created By" [value]="config?.admin.name" readonly>
                     </mat-form-field>
                 </div>
@@ -54,25 +59,25 @@
         </section>
         <section class="strategy-control-style">
             <mat-form-field class="switcher-component-section">
-                <mat-chip-list #chipList aria-label="Component selection">
-                <mat-chip
-                    *ngFor="let component of components"
-                    [selectable]="true"
-                    [removable]="editing"
-                    (removed)="removeComponent(component)">
-                    {{component}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-                <input
-                    placeholder="Switcher Components"
-                    #componentInput
-                    [formControl]="componentForm"
-                    [matAutocomplete]="auto"
-                    [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="addComponent($event)"
-                    [readonly]="!editing">
-                </mat-chip-list>
+                <mat-label>Switcher Components</mat-label>
+                <mat-chip-grid #chipList aria-label="Component selection">
+                    <mat-chip-row *ngFor="let component of components"
+                          [selectable]="true"
+                          [removable]="editing"
+                          (removed)="removeComponent(component)">
+                      {{component}}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                    <input #componentInput 
+                          [formControl]="componentForm"
+                          [matAutocomplete]="auto"
+                          [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="addComponent($event)"
+                          [readonly]="!editing">
+                  </mat-chip-grid>
                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectComponent($event)">
                 <mat-option *ngFor="let component of filteredComponents | async" [value]="component">
                     {{component}}

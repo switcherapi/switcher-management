@@ -70,6 +70,24 @@ mat-icon {
   background-color: rgb(255, 255, 255);
 }
 
+.btn-element.activated {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: 24px;
+  margin-left: 0px !important;
+  margin-top: 7px;
+  margin-bottom: 10px;
+  color: #5298ff;
+}
+
+.btn-element.deactivated {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: 24px;
+  margin-left: 0px !important;
+  margin-top: 7px;
+  margin-bottom: 10px;
+  color: #595959;
+}
+
 .svg-style {
   margin-right: 6px;
   margin-bottom: 6px;

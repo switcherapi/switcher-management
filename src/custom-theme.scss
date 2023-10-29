@@ -1,10 +1,16 @@
+@use '@angular/material' as mat;
 
-@import '@angular/material/theming';
-@include mat-core();
+@include mat.core();
 
-$switcher-management-primary: mat-palette($mat-indigo);
-$switcher-management-accent: mat-palette($mat-pink, A200, A100, A400);
-$switcher-management-warn: mat-palette($mat-red);
-$switcher-management-theme: mat-light-theme($switcher-management-primary, $switcher-management-accent, $switcher-management-warn);
+$switcher-management-primary: mat.define-palette(mat.$indigo-palette);
+$switcher-management-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$switcher-management-warn: mat.define-palette(mat.$red-palette);
+$switcher-management-theme: mat.define-light-theme((
+  color: (
+    primary: $switcher-management-primary,
+    accent: $switcher-management-accent,
+    warn: $switcher-management-warn,
+  )
+));
 
-@include angular-material-theme($switcher-management-theme);
+@include mat.all-component-themes($switcher-management-theme);

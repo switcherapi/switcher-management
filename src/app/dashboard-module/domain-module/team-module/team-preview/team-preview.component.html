@@ -4,6 +4,7 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
+                        <mat-label>Name</mat-label>
                         <input matInput placeholder="Name" readonly="{{!editing}}" 
                             [ngStyle]="editing ? {'color': 'black'} : ''" 
                             [formControl]="nameFormControl"

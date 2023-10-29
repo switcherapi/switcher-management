@@ -1,5 +1,55 @@
 @import url("styles-dark-theme.css");
 
+.mdc-text-field--filled {
+  background-color: #fff0 !important;
+}
+
+.mat-mdc-button {
+  color: white !important;
+  line-height: 36px !important;
+}
+
+.mat-mdc-button > .mat-icon {
+  vertical-align: middle !important;
+}
+
+.mat-mdc-menu-item .mat-icon {
+  color: #0000008a !important;
+}
+
+.mat-mdc-menu-item:hover:not([disabled]) {
+  background: rgba(172, 171, 171, 0.04) !important;
+}
+
+.environment-style .mdc-line-ripple::before,
+element-autocomplete .mdc-text-field__input::placeholder,
+element-autocomplete .mdc-line-ripple::before,
+element-autocomplete .mdc-text-field__input {
+  color: #929497 !important;
+  border-bottom-color: #929497 !important;
+}
+
+.mdc-text-field__input,
+.mat-mdc-select-value {
+  color: currentColor !important;
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+  --mdc-switch-selected-focus-state-layer-color: #5298ff;
+  --mdc-switch-selected-handle-color:#5298ff;
+  --mdc-switch-selected-hover-state-layer-color: #5298ff;
+  --mdc-switch-selected-pressed-state-layer-color: #5298ff;
+  --mdc-switch-selected-focus-handle-color: #5298ff;
+  --mdc-switch-selected-hover-handle-color: #5298ff;
+  --mdc-switch-selected-pressed-handle-color: #5298ff;
+  --mdc-switch-selected-focus-track-color: #5298ff;
+  --mdc-switch-selected-hover-track-color: #5298ff;
+  --mdc-switch-selected-pressed-track-color: #5298ff;
+  --mdc-switch-selected-track-color: #5298ff;
+}
+
+/* ##################### */
+
 a {
   cursor: pointer
 }
@@ -37,7 +87,7 @@ body {
   transition: all .2s cubic-bezier(0.100, 0.50, 0.30, 1);
 }
 
-.mat-button:hover:not([disabled]) {
+.mat-mdc-button:hover:not([disabled]) {
   transition: all .2s;
   box-shadow: 0 0 5px #757575;
 }

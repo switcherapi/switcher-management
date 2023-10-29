@@ -3,7 +3,7 @@ html.dark-mode {
     /*fix cdk modal issues*/
 }
 
-html.dark-mode .mat-menu-panel {
+html.dark-mode .mat-mdc-menu-panel {
     border-radius: 10px;
     box-shadow: 0 2px 4px -1px #35353533,0 4px 5px #ffffff24,0 1px 10px #ffffff1f;
     background: #1c1b1c;
@@ -29,9 +29,10 @@ html.dark-mode .home-section {
     background: #191919 !important;
 }
 
-html.dark-mode app-settings-account .mat-form-field-underline,
+html.dark-mode app-settings-account .mdc-line-ripple::before,
 html.dark-mode .username {
     background: #2e2e2e !important;
+    border-bottom-color: #2e2e2e !important;
 }
 
 html.dark-mode #profileMenu {
@@ -49,16 +50,17 @@ html.dark-mode #footer {
     box-shadow: 0px 0px 10px 10px #191919 !important;
 }
 
-html.dark-mode .mat-menu-panel .mat-menu-item,
-html.dark-mode .mat-menu-panel .mat-icon,
-html.dark-mode .mat-toolbar,
-html.dark-mode .mat-tab-label .mat-tab-label-content,
-html.dark-mode .mat-select-arrow,
+html.dark-mode .mat-mdc-menu-panel .mdc-list-item__primary-text,
+html.dark-mode .mat-mdc-menu-panel .mat-mdc-menu-item,
+html.dark-mode .mat-mdc-menu-panel .mat-icon,
+html.dark-mode .mat-mdc-toolbar,
+html.dark-mode .mat-mdc-tab-label .mat-mdc-tab-label-content,
+html.dark-mode .mat-mdc-select-arrow,
 html.dark-mode #modal-title {
-    color: #959393;
+    color: #959393 !important;
 }
 
-html.dark-mode .mat-button:not(#domainOptions):not(#domainList):not(.mat-button-disabled),
+html.dark-mode .mat-mdc-button:not(#domainOptions):not(#domainList):not(.mat-mdc-button-disabled),
 html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
 html.dark-mode .new-feature-text,
@@ -68,7 +70,7 @@ html.dark-mode .label-color {
 }
 
 html.dark-mode app-settings-account .settings-title,
-html.dark-mode .mat-dialog-actions .mat-button {
+html.dark-mode .mat-mdc-dialog-actions .mat-mdc-button {
     color: white !important;
 }
 
@@ -91,7 +93,7 @@ html.dark-mode #sidebarCollapse {
     background: #e3e3e3;
 }
 
-html.dark-mode .mat-dialog-actions .mat-button,
+html.dark-mode .mat-mdc-dialog-actions .mat-mdc-button,
 html.dark-mode .grid-container,
 html.dark-mode .nav-pills .nav-link.active {
     background-color: #eee;
@@ -116,9 +118,9 @@ html.dark-mode .ngb-toasts {
     filter: invert(100%) hue-rotate(180deg) saturate(1.5);
 }
 
-html.dark-mode simple-snack-bar .mat-button,
+html.dark-mode simple-snack-bar .mat-mdc-button,
 html.dark-mode .collab-patreon,
-html.dark-mode .mat-ripple {
+html.dark-mode .mat-mdc-ripple {
     filter: invert(100%) hue-rotate(180deg);
 }
 
@@ -141,19 +143,19 @@ html.dark-mode app-metric #metric-statistics-buttons,
 html.dark-mode app-metric-statistics canvas,
 html.dark-mode app-settings-account .btn-element,
 html.dark-mode app-ext-slack .card-body,
-html.dark-mode .mat-dialog-content,
-html.dark-mode .mat-autocomplete-panel.mat-autocomplete-visible,
+html.dark-mode .mat-mdc-dialog-content,
+html.dark-mode .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible,
 html.dark-mode .detail-body .header,
-html.dark-mode .detail-body .mat-chip-list,
+html.dark-mode .detail-body .mat-mdc-chip-list,
 html.dark-mode app-domain-detail .detail-body .options-section,
 html.dark-mode app-group-detail .detail-body .options-section,
 html.dark-mode app-config-detail .detail-body .options-section,
-html.dark-mode .mat-focus-indicator.btn-element.create,
+html.dark-mode .btn-element.create,
 html.dark-mode #docContainer {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);
 }
 
-html.dark-mode .mat-dialog-container app-changelog {
+html.dark-mode .mat-mdc-dialog-container app-changelog {
     filter: invert(0%) hue-rotate(0deg);
 }
 
@@ -168,7 +170,7 @@ html.dark-mode .cdk-overlay-backdrop {
     background: black;
 }
 
-html.dark-mode .mat-dialog-container {
+html.dark-mode .mat-mdc-dialog-container {
     box-shadow: none;
     border: 1px solid rgba(255, 254, 254, 0.2);
     background: #191919 !important;
@@ -182,12 +184,12 @@ html.dark-mode .fade {
     transition: none;
 }
 
-html.dark-mode app-settings-account .mat-form-field-label,
+html.dark-mode app-settings-account .mat-mdc-form-field-label,
 html.dark-mode app-settings-account .description,
 html.dark-mode .nav-item.nav-link,
 html.dark-mode .router-history,
-html.dark-mode .mat-select-value,
-html.dark-mode .mat-form-field-infix,
+html.dark-mode .mat-mdc-select-value,
+html.dark-mode .mat-mdc-form-field-infix,
 html.dark-mode .panel-slack-detail,
 html.dark-mode p,
 html.dark-mode #iconListChildren {
@@ -203,7 +205,7 @@ html.dark-mode .mat-menu-item:hover:not([disabled]) {
 }
 
 html.dark-mode #sidebarCollapse,
-html.dark-mode .mat-select-panel,
+html.dark-mode .mat-mdc-select-panel,
 html.dark-mode .btn-element .create,
 html.dark-mode app-version .app-version-style,
 html.dark-mode app-login .card-body,

@@ -4,6 +4,7 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
+                        <mat-label>Operation Name</mat-label>
                         <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Operation Name" [value]="strategy.operation" readonly>
                         <mat-select *ngIf="editing" placeholder="Operation Name" [formControl]="operationCategoryFormControl">
                             <mat-option *ngFor="let operation of strategyOperations" [value]="operation">
@@ -12,18 +13,22 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Description</mat-label>
                         <textarea #descElement matInput class="readonly-fields" placeholder="Description" [value]="strategy.description" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Created At</mat-label>
                         <input matInput class="readonly-fields" placeholder="Created At" [value]="strategy.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Last Update</mat-label>
                         <input matInput class="readonly-fields" placeholder="Last Update" [value]="strategy.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Created By</mat-label>
                         <input matInput class="readonly-fields" placeholder="Created By" [value]="strategy.admin.name" readonly>
                     </mat-form-field>
                 </div>
@@ -40,6 +45,7 @@
                             </mat-selection-list>
                         </mat-card-content>
                         <mat-form-field style="width: 100%;">
+                            <mat-label>Value</mat-label>
                             <input #inputValue matInput placeholder="Value" [formControl]="valueSelectionFormControl" 
                                 matTooltip="{{ strategyFormatSelected }}" maxlength="500" autocomplete="off">
                             <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">

@@ -21,10 +21,6 @@
   display: contents;
 }
 
-.btn-element {
-  display: block;
-}
-
 :host ::ng-deep .flex-column {
   display: block;
 }

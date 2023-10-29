@@ -34,9 +34,6 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     AppMaterialModule,
     BlockUIModule.forRoot()
   ],
-  entryComponents: [
-    TeamPermissionCreateComponent
-  ],
   providers: [Team]
 })
 export class TeamModule { }

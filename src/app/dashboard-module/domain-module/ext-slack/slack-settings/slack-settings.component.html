@@ -1,39 +1,41 @@
 <div class="description">
-    <mat-form-field appearance="fill">
+    <mat-form-field>
         <mat-label>Ignored Environments</mat-label>
-        <mat-chip-list #ignoredList aria-label="Ignored Environments">
-            <mat-chip *ngFor="let env of ignoredEnvironments" 
+        <mat-chip-grid #ignoredList aria-label="Ignored Environments">
+          <mat-chip-row *ngFor="let env of ignoredEnvironments" 
                 (removed)="remove(env, 'ignored')"
-                [removable]="true">{{env}}
-                <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                </button>
-            </mat-chip>
-            <input placeholder="Environment name..."
+                [removable]="true">
+            {{env}}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Environment name..."
                 [readonly]="!updatable"
                 [matChipInputFor]="ignoredList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" 
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="true"
                 (matChipInputTokenEnd)="add($event, 'ignored')">
-        </mat-chip-list>
-    </mat-form-field>
+        </mat-chip-grid>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
+      <mat-form-field>
         <mat-label>Frozen Environments</mat-label>
-        <mat-chip-list #frozenList aria-label="Frozen Environments">
-            <mat-chip *ngFor="let env of frozenEnvironments" 
+        <mat-chip-grid #frozenList aria-label="Frozen Environments">
+          <mat-chip-row *ngFor="let env of frozenEnvironments" 
                 (removed)="remove(env, 'frozen')"
-                [removable]="true">{{env}}
-                <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                </button>
-            </mat-chip>
-            <input placeholder="Environment name..."
+                [removable]="true">
+            {{env}}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Environment name..."
                 [readonly]="!updatable"
                 [matChipInputFor]="frozenList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" 
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="true"
                 (matChipInputTokenEnd)="add($event, 'frozen')">
-        </mat-chip-list>
-    </mat-form-field>
+        </mat-chip-grid>
+      </mat-form-field>
 </div>

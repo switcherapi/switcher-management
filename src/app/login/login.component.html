@@ -9,14 +9,16 @@
                     <div *ngIf="!success" class="form-group">
                         <p *ngIf="forgotPassword">To reset your password, please provide your email so we can send you the reset instructions.</p>
                         <mat-form-field *ngIf="hasInternalAuthEnabled()">
+                            <mat-label>E-mail</mat-label>
                             <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50"
-                                placeholder="E-mail" autocomplete="off" formControlName="email" required>
+                                autocomplete="off" formControlName="email" required>
                         </mat-form-field>
                     </div>
                     <div *ngIf="!forgotPassword" class="form-group">
                         <mat-form-field *ngIf="hasInternalAuthEnabled()">
+                            <mat-label>Password</mat-label>
                             <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
-                                placeholder="Password" formControlName="password" required>
+                                formControlName="password" required>
                         </mat-form-field>
                     </div>
                     <div *ngIf="!forgotPassword" class="btn-container">
