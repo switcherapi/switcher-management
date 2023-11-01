@@ -199,9 +199,9 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       .subscribe(data => {
         if (data) {
           this.toastService.showSuccess(`Relay saved with success`);
-          this.config = data;
+          this.config.relay = data.relay;
           this.editing = false;
-          this.parent.updateData(data);
+          this.parent.updateConfigRelay(data.relay);
         }
 
         this.blockUI.stop();
@@ -281,7 +281,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       .subscribe(data => {
         if (data) {
           this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
-          this.parent.updateData(data);
+          this.parent.updateConfigRelay(data.relay);
           this.selectEnvironment(env);
           this.toastService.showSuccess(`Environment updated with success`);
           this.blockUI.stop();
@@ -299,7 +299,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       delete this.config.relay.auth_token[this.currentEnvironment];
     }
     delete this.config.relay.endpoint[this.currentEnvironment];
-    this.parent.updateData(data);
+    this.parent.updateConfigRelay(data.relay);
     this.parent.updateNavTab(3);
   }
 

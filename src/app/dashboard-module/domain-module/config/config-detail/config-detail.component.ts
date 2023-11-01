@@ -313,6 +313,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`);
   }
 
+  updateConfigRelay(relay: ConfigRelay) {
+    this.config.relay = relay;
+  }
+
   private loadConfig() {
     this.configService.getConfigById(this.configId, true)
       .pipe(takeUntil(this.unsubscribe))
@@ -371,7 +375,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
-          this.updateData(data);
+          this.config.activated = data.activated;
           this.blockUI.stop();
           this.toastService.showSuccess(`Environment removed with success`);
         }
