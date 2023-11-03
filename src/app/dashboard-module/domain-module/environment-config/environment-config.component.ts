@@ -60,7 +60,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
         this.selectedEnvStatus = currentEnv;
         this.environmentStatusSelection.get('environmentStatusSelection').setValue(currentEnv);
-        this.outputEnvChanged.emit(new EnvironmentChangeEvent(this.selectedEnvName, this.selectedEnvStatus));
+        this.outputEnvChanged.emit(new EnvironmentChangeEvent(this.selectedEnvName, this.selectedEnvStatus, true));
       });
     }
   }
@@ -93,7 +93,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     this.selectedEnvName = 'default';
     this.selectedEnvStatus = this.configuredEnvironments[this.selectedEnvName];
     this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
-    this.outputEnvChanged.emit(new EnvironmentChangeEvent(this.selectedEnvName, this.selectedEnvStatus));
+    this.outputEnvChanged.emit(new EnvironmentChangeEvent(this.selectedEnvName, this.selectedEnvStatus, true));
   }
 
   isDisableToRemove(): boolean {
@@ -166,9 +166,11 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 export class EnvironmentChangeEvent {
   environmentName: string;
   status: boolean;
+  reloadPermissions: boolean;
 
-  constructor(environmentName: string, status: boolean) {
+  constructor(environmentName: string, status: boolean, reloadPermissions = false) {
     this.environmentName = environmentName;
     this.status = status;
+    this.reloadPermissions = reloadPermissions;
   }
 }

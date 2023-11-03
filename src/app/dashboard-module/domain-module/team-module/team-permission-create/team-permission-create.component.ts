@@ -7,6 +7,7 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PermissionService } from 'src/app/services/permission.service';
 import { Permission } from 'src/app/model/permission';
+import { EnvironmentService } from 'src/app/services/environment.service';
 
 @Component({
   selector: 'app-team-permission-create',
@@ -22,6 +23,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
 
   routers: string[] = [];
   actions: string[] = [];
+  environments: string[] = [];
   key: string;
   validKeyOnly: boolean;
 
@@ -36,6 +38,8 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   actionFormControl = new FormControl('', [
     Validators.required
   ]);
+
+  environmentFormControl = new FormControl('', []);
   
   valueSelectionFormControl = new FormControl('', [
     Validators.required
@@ -45,6 +49,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<TeamPermissionCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private permissionService: PermissionService,
+    private environmentService: EnvironmentService,
     private formBuilder: FormBuilder,
     private toastService: ToastService
   ) { }
@@ -52,14 +57,17 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadRouter();
     this.loadActions();
+    this.loadEnvironments();
 
     this.elementCreationFormGroup = this.formBuilder.group({
       routerFormControl: this.routerFormControl,
-      actionFormControl: this.actionFormControl
+      actionFormControl: this.actionFormControl,
+      environmentFormControl: this.environmentFormControl,
     });
 
     this.onRouterChange();
     this.onActionChange();
+    this.onEnvironmentsChange();
   }
 
   ngOnDestroy() {
@@ -96,26 +104,45 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   }
 
   private loadRouter(): void {
-    this.permissionService.getPermissionRouters().pipe(takeUntil(this.unsubscribe)).subscribe(routers => {
-      if (routers) {
-        this.routers = routers.routersAvailable;
-        if (this.data.router) {
-          this.routerFormControl.setValue(this.data.router);
+    this.permissionService.getPermissionRouters()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(routers => {
+        if (routers) {
+          this.routers = routers.routersAvailable;
+          if (this.data.router) {
+            this.routerFormControl.setValue(this.data.router);
+          }
         }
-      }
     }, error => {
       ConsoleLogger.printError(error);
     });
   }
 
   private loadActions(): void {
-    this.permissionService.getPermissionActions().pipe(takeUntil(this.unsubscribe)).subscribe(actions => {
-      if (actions) {
-        this.actions = actions.actionsAvailable;
-        if (this.data.action) {
-          this.actionFormControl.setValue(this.data.action);
+    this.permissionService.getPermissionActions()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(actions => {
+        if (actions) {
+          this.actions = actions.actionsAvailable;
+          if (this.data.action) {
+            this.actionFormControl.setValue(this.data.action);
+          }
         }
-      }
+    }, error => {
+      ConsoleLogger.printError(error);
+    });
+  }
+
+  private loadEnvironments() {
+    this.environmentService.getEnvironmentsByDomainId(this.data.domain)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(environments => {
+        if (environments) {
+          this.environments = environments.map(environment => environment.name);
+          if (this.data.environments) {
+            this.environmentFormControl.setValue(this.data.environments);
+          }
+        }
     }, error => {
       ConsoleLogger.printError(error);
     });
@@ -168,6 +195,12 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   private onActionChange() {
     this.actionFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.action = value;
+    });
+  }
+
+  private onEnvironmentsChange() {
+    this.environmentFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
+      this.data.environments = value;
     });
   }
 

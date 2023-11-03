@@ -121,8 +121,8 @@ export const configurationQueryByConfig = () => {
 
 export const permissionQuery = () => {
   return gql`
-    query permission($domain: String!, $router: String!, $actions: [String]!, $parent: String) {
-      permission(domain: $domain, router: $router, actions: $actions, parent: $parent) {
+    query permission($domain: String!, $router: String!, $actions: [String]!, $parent: String, $environment: String) {
+      permission(domain: $domain, router: $router, actions: $actions, parent: $parent, environment: $environment) {
         id
         name
         permissions {

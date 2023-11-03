@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Admin } from '../model/admin';
+import { ResultPermission } from '../model/permission';
 
 @Injectable({
   providedIn: 'root'
@@ -27,17 +28,19 @@ export class AdminService extends ApiService {
     return this.http.get<string[]>(`${environment.apiUrl}/admin/collaboration`).pipe(catchError(super.handleError));
   }
 
-  public readCollabPermission(domain: string, actions: string[], router: string, elementKey: string, elementValue: string): Observable<any> {
+  public readCollabPermission(domain: string, actions: string[], router: string, elementKey?: string, 
+    elementValue?: string, selectedEnvironment = 'default'): Observable<ResultPermission[]> {
     const body = {
       domain,
       action: actions,
       router,
+      environment: selectedEnvironment,
       element: {
         [`${elementKey}`]: elementValue
       }
     };
 
-    return this.http.post<any>(`${environment.apiUrl}/admin/collaboration/permission`, body).pipe(catchError(super.handleError));
+    return this.http.post<ResultPermission[]>(`${environment.apiUrl}/admin/collaboration/permission`, body).pipe(catchError(super.handleError));
   }
 
   public requestPasswordReset(email: string): Observable<any> {
@@ -45,9 +48,9 @@ export class AdminService extends ApiService {
     return this.http.post<any>(`${environment.apiUrl}/admin/login/request/recovery`, body).pipe(catchError(super.handleError));
   }
 
-  public updateAdmin(name: string): Observable<any> {
+  public updateAdmin(name: string): Observable<Admin> {
     const body = { name };
-    return this.http.patch<any>(`${environment.apiUrl}/admin/me`, body).pipe(catchError(super.handleError));
+    return this.http.patch<Admin>(`${environment.apiUrl}/admin/me`, body).pipe(catchError(super.handleError));
   }
 
   public leaveDomain(domain: string): Observable<any> {

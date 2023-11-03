@@ -163,7 +163,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT', 'name', this.domainName)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'ENVIRONMENT')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {

@@ -107,19 +107,20 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     this.loadOperationSelectionComponent();
 
     const element = this.permissions.filter(p => p.id === this.group.id)[0];
-    element.permissions.forEach(p => {
-      if (p.action === 'UPDATE') {
-        this.updatable = p.result === 'ok';
+    this.updatable = element.permissions.find(p => p.action === 'UPDATE').result === 'ok';
+    this.removable = element.permissions.find(p => p.action === 'DELETE').result === 'ok';
+    this.setEnvStatusControl(
+      element.permissions.find(p => p.action === 'UPDATE_ENV_STATUS').result === 'ok' ||
+      element.permissions.find(p => p.action === 'UPDATE').result === 'ok'
+    );
+  }
 
-        if (!this.updatable) {
-          this.environmentStatusSelection.disable({ onlySelf: true });
-        } else {
-          this.toggleSectionStyle = 'toggle-section';
-        }
-      } else if (p.action === 'DELETE') {
-        this.removable = p.result === 'ok';
-      }
-    });
+  private setEnvStatusControl(enable: boolean): void {
+    if (enable) {
+      this.toggleSectionStyle = 'toggle-section';
+    } else {
+      this.environmentStatusSelection.disable({ onlySelf: true });
+    }
   }
 
 }

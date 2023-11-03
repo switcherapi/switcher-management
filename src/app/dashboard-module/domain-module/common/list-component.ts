@@ -52,13 +52,13 @@ export class ListComponent implements AfterViewInit {
         });
     }
 
-    loadEnvironments(): void {
+    loadEnvironments(environmentName = 'default'): void {
         if (this.environments) {
-            setTimeout(() => this.initEnvironmentComponent(), 100);
+            setTimeout(() => this.initEnvironmentComponent(environmentName), 100);
         } else {
             this.envService.getEnvironmentsByDomainId(this.domainId).subscribe(env => {
                 this.environments = env;
-                this.initEnvironmentComponent();
+                this.initEnvironmentComponent(environmentName);
             });
         }
     }
@@ -75,8 +75,12 @@ export class ListComponent implements AfterViewInit {
         });
     }
 
-    setProductionFirst(): string {
-        const defaultEnv = this.environments.find(env => env.name === 'default');
+    protected onEnvChange($event: EnvironmentChangeEvent) {
+        this.environmentSelectionChange.emit($event.environmentName);
+    }
+
+    private setProductionFirst(environmentName = 'default'): string {
+        const defaultEnv = this.environments.find(env => env.name === environmentName);
 
         if (defaultEnv) {
             return defaultEnv.name;
@@ -85,9 +89,9 @@ export class ListComponent implements AfterViewInit {
         return this.environments[0].name;
     }
 
-    private initEnvironmentComponent(): void {
-        this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
-        this.environmentSelectionChange.emit(this.setProductionFirst());
+    private initEnvironmentComponent(environmentName: string): void {
+        this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst(environmentName));
+        this.environmentSelectionChange.emit(this.setProductionFirst(environmentName));
         this.cardListContainerStyle = 'card mt-4 ready';
     }
 
@@ -98,6 +102,6 @@ export class ListComponent implements AfterViewInit {
     
         this.childEnvironmentEmitter
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => this.environmentSelectionChange.emit(data.environmentName));
+          .subscribe(data => this.onEnvChange(data));
       }
 }
