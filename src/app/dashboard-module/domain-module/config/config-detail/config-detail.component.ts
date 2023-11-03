@@ -66,6 +66,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   configId: string;
   config: Config;
   strategies = new BehaviorSubject<Strategy[]>([]);
+  strategiesCreatable = false;
+  relayUpdatable = false;
 
   loading = true;
   loadingStrategies = true;
@@ -292,6 +294,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   onEnvChange($event: EnvironmentChangeEvent) {
     this.selectEnvironment($event);
+
+    if ($event.reloadPermissions) {
+      this.readPermissionToObject();
+    }
+
     this.loadStrategies();
     this.updateNavTab(3);
     this.disableMetrics = this.config.disable_metrics ? 
@@ -331,18 +338,31 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.config.key)
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE'], 
+      'SWITCHER', 'key', this.config.key, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-              this.envEnable.next(!this.updatable);
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+          this.relayUpdatable = data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
+          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+          this.envEnable.next(
+            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+            data.find(permission => permission.action === 'UPDATE').result === 'nok'
+          );
+        }
+    }, error => {
+      ConsoleLogger.printError(error);
+    }, () => {
+      this.loading = false;
+      this.detailBodyStyle = 'detail-body ready';
+    });
+
+    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'STRATEGY', undefined, undefined, this.currentEnvironment)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data.length) {
+          this.strategiesCreatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
         }
     }, error => {
       ConsoleLogger.printError(error);

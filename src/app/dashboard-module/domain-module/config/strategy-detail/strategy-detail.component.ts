@@ -280,19 +280,18 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.strategyList.parent.domainId, 
-      ['UPDATE', 'DELETE'], 'STRATEGY', 'strategy', this.strategy.strategy)
+    this.adminService.readCollabPermission(this.strategyList.parent.domainId, ['CREATE', 'UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
+      'STRATEGY', 'strategy', this.strategy.strategy, Object.keys(this.strategy.activated)[0])
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-              this.envEnable.next(!this.updatable);
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+          this.envEnable.next(
+            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+            data.find(permission => permission.action === 'UPDATE').result === 'nok'
+          );
         }
     }, error => {
       ConsoleLogger.printError(error);

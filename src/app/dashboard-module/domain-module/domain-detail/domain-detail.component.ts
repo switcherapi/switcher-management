@@ -143,6 +143,14 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     });
   }
 
+  onEnvChange($event: EnvironmentChangeEvent) {
+    this.selectEnvironment($event);
+
+    if ($event.reloadPermissions) {
+      this.readPermissionToObject();
+    }
+  }
+
   private loadDomain() {
     this.domainService.getDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
@@ -222,18 +230,17 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domain.id, ['UPDATE', 'DELETE'], 'DOMAIN', 'name', this.domain.name)
+    this.adminService.readCollabPermission(this.domain.id, ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
+      'DOMAIN', undefined, undefined, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-              this.envEnable.next(!this.updatable);
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+          this.envEnable.next(
+            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+            data.find(permission => permission.action === 'UPDATE').result === 'nok'
+          );
         }
     }, error => {
       ConsoleLogger.printError(error);

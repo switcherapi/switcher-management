@@ -16,6 +16,7 @@ import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
 import { PermissionService } from 'src/app/services/permission.service';
 import { Permissions } from 'src/app/model/permission';
+import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-group-list',
@@ -54,7 +55,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     this.error = '';
 
     this.readPermissionToObject();
-    this.readChildPermissions();
+    this.readChildPermissions('default');
     this.updateData();
   }
 
@@ -88,18 +89,24 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     });
   }
 
+  protected onEnvChange($event: EnvironmentChangeEvent) {
+    this.loading = true;
+    this.environmentSelectionChange.emit($event.environmentName);
+    this.readChildPermissions($event.environmentName);
+  }
+
   private updateData() {
     this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
       `/dashboard/domain/${this.domainName}/${this.domainId}`);
   }
 
-  private loadGroups() {
+  private loadGroups(environmentName: string) {
     this.groupService.getGroupsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
           this.groups = data;
-          super.loadEnvironments();
+          super.loadEnvironments(environmentName);
           this.domainRouteService.updateView(decodeURIComponent(this.domainName), 0);
         }
     }, error => {
@@ -115,28 +122,24 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'GROUP', 'name', decodeURIComponent(this.domainName))
+    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'GROUP')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'CREATE') {
-              this.creatable = element.result === 'ok';
-            }
-          });
+          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
         }
     });
   }
 
-  private readChildPermissions(): void {
-    this.permissionService.executePermissionQuery(this.domainId, this.domainId, 'GROUP', ['UPDATE', 'DELETE'])
+  private readChildPermissions(environmentName: string): void {
+    this.permissionService.executePermissionQuery(this.domainId, this.domainId, 'GROUP', ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], environmentName)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(response => {
         if (response.data.permission.length) {
           this.permissions = response.data.permission;
         }
 
-        this.loadGroups();
+        this.loadGroups(environmentName);
       });
   }
 

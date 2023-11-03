@@ -235,21 +235,21 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.parent.domainId, ['UPDATE', 'DELETE'], 'SWITCHER', 'key', this.config.key)
+    this.adminService.readCollabPermission(this.parent.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE', 'DELETE_RELAY'], 
+      'SWITCHER', 'key', this.config.key, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-
-              if (!this.editing) {
-                this.envEnable.next(!this.updatable);
-              }
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+          this.removable = 
+            data.find(permission => permission.action === 'DELETE').result === 'ok' ||
+            data.find(permission => permission.action === 'DELETE_RELAY').result === 'ok';
+          this.updatable = 
+            data.find(permission => permission.action === 'UPDATE').result === 'ok' ||
+            data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
+          this.envEnable.next(
+            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+            data.find(permission => permission.action === 'UPDATE').result === 'nok'
+          );
         }
     }, error => {
       ConsoleLogger.printError(error);

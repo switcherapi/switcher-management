@@ -27,6 +27,16 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+                        <mat-form-field class="strategy-style">
+                            <mat-select placeholder="Environments" [formControl]="environmentFormControl" multiple>
+                                <mat-select-trigger>{{environmentFormControl.value?.[0] || ''}}
+                                    <span *ngIf="(environmentFormControl.value?.length || 0) > 1">
+                                        (+{{(environmentFormControl.value?.length || 0) - 1}} {{environmentFormControl.value?.length === 2 ? 'other' : 'others'}})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let environment of environments" [value]="environment" [disabled]="data.permission">{{environment}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     <div class="description-values">
                         <mat-card>

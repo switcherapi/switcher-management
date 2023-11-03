@@ -147,6 +147,14 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
   }
 
+  onEnvChange($event: EnvironmentChangeEvent) {
+    this.selectEnvironment($event);
+
+    if ($event.reloadPermissions) {
+      this.readPermissionToObject();
+    }
+  }
+
   private updateData(group: Group) {
     this.group = group;
     this.nameFormControl.setValue(this.group.name);
@@ -171,18 +179,17 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'DELETE'], 'GROUP', 'name', this.group.name)
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
+      'GROUP', 'name', this.group.name, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-              this.envEnable.next(!this.updatable);
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            }
-          });
+          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+          this.envEnable.next(
+            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+            data.find(permission => permission.action === 'UPDATE').result === 'nok'
+          );
         }
     }, error => {
       ConsoleLogger.printError(error);

@@ -17,6 +17,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { Types } from 'src/app/model/path-route';
 import { PermissionService } from 'src/app/services/permission.service';
 import { Permissions } from 'src/app/model/permission';
+import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
 
 @Component({
   selector: 'app-config-list',
@@ -56,7 +57,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     this.error = '';
 
     this.readPermissionToObject();
-    this.readChildPermissions();
+    this.readChildPermissions('default');
   }
 
   ngOnDestroy() {
@@ -89,13 +90,19 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     });
   }
 
-  private loadConfigs() {
+  protected onEnvChange($event: EnvironmentChangeEvent) {
+    this.loading = true;
+    this.environmentSelectionChange.emit($event.environmentName);
+    this.readChildPermissions($event.environmentName);
+  }
+
+  private loadConfigs(environmentName: string) {
     this.configService.getConfigsByGroup(this.groupId, 'id,key,activated')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
           this.configs = data;
-          super.loadEnvironments();
+          super.loadEnvironments(environmentName);
         }
     }, error => {
       ConsoleLogger.printError(error);
@@ -110,28 +117,24 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'SWITCHER', 'name', this.domainName)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'SWITCHER')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'CREATE') {
-              this.creatable = element.result === 'ok';
-            }
-          });
+          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
         }
     });
   }
 
-  private readChildPermissions(): void {
-    this.permissionService.executePermissionQuery(this.domainId, this.groupId, 'SWITCHER', ['UPDATE', 'DELETE'])
+  private readChildPermissions(environmentName: string): void {
+    this.permissionService.executePermissionQuery(this.domainId, this.groupId, 'SWITCHER', ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], environmentName)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(response => {
         if (response.data.permission.length) {
           this.permissions = response.data.permission;
         }
 
-        this.loadConfigs();
+        this.loadConfigs(environmentName);
         this.loadGroup();
       });
   }

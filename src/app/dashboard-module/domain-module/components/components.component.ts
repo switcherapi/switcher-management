@@ -100,7 +100,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'COMPONENT', 'name', this.domainName)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'COMPONENT')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {

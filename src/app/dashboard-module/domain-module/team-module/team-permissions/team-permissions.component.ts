@@ -71,9 +71,11 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
       width: '400px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
       data: {
+        domain: this.team.domain,
         permissions: this.dataSource.data,
         router: permissionCopy.router,
         action: permissionCopy.action,
+        environments: permissionCopy.environments,
         values: permissionCopy.values,
         identifiedBy: permissionCopy.identifiedBy,
         permission: permissionCopy
@@ -119,13 +121,14 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
       width: '400px',
       data: {
         permissions: this.dataSource.data,
+        domain: this.team.domain,
         values: []
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.permissionService.createPermission(this.team._id, result.action, result.router, result.identifiedBy, result.values)
+        this.permissionService.createPermission(this.team._id, result.action, result.router, result.environments, result.identifiedBy, result.values)
           .pipe(takeUntil(this.unsubscribe)).subscribe(permission => {
             if (permission) {
               this.loadPermissions();

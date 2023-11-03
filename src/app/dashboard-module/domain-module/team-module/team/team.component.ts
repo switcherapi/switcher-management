@@ -122,7 +122,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['READ', 'CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', this.domainName)
+    this.adminService.readCollabPermission(this.domainId, ['READ', 'CREATE', 'UPDATE', 'DELETE'], 'ADMIN')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {

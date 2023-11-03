@@ -158,19 +158,13 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN', 'name', this.domainName)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE', 'UPDATE', 'DELETE'], 'ADMIN')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
-            if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
-            } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
-            } else if (element.action === 'CREATE') {
-              this.creatable = element.result === 'ok';
-            }
-          });
+          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
         }
     });
   }

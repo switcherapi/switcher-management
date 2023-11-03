@@ -86,11 +86,11 @@
                     <mat-icon style="font-size: large;">build</mat-icon>
                     <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
                 </button>
-                <button mat-button class="btn-element" (click)="addStrategy()" [disabled]="!updatable">
+                <button mat-button class="btn-element" (click)="addStrategy()" [disabled]="!strategiesCreatable && !updatable">
                     <mat-icon>code</mat-icon>
                     <div class="options-section-label">Add Strategy</div>
                 </button>
-                <button mat-button class="btn-element" (click)="addRelay()" [disabled]="!updatable || hasRelay()">
+                <button mat-button class="btn-element" (click)="addRelay()" [disabled]="(!relayUpdatable && !updatable) || hasRelay()">
                     <mat-icon>swap_horizontal_circle</mat-icon>
                     <div class="options-section-label">Add Relay</div>
                 </button>

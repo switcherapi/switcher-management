@@ -173,7 +173,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.parent.domainId, ['DELETE'], 'ADMIN', 'name', this.parent.domainName)
+    this.adminService.readCollabPermission(this.parent.domainId, ['DELETE'], 'ADMIN')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {

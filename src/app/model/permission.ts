@@ -3,6 +3,7 @@ export class Permission {
   action: string;
   active: boolean;
   router: string;
+  environments: string[];
   identifiedBy: string;
   values: string[];
 }

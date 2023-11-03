@@ -35,13 +35,13 @@ export class PermissionService extends ApiService {
     return this.http.get<any>(`${environment.apiUrl}/permission/spec/router/${router}`).pipe(catchError(super.handleError));
   }
 
-  public createPermission(idTeam: string, action: string, router: string, identifiedBy?: string, values?: string[]): Observable<Permission> {
+  public createPermission(idTeam: string, action: string, router: string, environments: string[] = [], identifiedBy?: string, values?: string[]): Observable<Permission> {
     let body = {};
 
     if (identifiedBy) {
-      body = { action, router, identifiedBy, values };
+      body = { action, router, environments, identifiedBy, values };
     } else {
-      body = { action, router };
+      body = { action, router, environments };
     }
 
     return this.http.post<Permission>(`${environment.apiUrl}/permission/create/${idTeam}`, body).pipe(catchError(super.handleError));
@@ -65,7 +65,7 @@ export class PermissionService extends ApiService {
     return this.http.delete<Permission>(`${environment.apiUrl}/permission/${id}`).pipe(catchError(super.handleError));
   }
 
-  public executePermissionQuery(domainId: string, parentId: string, router: string, actions: string[]) {
+  public executePermissionQuery(domainId: string, parentId: string, router: string, actions: string[], environment = 'default') {
     return this.apollo.query<GraphQLPermissionResultSet>({
       query: permissionQuery(),
       fetchPolicy: 'network-only',
@@ -74,6 +74,7 @@ export class PermissionService extends ApiService {
         parent: parentId,
         router,
         actions,
+        environment
       }
     });
   }
