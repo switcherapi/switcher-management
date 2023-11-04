@@ -6,7 +6,6 @@ import { TeamPermissionCreateComponent } from '../team-permission-create/team-pe
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -30,11 +29,10 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   permissions: Permission[];
   dataSource: MatTableDataSource<Permission>;
-  dataColumns = ['remove', 'edit', 'router', 'action', 'active'];
+  dataColumns = ['remove', 'edit', 'router', 'action', 'environments', 'active'];
 
   @Input() updatable: boolean = false;
   @Input() creatable: boolean = false;
@@ -59,10 +57,6 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   editPermission(permission: Permission) {
@@ -84,18 +78,18 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.permissionService.updatePermission(permission._id, result.action, result.router, result.identifiedBy)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(permissionUpdated => {
-            if (permissionUpdated) {
-              this.permissionService.updatePermissionValues(permissionUpdated._id, result.values)
-                .pipe(takeUntil(this.unsubscribe))
-                .subscribe(permissionValues => {
-                  if (permissionValues) {
-                    this.loadPermissions();
-                    this.toastService.showSuccess('Permission updated with success');
-                  }
-                });
+        this.permissionService.updatePermission(permission._id, result.action, result.router, result.identifiedBy, result.environments, result.values)
+          .pipe(takeUntil(this.unsubscribe)).subscribe(permission => {
+            if (permission) {
+              this.loadPermissions();
+              this.toastService.showSuccess('Permission updated with success');
             }
+          }, error => {
+            this.toastService.showError('Permission denied');
+            ConsoleLogger.printError(error);
+            this.blockUI.stop();
+          }, () => {
+            this.blockUI.stop();
           });
       }
     });
@@ -141,7 +135,7 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
 
   updateStatus(permission: Permission, event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
-    this.permissionService.updatePermission(permission._id, permission.action, permission.router, permission.identifiedBy, event.checked)
+    this.permissionService.updatePermissionStatus(permission._id, event.checked)
       .pipe(takeUntil(this.unsubscribe)).subscribe(permissionUpdated => {
         if (permissionUpdated) {
           this.toastService.showSuccess('Permission updated with success');
@@ -173,6 +167,7 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
       switch (sort.active) {
         case 'router': return this.compare(a.router, b.router, isAsc);
         case 'action': return this.compare(a.action, b.action, isAsc);
+        case 'environments': return this.compare(a.environments.join(', '), b.environments.join(', '), isAsc);
         case 'active': return this.compare(a.active ? 'true' : 'false', b.active ? 'true' : 'false', isAsc);
         default: return 0;
       }
@@ -196,10 +191,9 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
     })
   }
 
-  private loadDataSource(data: any): void {
+  private loadDataSource(data: Permission[]): void {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   private compare(a: number | string, b: number | string, isAsc: boolean) {

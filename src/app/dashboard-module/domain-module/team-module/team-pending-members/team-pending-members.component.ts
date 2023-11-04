@@ -4,7 +4,6 @@ import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamInviteDialogComponent } from '../team-invite-dialog/team-invite-dialog.component';
@@ -26,7 +25,6 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   @Input() removable: boolean = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<any>;
   dataColumns = ['remove', 'email', 'createdAt', 'request'];
@@ -50,10 +48,6 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   removeInvitation(request: string) {
@@ -94,7 +88,6 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   private loadDataSource(data: any[]): void {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
 }
