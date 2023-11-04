@@ -35,7 +35,8 @@ export class PermissionService extends ApiService {
     return this.http.get<any>(`${environment.apiUrl}/permission/spec/router/${router}`).pipe(catchError(super.handleError));
   }
 
-  public createPermission(idTeam: string, action: string, router: string, environments: string[] = [], identifiedBy?: string, values?: string[]): Observable<Permission> {
+  public createPermission(idTeam: string, action: string, router: string, 
+    environments: string[] = [], identifiedBy?: string, values?: string[]): Observable<Permission> {
     let body = {};
 
     if (identifiedBy) {
@@ -47,18 +48,17 @@ export class PermissionService extends ApiService {
     return this.http.post<Permission>(`${environment.apiUrl}/permission/create/${idTeam}`, body).pipe(catchError(super.handleError));
   }
 
-  public updatePermission(id: string, action: string, router: string, identifiedBy?: string, active: boolean = true): Observable<Permission> {
-    let body = { action, router, identifiedBy, active: active ? 'true' : 'false' };
+  public updatePermission(id: string, action: string, router: string, identifiedBy?: string, 
+    environments: string[] = [], values: string[] = [], active: boolean = true): Observable<Permission> {
+    let body = { action, router, identifiedBy, environments, values, active: active ? 'true' : 'false' };
 
     return this.http.patch<Permission>(`${environment.apiUrl}/permission/${id}`, body).pipe(catchError(super.handleError));
   }
 
-  public updatePermissionValues(id: string, values: string[]): Observable<Permission> {
-    let body = {
-      values
-    };
+  public updatePermissionStatus(id: string, active: boolean = true): Observable<Permission> {
+    let body = { active: active ? 'true' : 'false' };
 
-    return this.http.patch<Permission>(`${environment.apiUrl}/permission/updateValues/${id}`, body).pipe(catchError(super.handleError));
+    return this.http.patch<Permission>(`${environment.apiUrl}/permission/${id}`, body).pipe(catchError(super.handleError));
   }
 
   public deletePermission(id: string): Observable<Permission> {

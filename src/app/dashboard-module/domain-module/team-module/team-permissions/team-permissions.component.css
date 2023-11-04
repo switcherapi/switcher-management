@@ -23,4 +23,8 @@
   .table-header-resize {
     width: 80px;
   }
+
+  .hide-on-mobile {
+    display: none;
+  }
 }
