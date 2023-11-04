@@ -165,10 +165,10 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
 
 export class EnvironmentChangeEvent {
   environmentName: string;
-  status: boolean;
+  status?: boolean; // only used by Detail components
   reloadPermissions: boolean;
 
-  constructor(environmentName: string, status: boolean, reloadPermissions = false) {
+  constructor(environmentName: string, status?: boolean, reloadPermissions = false) {
     this.environmentName = environmentName;
     this.status = status;
     this.reloadPermissions = reloadPermissions;

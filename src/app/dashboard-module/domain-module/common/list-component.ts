@@ -69,7 +69,7 @@ export class ListComponent implements AfterViewInit {
             if (comps.first) {
                 this.envSelectionChange = comps.first;
                 this.envSelectionChange.selectionChange.subscribe((s: MatSelectionListChange) => {
-                    this.environmentSelectionChange.emit(s.source._value.toString());
+                    this.onEnvChange({ environmentName: s.source._value.toString(), reloadPermissions: true });
                 });
             }
         });
