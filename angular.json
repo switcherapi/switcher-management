@@ -16,7 +16,9 @@
             "outputPath": "dist/switcher-management",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -104,21 +106,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "switcher-management:build"
+            "buildTarget": "switcher-management:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "switcher-management:build:production"
+              "buildTarget": "switcher-management:build:production"
             },
             "local": {
-              "browserTarget": "switcher-management:build:local"
+              "buildTarget": "switcher-management:build:local"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "switcher-management:build"
+            "buildTarget": "switcher-management:build"
           }
         },
         "lint": {
