@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM node:hydrogen-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Required for @parcel/watcher
 RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
@@ -19,7 +19,7 @@ RUN npm run build:local
 RUN npm prune --production
 
 # ---------- Release ----------
-FROM nginx:1.25-alpine-slim
+FROM nginx:1.25.3-alpine-slim
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf

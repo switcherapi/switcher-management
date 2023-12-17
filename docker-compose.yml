@@ -6,7 +6,7 @@ networks:
 
 services:
   switchermanagement:
-    image: trackerforce/switcher-management:1.2.6
+    image: trackerforce/switcher-management:latest
     container_name: switchermanagement
     # Enable SSL with "./setup.sh true"
     command: ["/bin/sh", "-c", "./setup.sh true"]
