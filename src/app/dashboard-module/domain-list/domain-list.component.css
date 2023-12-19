@@ -1,7 +1,9 @@
 #domainCreateBtn {
-  background-color: rgb(71, 76, 83);
   float: right; 
   outline: none;
+  font-size: initial;
+  border-radius: 5px;
+  border: 1px solid #7d7d7d;
 }
 
 h4 {
