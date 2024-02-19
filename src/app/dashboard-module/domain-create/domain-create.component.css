@@ -3,6 +3,11 @@
   display: contents;
 }
 
+.domain-create-bottom-dialog {
+  float: right;
+  justify-content: end;
+}
+
 @media only screen and (max-width: 560px) {
   .options-section-label {
     display: none;

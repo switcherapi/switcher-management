@@ -40,3 +40,8 @@ mat-icon {
 .fx-spacer {
   flex: 1 1 auto;
 }
+
+.btn-bottom-dialog {
+  float: right;
+  justify-content: end;
+}

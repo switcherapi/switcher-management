@@ -60,16 +60,13 @@ mat-icon {
 
 .btn-element {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  margin-top: 7px;
-  margin-left: 10px;
+  margin: .2rem;
   background: #549bfb;
   color: white;
 }
 
 .btn-element.save {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  margin-top: 7px;
-  margin-left: 10px;
   background: #2ec454;
   color: white;
 }
