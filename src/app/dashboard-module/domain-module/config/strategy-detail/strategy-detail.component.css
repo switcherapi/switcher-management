@@ -11,10 +11,6 @@
   display: flex;
 }
 
-.strategy-controll-style {
-  display: ruby-base;
-}
-
 .description-values {
   display: grid;
   align-self: start;

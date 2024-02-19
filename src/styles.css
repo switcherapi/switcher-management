@@ -17,6 +17,14 @@
   color: #0000008a !important;
 }
 
+.mat-mdc-form-field {
+  display: flex !important;
+}
+
+.mat-mdc-tab-body-content {
+  overflow: clip !important;
+}
+
 .mat-mdc-menu-item:hover:not([disabled]) {
   background: rgba(172, 171, 171, 0.04) !important;
 }
@@ -34,7 +42,7 @@ element-autocomplete .mdc-text-field__input {
   color: currentColor !important;
 }
 
-.mat-mdc-slide-toggle.mat-accent {
+html .mat-mdc-slide-toggle.mat-accent {
   --mdc-switch-selected-focus-state-layer-color: #5298ff;
   --mdc-switch-selected-handle-color:#5298ff;
   --mdc-switch-selected-hover-state-layer-color: #5298ff;

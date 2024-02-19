@@ -5,7 +5,10 @@
 }
 
 .strategy-values-control {
-  display: flex;
+  display: inherit;
+  float: right;
+  justify-content: end;
+  margin: .2rem;
 }
 
 .description-values {
