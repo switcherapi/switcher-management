@@ -29,10 +29,4 @@
 # Cloud Hosted API
 
 Sign up for a free account using our Cloud hosted API : [cloud.switcherapi.com](https://cloud.switcherapi.com)<br>
-Join us on [Slack](https://switcher-hq.slack.com/) or [Discussion Area](https://github.com/switcherapi/switcher-management/discussions) if you have questions about your account. 
-
-## Donation
-Donations for coffee and pizza are always welcomed.
-[![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/switcherapi)
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=A5R6K3JAD8SW4&no_recurring=0&item_name=Thank+you+for+supporting+the+Open+Source+Community&currency_code=CAD)
+Join us on [Slack](https://switcher-hq.slack.com/) or [Discussion Area](https://github.com/switcherapi/switcher-management/discussions) if you have questions about your account.
