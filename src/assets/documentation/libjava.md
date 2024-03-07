@@ -21,7 +21,7 @@ A Java SDK for Switcher API
 
 ### Features
 - Flexible and robust SDK that will keep your code clean and maintainable.
-- Able to work offline using a snapshot file pulled from your remote Switcher-API Domain.
+- Able to work local using a snapshot file pulled from your remote Switcher-API Domain.
 - Silent mode is a hybrid configuration that automatically enables contingent sub-processes in case of any connectivity issue.
 - Built-in mock implementation for clear and easy implementation of automated testing.
 - Easy to setup. Switcher Context is responsible to manage all the configuration complexity between your application and API.
@@ -30,9 +30,9 @@ A Java SDK for Switcher API
 
 ### Usage
 
-##### - Install  
-- Maven
-
+##### - Install
+- Using the source code `mvn clean install`
+- Adding as a dependency - Maven
 ```xml
 <dependency>
   <groupId>com.github.switcherapi</groupId>
@@ -58,7 +58,7 @@ Define a feature class that extends SwitcherContext. This implementation will ce
 
 The Client SDK configuration must be defined in a properties file that contains all parameters for your application to start communicating with the API.
 
-1. Inside a resources folder, create a file called: switcherapi.properties.
+1. Inside the resources' folder, create a file named: switcherapi.properties.
 
 Configure the parameters according to the definition below.</br>
 You can also use environment variables using the standard notation ${VALUE:DEFAULT_VALUE}
@@ -88,8 +88,8 @@ switcher.domain
 # Environment name. Production environment is named as 'default'
 switcher.environment
 
-# true/false When offline, it will only use a local snapshot file
-switcher.offline
+# true/false When local, it will only use a local snapshot
+switcher.local
 
 # Folder from where snapshots will be saved/read
 switcher.snapshot.location
@@ -114,6 +114,9 @@ switcher.truststore.password -> Truststore password
 
 # Time in ms given to the API to respond - 3000 default value
 switcher.timeout -> Time in ms given to the API to respond - 3000 default value
+
+(Java 8 applications only)
+switcher.regextimeout -> Time in ms given to Timed Match Worker used for local Regex (ReDoS safety mechanism) - 3000 default value
 ```
 
 The Base Context provides with a more flexible way to configure the Client SDK.<br>
@@ -123,7 +126,7 @@ Instead of using SwitcherContext, which is used to automatically load from the s
 MyAppFeatures.configure(ContextBuilder.builder()
 		.contextLocation("com.github.switcherapi.playground.Features")
 		.apiKey("API_KEY")
-		.url("https://switcherapi.com/api")
+		.url("https://api.switcherapi.com")
 		.domain("Playground")
 		.component("switcher-playground"));
 
@@ -141,8 +144,10 @@ MyAppFeatures.loadProperties("switcherapi-test");
 
 ```java
 public class MyAppFeatures extends SwitcherContext {
+	
 	@SwitcherKey
 	public static final String MY_SWITCHER = "MY_SWITCHER";
+
 }
 
 Switcher mySwitcher = MyAppFeatures.getSwitcher(MY_SWITCHER);
@@ -228,19 +233,39 @@ switcher.throttle(1000).isItOn();
 
 </br>
 
-##### - Offline settings
-You can also set the Switcher library to work offline. It will use a local snapshot file to retrieve the switchers configuration.<br>
+##### - Local settings
+You can also set the Switcher library to work locally. It will use a local snapshot file to retrieve the switchers configuration.<br>
 This feature is useful for testing purposes or when you need to run your application without internet access.
 
 ```java
 MyAppFeatures.configure(ContextBuilder.builder()
-	.offline(true)
+	.local(true)
 	.snapshotLocation("/src/resources"));
 
 MyAppFeatures.initializeClient();
 
 Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
 switcher.isItOn();
+```
+</br>
+
+##### - Hybrid settings
+Forcing Switchers to resolve remotely can help you define exclusive features that cannot be resolved locally.<br>
+This feature is ideal if you want to run the SDK in local mode but still want to resolve a specific switcher remotely.
+
+```java
+MyAppFeatures.configure(ContextBuilder.builder()
+    .url("https://api.switcherapi.com")
+    .apiKey("API_KEY")
+    .domain("Playground")
+    .component("switcher-playground")    
+	.local(true)
+	.snapshotLocation("/src/resources"));
+
+MyAppFeatures.initializeClient();
+
+Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
+switcher.forceRemote().isItOn();
 ```
 </br>
 
