@@ -21,7 +21,7 @@ A JavaScript SDK for Switcher API
 
 ### Features
 - Flexible and robust functions that will keep your code clean and maintainable.
-- Able to work offline using a snapshot file downloaded from your remote Switcher-API Domain.
+- Able to work locally using a snapshot file downloaded from your remote Switcher-API Domain.
 - Silent mode is a hybrid configuration that automatically enables a contingent sub-process in case of any connectivity issue.
 - Built-in mock implementation for clear and easy implementation of automated testing.
 - Easy to setup. Switcher Context is responsible to manage all the complexity between your application and API.
@@ -45,7 +45,7 @@ const apiKey = '[API_KEY]';
 const environment = 'default';
 const domain = 'My Domain';
 const component = 'MyApp';
-const url = 'https://switcherapi.com/api';
+const url = 'https://api.switcherapi.com';
 ```
 
 - **apiKey**: Switcher-API key generated to your component.
@@ -58,7 +58,7 @@ const url = 'https://switcherapi.com/api';
 You can also activate features such as offline and silent mode:
 
 ```js
-const offline = true;
+const local = true;
 const logger = true;
 const snapshotLocation = './snapshot/';
 const snapshotAutoUpdateInterval = 3;
@@ -66,13 +66,13 @@ const silentMode = '5m';
 const certPath = './certs/ca.pem';
 
 Switcher.buildContext({ url, apiKey, domain, component, environment }, {
-    offline, logger, snapshotLocation, snapshotAutoUpdateInterval, silentMode, certPath
+    local, logger, snapshotLocation, snapshotAutoUpdateInterval, silentMode, certPath
 });
 
 let switcher = Switcher.factory();
 ```
 
-- **offline**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'
+- **local**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'
 - **logger**: If activated, it is possible to retrieve the last results from a given Switcher key using Switcher.getLogger('KEY')
 - **snapshotLocation**: Location of snapshot files. The default value is './snapshot/'
 - **snapshotAutoUpdateInterval**: Enable Snapshot Auto Update given an interval in seconds (default: 0 disabled).
@@ -136,6 +136,15 @@ const switcher = Switcher.factory();
 await switcher
     .throttle(1000)
     .isItOn('FEATURE01');
+```
+
+6. **Hybrid mode**
+Forcing Switchers to resolve remotely can help you define exclusive features that cannot be resolved locally.
+This feature is ideal if you want to run the SDK in local mode but still want to resolve a specific switcher remotely.
+
+```ts
+const switcher = Switcher.factory();
+await switcher.remote().isItOn('FEATURE01');
 ```
 
 </br>
