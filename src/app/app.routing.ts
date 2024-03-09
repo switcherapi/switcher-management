@@ -9,9 +9,10 @@ import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
 import { SignupDomainComponent } from './signup-domain/signup-domain.component';
 import { SlackAuthComponent } from './slack-auth/slack-auth.component';
+import { environment } from 'src/environments/environment';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent },
+    { path: '', component: environment.allowHomeView ? HomeComponent : LoginComponent },
 
     { path: 'login', component: LoginComponent },
 
