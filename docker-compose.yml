@@ -6,10 +6,10 @@ networks:
 
 services:
   switchermanagement:
-    image: trackerforce/switcher-management:latest
+    image: trackerforce/switcher-management:dev
     container_name: switchermanagement
     # Enable SSL with "./setup.sh true"
-    command: ["/bin/sh", "-c", "./setup.sh true"]
+    command: ["/bin/sh", "-c", "./setup.sh false"]
     ports:
       - 443:443
       - 80:80
@@ -21,8 +21,8 @@ services:
       - SWITCHERAPI_URL=https://switcherapi.com/api
       - SM_IP=localhost
       # - GOOGLE_RECAPTCHA=
-      # - ALLOW_INTERNAL_AUTH=
-      # - ALLOW_HOME_VIEW=
+      # - ALLOW_INTERNAL_AUTH=false
+      # - ALLOW_HOME_VIEW=true
       # - GITHUB_CLIENTID=
       # - BITBUCKET_CLIENTID=
       # - SWITCHERSLACKAPP_URL=[ENDPOINT]/slack/install
