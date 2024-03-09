@@ -5,6 +5,7 @@
     window["env"]["RELEASE_TIME"] = undefined;
     window["env"]["GOOGLE_RECAPTCHA"] = undefined;
     window["env"]["ALLOW_INTERNAL_AUTH"] = undefined;
+    window["env"]["ALLOW_HOME_VIEW"] = undefined;
     window["env"]["GITHUB_CLIENTID"] = undefined;
     window["env"]["BITBUCKET_CLIENTID"] = undefined;
     window["env"]["SWITCHERSLACKAPP_URL"] = undefined;

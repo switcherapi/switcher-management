@@ -22,6 +22,7 @@ services:
       - SM_IP=localhost
       # - GOOGLE_RECAPTCHA=
       # - ALLOW_INTERNAL_AUTH=
+      # - ALLOW_HOME_VIEW=
       # - GITHUB_CLIENTID=
       # - BITBUCKET_CLIENTID=
       # - SWITCHERSLACKAPP_URL=[ENDPOINT]/slack/install
