@@ -6,6 +6,7 @@ export const environment = {
   releaseTime: window["env"]["RELEASE_TIME"] || undefined,
   recaptchaPublicKey: window["env"]["GOOGLE_RECAPTCHA"] || undefined,
   allowInternalAuth: window["env"]["ALLOW_INTERNAL_AUTH"] || true,
+  allowHomeView: window["env"]["ALLOW_HOME_VIEW"] || false,
   githubApiClientId: window["env"]["GITHUB_CLIENTID"] || undefined,
   bitbucketApiClientId: window["env"]["BITBUCKET_CLIENTID"] || undefined,
   teamInviteLink: `${window["env"]["SM_IP"] || 'localhost'}/collab/join`,
