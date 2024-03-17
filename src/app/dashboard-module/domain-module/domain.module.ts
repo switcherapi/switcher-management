@@ -26,7 +26,7 @@ import { ToasterModule } from 'src/app/_helpers/toaster/toaster.module';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
 import { TeamInviteDialogComponent } from './team-module/team-invite-dialog/team-invite-dialog.component';
@@ -80,7 +80,7 @@ import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-setting
     DomainRoutingModule,
     AppMaterialModule,
     ToasterModule,
-    NgChartsModule,
+    BaseChartDirective,
     MetricModule,
     BlockUIModule.forRoot()
   ],

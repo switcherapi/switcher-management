@@ -117,8 +117,8 @@ export class SwitchersStatisticsTab {
 
   public loadSwitchersView(): void {
     const switcherStatistics = this.statistics.switchers;
-    let negative = { data: [], label: 'Negative' };
-    let positive = { data: [], label: 'Positive' };
+    let negative = { data: [], label: 'Negative', backgroundColor: 'rgba(105, 0, 132, .2)', borderColor: 'rgba(200, 99, 132, .7)', borderWidth: 2, fill: 'origin' };
+    let positive = { data: [], label: 'Positive', backgroundColor: 'rgba(0, 137, 132, .2)', borderColor: 'rgba(0, 10, 130, .7)', borderWidth: 2, fill: 'origin' };
 
     switcherStatistics.forEach(switcherStats => {
       this.barChartLabels.push(switcherStats.switcher);
@@ -158,8 +158,8 @@ export class ComponentsStatisticsTab {
 
   public loadComponentsView(): void {
     const componentsStatistics = this.statistics.components;
-    let negative = { data: [], label: 'Negative' };
-    let positive = { data: [], label: 'Positive' };
+    let negative = { data: [], label: 'Negative', backgroundColor: 'rgba(105, 0, 132, .2)', borderColor: 'rgba(200, 99, 132, .7)', borderWidth: 2, fill: 'origin' };
+    let positive = { data: [], label: 'Positive', backgroundColor: 'rgba(0, 137, 132, .2)', borderColor: 'rgba(0, 10, 130, .7)', borderWidth: 2, fill: 'origin' };
 
     componentsStatistics.forEach(componentStats => {
       this.barChartLabels.push(componentStats.component);
@@ -245,18 +245,8 @@ export class SwitcherDateTimeGroupedTab {
     this.chartShortLabels = [];
     
     const switcherStatistics = this.parent.data.statistics.switchers;
-    let negative = { data: [], label: 'Negative', 
-      backgroundColor: 'rgba(105, 0, 132, .2)',
-      borderColor: 'rgba(200, 99, 132, .7)',
-      borderWidth: 2,
-      fill: 'origin'
-    };
-    let positive = { data: [], label: 'Positive',
-      backgroundColor: 'rgba(0, 137, 132, .2)',
-      borderColor: 'rgba(0, 10, 130, .7)',
-      borderWidth: 2,
-      fill: 'origin'
-    };
+    let negative = { data: [], label: 'Negative', backgroundColor: 'rgba(105, 0, 132, .2)', borderColor: 'rgba(200, 99, 132, .7)', borderWidth: 2, fill: 'origin' };
+    let positive = { data: [], label: 'Positive', backgroundColor: 'rgba(0, 137, 132, .2)', borderColor: 'rgba(0, 10, 130, .7)', borderWidth: 2, fill: 'origin' };
 
     switcherStatistics.forEach(switcherStats => {
       this.total_content = switcherStats.dateTimeStatistics.length;

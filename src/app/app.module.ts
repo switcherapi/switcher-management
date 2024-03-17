@@ -32,6 +32,7 @@ import { environment } from '../environments/environment';
 import { PwaService } from './services/pwa.service';
 import { SlackAuthComponent } from './slack-auth/slack-auth.component';
 import { AppVersionComponent } from './app-version/app-version.component';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
     imports: [
@@ -71,7 +72,8 @@ import { AppVersionComponent } from './app-version/app-version.component';
         useClass: TokenInterceptor,
         multi: true
       },
-      { provide: LocationStrategy, useClass: PathLocationStrategy }
+      { provide: LocationStrategy, useClass: PathLocationStrategy },
+      provideCharts(withDefaultRegisterables())
     ],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
