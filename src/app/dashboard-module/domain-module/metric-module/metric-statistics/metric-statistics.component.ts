@@ -6,6 +6,9 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
+const negativeTemplate = { label: 'Negative', backgroundColor: '#ffa1b5', fill: 'origin' };
+const positiveTemplate = { label: 'Positive', backgroundColor: '#86c7f3', fill: 'origin' };
+
 @Component({
   selector: 'app-metric-statistics',
   templateUrl: './metric-statistics.component.html',
@@ -117,8 +120,8 @@ export class SwitchersStatisticsTab {
 
   public loadSwitchersView(): void {
     const switcherStatistics = this.statistics.switchers;
-    let negative = { data: [], label: 'Negative', backgroundColor: 'rgba(105, 0, 132, .2)', borderColor: 'rgba(200, 99, 132, .7)', borderWidth: 2, fill: 'origin' };
-    let positive = { data: [], label: 'Positive', backgroundColor: 'rgba(0, 137, 132, .2)', borderColor: 'rgba(0, 10, 130, .7)', borderWidth: 2, fill: 'origin' };
+    let negative = { ...negativeTemplate, data: [] };
+    let positive = { ...positiveTemplate, data: [] };
 
     switcherStatistics.forEach(switcherStats => {
       this.barChartLabels.push(switcherStats.switcher);
@@ -158,8 +161,8 @@ export class ComponentsStatisticsTab {
 
   public loadComponentsView(): void {
     const componentsStatistics = this.statistics.components;
-    let negative = { data: [], label: 'Negative', backgroundColor: 'rgba(105, 0, 132, .2)', borderColor: 'rgba(200, 99, 132, .7)', borderWidth: 2, fill: 'origin' };
-    let positive = { data: [], label: 'Positive', backgroundColor: 'rgba(0, 137, 132, .2)', borderColor: 'rgba(0, 10, 130, .7)', borderWidth: 2, fill: 'origin' };
+    let negative = { ...negativeTemplate, data: [] };
+    let positive = { ...positiveTemplate, data: [] };
 
     componentsStatistics.forEach(componentStats => {
       this.barChartLabels.push(componentStats.component);
@@ -245,8 +248,8 @@ export class SwitcherDateTimeGroupedTab {
     this.chartShortLabels = [];
     
     const switcherStatistics = this.parent.data.statistics.switchers;
-    let negative = { data: [], label: 'Negative', backgroundColor: 'rgba(105, 0, 132, .2)', borderColor: 'rgba(200, 99, 132, .7)', borderWidth: 2, fill: 'origin' };
-    let positive = { data: [], label: 'Positive', backgroundColor: 'rgba(0, 137, 132, .2)', borderColor: 'rgba(0, 10, 130, .7)', borderWidth: 2, fill: 'origin' };
+    let negative = { ...negativeTemplate, data: [] };
+    let positive = { ...positiveTemplate, data: [] };
 
     switcherStatistics.forEach(switcherStats => {
       this.total_content = switcherStats.dateTimeStatistics.length;
@@ -297,21 +300,24 @@ export class SwitcherDateTimeGroupedTab {
   }
 
   expandSelectedData(index: number) {
-    this.parent.parent.loadDataMetrics(1, this.parent.environment, this.chartLabels[index], this.chartLabels[index]).subscribe(metrics => {
-      if (metrics) {
-        this.parent.dialog.open(SwitcherDataStatsDialogComponent, {
-          width: '1200px',
-          minWidth: window.innerWidth < 450 ? '95vw' : '',
-          data: {
-            stats: metrics.data,
-            switcher: this.parent.switcher,
-            parent: this.parent.parent,
-            date: this.chartLabels[index]
-          }
-        });
+    this.parent.parent.loadDataMetrics(1, this.parent.environment, this.chartLabels[index], this.chartLabels[index]).subscribe({
+      next: (metrics) => {
+        if (metrics) {
+          this.parent.dialog.open(SwitcherDataStatsDialogComponent, {
+            width: '1200px',
+            minWidth: window.innerWidth < 450 ? '95vw' : '',
+            data: {
+              stats: metrics.data,
+              switcher: this.parent.switcher,
+              parent: this.parent.parent,
+              date: this.chartLabels[index]
+            }
+          });
+        }
+      },
+      error: (error) => {
+        ConsoleLogger.printError(error);
       }
-    }, error => {
-      ConsoleLogger.printError(error);
     });
   }
 
@@ -332,10 +338,6 @@ export class SwitcherDateTimeGroupedTab {
       margin-right: 10px;
       margin-top: 10px;
       background: #8e8e8e;
-    }
-    
-    .mat-dialog-content {
-      padding-bottom: 20px;
     }
 
     .header-log {
