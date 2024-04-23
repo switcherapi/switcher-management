@@ -80,10 +80,8 @@
     "@angular/localize": {
       "glob": "^10.3.10"
     },
-    "ngx-markdown": {
-      "mermaid": {
-        "dompurify": "^2.5.0"
-      }
+    "mermaid": {
+      "dompurify": "^2.5.0"
     }
   },
   "repository": {
