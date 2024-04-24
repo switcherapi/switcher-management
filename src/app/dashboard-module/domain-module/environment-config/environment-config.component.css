@@ -16,6 +16,12 @@
   display: none;
 }
 
+.env-delete-btn {
+  float: right; 
+  margin-top: -5px;
+  color: inherit !important;
+}
+
 :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
   background-color: #b0d2ff;
 }
