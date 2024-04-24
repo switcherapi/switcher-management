@@ -30,8 +30,6 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
   permissions: Permissions[];
   configs: Config[];
-  loading = false;
-  error = '';
 
   creatable: boolean = false;
 
@@ -57,7 +55,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     this.error = '';
 
     this.readPermissionToObject();
-    this.readChildPermissions('default');
+    this.readChildPermissions(this.environmentSelection.get('environmentSelection').value || 'default');
   }
 
   ngOnDestroy() {
@@ -90,6 +88,16 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     });
   }
 
+  onNext(): void {
+    this.skip += 10;
+    this.ngOnInit();
+  }
+
+  onPrevious(): void {
+    this.skip -= 10;
+    this.ngOnInit();
+  }
+
   protected onEnvChange($event: EnvironmentChangeEvent) {
     this.loading = true;
     this.environmentSelectionChange.emit($event.environmentName);
@@ -97,7 +105,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   }
 
   private loadConfigs(environmentName: string) {
-    this.configService.getConfigsByGroup(this.groupId, 'id,key,activated')
+    this.configService.getConfigsByGroup(this.groupId, this.skip, 'id,key,activated')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
