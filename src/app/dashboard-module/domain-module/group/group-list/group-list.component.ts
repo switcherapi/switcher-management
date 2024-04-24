@@ -29,8 +29,6 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy {
   permissions: Permissions[];
   groups: Group[];
-  loading = false;
-  error = '';
 
   creatable: boolean = false;
 
@@ -55,7 +53,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     this.error = '';
 
     this.readPermissionToObject();
-    this.readChildPermissions('default');
+    this.readChildPermissions(this.environmentSelection.get('environmentSelection').value || 'default');
     this.updateData();
   }
 
@@ -89,6 +87,16 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     });
   }
 
+  onNext(): void {
+    this.skip += 10;
+    this.ngOnInit();
+  }
+
+  onPrevious(): void {
+    this.skip -= 10;
+    this.ngOnInit();
+  }
+
   protected onEnvChange($event: EnvironmentChangeEvent) {
     this.loading = true;
     this.environmentSelectionChange.emit($event.environmentName);
@@ -101,7 +109,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   private loadGroups(environmentName: string) {
-    this.groupService.getGroupsByDomain(this.domainId)
+    this.groupService.getGroupsByDomain(this.domainId, this.skip, 'id,name,activated,admin')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {

@@ -35,4 +35,12 @@
             </app-config-preview>
         </div>
     </div>
+    <div *ngIf="configs.length === 10 || skip > 0" class="pagination">
+        <button mat-button class="btn-element create nav" (click)="onPrevious()" disabled="{{skip === 0}}">
+            <mat-icon style="font-size: larger;">arrow_back</mat-icon>
+        </button>
+        <button mat-button class="btn-element create nav" (click)="onNext()" disabled="{{configs.length < 10}}">
+            <mat-icon style="font-size: larger;">arrow_forward</mat-icon>
+        </button>
+    </div>
 </div>

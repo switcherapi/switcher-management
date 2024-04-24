@@ -17,9 +17,10 @@ export class ConfigService extends ApiService {
     super();
   }
 
-  public getConfigsByGroup(id: string, fields?: string): Observable<Config[]> {
+  public getConfigsByGroup(id: string, skip: number, fields?: string): Observable<Config[]> {
     const params: any = {
-      group: id
+      group: id,
+      skip: skip.toString(),
     };
 
     if (fields) {

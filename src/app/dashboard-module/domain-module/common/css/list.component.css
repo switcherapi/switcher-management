@@ -9,6 +9,10 @@ mat-icon {
   color: white;
 }
 
+.btn-element.nav {
+  margin: .5rem;
+}
+
 .div-btn-new {
   width: 100%; 
   margin: auto;
