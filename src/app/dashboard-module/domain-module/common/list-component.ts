@@ -29,6 +29,10 @@ export class ListComponent implements AfterViewInit {
     domainName: string;
     groupId: string;
 
+    skip: number = 0;
+    loading = false;
+    error = '';
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,

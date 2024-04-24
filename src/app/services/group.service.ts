@@ -16,26 +16,39 @@ export class GroupService extends ApiService {
     super();
   }
   
-  public getGroupsByDomain(id: string): Observable<Group[]> {
-    return this.http.get<Group[]>(`${environment.apiUrl}/groupconfig`, { params: { domain: id } }).pipe(catchError(super.handleError));
+  public getGroupsByDomain(id: string, skip: number, fields?: string): Observable<Group[]> {
+    const params: any = {
+      domain: id,
+      skip: skip.toString(),
+    };
+
+    if (fields) {
+      params.fields = fields;
+    }
+
+    return this.http.get<Group[]>(`${environment.apiUrl}/groupconfig`, { params })
+      .pipe(catchError(super.handleError));
   }
 
   public getGroupById(id: string): Observable<Group> {
-    return this.http.get<Group>(`${environment.apiUrl}/groupconfig/${id}`).pipe(catchError(super.handleError));
+    return this.http.get<Group>(`${environment.apiUrl}/groupconfig/${id}`)
+      .pipe(catchError(super.handleError));
   }
 
   public setGroupEnvironmentStatus(id: string, env: string, status: boolean): Observable<Group> {
     const body = {
       [`${env}`]: status
     }
-    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/updateStatus/` + id), body).pipe(catchError(super.handleError));
+    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/updateStatus/` + id), body)
+      .pipe(catchError(super.handleError));
   }
 
   public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Group> {
     const body = {
       env
     }
-    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/removeStatus/${id}`), body).pipe(catchError(super.handleError));
+    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/removeStatus/${id}`), body)
+      .pipe(catchError(super.handleError));
   }
 
   public updateGroup(id: string, name?: string, description?: string): Observable<Group> {
@@ -44,7 +57,8 @@ export class GroupService extends ApiService {
     if (name) body.name = name;
     if (description) body.description = description;
 
-    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/` + id), body).pipe(catchError(super.handleError));
+    return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/` + id), body)
+      .pipe(catchError(super.handleError));
   }
 
   public createGroup(domain: string, name: string, description: string): Observable<Group> {
@@ -53,11 +67,13 @@ export class GroupService extends ApiService {
       description,
       domain
     }
-    return this.http.post<Group>((`${environment.apiUrl}/groupconfig/create`), body).pipe(catchError(super.handleError));
+    return this.http.post<Group>((`${environment.apiUrl}/groupconfig/create`), body)
+      .pipe(catchError(super.handleError));
   }
 
   public deleteGroup(id: string): Observable<Group> {
-    return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/${id}`).pipe(catchError(super.handleError));
+    return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/${id}`)
+      .pipe(catchError(super.handleError));
   }
 
   public getHistory(id: string, limit: number, skip: number): Observable<History[]> {
@@ -72,6 +88,7 @@ export class GroupService extends ApiService {
   }
 
   public resetHistory(id: string): Observable<Group> {
-    return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/history/${id}`).pipe(catchError(super.handleError));
+    return this.http.delete<Group>(`${environment.apiUrl}/groupconfig/history/${id}`)
+      .pipe(catchError(super.handleError));
   }
 }
