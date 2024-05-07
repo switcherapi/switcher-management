@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
@@ -69,16 +69,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
     this.route.params.subscribe(params => {
       this.groupId = params.groupid;
-    });
-
-    this.route.paramMap.pipe(map(() => window.history.state))
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.element) {
-          this.updateData(JSON.parse(data.element));
-        } else {
-          this.loadGroup();
-        }
+      this.loadGroup();
     });
   }
 
