@@ -62,8 +62,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   }
 
   selectGroup() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.group.id}`], 
-      { state: { element: JSON.stringify(this.group) } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.group.id}`]);
   }
 
   selectEnvironment(envName: string): void {
