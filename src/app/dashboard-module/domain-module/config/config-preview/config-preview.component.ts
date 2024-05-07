@@ -64,8 +64,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   }
 
   selectConfig() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`], 
-      { state: { element: JSON.stringify(this.config) } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`]);
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
