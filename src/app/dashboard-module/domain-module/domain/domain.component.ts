@@ -77,7 +77,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => { 
         this.currentPath = data;
-        this.loadConfiguration();
+        this.loadConfiguration(data.forceFetch);
     });
 
     if (environment.slackUrl) {
@@ -223,7 +223,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.navControl = !this.navControl;
   }
 
-  private loadConfiguration() {
+  private loadConfiguration(forceFetch: boolean = false) {
     const path = this.domainRouteService.getStoredPath();
     if (path) {
       this.currentPath = path;
@@ -235,7 +235,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     } else if (this.currentPath.type === Types.CONFIG_TYPE) {
       query = this.domainService.executeConfigurationConfigQuery(this.domainId, this.currentPath.id);
     } else {
-      query = this.domainService.executeConfigurationQuery(this.domainId);
+      query = this.domainService.executeConfigurationQuery(this.domainId, forceFetch);
     }
 
     query.pipe(takeUntil(this.unsubscribe)).subscribe(response => {

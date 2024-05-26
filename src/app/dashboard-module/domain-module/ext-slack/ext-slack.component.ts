@@ -12,6 +12,7 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { SlackSettingsComponent } from './slack-settings/slack-settings.component';
 import { FeatureService } from 'src/app/services/feature.service';
+import { Types } from 'src/app/model/path-route';
 
 @Component({
   selector: 'app-ext-slack',
@@ -90,7 +91,9 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
         this.slackService.unlinkInstallation(this.domainId)
           .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
             if (data) {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
+              this.domainRouteService.updatePath(this.domainId, this.domainName, 
+                Types.DOMAIN_TYPE, `/dashboard/domain/${this.domainName}/${this.domainId}`, true);
               this.toastService.showSuccess(data.message);
             }
           }, (error) => {
@@ -136,6 +139,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     }, (error) => {
       ConsoleLogger.printError(error);
       this.toastService.showError('Unable to display Slack Integrations properties');
+      this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
     }, () => {
       this.loading = false;
     });

@@ -128,9 +128,10 @@ export class DomainService extends ApiService {
     });
   }
 
-  public executeConfigurationQuery(domainId: string) {
+  public executeConfigurationQuery(domainId: string, forceFetch: boolean = false) {
     return this.apollo.query<GraphQLConfigurationResultSet>({
       query: configurationQueryByDomain(),
+      fetchPolicy: forceFetch ? 'network-only' : 'cache-first',
       variables: { 
         domain: domainId
       }

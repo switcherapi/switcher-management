@@ -3,12 +3,13 @@ export class PathRoute {
   name: string;
   path: string;
   type: string;
+  forceFetch: boolean = false;
 }
 
 export class Types {
-  public static DOMAIN_TYPE = 'Domain';
-  public static GROUP_TYPE = 'Group';
-  public static CONFIG_TYPE = 'Switcher';
-  public static COMPONENT_TYPE = 'Component';
-  public static CURRENT_ROUTE = 'switcher.currentRoute';
+  public static readonly DOMAIN_TYPE = 'Domain';
+  public static readonly GROUP_TYPE = 'Group';
+  public static readonly CONFIG_TYPE = 'Switcher';
+  public static readonly COMPONENT_TYPE = 'Component';
+  public static readonly CURRENT_ROUTE = 'switcher.currentRoute';
 }
