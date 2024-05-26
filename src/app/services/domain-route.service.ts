@@ -6,12 +6,13 @@ export class DomainRouteService {
   @Output() pathChange: EventEmitter<PathRoute> = new EventEmitter();
   @Output() viewHeaderEvent: EventEmitter<ViewHeader> = new EventEmitter();
 
-  updatePath(id: string, name: string, type: string, path: string): void {
+  updatePath(id: string, name: string, type: string, path: string, forceFetch: boolean = false): void {
     const pathRoute = new PathRoute();
     pathRoute.id = id;
     pathRoute.name = name;
     pathRoute.type = type;
     pathRoute.path = path;
+    pathRoute.forceFetch = forceFetch;
 
     localStorage.setItem(Types.CURRENT_ROUTE, JSON.stringify(pathRoute));
     this.pathChange.next(pathRoute);
