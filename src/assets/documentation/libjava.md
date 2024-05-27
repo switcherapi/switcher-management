@@ -12,7 +12,7 @@ A Java SDK for Switcher API
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-client)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-client-java/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/switcherapi/switcher-client-java?targetFile=pom.xml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.switcherapi/switcher-client.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.switcherapi%22%20AND%20a:%22switcher-client%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.switcherapi/switcher-client.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.github.switcherapi/switcher-client)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
 </div>
@@ -23,7 +23,7 @@ A Java SDK for Switcher API
 - Flexible and robust SDK that will keep your code clean and maintainable.
 - Able to work local using a snapshot file pulled from your remote Switcher-API Domain.
 - Silent mode is a hybrid configuration that automatically enables contingent sub-processes in case of any connectivity issue.
-- Built-in mock implementation for clear and easy implementation of automated testing.
+- Built-in test annotation for clear and easy implementation of automated testing.
 - Easy to setup. Switcher Context is responsible to manage all the configuration complexity between your application and API.
 
 * * *
@@ -167,6 +167,15 @@ Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
 switcher.isItOn();
 ```
 
+Or, you can submit the switcher request and get the criteria response, which contains result, reason and metadata that can be used for any additional verification.
+
+```java
+CriteriaResponse response = switcher.submit();
+response.isItOn(); // true/false
+response.getReason(); // Descriptive response based on result value
+response.getMetadata(YourMetadata.class); // Additional information
+```
+
 2. **Strategy validation - preparing input**
 
 Loading information into the switcher can be made by using *prepareEntry*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
@@ -178,23 +187,11 @@ entries.add(Entry.build(StrategyValidator.DATE, "2020-12-10"));
 
 switcher.prepareEntry(entries);
 switcher.isItOn();
-//or
-switcher.isItOn(entries);
 ```
-
-Strategy validators can be specified as:
-- StrategyValidator.DATE: Date validation
-- StrategyValidator.TIME: Time validation
-- StrategyValidator.VALUE: Plain text validation
-- StrategyValidator.NUMERIC: Numeric validation
-- StrategyValidator.NETWORK: IP/range validation
-- StrategyValidator.REGEX: Regular expression validation
-- StrategyValidator.PAYLOAD: JSON Payload validation
-
 
 3. **Strategy validation - Fluent style**
 
-Create chained calls using 'getSwitcher' then 'prepareEntry' then 'isItOn' functions.
+Create chained calls to validate the switcher with a more readable and maintainable code.
 
 ```java
 import static **.MyAppFeatures.*;
@@ -205,27 +202,17 @@ getSwitcher(FEATURE01)
 	.isItOn();
 ```
 
-4. **Strategy validation - all-in-one execution**
+4. **Accessing the response history**
 
-All-in-one method is fast and include everything you need to execute a complex call to the API. Stack inputs changing the last parameter to *true* in case you need to add more values to the strategy validator.
-
-```java
-switcher.isItOn(FEATURE01, Entry.build(StrategyValidator.NETWORK, "10.0.0.3"), false);
-//or simply
-switcher.checkNetwork("10.0.0.3").isItOn();
-```
-
-5. **Accessing the response history**
-
-Switchers when created store the last execution result from a given switcher key. This can be useful for troubleshooting or internal logging.
+Switchers stores the last execution result from a given switcher key/entry.
 
 ```java
 switcher.getHistoryExecution();
 ```
 
-6. **Throttling**
+5. **Throttling**
 
-Improve the overall performance by using throttle feature to skip API calls in a short time. This feature is ideal for critical or repetitive code executions that requires high performance.
+Run Switchers asynchronously when using throttling. It will return the last known value until the throttle time is over.
 
 ```java
 switcher.throttle(1000).isItOn();
@@ -234,8 +221,7 @@ switcher.throttle(1000).isItOn();
 </br>
 
 ##### - Local settings
-You can also set the Switcher library to work locally. It will use a local snapshot file to retrieve the switchers configuration.<br>
-This feature is useful for testing purposes or when you need to run your application without internet access.
+You can also set the Switcher library to work locally. It will use a local snapshot file to retrieve the switchers configuration.
 
 ```java
 MyAppFeatures.configure(ContextBuilder.builder()
@@ -254,18 +240,34 @@ Forcing Switchers to resolve remotely can help you define exclusive features tha
 This feature is ideal if you want to run the SDK in local mode but still want to resolve a specific switcher remotely.
 
 ```java
+switcher.forceRemote().isItOn();
+```
+
+Another option is to use in-memory loaded snapshots to resolve the switchers.<br>
+Switcher SDK will schedule a background task to update snapshot in-memory a new version is available.
+
+```java
 MyAppFeatures.configure(ContextBuilder.builder()
     .url("https://api.switcherapi.com")
-    .apiKey("API_KEY")
+    .apiKey("[API-KEY]")
     .domain("Playground")
-    .component("switcher-playground")    
-	.local(true)
-	.snapshotLocation("/src/resources"));
+    .local(true)
+    .snapshotAutoLoad(true)
+    .snapshotAutoUpdateInterval("5s") // You can choose to configure here or using `scheduleSnapshotAutoUpdate`
+    .component("switcher-playground"));
 
 MyAppFeatures.initializeClient();
+MyAppFeatures.scheduleSnapshotAutoUpdate("5s", new SnapshotCallback() {
+    @Override
+    public void onSnapshotUpdate(long version) {
+        logger.info("Snapshot updated: {}", version);
+    }
 
-Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
-switcher.forceRemote().isItOn();
+    @Override
+    public void onSnapshotUpdateError(Exception e) {
+        logger.error("Failed to update snapshot: {}", e.getMessage());
+    }
+});
 ```
 </br>
 
@@ -275,37 +277,37 @@ These features allow you to configure the SDK to automatically update the snapsh
 
 1. This feature will update the in-memory Snapshot every time the file is modified.
 ```java
-SwitcherFactory.watchSnapshot();
-SwitcherFactory.stopWatchingSnapshot();
+MyAppFeatures.watchSnapshot();
+MyAppFeatures.stopWatchingSnapshot();
 ```
 
 2. You can also perform snapshot update validation to verify if there are changes to be pulled.
 ```java
-SwitcherFactory.validateSnapshot();
+MyAppFeatures.validateSnapshot();
 ```
 
 3. Enable the Client SDK to execute Snapshot Auto Updates in the background using configuration. It basically encapsulates the validateSnapshot feature into a scheduled task managed by the SDK.
 
 ```java
 // It will check and update the local/in-memory snapshot to the latest version every second
-SwitcherFactory.configure(ContextBuilder.builder()
+MyAppFeatures.configure(ContextBuilder.builder()
 	.snapshotAutoUpdateInterval("1s")
 	.snapshotLocation("/src/resources"));
 ```
 
 </br>
 
-##### - Built-in mock feature
-Write automated tests using this built-in mock mechanism to guide your test scenario according to what you want to test.
+##### - Built-in test feature
+Write automated tests using this built-in test annotation to guide your test scenario according to what you want to test.
 </br>*SwitcherExecutor* implementation has 2 methods that can make mock tests easier. Use assume to force a value to a switcher and forget to reset its original state.
 
 ```java
-Switcher switcher = SwitcherFactory.getSwitcher("FEATURE01");
+Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
 
-SwitcherExecutor.assume("FEATURE01", false);
+SwitcherExecutor.assume(FEATURE01, false);
 switcher.isItOn(); // 'false'
 
-SwitcherExecutor.forget("FEATURE01");
+SwitcherExecutor.forget(FEATURE01);
 switcher.isItOn(); // Now, it's going to return the result retrieved from the API or the Snapshot file
 ```
 
@@ -325,13 +327,32 @@ void testSwitchers() {
 }
 ```
 
-#### SwitcherMock annotation - Requires JUnit 5 Jupiter
-Predefine Switchers result outside your test methods via Parameterized Test.
+#### SwitcherTest annotation - Requires JUnit 5 Jupiter
+Predefine Switchers result outside your test methods with the SwitcherTest annotation.
 </br>It encapsulates the test and makes sure that the Switcher returns to its original state after concluding the test.
 
+Simple use case (result is default to true, so it can be omitted):
 ```java
-@ParameterizedTest
-@SwitcherMock(key = MY_SWITCHER, result = true)
+@SwitcherTest(key = MY_SWITCHER, result = true)
+void testMyFeature() {
+   assertTrue(instance.myFeature());
+}
+```
+
+Multiple Switchers where more than one Switcher is used in the test:
+```java
+@SwitcherTest(switchers = {
+    @SwitcherTestValue(key = MY_SWITCHER),
+    @SwitcherTestValue(key = MY_SWITCHER2)
+})
+void testMyFeature() {
+   assertTrue(instance.myFeature());
+}
+```
+
+AB Test scenario where your test should return the same result regardless of the Switcher result:
+```java
+@SwitcherTest(key = MY_SWITCHER, abTest = true)
 void testMyFeature() {
    assertTrue(instance.myFeature());
 }

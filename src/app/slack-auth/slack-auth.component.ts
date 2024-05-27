@@ -64,7 +64,7 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
-          this.domains = data;
+          this.domains = data.filter(domain => !domain.integrations.slack);
         }
     }, error => {
       ConsoleLogger.printError(error);
