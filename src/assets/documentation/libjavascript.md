@@ -39,7 +39,7 @@ A JavaScript SDK for Switcher API
 The context properties stores all information regarding connectivity.
 
 ```js
-const Switcher = require('switcher-client');
+import { Client } from 'switcher-client';
 
 const apiKey = '[API_KEY]';
 const environment = 'default';
@@ -48,14 +48,14 @@ const component = 'MyApp';
 const url = 'https://api.switcherapi.com';
 ```
 
-- **apiKey**: Switcher-API key generated to your component.
-- **environment**: (optional) Environment name. Production environment is named as 'default'.
 - **domain**: Domain name.
-- **component**: Application name.
 - **url**: (optional) Swither-API endpoint.
+- **apiKey**: (optional) Switcher-API key generated to your component.
+- **component**: (optional) Application name.
+- **environment**: (optional) Environment name. Production environment is named as 'default'.
 
 ##### - Options
-You can also activate features such as offline and silent mode:
+You can also activate features such as local and silent mode:
 
 ```js
 const local = true;
@@ -65,15 +65,15 @@ const snapshotAutoUpdateInterval = 3;
 const silentMode = '5m';
 const certPath = './certs/ca.pem';
 
-Switcher.buildContext({ url, apiKey, domain, component, environment }, {
+Client.buildContext({ url, apiKey, domain, component, environment }, {
     local, logger, snapshotLocation, snapshotAutoUpdateInterval, silentMode, certPath
 });
 
-let switcher = Switcher.factory();
+let switcher = Client.getSwitcher();
 ```
 
 - **local**: If activated, the client will only fetch the configuration inside your snapshot file. The default value is 'false'
-- **logger**: If activated, it is possible to retrieve the last results from a given Switcher key using Switcher.getLogger('KEY')
+- **logger**: If activated, it is possible to retrieve the last results from a given Switcher key using Client.getLogger('KEY')
 - **snapshotLocation**: Location of snapshot files. The default value is './snapshot/'
 - **snapshotAutoUpdateInterval**: Enable Snapshot Auto Update given an interval in seconds (default: 0 disabled).
 - **silentMode**: Enable contigency given the time for the client to retry - e.g. 5s (s: seconds - m: minutes - h: hours)
@@ -94,8 +94,10 @@ Here are some examples:
 Invoking the API can be done by instantiating the switcher and calling *isItOn* passing its key as a parameter.
 
 ```js
-const switcher = Switcher.factory();
+const switcher = Client.getSwitcher();
 await switcher.isItOn('FEATURE01');
+// or
+const { result, reason, metadata } = await switcher.detail().isItOn('FEATURE01');
 ```
 
 2. **Promise**
@@ -111,9 +113,7 @@ switcher.isItOn('KEY')
 Loading information into the switcher can be made by using *prepare*, in case you want to include input from a different place of your code. Otherwise, it is also possible to include everything in the same call.
 
 ```js
-const { checkValue, checkNetwork } = require('switcher-client');
-
-switcher.prepare('FEATURE01', [checkValue('USER_1')];
+switcher.checkValue('USER_1').prepare('FEATURE01');
 switcher.isItOn();
 ```
 
@@ -121,21 +121,29 @@ switcher.isItOn();
 All-in-one method is fast and include everything you need to execute a complex call to the API.
 
 ```js
-await switcher.isItOn('FEATURE01', [
-    checkValue('User 1'),
-    checkNetwork('192.168.0.1')
-]);
+await switcher
+    .checkValue('User 1')
+    .checkNetwork('192.168.0.1')
+    .isItOn('FEATURE01');
 ```
 
 5. **Throttle**
-Throttling is useful when placing Feature Flags at critical code blocks require zero-latency without having to switch to offline.
+Throttling is useful when placing Feature Flags at critical code blocks require zero-latency without having to switch to local.
 API calls will happen asynchronously and the result returned is based on the last API response.
 
 ```js
-const switcher = Switcher.factory();
+const switcher = Client.getSwitcher();
 await switcher
     .throttle(1000)
     .isItOn('FEATURE01');
+```
+
+In order to capture issues that may occur during the process, it is possible to log the error by subscribing to the error events.
+
+```js
+Client.subscribeNotifyError((error) => {
+    console.log(error);
+});
 ```
 
 6. **Hybrid mode**
@@ -143,21 +151,25 @@ Forcing Switchers to resolve remotely can help you define exclusive features tha
 This feature is ideal if you want to run the SDK in local mode but still want to resolve a specific switcher remotely.
 
 ```ts
-const switcher = Switcher.factory();
+const switcher = Client.getSwitcher();
 await switcher.remote().isItOn('FEATURE01');
 ```
 
 </br>
 
 ##### - Built-in mock feature
-You can also bypass your switcher configuration by invoking 'Switcher.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false.
+You can also bypass your switcher configuration by invoking 'Client.assume'. This is perfect for your test code where you want to test both scenarios when the switcher is true and false.
 
 ```js
-Switcher.assume('FEATURE01').true();
+Client.assume('FEATURE01').true();
 switcher.isItOn('FEATURE01'); // true
 
-Switcher.forget('FEATURE01');
+Client.forget('FEATURE01');
 switcher.isItOn('FEATURE01'); // Now, it's going to return the result retrieved from the API or the Snaopshot file
+
+Client.assume('FEATURE01').false().withMetadata({ message: 'Feature is disabled' }); // Include metadata to emulate Relay response
+const response = await switcher.detail().isItOn('FEATURE01'); // false
+console.log(response.metadata.message); // Feature is disabled
 ```
 
 **Enabling Test Mode**
@@ -166,7 +178,7 @@ It prevents the Switcher Client from locking snapshot files even after the test 
 
 To enable this feature, it is recommended to place the following on your test setup files:
 ```js
-Switcher.setTestEnabled();
+Client.testMode();
 ```
 
 **Smoke Test**
@@ -176,41 +188,47 @@ Switcher Keys may not be configured correctly and can cause your code to have un
 This feature will validate using the context provided to check if everything is up and running.
 In case something is missing, this operation will throw an exception pointing out which Switcher Keys are not configured.
 ```js
-Switcher.checkSwitchers(['FEATURE01', 'FEATURE02'])
+Client.checkSwitchers(['FEATURE01', 'FEATURE02'])
 ```
 
 ##### Loading Snapshot from the API
-This step is optional if you want to load a copy of the configuration that can be used to eliminate latency when offline mode is activated.<br>
+This step is optional if you want to load a copy of the configuration that can be used to eliminate latency when local mode is activated.<br>
 Activate watchSnapshot optionally passing true in the arguments.<br>
 Auto load Snapshot from API passing true as second argument.
 
 ```js
-Switcher.loadSnapshot();
+Client.loadSnapshot();
 ```
 
 ##### Watch for Snapshot file changes
 Activate and monitor snapshot changes using this feature. Optionally, you can implement any action based on the callback response.
 
 ```js
-Switcher.watchSnapshot(
-    () =>  console.log('In-memory snapshot updated'), 
-    (err) => console.log(err));
+Client.watchSnapshot({
+    success: () => console.log('In-memory snapshot updated'),
+    reject: (err) => console.log(err)
+});
 ```
 
 ##### - Snapshot version check
 For convenience, an implementation of a domain version checker is available if you have external processes that manage snapshot files.
 
 ```js
-Switcher.checkSnapshot();
+Client.checkSnapshot();
 ```
 
 ##### Snapshot Update Scheduler
 You can also schedule a snapshot update using the method below.<br>
-It allows you to run the Client SDK in offline mode (zero latency) and still have the snapshot updated automatically.
+It allows you to run the Client SDK in local mode (zero latency) and still have the snapshot updated automatically.
 
 ```js
-Switcher.scheduleSnapshotAutoUpdate(1 * 60 * 60 * 24); // 24 hours
+Client.scheduleSnapshotAutoUpdate(3000, {
+    success: (updated) => console.log('Snapshot updated', updated),
+    reject: (err) => console.log(err)
+});
 ```
+
+* * *
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[libjavascript.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
