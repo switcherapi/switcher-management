@@ -115,8 +115,6 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
           .subscribe(data => {
             if (data) {
               this.toastService.showSuccess(data.message);
-              this.slack.tickets_approved = 0;
-              this.slack.tickets_denied = 0;
               this.slack.tickets_opened = 0;
             }
           }, (error) => {

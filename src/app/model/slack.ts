@@ -6,8 +6,6 @@ export class Slack {
     is_enterprise: boolean;
     installed_at: number;
     tickets_opened: number;
-    tickets_approved: number;
-    tickets_denied: number;
     settings: Settings;
 }
 
