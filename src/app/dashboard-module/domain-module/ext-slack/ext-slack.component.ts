@@ -110,7 +110,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = 'Are you sure you want to delete all tickets?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.slackService.resetTickets(this.slack.team_id)
+        this.slackService.resetTickets(this.slack.team_id, this.domainId)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe(data => {
             if (data) {
