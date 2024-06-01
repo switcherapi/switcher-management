@@ -31,8 +31,8 @@ export class SlackService extends ApiService {
       .pipe(catchError(this.handleError));
   }
 
-  public resetTickets(team_id: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/slack/v1/ticket/clear`, { team_id })
+  public resetTickets(team_id: string, domain_id: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/slack/v1/ticket/clear`, { team_id, domain_id })
       .pipe(catchError(this.handleError));
   }
 
