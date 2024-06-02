@@ -24,6 +24,7 @@ import { Types } from 'src/app/model/path-route';
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+  detailBodyStyle: string = 'detail-body loading';
 
   @ViewChild(SlackSettingsComponent) 
   slackSettings: SlackSettingsComponent;
@@ -140,6 +141,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
     }, () => {
       this.loading = false;
+      this.detailBodyStyle = 'detail-body ready';
     });
   }
 
