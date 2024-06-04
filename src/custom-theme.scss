@@ -2,15 +2,13 @@
 
 @include mat.core();
 
-$switcher-management-primary: mat.define-palette(mat.$indigo-palette);
-$switcher-management-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$switcher-management-warn: mat.define-palette(mat.$red-palette);
-$switcher-management-theme: mat.define-light-theme((
-  color: (
-    primary: $switcher-management-primary,
-    accent: $switcher-management-accent,
-    warn: $switcher-management-warn,
-  )
+$switcher-management-theme: mat.define-theme((
+ color: (
+    theme-type: light,
+    primary: mat.$violet-palette,
+  ),
 ));
 
-@include mat.all-component-themes($switcher-management-theme);
+html {
+  @include mat.all-component-themes($switcher-management-theme);
+}
