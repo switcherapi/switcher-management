@@ -16,6 +16,11 @@
   width: 100%;
 }
 
+.options-section-config {
+  float: right;
+  display: -webkit-inline-box;
+}
+
 .options-section-label {
   vertical-align: baseline !important;
   display: contents;

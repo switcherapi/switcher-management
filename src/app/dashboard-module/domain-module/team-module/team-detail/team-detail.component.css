@@ -17,6 +17,10 @@
   display: flex;
 }
 
+.toggle-style {
+  margin-top: 0;
+}
+
 .toggle-section {
   margin: auto;
   display: block;

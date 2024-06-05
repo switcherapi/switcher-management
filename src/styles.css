@@ -73,6 +73,10 @@ body {
   background: #cacaca;
 }
 
+label {
+  margin-bottom: inherit;
+}
+
 #page-container {
   position: relative;
   min-height: 100vh;
@@ -100,12 +104,25 @@ body {
   box-shadow: 0 0 5px #757575;
 }
 
+.mdc-menu-surface,
+.mat-mdc-table {
+  background-color: white !important;
+}
+
+.mat-mdc-paginator {
+  background-color: rgb(251, 251, 251) !important;
+}
+
 .btn-red {
   background: #fb5454 !important;
 }
 
 .icon-color {
   color: white;
+}
+
+.card {
+  border: 0;
 }
 
 ngb-modal-backdrop {

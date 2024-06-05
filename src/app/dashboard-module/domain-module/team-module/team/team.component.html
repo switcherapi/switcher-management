@@ -3,7 +3,7 @@
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!error" [ngClass]="classStatus">
+<div *ngIf="!error" [ngClass]="classStatus" style="border: 0;">
     <div *ngIf="!loading">
         <div *ngIf="teams" class="header-style">
             <div style="display: flex;">

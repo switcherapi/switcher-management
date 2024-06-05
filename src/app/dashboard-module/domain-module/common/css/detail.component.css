@@ -30,7 +30,7 @@ mat-icon {
 }
 
 .detail-body {
-  padding-top: 20px;
+  padding-top: .5rem;
 }
 
 .detail-body.loading {
@@ -50,6 +50,7 @@ mat-icon {
 .options-section {
   float: right;
   display: -webkit-inline-box;
+  margin-top: 1rem;
 }
 
 .svg-style {

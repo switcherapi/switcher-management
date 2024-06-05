@@ -106,6 +106,7 @@ html.dark-mode app-config-detail .chartjs-render-monitor {
     filter: invert(100%) hue-rotate(180deg) contrast(1.3);
 }
 
+html.dark-mode .mat-mdc-card,
 html.dark-mode .btn-element,
 html.dark-mode .btn-element.remove,
 html.dark-mode .btn-red {
@@ -140,6 +141,7 @@ html.dark-mode app-metric-data,
 html.dark-mode app-metric .header-filter,
 html.dark-mode app-metric .nav-tabs,
 html.dark-mode app-metric #metric-statistics-buttons,
+html.dark-mode app-metric .mat-mdc-tab-header,
 html.dark-mode app-metric-statistics canvas,
 html.dark-mode app-settings-account .btn-element,
 html.dark-mode app-ext-slack .card-body,
@@ -147,6 +149,7 @@ html.dark-mode .mat-mdc-dialog-content,
 html.dark-mode .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible,
 html.dark-mode .detail-body .header,
 html.dark-mode .detail-body .mat-mdc-chip-list,
+html.dark-mode .options-section-config,
 html.dark-mode app-domain-detail .detail-body .options-section,
 html.dark-mode app-group-detail .detail-body .options-section,
 html.dark-mode app-config-detail .detail-body .options-section,
@@ -170,7 +173,7 @@ html.dark-mode .cdk-overlay-backdrop {
     background: black;
 }
 
-html.dark-mode .mat-mdc-dialog-container {
+html.dark-mode .mat-mdc-dialog-surface {
     box-shadow: none;
     border: 1px solid rgba(255, 254, 254, 0.2);
     background: #191919 !important;
@@ -192,6 +195,7 @@ html.dark-mode .mat-mdc-select-value,
 html.dark-mode .mat-mdc-form-field-infix,
 html.dark-mode .panel-slack-detail,
 html.dark-mode p,
+html.dark-mode mat-toolbar span,
 html.dark-mode #iconListChildren {
     color: #959393;
 }

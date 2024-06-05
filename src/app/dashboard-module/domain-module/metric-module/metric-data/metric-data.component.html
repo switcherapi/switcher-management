@@ -63,7 +63,7 @@
     <div class="tablelog-footer">
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
     </div>
-    <div style="display: flex; padding-bottom: 15px;">
+    <div style="display: flex; margin: 1rem;">
         <button mat-button class="btn-element" style="background:#fb5454;" 
             (click)="resetSwitcherMetrics()" 
             [disabled]="!switcher || !dataSource?.data?.length || !removable">

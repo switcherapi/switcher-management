@@ -5,7 +5,7 @@
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
 <div [ngClass]="classStatus">
     <div class="header-style">
-        <div>
+        <div style="display: flex;">
             <button mat-button class="btn-element create" (click)="createComponent()" [disabled]="inputComponentName.value.length < 2 || !creatable">
                 <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
                 <mat-icon *ngIf="!creating"style="font-size: large;">build</mat-icon>
@@ -20,7 +20,7 @@
     <div *ngIf="!loading">
         <div *ngFor="let component of components">
             <div class="grid-container">
-                <label class="label-env-name">
+                <label class="label-env-name" for="inputComponentName">
                     <mat-icon>devices_other</mat-icon>
                     {{ component.name }}
                 </label>

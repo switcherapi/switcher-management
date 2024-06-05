@@ -17,14 +17,18 @@
   height: min-content;
 }
 
+.toggle-style {
+  margin-top: 0;
+}
+
 .toggle-section {
   margin: auto;
-  display: contents;
+  display: block;
 }
 
 .detail-body {
   padding-top: 0px;
-  padding-bottom: 20px;
+  padding-bottom: 5rem;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
