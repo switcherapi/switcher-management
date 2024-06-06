@@ -13,8 +13,9 @@
             <div class="description">
                 <form [formGroup]="elementCreationFormGroup">
                     <mat-form-field>
+                        <mat-label>Key</mat-label>
                         <input #nameElement matInput cdkFocusInitial special-chars [autoUpper]="true" [autoUnderscore]="true"
-                            placeholder="Key" maxlength="30" style="color: black" 
+                            maxlength="30" style="color: black" 
                             [formControl]="keyFormControl" autocomplete="off">
                         <mat-error *ngIf="keyFormControl.hasError('minlength')">
                             Key must contains at least 3 characters
@@ -24,7 +25,8 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field>
-                        <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="3" 
+                        <mat-label>Description</mat-label>
+                        <textarea #descElement maxlength="256" style="color: black" rows="3" 
                             [formControl]="descFormControl">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>

@@ -14,21 +14,24 @@
                 <form [formGroup]="elementCreationFormGroup" class="main-content">
                     <div class="left-content">
                         <mat-form-field class="strategy-style">
-                            <mat-select placeholder="Strategy" [formControl]="strategyFormControl">
+                            <mat-label>Strategy</mat-label>
+                            <mat-select [formControl]="strategyFormControl">
                                 <mat-option *ngFor="let strategy of strategies" [value]="strategy">
                                     {{strategy}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field class="strategy-style">
-                            <mat-select placeholder="Operation" [formControl]="operationFormControl">
+                            <mat-label>Operation</mat-label>
+                            <mat-select [formControl]="operationFormControl">
                                 <mat-option *ngFor="let operation of operations" [value]="operation">
                                     {{operation}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field>
-                            <textarea #descElement matInput placeholder="Description" maxlength="256" style="color: black" rows="5" 
+                            <mat-label>Description</mat-label>
+                            <textarea #descElement matInput maxlength="256" style="color: black" rows="5" 
                                 [formControl]="descFormControl" autocomplete="off">
                             </textarea>
                             <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
@@ -49,7 +52,8 @@
                                         </mat-selection-list>
                                     </mat-card-content>
                                     <mat-form-field>
-                                        <input #inputValue matInput placeholder="Value" 
+                                        <mat-label>Value</mat-label>
+                                        <input #inputValue matInput
                                             [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected }}" autocomplete="off">
                                         <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
                                             Please, check the value format

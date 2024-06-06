@@ -17,7 +17,8 @@
     </div>
     <div *ngIf="data.apiKey">
         <mat-form-field>
-            <textarea matInput placeholder="API Key" [(ngModel)]="data.apiKey" style="color: black" readonly>
+            <mat-label>API Key</mat-label>
+            <textarea matInput [(ngModel)]="data.apiKey" style="color: black" readonly>
             </textarea>
             <mat-hint align="end"><strong style="color: red;">Keep this key in a safe place</strong></mat-hint>
         </mat-form-field>

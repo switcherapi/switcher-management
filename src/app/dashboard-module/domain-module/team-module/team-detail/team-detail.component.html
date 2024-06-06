@@ -5,7 +5,7 @@
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
                         <mat-label>Name</mat-label>
-                        <input matInput placeholder="Name" readonly="{{!editing}}" 
+                        <input matInput readonly="{{!editing}}" 
                             [ngStyle]="editing ? {'color': 'black'} : ''" 
                             [formControl]="nameFormControl"
                             autocomplete="off">
@@ -18,7 +18,7 @@
                     </mat-error>
                     <mat-form-field>
                         <mat-label>Domain Name</mat-label>
-                        <input matInput placeholder="Domain Name" [value]="domainName" readonly>
+                        <input matInput [value]="domainName" readonly>
                     </mat-form-field>
                 </div>
             </div>

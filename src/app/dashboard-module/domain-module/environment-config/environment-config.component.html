@@ -2,7 +2,7 @@
     <form [formGroup]="environmentSelection">
         <mat-form-field style="width: 180px;">
             <mat-label>Environment selection</mat-label>
-            <mat-select #envSelectionChange placeholder="Environment selection" formControlName="environmentSelection">
+            <mat-select #envSelectionChange formControlName="environmentSelection">
                 <mat-option *ngFor="let environment of environments" [value]="environment.name">
                     {{environment.name}}
                 </mat-option>

@@ -1,7 +1,8 @@
 <block-ui>
     <div class="filter-permission-style">
         <mat-form-field class="filter-input">
-            <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            <mat-label>Filter</mat-label>
+            <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
         </mat-form-field>
         <button mat-button class="btn-element" (click)="createPermission()" [disabled]="!creatable">
             <mat-icon style="font-size: large;">build</mat-icon>

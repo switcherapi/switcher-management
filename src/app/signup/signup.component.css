@@ -30,7 +30,7 @@ h4 {
   background: #42474d;
   color: white;
   transition: all .5s;
-  width: 25%;
+  width: 28%;
 }
 
 .btn-element:hover {
@@ -41,24 +41,6 @@ h4 {
   background: white;
   border: 1px solid black;
   margin-left: 20px;
-}
-
-.new-feature {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transform: translate(50%, -50%);
-  padding-left: .5rem;
-  padding-right: .5rem;
-  background-color: #5298ff;
-  border-radius: 20px;
-}
-
-.new-feature-text {
-  margin: 3px 0px 3px;
-  font-size: 12px;
-  font-weight: lighter;
-  line-height: initial;
 }
 
 .loader {

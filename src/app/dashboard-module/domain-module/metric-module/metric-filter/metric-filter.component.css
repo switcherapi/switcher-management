@@ -3,6 +3,10 @@
   display: contents;
 }
 
+.mat-calendar-period-button {
+  color: black !important
+}
+
 @media only screen and (max-width: 430px) {
   .options-section-label {
     display: none;

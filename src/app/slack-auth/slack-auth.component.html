@@ -17,7 +17,8 @@
             <div *ngIf="!loading" class="card-body">
                 <div class="form-group">
                     <mat-form-field>
-                        <mat-select placeholder="Select Domain" [formControl]="domainFormControl">
+                        <mat-label>Select Domain</mat-label>
+                        <mat-select [formControl]="domainFormControl">
                             <mat-option *ngFor="let domain of domains" [value]="domain">
                                 {{ domain.name }}
                             </mat-option>
@@ -27,12 +28,14 @@
                 <div *ngIf="!error">
                     <div class="form-group">
                         <mat-form-field>
-                            <input matInput type="text" placeholder="Slack Team" value="{{ installation?.team_name }}" readonly="true">
+                            <mat-label>Slack Team</mat-label>
+                            <input matInput type="text" value="{{ installation?.team_name }}" readonly="true">
                         </mat-form-field>
                     </div>
                     <div class="form-group">
                         <mat-form-field>
-                            <input matInput type="text" placeholder="Slack Channel" value="{{ installation?.incoming_webhook_channel }}" readonly="true">
+                            <mat-label>Slack Channel</mat-label>
+                            <input matInput type="text" value="{{ installation?.incoming_webhook_channel }}" readonly="true">
                         </mat-form-field>
                     </div>
                 </div>

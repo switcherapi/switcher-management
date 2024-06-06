@@ -2,6 +2,10 @@ mat-icon {
   vertical-align: middle;
 }
 
+.grid-container {
+  border-radius: var(--mdc-text-button-container-shape);
+}
+
 .btn-element {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
   background: #549bfb;

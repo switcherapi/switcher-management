@@ -51,6 +51,11 @@ p {
   box-shadow: none;
 }
 
+th,
+.mat-mdc-paginator {
+  background-color: rgb(251, 251, 251) !important;
+}
+
 .mat-header-cell {
   color: white;
   font-size: unset;

@@ -66,6 +66,15 @@ tr.element-row:not(.expanded-row):active {
   transition: opacity 0.5s ease-in-out;
 }
 
+th,
+.mat-mdc-paginator {
+  background-color: rgb(251, 251, 251) !important;
+}
+
+td {
+  word-break: break-all;
+}
+
 /* fix layout issues */
 :host ::ng-deep .mat-paginator-container {
   min-height: auto;

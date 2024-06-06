@@ -9,7 +9,7 @@
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
                         <mat-label>Name</mat-label>
-                        <input #keyElement matInput placeholder="Name" [value]="config?.key" maxlength="30"
+                        <input #keyElement matInput [value]="config?.key" maxlength="30"
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" 
                             special-chars [autoUpper]="true" [autoUnderscore]="true"
                             [formControl]="keyFormControl" autocomplete="off">
@@ -22,7 +22,7 @@
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>
-                        <textarea #descElement matInput placeholder="Description" [value]="config?.description" maxlength="256"
+                        <textarea #descElement matInput [value]="config?.description" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
@@ -31,15 +31,15 @@
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
                         <mat-label>Created At</mat-label>
-                        <input matInput placeholder="Created At" [value]="config?.createdAt | date:'medium'" readonly>
+                        <input matInput [value]="config?.createdAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Last Update</mat-label>
-                        <input matInput placeholder="Last Update" [value]="config?.updatedAt | date:'medium'" readonly>
+                        <input matInput [value]="config?.updatedAt | date:'medium'" readonly>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Created By</mat-label>
-                        <input matInput placeholder="Created By" [value]="config?.admin.name" readonly>
+                        <input matInput [value]="config?.admin.name" readonly>
                     </mat-form-field>
                 </div>
                 <div class="description">

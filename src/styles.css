@@ -4,7 +4,8 @@
   background-color: #fff0 !important;
 }
 
-.mat-mdc-button {
+app-domain .mat-mdc-button,
+app-domain-list .mat-mdc-button {
   color: white !important;
   line-height: 36px !important;
 }
@@ -107,10 +108,6 @@ label {
 .mdc-menu-surface,
 .mat-mdc-table {
   background-color: white !important;
-}
-
-.mat-mdc-paginator {
-  background-color: rgb(251, 251, 251) !important;
 }
 
 .btn-red {

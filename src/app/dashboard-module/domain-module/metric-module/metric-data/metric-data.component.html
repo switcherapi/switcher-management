@@ -1,6 +1,7 @@
 <div class="mat-elevation-z8">
     <mat-form-field style="margin-left: 20px; margin-top: 10px;">
-        <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        <mat-label>Filter</mat-label>
+        <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
     </mat-form-field>
     
     <table mat-table matSort multiTemplateDataRows
@@ -37,17 +38,17 @@
                     <div class="element-detail">
                         <mat-list role="list" *ngFor="let entry of element.entry">
                             <mat-form-field style="width: 100%;">
-                                <input matInput placeholder="{{entry.strategy}}" [value]="entry.input"
-                                    readonly autocomplete="off">
+                                <mat-label>{{entry.strategy}}</mat-label>
+                                <input matInput [value]="entry.input" readonly autocomplete="off">
                             </mat-form-field>
                         </mat-list>
                         <mat-form-field style="width: 100%;">
-                            <input matInput placeholder="Reason" [value]="element.reason"
-                                readonly autocomplete="off">
+                            <mat-label>Reason</mat-label>
+                            <input matInput [value]="element.reason" readonly autocomplete="off">
                         </mat-form-field>
                         <mat-form-field *ngIf="element.message" style="width: 100%;">
-                            <input matInput placeholder="Message" [value]="element.message"
-                                readonly autocomplete="off">
+                            <mat-label>Message</mat-label>
+                            <input matInput [value]="element.message" readonly autocomplete="off">
                         </mat-form-field>
                     </div>
                 </div>

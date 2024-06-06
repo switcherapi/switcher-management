@@ -9,10 +9,12 @@
 </h4>
 <div mat-dialog-content>
     <mat-form-field>
-        <input matInput [(ngModel)]="data.team.name" placeholder="Team" readonly="true">
+        <mat-label>Team</mat-label>
+        <input matInput [(ngModel)]="data.team.name" readonly="true">
     </mat-form-field>
     <mat-form-field>
-        <input matInput [(ngModel)]="data.email" placeholder="For" readonly="true">
+        <mat-label>For</mat-label>
+        <input matInput [(ngModel)]="data.email" readonly="true">
     </mat-form-field>
 </div>
 <div mat-dialog-actions style="float: right;">

@@ -5,15 +5,15 @@
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
                         <mat-label>Relay Type</mat-label>
-                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Type" [value]="config.relay.type" readonly>
-                        <mat-select *ngIf="editing" placeholder="Relay Type" [formControl]="relayTypeFormControl">
+                        <input *ngIf="!editing" matInput class="readonly-fields" [value]="config.relay.type" readonly>
+                        <mat-select *ngIf="editing" [formControl]="relayTypeFormControl">
                             <mat-option value="VALIDATION">VALIDATION</mat-option>
                             <mat-option value="NOTIFICATION">NOTIFICATION</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>
-                        <textarea #descElement matInput class="readonly-fields" placeholder="Description" 
+                        <textarea #descElement matInput class="readonly-fields"
                             [value]="config.relay.description ? config.relay.description : ''" maxlength="256"
                             [ngStyle]="editing ? {'color': 'black'} : ''" rows="6" readonly="{{ !editing }}">
                         </textarea>
@@ -23,7 +23,7 @@
                 <div class="description" style="width: 300px;">
                     <mat-form-field>
                         <mat-label>Endpoint</mat-label>
-                        <input #endpointElement matInput placeholder="Endpoint" maxlength="200" required
+                        <input #endpointElement matInput maxlength="200" required
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}"  autocomplete="off" [formControl]="endpointFormControl">
                         <mat-error *ngIf="endpointFormControl.hasError('required')">
                             Endpoint must be valid
@@ -31,21 +31,21 @@
                     </mat-form-field>
                     <mat-form-field class="operations-style">
                         <mat-label>Relay Method</mat-label>
-                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Method" [value]="config.relay.method" readonly>
-                        <mat-select *ngIf="editing" placeholder="Relay Method" [formControl]="relayMethodFormControl">
+                        <input *ngIf="!editing" matInput class="readonly-fields" [value]="config.relay.method" readonly>
+                        <mat-select *ngIf="editing" [formControl]="relayMethodFormControl">
                             <mat-option value="GET">GET</mat-option>
                             <mat-option value="POST">POST</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Authorization Prefix</mat-label>
-                        <input #authPrefixElement matInput placeholder="Authorization Prefix" 
+                        <input #authPrefixElement matInput
                             [value]="config.relay.auth_prefix ? config.relay.auth_prefix : ''" maxlength="50"
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" autocomplete="off">
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Authorization Token</mat-label>
-                        <input #authTokenElement matInput placeholder="Authorization Token" maxlength="200" type="{{ !editing ? 'password' : 'text' }}"
+                        <input #authTokenElement matInput maxlength="200" type="{{ !editing ? 'password' : 'text' }}"
                                 [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" autocomplete="off">
                     </mat-form-field>
                 </div>

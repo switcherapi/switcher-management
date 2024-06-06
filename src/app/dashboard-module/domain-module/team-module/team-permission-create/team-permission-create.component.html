@@ -14,21 +14,24 @@
                 <form [formGroup]="elementCreationFormGroup">
                     <div>
                         <mat-form-field class="strategy-style">
-                            <mat-select placeholder="Component" [formControl]="routerFormControl">
+                            <mat-label>Component</mat-label>
+                            <mat-select [formControl]="routerFormControl">
                                 <mat-option *ngFor="let router of routers" [value]="router" [disabled]="data.permission">
                                     {{router}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field class="strategy-style">
-                            <mat-select placeholder="Permission" [formControl]="actionFormControl">
+                            <mat-label>Permission</mat-label>
+                            <mat-select [formControl]="actionFormControl">
                                 <mat-option *ngFor="let action of actions" [value]="action" [disabled]="data.permission">
                                     {{action}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field class="strategy-style">
-                            <mat-select placeholder="Environments" [formControl]="environmentFormControl" multiple>
+                            <mat-label>Environments</mat-label>
+                            <mat-select [formControl]="environmentFormControl" multiple>
                                 <mat-select-trigger>{{environmentFormControl.value?.[0] || ''}}
                                     <span *ngIf="(environmentFormControl.value?.length || 0) > 1">
                                         (+{{(environmentFormControl.value?.length || 0) - 1}} {{environmentFormControl.value?.length === 2 ? 'other' : 'others'}})
@@ -51,7 +54,8 @@
                                 </mat-selection-list>
                             </mat-card-content>
                             <mat-form-field>
-                                <input #inputValue matInput placeholder="Selected" maxlength="20" [formControl]="valueSelectionFormControl" autocomplete="off">
+                                <mat-label>Selected</mat-label>
+                                <input #inputValue matInput maxlength="20" [formControl]="valueSelectionFormControl" autocomplete="off">
                             </mat-form-field>
                             <div class="strategy-values-control">
                                 <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 

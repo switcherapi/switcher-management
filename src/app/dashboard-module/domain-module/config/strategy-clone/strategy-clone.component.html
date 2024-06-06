@@ -12,10 +12,12 @@
         <div class="header-container">
             <div class="description">
                 <mat-form-field>
-                    <input matInput class="readonly-fields" placeholder="From environment" [value]="data.currentEnvironment" readonly>
+                    <mat-label>From environment</mat-label>
+                    <input matInput class="readonly-fields" [value]="data.currentEnvironment" readonly>
                 </mat-form-field>
                 <mat-form-field>
-                    <mat-select #envSelectionChange cdkFocusInitial placeholder="To environment" [formControl]="environmentSelection">
+                    <mat-label>To environment</mat-label>
+                    <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
                         <mat-option *ngFor="let environment of environments" [value]="environment.name">
                             {{environment.name}}
                         </mat-option>

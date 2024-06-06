@@ -9,10 +9,11 @@
 </h4>
 <div mat-dialog-content>
     <mat-form-field>
-        <input matInput [(ngModel)]="data.domain" placeholder="Domain" readonly="true">
+        <mat-label>Domain</mat-label>
+        <input matInput [(ngModel)]="data.domain" readonly="true">
     </mat-form-field>
 </div>
-<div>
+<div mat-dialog-actions style="float: right;">
     <button class="btn-cancel" mat-button (click)="onCancel()">Close</button>
     <button class="btn-save" mat-button (click)="onCopy()" [cdkCopyToClipboard]="getUrl()" cdkFocusInitial>
         <mat-icon>file_copy</mat-icon>

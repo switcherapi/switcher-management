@@ -12,6 +12,7 @@ mat-icon {
   white-space: normal;
   color: #5298ff;
   display: block !important;
+  border-radius: 20px 0 20px 0;
 }
 
 .header-section.deactivated {
@@ -54,6 +55,7 @@ mat-icon {
   padding: 2px;
   margin-bottom: 10px;
   background: #549bfb94;
+  border-radius: 20px 0 0 0;
 }
 
 .grid-container.deactivated {

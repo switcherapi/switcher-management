@@ -1,6 +1,7 @@
 <div class="filter-member-style">
     <mat-form-field class="filter-input">
-        <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter / Email">
+        <mat-label>Filter / Email</mat-label>
+        <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
     </mat-form-field>
 </div>
 <div *ngIf="loading" class="card-body loader-div">

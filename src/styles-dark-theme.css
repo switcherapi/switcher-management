@@ -60,6 +60,7 @@ html.dark-mode #modal-title {
     color: #959393 !important;
 }
 
+html.dark-mode .header-section.activated:hover,
 html.dark-mode .mat-mdc-button:not(#domainOptions):not(#domainCreateBtn):not(.mat-mdc-button-disabled),
 html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
@@ -142,6 +143,7 @@ html.dark-mode app-metric .header-filter,
 html.dark-mode app-metric .nav-tabs,
 html.dark-mode app-metric #metric-statistics-buttons,
 html.dark-mode app-metric .mat-mdc-tab-header,
+html.dark-mode app-strategy-list .mat-mdc-tab-header,
 html.dark-mode app-metric-statistics canvas,
 html.dark-mode app-settings-account .btn-element,
 html.dark-mode app-ext-slack .card-body,
@@ -153,6 +155,7 @@ html.dark-mode .options-section-config,
 html.dark-mode app-domain-detail .detail-body .options-section,
 html.dark-mode app-group-detail .detail-body .options-section,
 html.dark-mode app-config-detail .detail-body .options-section,
+html.dark-mode mat-datepicker-content,
 html.dark-mode .btn-element.create,
 html.dark-mode #docContainer {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);

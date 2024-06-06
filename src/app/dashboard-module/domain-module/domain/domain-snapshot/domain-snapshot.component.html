@@ -13,14 +13,16 @@
             <div class="header-container">
                 <div class="description">
                     <mat-form-field>
-                        <mat-select #envSelectionChange cdkFocusInitial placeholder="Environment selection" [formControl]="environmentSelection">
+                        <mat-label>Environment selection</mat-label>
+                        <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
                             <mat-option *ngFor="let environment of environments" [value]="environment.name">
                                 {{environment.name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
-                        <mat-select #componentSelectionChange placeholder="Component selection" [formControl]="componentSelection">
+                        <mat-label>Component selection</mat-label>
+                        <mat-select #componentSelectionChange [formControl]="componentSelection">
                             <mat-option *ngFor="let component of components" [value]="component.name">
                                 {{component.name}}
                             </mat-option>

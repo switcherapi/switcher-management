@@ -15,18 +15,20 @@
                         <h5 class="card-title">Details</h5>
                         <div class="description">
                             <mat-form-field>
-                                <input matInput placeholder="Team Name" [value]="slack.team_name" readonly>
+                                <mat-label>Team Name</mat-label>
+                                <input matInput [value]="slack.team_name" readonly>
                             </mat-form-field>
                         </div>
                         <div class="description">
                             <mat-form-field>
-                                <input matInput placeholder="Approval Channel" [value]="slack.channel" readonly>
+                                <mat-label>Approval Channel</mat-label>
+                                <input matInput [value]="slack.channel" readonly>
                             </mat-form-field>
                         </div>
                         <div class="description">
                             <mat-form-field>
-                                <input matInput placeholder="Installed At"
-                                    [value]="slack.installed_at * 1000 | date:'medium'" readonly>
+                                <mat-label>Installed At</mat-label>
+                                <input matInput [value]="slack.installed_at * 1000 | date:'medium'" readonly>
                             </mat-form-field>
                         </div>
                         <div class="description">

@@ -1,7 +1,7 @@
 <div class="description">
     <mat-form-field>
         <mat-label>Ignored Environments</mat-label>
-        <mat-chip-grid #ignoredList aria-label="Ignored Environments">
+        <mat-chip-grid #ignoredList>
           <mat-chip-row *ngFor="let env of ignoredEnvironments" 
                 (removed)="remove(env, 'ignored')"
                 [removable]="true">
@@ -10,8 +10,7 @@
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>
-          <input placeholder="Environment name..."
-                [readonly]="!updatable"
+          <input [readonly]="!updatable"
                 [matChipInputFor]="ignoredList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="true"
@@ -21,7 +20,7 @@
 
       <mat-form-field>
         <mat-label>Frozen Environments</mat-label>
-        <mat-chip-grid #frozenList aria-label="Frozen Environments">
+        <mat-chip-grid #frozenList>
           <mat-chip-row *ngFor="let env of frozenEnvironments" 
                 (removed)="remove(env, 'frozen')"
                 [removable]="true">
@@ -30,8 +29,7 @@
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>
-          <input placeholder="Environment name..."
-                [readonly]="!updatable"
+          <input [readonly]="!updatable"
                 [matChipInputFor]="frozenList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="true"

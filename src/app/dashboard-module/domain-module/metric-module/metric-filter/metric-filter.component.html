@@ -12,7 +12,8 @@
         <div class="header-container">
             <div class="description">
                 <mat-form-field class="filter-env-selector">
-                    <mat-select placeholder="Environment selection" [formControl]="environmentSelection">
+                    <mat-label>Environment selection</mat-label>
+                    <mat-select [formControl]="environmentSelection">
                         <mat-option *ngFor="let environment of environments" [value]="environment.name">
                             {{environment.name}}
                         </mat-option>
@@ -24,7 +25,8 @@
                     [lockFilter]="lockFilter">
                 </element-autocomplete>
                 <mat-form-field *ngIf="selectedFilter" class="filter-env-selector">
-                    <mat-select placeholder="Group By" [(ngModel)]="dateGroupPattern">
+                    <mat-label>Group By</mat-label>
+                    <mat-select [(ngModel)]="dateGroupPattern">
                         <mat-option value="YYYY-MM">Month</mat-option>
                         <mat-option value="YYYY-MM-DD">Day</mat-option>
                         <mat-option value="YYYY-MM-DD HH">Hour</mat-option>
@@ -32,12 +34,14 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="filter-date-selector">
-                    <input matInput [matDatepicker]="fromPicker" placeholder="From" [formControl]="dateAfterFormControl">
+                    <mat-label>From</mat-label>
+                    <input matInput [matDatepicker]="fromPicker" [formControl]="dateAfterFormControl">
                     <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
                     <mat-datepicker #fromPicker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field class="filter-date-selector">
-                    <input matInput [matDatepicker]="toPicker" placeholder="To" [formControl]="dateBeforeFormControl">
+                    <mat-label>To</mat-label>
+                    <input matInput [matDatepicker]="toPicker" [formControl]="dateBeforeFormControl">
                     <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
                     <mat-datepicker #toPicker></mat-datepicker>
                 </mat-form-field>

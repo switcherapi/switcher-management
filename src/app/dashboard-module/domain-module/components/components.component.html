@@ -12,8 +12,9 @@
                 Create
             </button>
             <mat-form-field style="padding-left: 14px;">
-                <input #inputComponentName matInput placeholder="Component name" maxlength="30"  
-                special-chars [formControl]="compFormControl" autocomplete="off">
+                <mat-label>Component name</mat-label>
+                <input #inputComponentName matInput maxlength="30"  
+                    special-chars [formControl]="compFormControl" autocomplete="off">
             </mat-form-field>
         </div>
     </div>
