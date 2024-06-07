@@ -240,7 +240,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   hasRelay() {
-    return this.config?.relay.activated ? 
+    return this.config?.relay?.activated ? 
       this.config.relay.activated[this.currentEnvironment] != undefined : false;
   }
 
@@ -306,7 +306,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
 
     this.loadStrategies();
-    this.updateNavTab(3);
     this.disableMetrics = this.config.disable_metrics ? 
       this.config.disable_metrics[this.currentEnvironment] : false;
   }
@@ -327,6 +326,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   updateConfigRelay(relay: ConfigRelay) {
+    if (!relay) {
+      this.config.relay = new ConfigRelay();
+      this.config.relay.type = 'VALIDATION';
+      this.config.relay.method = 'GET';
+      return;
+    }
+
     this.config.relay = relay;
   }
 

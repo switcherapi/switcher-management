@@ -315,7 +315,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     }
     delete this.config.relay.endpoint[this.currentEnvironment];
     this.parent.updateConfigRelay(data.relay);
-    this.parent.updateNavTab(3);
+    this.parent.updateNavTab(1);
   }
 
   private openRelayVerificationDialog(): void {
