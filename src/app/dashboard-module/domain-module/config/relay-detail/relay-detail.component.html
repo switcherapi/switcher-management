@@ -4,8 +4,8 @@
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
-                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Type" [value]="config.relay.type" readonly>
-                        <mat-select *ngIf="editing" placeholder="Relay Type" [formControl]="relayTypeFormControl">
+                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Type" [value]="config.relay.type" required readonly>
+                        <mat-select *ngIf="editing" placeholder="Relay Type" [formControl]="relayTypeFormControl" required>
                             <mat-option value="VALIDATION">VALIDATION</mat-option>
                             <mat-option value="NOTIFICATION">NOTIFICATION</mat-option>
                         </mat-select>
@@ -27,8 +27,8 @@
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field class="operations-style">
-                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Method" [value]="config.relay.method" readonly>
-                        <mat-select *ngIf="editing" placeholder="Relay Method" [formControl]="relayMethodFormControl">
+                        <input *ngIf="!editing" matInput class="readonly-fields" placeholder="Relay Method" [value]="config.relay.method" required readonly>
+                        <mat-select *ngIf="editing" placeholder="Relay Method" [formControl]="relayMethodFormControl" required>
                             <mat-option value="GET">GET</mat-option>
                             <mat-option value="POST">POST</mat-option>
                         </mat-select>

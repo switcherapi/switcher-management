@@ -23,9 +23,6 @@ export class StrategyListComponent {
     const strategies = this.strategies.getValue();
     strategies.splice(strategies.indexOf(strategy), 1);
     this.parent.hasStrategies = strategies.length > 0;
-
-    if (!this.parent.hasStrategies)
-      this.parent.updateNavTab(3);
   }
 
   updateStrategies(strategy: Strategy) {
