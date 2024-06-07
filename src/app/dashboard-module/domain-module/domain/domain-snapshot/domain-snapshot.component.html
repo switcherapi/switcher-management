@@ -13,7 +13,7 @@
             <div class="header-container">
                 <div class="description">
                     <mat-form-field>
-                        <mat-label>Environment selection</mat-label>
+                        <mat-label>Environment</mat-label>
                         <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
                             <mat-option *ngFor="let environment of environments" [value]="environment.name">
                                 {{environment.name}}
@@ -21,7 +21,7 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
-                        <mat-label>Component selection</mat-label>
+                        <mat-label>Component</mat-label>
                         <mat-select #componentSelectionChange [formControl]="componentSelection">
                             <mat-option *ngFor="let component of components" [value]="component.name">
                                 {{component.name}}

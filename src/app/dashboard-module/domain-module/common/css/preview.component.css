@@ -47,24 +47,21 @@ mat-icon {
   display: none;
 }
 
-.grid-container.activated {
+.grid-container {
   display: grid;
   grid-template-areas:
     'header empty empty empty empty toggle';
   grid-gap: 2px;
   padding: 2px;
   margin-bottom: 10px;
-  background: #549bfb94;
   border-radius: 20px 0 0 0;
 }
 
+.grid-container.activated {
+  background: #549bfb94;
+}
+
 .grid-container.deactivated {
-  display: grid;
-  grid-template-areas:
-    'header empty empty empty empty toggle';
-  grid-gap: 2px;
-  padding: 2px;
-  margin-bottom: 10px;
   background: #d0d0d0;
 }
 

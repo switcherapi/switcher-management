@@ -14,7 +14,7 @@
         <div *ngIf="!childEnvironmentEmitter" class="environment-style">
             <form [formGroup]="environmentSelection">
                 <mat-form-field>
-                    <mat-label>Environment selection</mat-label>
+                    <mat-label>Environment</mat-label>
                     <mat-select #envSelectionChange formControlName="environmentSelection">
                         <mat-option *ngFor="let environment of environments" [value]="environment.name">
                             {{environment.name}}

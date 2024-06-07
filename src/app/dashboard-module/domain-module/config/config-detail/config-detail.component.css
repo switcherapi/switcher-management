@@ -2,14 +2,6 @@
   min-height: 450px;
 }
 
-.strategy-section.strategies {
-  min-height: 600px;
-}
-
-.strategy-section.metrics {
-  min-height: 700px;
-}
-
 .switcher-component-section {
   display: grid; 
   padding: 15px;
