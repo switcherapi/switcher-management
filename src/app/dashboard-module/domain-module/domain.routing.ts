@@ -1,5 +1,5 @@
 import { NgModule }             from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
 
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './components/components.component';
@@ -17,27 +17,27 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 const routes: Routes = [
   {
     path: '',
-    component: DomainComponent, canActivate: [AuthGuard],
+    component: DomainComponent, canActivate: mapToCanActivate([AuthGuard]),
     children: [
       {
         path: '',
-        component: DomainDetailComponent, canActivate: [AuthGuard]
+        component: DomainDetailComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'groups',
-        component: GroupListComponent, canActivate: [AuthGuard]
+        component: GroupListComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'groups/:groupid',
-        component: GroupDetailComponent, canActivate: [AuthGuard]
+        component: GroupDetailComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'groups/:groupid/switchers',
-        component: ConfigListComponent, canActivate: [AuthGuard]
+        component: ConfigListComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'groups/:groupid/switchers/:configid',
-        component: ConfigDetailComponent, canActivate: [AuthGuard]
+        component: ConfigDetailComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'metrics',
@@ -45,23 +45,23 @@ const routes: Routes = [
       },
       {
         path: 'change-log',
-        component: ChangelogComponent, canActivate: [AuthGuard]
+        component: ChangelogComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'groups/:groupid/change-log',
-        component: ChangelogComponent, canActivate: [AuthGuard]
+        component: ChangelogComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'groups/:groupid/switchers/:configid/change-log',
-        component: ChangelogComponent, canActivate: [AuthGuard]
+        component: ChangelogComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'components',
-        component: ComponentsComponent, canActivate: [AuthGuard]
+        component: ComponentsComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'environments',
-        component: EnvironmentsComponent, canActivate: [AuthGuard]
+        component: EnvironmentsComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       {
         path: 'teams',
@@ -69,7 +69,7 @@ const routes: Routes = [
       },
       {
         path: 'integration/slack',
-        component: ExtSlackComponent, canActivate: [AuthGuard]
+        component: ExtSlackComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       { path: '**', redirectTo: '/dashboard/domain' }
     ]

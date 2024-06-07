@@ -62,27 +62,33 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
   private loadDomains() {
     this.domainService.getDomains()
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.domains = data.filter(domain => !domain.integrations.slack);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.domains = data.filter(domain => !domain.integrations.slack);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to load Domains`);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load Domains`);
-    });
+      });
   }
 
   private loadSlackInstallation(): void {
     this.loading = true;
     this.slackService.findSlackInstallation(this.enterprise_id, this.team_id)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(installation => {
-        this.installation = installation;
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.error = 'Unable to load Slack Installation';
-        this.loading = false;
+      .subscribe({
+        next: installation => {
+          this.installation = installation;
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = 'Unable to load Slack Installation';
+          this.loading = false;
+        }
       });
   }
 
@@ -103,13 +109,16 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.slackService.authorizeInstallation(this.selectedDomain.id, this.team_id)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(() => {
-        this.toastService.showSuccess(`Slack App succesfully installed for ${this.selectedDomain.name}`);
-        this.router.navigate(['/dashboard']);
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to complete the Slack installation`);
-        this.loading = false;
+      .subscribe({
+        next: _ => {
+          this.toastService.showSuccess(`Slack App succesfully installed for ${this.selectedDomain.name}`);
+          this.router.navigate(['/dashboard']);
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to complete the Slack installation`);
+          this.loading = false;
+        }
       });
   }
 
@@ -117,12 +126,15 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.slackService.declineInstallation(this.enterprise_id, this.team_id)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(() => {
-        this.router.navigate(['/dashboard']);
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to decline Slack installation`);
-        this.loading = false;
+      .subscribe({
+        next: _ => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to decline Slack installation`);
+          this.loading = false;
+        }
       });
   }
 

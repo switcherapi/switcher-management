@@ -63,50 +63,61 @@ export class DomainListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loading = true;
-        this.domainService.createDomain(result.name, result.description).subscribe(domain => {
-          if (domain) {
-            this.ngOnInit();
-            this.toastService.showSuccess('Domain created with success');
+        this.domainService.createDomain(result.name, result.description).subscribe({
+          next: domain => {
+            if (domain) {
+              this.ngOnInit();
+              this.toastService.showSuccess('Domain created with success');
+            }
+          },
+          error: error => {
+            this.loading = false;
+            this.toastService.showError(`Unable to create a new domain. ${error.error}`);
+            ConsoleLogger.printError(error);
           }
-        }, error => {
-          this.loading = false;
-          this.toastService.showError(`Unable to create a new domain. ${error.error}`);
-          ConsoleLogger.printError(error);
         });
       }
     });
   }
   
   private loadDomain(): void {
-    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.domains = data;
+    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe({
+      next: (data) => {
+        if (data) {
+          this.domains = data;
+        }
+      },
+      error: (error) => {
+        ConsoleLogger.printError(error);
+        this.loading = false;
+        this.error = this.errorHandler.doError(error);
+      },
+      complete: () => {
+        if (!this.domains) {
+          this.error = 'Failed to connect to Switcher API';
+        }
+        this.loading = false;
+        this.cardListContainerStyle = 'card mt-4 ready';
       }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      if (!this.domains) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loading = false;
-      this.cardListContainerStyle = 'card mt-4 ready';
     });
   }
 
   private loadCollabDomain(): void {
     this.collabDomains = [];
-    this.domainService.getDomainsCollab().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data?.length) {
-        this.collabDomains = data;
-        this.cardCollabListContainerStyle = 'card mt-4 ready';
+    this.domainService.getDomainsCollab().pipe(takeUntil(this.unsubscribe)).subscribe({
+      next: (data) => {
+        if (data?.length) {
+          this.collabDomains = data;
+          this.cardCollabListContainerStyle = 'card mt-4 ready';
+        }
+      }, 
+      error: (error) => {
+        ConsoleLogger.printError(error);
+        this.loadingCollab = false;
+      },
+      complete: () => {
+        this.loadingCollab = false;
       }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loadingCollab = false;
-    }, () => {
-      this.loadingCollab = false;
     });
   }
 

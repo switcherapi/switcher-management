@@ -35,18 +35,21 @@ export class SignupDomainComponent implements OnInit, OnDestroy {
 
   onAccept() {
     this.loading = true;
-    this.domainService.acceptDomainTransfer(this.request).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-        if (success) {
-          this.router.navigate(['/dashboard']);
-          this.toastService.showSuccess(`Domain transfered with success`);
+    this.domainService.acceptDomainTransfer(this.request).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: success => {
+          if (success) {
+            this.router.navigate(['/dashboard']);
+            this.toastService.showSuccess(`Domain transfered with success`);
+          }
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = `Domain cannot be transfered`;
+          this.loading = false;
         }
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.error = `Domain cannot be transfered`;
-        this.loading = false;
-      }
-    );
+      });
   }
 
   ngOnDestroy() {

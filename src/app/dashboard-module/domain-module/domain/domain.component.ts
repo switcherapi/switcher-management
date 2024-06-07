@@ -116,29 +116,33 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.blockUI.start('Creating request...');
     this.domainService.requestDomainTransfer(this.currentPath.id)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(domain => {
-        if (domain) {
-          if (this.transferLabel === 'Transfer Domain') {
-            this.transferLabel = 'Cancel Transfer';
-            this.dialog.open(DomainTransferDialogComponent, {
-              width: '450px',
-              minWidth: window.innerWidth < 450 ? '95vw' : '',
-              data: {
-                request_id: domain.id,
-                domain: domain.name
-              }
-            });
-          } else {
-            this.transferLabel = 'Transfer Domain';
-            this.toastService.showSuccess(`Transfer canceled with success`);
+      .subscribe({
+        next: domain => {
+          if (domain) {
+            if (this.transferLabel === 'Transfer Domain') {
+              this.transferLabel = 'Cancel Transfer';
+              this.dialog.open(DomainTransferDialogComponent, {
+                width: '450px',
+                minWidth: window.innerWidth < 450 ? '95vw' : '',
+                data: {
+                  request_id: domain.id,
+                  domain: domain.name
+                }
+              });
+            } else {
+              this.transferLabel = 'Transfer Domain';
+              this.toastService.showSuccess(`Transfer canceled with success`);
+            }
           }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.blockUI.stop();
+        },
+        complete: () => {
+          this.blockUI.stop();
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.blockUI.stop();
-    }, () => {
-      this.blockUI.stop();
-    });
+      });
   }
 
   onSelectElementFilter(value: any): void {
@@ -238,13 +242,16 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       query = this.domainService.executeConfigurationQuery(this.domainId, forceFetch);
     }
 
-    query.pipe(takeUntil(this.unsubscribe)).subscribe(response => {
-      if (response) {
-        this.updateData(response.data.configuration);
-        this.checkDomainOwner();
+    query.pipe(takeUntil(this.unsubscribe)).subscribe({
+      next: response => {
+        if (response) {
+          this.updateData(response.data.configuration);
+          this.checkDomainOwner();
+        }
+      },
+      error: error => {
+        ConsoleLogger.printError(error);
       }
-    }, error => {
-      ConsoleLogger.printError(error);
     });
   }
 
@@ -289,33 +296,39 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   private redirectToSwitcher(item: any) {
     this.configService.getConfigById(item._id, true)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(config => {
-        if (config) {
-          this.config = config;
-          this.currentPath.id = config.id;
-          this.currentPath.type = Types.CONFIG_TYPE;
-          this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${item.parent._id}/switchers/${config.id}`;
-          this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.config) } });
+      .subscribe({
+        next: config => {
+          if (config) {
+            this.config = config;
+            this.currentPath.id = config.id;
+            this.currentPath.type = Types.CONFIG_TYPE;
+            this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${item.parent._id}/switchers/${config.id}`;
+            this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.config) } });
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private redirectToGroup(item: any) {
     this.groupService.getGroupById(item._id)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(group => {
-        if (group) {
-          this.group = group;
-          this.currentPath.id = group.id;
-          this.currentPath.type = Types.GROUP_TYPE;
-          this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${group.id}`;
-          this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.group) } });
+      .subscribe({
+        next: group => {
+          if (group) {
+            this.group = group;
+            this.currentPath.id = group.id;
+            this.currentPath.type = Types.GROUP_TYPE;
+            this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${group.id}`;
+            this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.group) } });
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
 }

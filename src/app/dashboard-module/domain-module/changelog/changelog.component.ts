@@ -156,7 +156,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.domainService.getHistory(this.domainId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+      .subscribe({
+        next: data => this.loadSuccess(data),
+        error: error => this.loadError(error)
+      });
 
     this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
       `/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}`);
@@ -166,7 +169,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.groupService.getHistory(this.groupId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+      .subscribe({
+        next: data => this.loadSuccess(data),
+        error: error => this.loadError(error)
+      });
 
     if (this.fetch) {
       this.groupService.getGroupById(this.groupId)
@@ -182,7 +188,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.configService.getHistory(this.configId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+      .subscribe({
+        next: data => this.loadSuccess(data),
+        error: error => this.loadError(error)
+      });
 
     if (this.fetch) {
       this.configService.getConfigById(this.configId, false)
@@ -198,7 +207,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.strategyService.getHistory(this.strategy.id, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.loadSuccess(data), error => this.loadError(error));
+      .subscribe({
+        next: data => this.loadSuccess(data),
+        error: error => this.loadError(error)
+      });
   }
 
   private loadDataSource(data: History[], refresh: boolean): void {
@@ -218,25 +230,37 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   private resetDomainChangeLog(): void {
     this.domainService.resetHistory(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
+      .subscribe({
+        next: data => this.changeLogSuccess(data),
+        error: error => this.changeLogError(error)
+      });
   }
 
   private resetGroupChangeLog(): void {
     this.groupService.resetHistory(this.groupId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
+      .subscribe({
+        next: data => this.changeLogSuccess(data),
+        error: error => this.changeLogError(error)
+      });
   }
 
   private resetConfigChangeLog(): void {
     this.configService.resetHistory(this.configId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
+      .subscribe({
+        next: data => this.changeLogSuccess(data),
+        error: error => this.changeLogError(error)
+      });
   }
 
   private resetStrategyChangeLog(): void {
     this.strategyService.resetHistory(this.strategy.id)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.changeLogSuccess(data), error => this.changeLogError(error));
+      .subscribe({
+        next: data => this.changeLogSuccess(data),
+        error: error => this.changeLogError(error)
+      });
   }
 
   private changeLogSuccess(data: any): void {

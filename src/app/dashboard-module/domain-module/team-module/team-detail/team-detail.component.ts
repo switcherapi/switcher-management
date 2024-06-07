@@ -102,7 +102,10 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
         this.blockUI.start('Updating Team...');
         this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
+          .subscribe({
+            next: team => this.onSuccess(team),
+            error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
+          });
       }
     }
   }
@@ -111,18 +114,25 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.blockUI.start('Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(team => this.onSuccess(team), error => this.onError(error, `Unable to update team: '${this.team.name}'`));
+      .subscribe({
+        next: team => this.onSuccess(team),
+        error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
+      });
   }
 
   removeTeam() {
     this.blockUI.start('Removing team...');
-    this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-        if (team) {
-          this.blockUI.stop();
-          this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}/teams`]);
-          this.toastService.showSuccess(`Team removed with success`);
-        }
-      }, error => this.onError(error, `Unable to remove team: '${this.team.name}'`));
+    this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: team => {
+          if (team) {
+            this.blockUI.stop();
+            this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}/teams`]);
+            this.toastService.showSuccess(`Team removed with success`);
+          }
+        },
+        error: error => this.onError(error, `Unable to remove team: '${this.team.name}'`)
+      });
   }
 
   private onSuccess(team: any): void {
@@ -143,18 +153,22 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   private loadTeam(): void {
     this.teamService.getTeam(this.teamId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(team => {
-        if (team) {
-          this.team = team;
-          this.nameFormControl.setValue(this.team.name);
-          this.setHeaderStyle();
+      .subscribe({
+        next: team => {
+          if (team) {
+            this.team = team;
+            this.nameFormControl.setValue(this.team.name);
+            this.setHeaderStyle();
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    });
+      });
   }
 
   private readPermissionToObject(): void {

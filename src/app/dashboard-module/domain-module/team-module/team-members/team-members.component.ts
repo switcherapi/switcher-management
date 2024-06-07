@@ -54,40 +54,53 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   }
 
   inviteMember(email: string) {
-    this.teamService.inviteTeamMember(this.team._id, email).pipe(takeUntil(this.unsubscribe)).subscribe(invite => {
-      if (invite) {
-        this.onInvite(invite);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to invite ${email} - ${error.error}`);
-    });
+    this.teamService.inviteTeamMember(this.team._id, email).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: invite => {
+          if (invite) {
+            this.onInvite(invite);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to invite ${email} - ${error.error}`);
+        }
+      });
   }
 
   removeMember(member: Admin) {
     this.teamService.removeTeamMember(this.team._id, member.id)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(memberRemoved => {
-      if (memberRemoved) {
-        this.loadTeam();
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
-    })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: memberRemoved => {
+          if (memberRemoved) {
+            this.loadTeam();
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
+        }
+      });
   }
 
   private loadTeam(): void {
     this.loading = true;
-    this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(team => {
-      if (team) {
-        this.loadDataSource(team.members)
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    })
+    this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: team => {
+          if (team) {
+            this.loadDataSource(team.members)
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
   }
 
   private loadDataSource(data: Admin[]): void {

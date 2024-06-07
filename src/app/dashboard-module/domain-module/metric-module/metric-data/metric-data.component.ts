@@ -94,16 +94,19 @@ export class MetricDataComponent implements OnInit, OnDestroy {
       if (result) {
         this.metricService.resetMetricsForSwitcher(this.parent.domainId, this.switcher)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
-              this.parent.switcher = null;
-              this.dataSource = new MatTableDataSource(null);
-              this.toastService.showSuccess(`Metrics reseted with success`);
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.parent.switcher = null;
+                this.dataSource = new MatTableDataSource(null);
+                this.toastService.showSuccess(`Metrics reseted with success`);
+              }
+            },
+            error: error => {
+              this.toastService.showError(`Unable to reset Metrics`);
+              ConsoleLogger.printError(error);
             }
-        }, error => {
-          this.toastService.showError(`Unable to reset Metrics`);
-          ConsoleLogger.printError(error);
-        });
+          });
       }
     });
   }
@@ -129,27 +132,35 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   onNextPage(): void {
-    this.parent.loadDataMetrics(++this.page, this.parent.environment, this.date, this.date).subscribe(metrics => {
-      if (metrics) {
-        this.loadDataSource(metrics.data);
-        this.pageLoaded += metrics.data.length;
-        this.currentPageSize = metrics.data.length;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+    this.parent.loadDataMetrics(++this.page, this.parent.environment, this.date, this.date)
+      .subscribe({
+        next: metrics => {
+          if (metrics) {
+            this.loadDataSource(metrics.data);
+            this.pageLoaded += metrics.data.length;
+            this.currentPageSize = metrics.data.length;
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        }
+      });
   }
 
   onPreviousPage(): void {
-    this.parent.loadDataMetrics(--this.page, this.parent.environment, this.date, this.date).subscribe(metrics => {
-      if (metrics) {
-        this.loadDataSource(metrics.data);
-        this.pageLoaded -= this.currentPageSize;
-        this.currentPageSize = metrics.data.length;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+    this.parent.loadDataMetrics(--this.page, this.parent.environment, this.date, this.date)
+      .subscribe({
+        next: metrics => {
+          if (metrics) {
+            this.loadDataSource(metrics.data);
+            this.pageLoaded -= this.currentPageSize;
+            this.currentPageSize = metrics.data.length;
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        }
+      });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {

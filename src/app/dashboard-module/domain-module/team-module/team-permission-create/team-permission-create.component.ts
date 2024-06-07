@@ -106,46 +106,55 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   private loadRouter(): void {
     this.permissionService.getPermissionRouters()
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(routers => {
-        if (routers) {
-          this.routers = routers.routersAvailable;
-          if (this.data.router) {
-            this.routerFormControl.setValue(this.data.router);
+      .subscribe({
+        next: routers => {
+          if (routers) {
+            this.routers = routers.routersAvailable;
+            if (this.data.router) {
+              this.routerFormControl.setValue(this.data.router);
+            }
           }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private loadActions(): void {
     this.permissionService.getPermissionActions()
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(actions => {
-        if (actions) {
-          this.actions = actions.actionsAvailable;
-          if (this.data.action) {
-            this.actionFormControl.setValue(this.data.action);
+      .subscribe({
+        next: actions => {
+          if (actions) {
+            this.actions = actions.actionsAvailable;
+            if (this.data.action) {
+              this.actionFormControl.setValue(this.data.action);
+            }
           }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private loadEnvironments() {
     this.environmentService.getEnvironmentsByDomainId(this.data.domain)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(environments => {
-        if (environments) {
-          this.environments = environments.map(environment => environment.name);
-          if (this.data.environments) {
-            this.environmentFormControl.setValue(this.data.environments);
+      .subscribe({
+        next: environments => {
+          if (environments) {
+            this.environments = environments.map(environment => environment.name);
+            if (this.data.environments) {
+              this.environmentFormControl.setValue(this.data.environments);
+            }
           }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private validateData(data: any): boolean {
@@ -180,15 +189,19 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   private onRouterChange() {
     this.routerFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.router = value;
-      this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe)).subscribe(permissionValue => {
-        this.key = permissionValue.key;
-        this.validKeyOnly = permissionValue?.key;
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.validKeyOnly = false;
-        this.valueSelectionFormControl.setValue(null);
-        this.data.values = [];
-      });
+      this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe))
+        .subscribe({
+          next: permissionValue => {
+            this.key = permissionValue.key;
+            this.validKeyOnly = permissionValue?.key;
+          },
+          error: error => {
+            ConsoleLogger.printError(error);
+            this.validKeyOnly = false;
+            this.valueSelectionFormControl.setValue(null);
+            this.data.values = [];
+          }
+        });
     });
   }
 

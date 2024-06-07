@@ -122,18 +122,21 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         this.blockUI.start('Removing strategy...');
         this.strategyService.deleteStrategy(this.strategy.id)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(_data => {
-            this.strategyList.reloadStrategies(this.strategy);
-            this.blockUI.stop();
-            this.toastService.showSuccess(`Strategy removed with success`);
+          .subscribe({
+            next: _data => {
+              this.strategyList.reloadStrategies(this.strategy);
+              this.blockUI.stop();
+              this.toastService.showSuccess(`Strategy removed with success`);
 
-            if (!this.strategyList.strategies.getValue().length)
-              this.scrollToElement(document.getElementById('page-container'));
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(`Unable to remove this strategy`);
-          ConsoleLogger.printError(error);
-        });
+              if (!this.strategyList.strategies.getValue().length)
+                this.scrollToElement(document.getElementById('page-container'));
+            },
+            error: error => {
+              this.blockUI.stop();
+              this.toastService.showError(`Unable to remove this strategy`);
+              ConsoleLogger.printError(error);
+            }
+          });
       }
     });
   }
@@ -153,24 +156,29 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         this.blockUI.start('Cloning strategy...');
         this.strategyService.getStrategiesByConfig(this.strategy.config, result.environment)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data.length) {
-              this.toastService.showError(`Strategy already exist in ${result.environment}`);
-            } else {
-              this.strategyService.createStrategy(
-                this.strategy.config,
-                this.strategy.description,
-                this.strategy.strategy,
-                this.strategy.operation,
-                result.environment,
-                this.strategy.values).subscribe(_data => {
-                  this.toastService.showSuccess(`Strategy cloned with success`);
-                }, error => {
-                  this.toastService.showError(error.error);
-                  ConsoleLogger.printError(error);
-                });
-            }
-        }, error => this.updateValueError(error, 'Unable to edit this value'), () => this.blockUI.stop());
+          .subscribe({
+            next: data => {
+              if (data.length) {
+                this.toastService.showError(`Strategy already exist in ${result.environment}`);
+              } else {
+                this.strategyService.createStrategy(
+                  this.strategy.config,
+                  this.strategy.description,
+                  this.strategy.strategy,
+                  this.strategy.operation,
+                  result.environment,
+                  this.strategy.values).subscribe({
+                    next: _data => this.toastService.showSuccess(`Strategy cloned with success`),
+                    error: error => {
+                      this.toastService.showError(error.error);
+                      ConsoleLogger.printError(error);
+                    }
+                  });
+              }
+            },
+            error: error => this.updateValueError(error, 'Unable to edit this value'),
+            complete: () => this.blockUI.stop()
+          });
       }
     });
   }
@@ -181,13 +189,16 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     if (valid) {
       this.strategyService.addValue(this.strategy.id, newValue)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => {
-          if (data) {
-            this.strategyValueSelection.deselectAll();
-            this.updateValueSuccess(data);
-          }
-      }, error => this.updateValueError(error, 'Unable to add this value'), 
-      () => this.blockUI.stop());
+        .subscribe({
+          next: data => {
+            if (data) {
+              this.strategyValueSelection.deselectAll();
+              this.updateValueSuccess(data);
+            }
+          },
+          error: error => this.updateValueError(error, 'Unable to add this value'),
+          complete: () => this.blockUI.stop()
+        });
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -199,9 +210,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.blockUI.start('Updating value...');
       this.strategyService.updateValue(this.strategy.id, oldValue, newValue)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => this.updateValueSuccess(data), 
-          error => this.updateValueError(error, 'Unable to edit this value'), 
-          () => this.blockUI.stop());
+        .subscribe({
+          next: data => this.updateValueSuccess(data),
+          error: error => this.updateValueError(error, 'Unable to edit this value'),
+          complete: () => this.blockUI.stop()
+        });
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
@@ -212,9 +225,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.blockUI.start('Removing value...');
       this.strategyService.deleteValue(this.strategy.id, value)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => this.updateValueSuccess(data), 
-          error => this.updateValueError(error, 'Unable to remove this value'), 
-          () => this.blockUI.stop());
+        .subscribe({
+          next: data => this.updateValueSuccess(data),
+          error: error => this.updateValueError(error, 'Unable to remove this value'),
+          complete: () => this.blockUI.stop()
+        });
     } else {
       this.toastService.showError(`One value is required, update or add new values`);
     }
@@ -283,39 +298,46 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.adminService.readCollabPermission(this.strategyList.parent.domainId, ['CREATE', 'UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
       'STRATEGY', 'strategy', this.strategy.strategy, Object.keys(this.strategy.activated)[0])
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
-          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
-          this.envEnable.next(
-            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
-            data.find(permission => permission.action === 'UPDATE').result === 'nok'
-          );
+      .subscribe({
+        next: data => {
+          if (data.length) {
+            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+            this.envEnable.next(
+              data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+              data.find(permission => permission.action === 'UPDATE').result === 'nok'
+            );
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        },
+        complete: () => {
+          this.blockUI.stop();
+          this.detailBodyStyle = 'detail-body ready';
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.blockUI.stop();
-      this.detailBodyStyle = 'detail-body ready';
-    });
+      });
   }
 
   private editStrategy(body: { operation: string; description: any; }) {
     this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.strategy.operation = body.operation;
-          this.strategy.description = body.description;
-
-          this.toastService.showSuccess(`Strategy updated with success`);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.strategy.operation = body.operation;
+            this.strategy.description = body.description;
+  
+            this.toastService.showSuccess(`Strategy updated with success`);
+            this.editing = false;
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
           this.editing = false;
         }
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
-        this.editing = false;
       });
   }
 
@@ -324,15 +346,19 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.selectEnvironment(env);
     this.strategyService.setStrategyEnvironmentStatus(this.strategy.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.toastService.showSuccess(`Environment updated with success`);
-        }
-    }, error => {
-      this.blockUI.stop();
-      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
-      ConsoleLogger.printError(error);
-    }, () => this.blockUI.stop());
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.toastService.showSuccess(`Environment updated with success`);
+          }
+        },
+        error: error => {
+          this.blockUI.stop();
+          this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
+          ConsoleLogger.printError(error);
+        },
+        complete: () => this.blockUI.stop()
+      });
   }
 }
 

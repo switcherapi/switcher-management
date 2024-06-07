@@ -3,7 +3,7 @@ import '@angular/localize/init';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { appRoutingModule } from './app.routing';
@@ -42,7 +42,6 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
       CommonModule,
       BrowserAnimationsModule,
       ReactiveFormsModule,
-      HttpClientModule,
       appRoutingModule,
       GraphQLModule,
       DashboardModule,
@@ -69,12 +68,9 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
       PwaService,
       AuthGuard,
       AuthService,
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: TokenInterceptor,
-        multi: true
-      },
+      { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
       { provide: LocationStrategy, useClass: PathLocationStrategy },
+      provideHttpClient(withInterceptorsFromDi()),
       provideCharts(withDefaultRegisterables())
     ],
     bootstrap: [AppComponent],

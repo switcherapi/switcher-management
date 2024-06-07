@@ -116,15 +116,18 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         this.blockUI.start('Removing group...');
         this.groupService.deleteGroup(this.group.id)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(_data => {
-            this.blockUI.stop();
-            this.router.navigate([this.domainRouteService.getPreviousPath()]);
-            this.toastService.showSuccess(`Group removed with success`);
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(`Unable to remove this group`);
-          ConsoleLogger.printError(error);
-        });
+          .subscribe({
+            next: _data => {
+              this.blockUI.stop();
+              this.router.navigate([this.domainRouteService.getPreviousPath()]);
+              this.toastService.showSuccess(`Group removed with success`);
+            },
+            error: error => {
+              this.blockUI.stop();
+              this.toastService.showError(`Unable to remove this group`);
+              ConsoleLogger.printError(error);
+            }
+          });
       }
     });
   }
@@ -150,35 +153,42 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   private loadGroup() {
     this.groupService.getGroupById(this.groupId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(group => {
-        if (group) {
-          this.updateData(group);
+      .subscribe({
+        next: group => {
+          if (group) {
+            this.updateData(group);
+          }
+        },
+        error: error => {
+          this.toastService.showError(`Unable to load Group`);
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      this.toastService.showError(`Unable to load Group`);
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
       'GROUP', 'name', this.group.name, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
-          this.envEnable.next(
-            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
-            data.find(permission => permission.action === 'UPDATE').result === 'nok'
-          );
+      .subscribe({
+        next: data => {
+          if (data.length) {
+            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.envEnable.next(
+              data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+              data.find(permission => permission.action === 'UPDATE').result === 'nok'
+            );
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        },
+        complete: () => {
+          this.loading = false;
+          this.detailBodyStyle = 'detail-body ready';
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
+      });
   }
 
   private editGroup(body: { name: string; description: string; }) {
@@ -186,22 +196,25 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       body.name != this.group.name ? body.name : undefined,
       body.description != this.group.description ? body.description : undefined)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => {
-          if (data) {
-            this.group.name = body.name;
-            this.group.description = body.description;
-            
+        .subscribe({
+          next: data => {
+            if (data) {
+              this.group.name = body.name;
+              this.group.description = body.description;
+              
+              this.blockUI.stop();
+              this.toastService.showSuccess(`Group updated with success`);
+              this.editing = false;
+            }
+          },
+          error: error => {
             this.blockUI.stop();
-            this.toastService.showSuccess(`Group updated with success`);
-            this.editing = false;
+            ConsoleLogger.printError(error);
+            this.toastService.showError(`Unable to update group`);
+            this.classStatus = 'header editing';
+            this.editing = true;
           }
-      }, error => {
-        this.blockUI.stop();
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update group`);
-        this.classStatus = 'header editing';
-        this.editing = true;
-      });
+        });
   }
 
   public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
@@ -209,32 +222,38 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     this.selectEnvironment(env);
     this.groupService.setGroupEnvironmentStatus(this.group.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.selectEnvironment(env);
-          this.toastService.showSuccess(`Environment updated with success`);
-        }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
-    }, () => this.blockUI.stop());
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.toastService.showSuccess(`Environment updated with success`);
+          }
+        },
+        error: error => {
+          this.blockUI.stop();
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
+        },
+        complete: () => this.blockUI.stop()
+      });
   }
 
   public removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
     this.groupService.removeDomainEnvironmentStatus(this.group.id, env)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Environment removed with success`);
+          }
+        },
+        error: error => {
           this.blockUI.stop();
-          this.toastService.showSuccess(`Environment removed with success`);
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to remove the environment '${env}'`);
         }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove the environment '${env}'`);
-    });
+      });
   }
 
 }

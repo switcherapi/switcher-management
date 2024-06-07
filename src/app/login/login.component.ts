@@ -74,7 +74,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                 password: this.f.password.value
             })
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(success => this.onSuccess(success), error => this.onError(error));
+            .subscribe({
+                next: success => this.onSuccess(success),
+                error: error => this.onError(error)
+            });
     }
 
     onGitHubLogin() {
@@ -108,14 +111,15 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.loading = true;
             this.adminService.requestPasswordReset(this.f.email.value)
                 .pipe(takeUntil(this.unsubscribe))
-                .subscribe(data => {
-
-                if (data) {
-                    this.success = 'Password recovery successfully sent';
-                }
-                this.loading = false;
-                
-            }, error => this.onError(error));
+                .subscribe({
+                    next: data => {
+                        if (data) {
+                            this.success = 'Password recovery successfully sent';
+                        }
+                        this.loading = false;
+                    },
+                    error: error => this.onError(error)
+                });
         }
     }
 
@@ -132,14 +136,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     
     private isAlive(): void {
-        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-            if (data) {
-                this.apiVersion = data.attributes.version;
-            }
-        }, error => {
-            ConsoleLogger.printError(error);
-            this.status = 'Offline for Maintenance';
-        });
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
+            .subscribe({
+                next: data => {
+                    if (data) {
+                        this.apiVersion = data.attributes.version;
+                    }
+                },
+                error: error => {
+                    ConsoleLogger.printError(error);
+                    this.status = 'Offline for Maintenance';
+                }
+            });
     }
 
     private loginWithGitHub(code: string) {
@@ -147,7 +155,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.authService.loginWithGitHub(code)
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(success => this.onSuccess(success), error => this.onError(error));
+            .subscribe({
+                next: success => this.onSuccess(success),
+                error: error => this.onError(error)
+            });
     }
 
     private loginWithBitBucket(code: string) {
@@ -155,7 +166,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.authService.loginWithBitBucket(code)
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(success => this.onSuccess(success), error => this.onError(error));
+            .subscribe({
+                next: success => this.onSuccess(success),
+                error: error => this.onError(error)
+            });
     }
 
     private onError(error: any) {

@@ -6,10 +6,12 @@ export class DataUtils {
     let success = true;
     value.forEach(v => {
       if (v.length <= max) {
-        if (arr.indexOf(v) === -1)
+        if (arr.indexOf(v) === -1) {
           arr.push(v);
-      } else
+        }
+      } else {
         success = false;
+      }
     });
 
     return success;

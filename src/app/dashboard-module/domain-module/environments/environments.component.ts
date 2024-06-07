@@ -86,16 +86,20 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
       this.envService.createEnvironment(this.domainId, envName)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(env => {
-          if (env) {
-            this.environments.push(env);
-            this.toastService.showSuccess('Environment created with success');
+        .subscribe({
+          next: env => {
+            if (env) {
+              this.environments.push(env);
+              this.toastService.showSuccess('Environment created with success');
+            }
+          },
+          error: error => {
+            this.toastService.showError(error.error);
+            ConsoleLogger.printError(error);
+          },
+          complete: () => {
+            this.creating = false;
           }
-        }, error => {
-          this.toastService.showError(error.error);
-          ConsoleLogger.printError(error);
-        }, () => {
-          this.creating = false;
         });
     } else {
       this.toastService.showError('Unable to create this Environment');
@@ -112,14 +116,17 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
         this.envService.deleteEnvironment(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(env => {
-          if (env) {
-            this.environments.splice(this.environments.indexOf(environment[0]), 1);
-            this.toastService.showSuccess('Environment removed with success');
+        .subscribe({
+          next: env => {
+            if (env) {
+              this.environments.splice(this.environments.indexOf(environment[0]), 1);
+              this.toastService.showSuccess('Environment removed with success');
+            }
+          },
+          error: error => {
+            ConsoleLogger.printError(error);
+            this.toastService.showError('Unable to remove this Environment');
           }
-        }, error => {
-          ConsoleLogger.printError(error);
-          this.toastService.showError('Unable to remove this Environment');
         });
       }
     });
@@ -134,13 +141,16 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
       if (result) {
         this.envService.resetEnvironment(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(env => {
-          if (env) {
-            this.toastService.showSuccess('Environment reseted with success');
+        .subscribe({
+          next: env => {
+            if (env) {
+              this.toastService.showSuccess('Environment reseted with success');
+            }
+          },
+          error: error => {
+            ConsoleLogger.printError(error);
+            this.toastService.showError('Unable to reset this Environment');
           }
-        }, error => {
-          ConsoleLogger.printError(error);
-          this.toastService.showError('Unable to reset this Environment');
         });
       }
     });
@@ -150,16 +160,19 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.envService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(env => {
-        this.environments = env.filter(e => e.name != 'default');
-    }, error => {
-      this.error = error;
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      this.loading = false;
-      this.classStatus = "card mt-4 ready";
-    });
+      .subscribe({
+        next: env => {
+          this.environments = env.filter(e => e.name != 'default');
+        },
+        error: error => {
+          this.error = this.errorHandler.doError(error);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+          this.classStatus = "card mt-4 ready";
+        }
+      });
   }
 
   private readPermissionToObject(): void {

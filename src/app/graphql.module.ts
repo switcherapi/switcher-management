@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
@@ -9,7 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 const uri = `${environment.apiUrl}/adm-graphql`;
 
 @NgModule({
-  imports: [BrowserModule, ApolloModule, HttpClientModule],
+  imports: [BrowserModule, ApolloModule],
   providers: [
     {
       provide: APOLLO_OPTIONS,

@@ -79,17 +79,22 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.permissionService.updatePermission(permission._id, result.action, result.router, result.identifiedBy, result.environments, result.values)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(permission => {
-            if (permission) {
-              this.loadPermissions();
-              this.toastService.showSuccess('Permission updated with success');
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: permission => {
+              if (permission) {
+                this.loadPermissions();
+                this.toastService.showSuccess('Permission updated with success');
+              }
+            },
+            error: error => {
+              this.toastService.showError('Permission denied');
+              ConsoleLogger.printError(error);
+              this.blockUI.stop();
+            },
+            complete: () => {
+              this.blockUI.stop();
             }
-          }, error => {
-            this.toastService.showError('Permission denied');
-            ConsoleLogger.printError(error);
-            this.blockUI.stop();
-          }, () => {
-            this.blockUI.stop();
           });
       }
     });
@@ -97,17 +102,21 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
 
   removePermission(permission: Permission) {
     this.blockUI.start('Removing permission...');
-    this.permissionService.deletePermission(permission._id).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.permissions.splice(this.permissions.indexOf(permission), 1);
-        this.loadDataSource(this.permissions);
-        this.blockUI.stop();
-        this.toastService.showSuccess('Permission removed with success');
-      }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-    });
+    this.permissionService.deletePermission(permission._id).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.permissions.splice(this.permissions.indexOf(permission), 1);
+            this.loadDataSource(this.permissions);
+            this.blockUI.stop();
+            this.toastService.showSuccess('Permission removed with success');
+          }
+        },
+        error: error => {
+          this.blockUI.stop();
+          ConsoleLogger.printError(error);
+        }
+      });
   }
 
   createPermission() {
@@ -136,16 +145,21 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   updateStatus(permission: Permission, event: MatSlideToggleChange) {
     this.blockUI.start('Updating status...');
     this.permissionService.updatePermissionStatus(permission._id, event.checked)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(permissionUpdated => {
-        if (permissionUpdated) {
-          this.toastService.showSuccess('Permission updated with success');
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: permissionUpdated => {
+          if (permissionUpdated) {
+            this.toastService.showSuccess('Permission updated with success');
+          }
+        },
+        error: error => {
+          this.toastService.showError('Permission denied');
+          ConsoleLogger.printError(error);
+          this.blockUI.stop();
+        },
+        complete: () => {
+          this.blockUI.stop();
         }
-      }, error => {
-        this.toastService.showError('Permission denied');
-        ConsoleLogger.printError(error);
-        this.blockUI.stop();
-      }, () => {
-        this.blockUI.stop();
       });
   }
 
@@ -178,17 +192,22 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
 
   private loadPermissions(): void {
     this.loading = true;
-    this.permissionService.getPermissionsByTeam(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(permissions => {
-      if (permissions) {
-        this.permissions = permissions;
-        this.loadDataSource(this.permissions);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    })
+    this.permissionService.getPermissionsByTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: permissions => {
+          if (permissions) {
+            this.permissions = permissions;
+            this.loadDataSource(this.permissions);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
   }
 
   private loadDataSource(data: Permission[]): void {

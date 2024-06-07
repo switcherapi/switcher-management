@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, mapToCanActivate } from '@angular/router';
 
 import { LoginComponent } from './login';
 import { HomeComponent } from './home/home.component';
@@ -40,11 +40,11 @@ const routes: Routes = [
         data: { preload: true }
     },
 
-    { path: 'collab/join', component: SignupTeamComponent, canActivate: [AuthGuard] },
+    { path: 'collab/join', component: SignupTeamComponent, canActivate: mapToCanActivate([AuthGuard]) },
 
-    { path: 'domain/transfer', component: SignupDomainComponent, canActivate: [AuthGuard] },
+    { path: 'domain/transfer', component: SignupDomainComponent, canActivate: mapToCanActivate([AuthGuard]) },
 
-    { path: 'slack/authorization', component: SlackAuthComponent, canActivate: [AuthGuard] },
+    { path: 'slack/authorization', component: SlackAuthComponent, canActivate: mapToCanActivate([AuthGuard]) },
 
     { path: '**', redirectTo: '/dashboard' }
 ];

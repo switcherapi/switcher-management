@@ -132,16 +132,19 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.blockUI.start('Generating verification code...');
     this.domainService.getVerificationCode(this.parent.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        this.blockUI.stop();
-        if (data?.code) {
-          this.relayVerificationCode = data.code;
-          this.openRelayVerificationDialog();
+      .subscribe({
+        next: data => {
+          this.blockUI.stop();
+          if (data?.code) {
+            this.relayVerificationCode = data.code;
+            this.openRelayVerificationDialog();
+          }
+        },
+        error: error => {
+          this.blockUI.stop();
+          this.toastService.showError(`Unable to generate a verification code`);
+          ConsoleLogger.printError(error);
         }
-      }, error => {
-        this.blockUI.stop();
-        this.toastService.showError(`Unable to generate a verification code`);
-        ConsoleLogger.printError(error);
       });
   }
 
@@ -159,16 +162,19 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         this.blockUI.start('Removing relay...');
         this.configService.removeConfigRelay(this.config.id, this.currentEnvironment)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
-              this.updateConfiguredRelay(data);
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.updateConfiguredRelay(data);
+              }
+              this.blockUI.stop();
+            },
+            error: error => {
+              this.blockUI.stop();
+              this.toastService.showError(`Unable to remove this relay`);
+              ConsoleLogger.printError(error);
             }
-            this.blockUI.stop();
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(`Unable to remove this relay`);
-          ConsoleLogger.printError(error);
-        });
+          });
       }
     });
   }
@@ -196,24 +202,26 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.blockUI.start('Updating relay...');
     this.configService.updateConfigRelay(this.config)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.toastService.showSuccess(`Relay saved with success`);
-          this.config.relay = data.relay;
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.toastService.showSuccess(`Relay saved with success`);
+            this.config.relay = data.relay;
+            this.editing = false;
+            this.parent.updateConfigRelay(data.relay);
+          }
+          this.blockUI.stop();
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update relay: ${error.error}`);
           this.editing = false;
-          this.parent.updateConfigRelay(data.relay);
+          this.blockUI.stop();
+
+          this.config.relay = JSON.parse(this.relayOld);
+          this.loadRelay();
         }
-
-        this.blockUI.stop();
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update relay: ${error.error}`);
-      this.editing = false;
-      this.blockUI.stop();
-
-      this.config.relay = JSON.parse(this.relayOld);
-      this.loadRelay();
-    });
+      });
   }
 
   private loadRelay(): void {
@@ -238,25 +246,29 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.adminService.readCollabPermission(this.parent.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE', 'DELETE_RELAY'], 
       'SWITCHER', 'key', this.config.key, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          this.removable = 
-            data.find(permission => permission.action === 'DELETE').result === 'ok' ||
-            data.find(permission => permission.action === 'DELETE_RELAY').result === 'ok';
-          this.updatable = 
-            data.find(permission => permission.action === 'UPDATE').result === 'ok' ||
-            data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
-          this.envEnable.next(
-            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
-            data.find(permission => permission.action === 'UPDATE').result === 'nok'
-          );
+      .subscribe({
+        next: data => {
+          if (data.length) {
+            this.removable = 
+              data.find(permission => permission.action === 'DELETE').result === 'ok' ||
+              data.find(permission => permission.action === 'DELETE_RELAY').result === 'ok';
+            this.updatable = 
+              data.find(permission => permission.action === 'UPDATE').result === 'ok' ||
+              data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
+            this.envEnable.next(
+              data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+              data.find(permission => permission.action === 'UPDATE').result === 'nok'
+            );
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        },
+        complete: () => {
+          this.blockUI.stop();
+          this.detailBodyStyle = 'detail-body ready';
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.blockUI.stop();
-      this.detailBodyStyle = 'detail-body ready';
-    });
+      });
   }
 
   private loadRelaySettings(): void {
@@ -278,19 +290,22 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.blockUI.start('Updating environment...');
     this.configService.updateConfigRelayStatus(this.config.id, configRelayStatus)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
-          this.parent.updateConfigRelay(data.relay);
-          this.selectEnvironment(env);
-          this.toastService.showSuccess(`Environment updated with success`);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
+            this.parent.updateConfigRelay(data.relay);
+            this.selectEnvironment(env);
+            this.toastService.showSuccess(`Environment updated with success`);
+            this.blockUI.stop();
+          }
+        },
+        error: error => {
+          this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
           this.blockUI.stop();
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private updateConfiguredRelay(data: Config): void {
@@ -319,18 +334,21 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         this.blockUI.start('Verifying Relay...');
         this.configService.verifyRelay(this.config.id, this.currentEnvironment)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(response => {
-            this.blockUI.stop();
-            if (response.status === 'verified') {
-              this.toastService.showSuccess(`Relay verified with success`);
-              this.config.relay.verified[this.currentEnvironment] = true;
-            } else {
-              this.toastService.showError(`Failed to verify Relay`);
+          .subscribe({
+            next: response => {
+              this.blockUI.stop();
+              if (response.status === 'verified') {
+                this.toastService.showSuccess(`Relay verified with success`);
+                this.config.relay.verified[this.currentEnvironment] = true;
+              } else {
+                this.toastService.showError(`Failed to verify Relay`);
+              }
+            },
+            error: error => {
+              this.blockUI.stop();
+              this.toastService.showError(`Unable to verify Relay`);
+              ConsoleLogger.printError(error);
             }
-          }, error => {
-            this.blockUI.stop();
-            this.toastService.showError(`Unable to verify Relay`);
-            ConsoleLogger.printError(error);
           });
       }
     });

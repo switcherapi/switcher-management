@@ -51,14 +51,18 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   }
 
   removeInvitation(request: string) {
-    this.teamService.removeInvitation(this.team._id, request).pipe(takeUntil(this.unsubscribe)).subscribe(invitationRequest => {
-      if (invitationRequest) {
-        this.loadPendingInvitations();
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove invitaion request - ${error.error}`)
-    })
+    this.teamService.removeInvitation(this.team._id, request).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: invitationRequest => {
+          if (invitationRequest) {
+            this.loadPendingInvitations();
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to remove invitation request - ${error.error}`)
+        }
+      });
   }
 
   onGetInviteRequest(invite: any): void {
@@ -75,14 +79,19 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
 
   private loadPendingInvitations(): void {
     this.loading = true;
-    this.teamService.getPendingInvitations(this.team._id).pipe(takeUntil(this.unsubscribe)).subscribe(invitations => {
-      this.loadDataSource(invitations);
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    })
+    this.teamService.getPendingInvitations(this.team._id).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: invitations => {
+          this.loadDataSource(invitations);
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
   }
 
   private loadDataSource(data: any[]): void {

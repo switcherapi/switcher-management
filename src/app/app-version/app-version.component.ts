@@ -26,14 +26,17 @@ export class AppVersionComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.apiVersion = data.attributes.version;
-        this.apiReleaseTime = data.attributes.release_time;
+    this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe({
+      next: (data) => {
+        if (data) {
+          this.apiVersion = data.attributes.version;
+          this.apiReleaseTime = data.attributes.release_time;
+        }
+      },
+      error: (error) => {
+        ConsoleLogger.printError(error);
+        this.apiVersion = '[offline]';
       }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.apiVersion = '[offline]';
     });
   }
 

@@ -64,17 +64,20 @@ export class SignupComponent implements OnInit, OnDestroy {
                 email: this.f.email.value,
                 password: this.f.password.value,
                 token: this.recaptcha_token || ''
-            }).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-                if (data) {
-                    this.waitingConfirmation = true;
+            }).pipe(takeUntil(this.unsubscribe))
+            .subscribe({
+                next: data => {
+                    if (data) {
+                        this.waitingConfirmation = true;
+                    }
+                    this.loading = false;
+                },
+                error: error => {
+                    ConsoleLogger.printError(error);
+                    this.error = error;
+                    this.loading = false;
                 }
-                this.loading = false;
-            }, error => {
-                ConsoleLogger.printError(error);
-                this.error = error;
-                this.loading = false;
-            }
-        );
+            });
     }
 
     onGitHubLogin() {
@@ -113,13 +116,17 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     private isAlive(): void {
-        this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-            if (data) {
-                this.apiVersion = data.attributes.version;
-            }
-        }, error => {
-            ConsoleLogger.printError(error);
-            this.status = 'Offline for Maintenance';
-        });
+        this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
+            .subscribe({
+                next: data => {
+                    if (data) {
+                        this.apiVersion = data.attributes.version;
+                    }
+                },
+                error: error => {
+                    ConsoleLogger.printError(error);
+                    this.status = 'Offline for Maintenance';
+                }
+            });
     }
 }

@@ -74,17 +74,20 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
 
     this.configService.setConfigEnvironmentStatus(this.config.id, this.selectedEnv, event.checked)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.config.activated = data.activated;
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.config.activated = data.activated;
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Environment updated with success`);
+          }
+        },
+        error: error => {
           this.blockUI.stop();
-          this.toastService.showSuccess(`Environment updated with success`);
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
         }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
-    });
+      });
   }
 
   private loadOperationSelectionComponent(): void {

@@ -33,7 +33,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
         && request.url !== `${environment.apiUrl}/admin/refresh/me`) {
         return this.handle401Error(request, next);
       } else {
-        return throwError(error);
+        return throwError(() => error);
       }
     }));
   }
@@ -59,7 +59,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
         }),
         catchError((error) => {
           this.router.navigate(['/login']);
-          return throwError(error);
+          return throwError(() => error);
         }));
 
     } else {

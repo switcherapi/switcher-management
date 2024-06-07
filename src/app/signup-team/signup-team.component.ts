@@ -38,35 +38,41 @@ export class SignupTeamComponent implements OnInit, OnDestroy {
   }
 
   private loadInvite(): void {
-    this.teamService.getInvitation(this.request).pipe(takeUntil(this.unsubscribe)).subscribe(invite => {
-      if (invite) {
-        this.team = invite.team;
-        this.domain = invite.domain;
-      }
-      this.loading = false;
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.error = error.error;
-      this.loading = false;
-    }
-  );
+    this.teamService.getInvitation(this.request).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: invite => {
+          if (invite) {
+            this.team = invite.team;
+            this.domain = invite.domain;
+          }
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error.error;
+          this.loading = false;
+        }
+      });
   }
 
   onAccept() {
     this.loading = true;
 
-    this.teamService.acceptInvitation(this.request).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-        if (success) {
-          this.router.navigate(['/dashboard']);
-          this.toastService.showSuccess(`Joined with success`);
+    this.teamService.acceptInvitation(this.request).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: success => {
+          if (success) {
+            this.router.navigate(['/dashboard']);
+            this.toastService.showSuccess(`Joined with success`);
+          }
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error.error;
+          this.loading = false;
         }
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.error = error.error;
-        this.loading = false;
-      }
-    );
+      });
   }
 
   ngOnDestroy() {

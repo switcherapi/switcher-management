@@ -90,16 +90,20 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     modalConfirmation.result.then((result) => {
       if (result) {
         this.slackService.unlinkInstallation(this.domainId)
-          .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-            if (data) {
-              this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
-              this.domainRouteService.updatePath(this.domainId, this.domainName, 
-                Types.DOMAIN_TYPE, `/dashboard/domain/${this.domainName}/${this.domainId}`, true);
-              this.toastService.showSuccess(data.message);
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
+                this.domainRouteService.updatePath(this.domainId, this.domainName, 
+                  Types.DOMAIN_TYPE, `/dashboard/domain/${this.domainName}/${this.domainId}`, true);
+                this.toastService.showSuccess(data.message);
+              }
+            },
+            error: error => {
+              ConsoleLogger.printError(error);
+              this.toastService.showError('Unable to uninstall Slack');
             }
-          }, (error) => {
-            ConsoleLogger.printError(error);
-            this.toastService.showError('Unable to uninstall Slack');
           });
       }
     });
@@ -113,14 +117,17 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       if (result) {
         this.slackService.resetTickets(this.slack.team_id, this.domainId)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
-              this.toastService.showSuccess(data.message);
-              this.slack.tickets_opened = 0;
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.toastService.showSuccess(data.message);
+                this.slack.tickets_opened = 0;
+              }
+            },
+            error: error => {
+              ConsoleLogger.printError(error);
+              this.toastService.showError('Unable to reset tickets');
             }
-          }, (error) => {
-            ConsoleLogger.printError(error);
-            this.toastService.showError('Unable to reset tickets');
           });
       }
     });
@@ -131,18 +138,22 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
 
     this.slackService.getSlackInstallation(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(slack => {
-        this.slack = slack;
-        this.slackSettings.loadSettings(this.slack);
-        this.loadSlackAvailability();
-    }, (error) => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError('Unable to display Slack Integrations properties');
-      this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
-    }, () => {
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
+      .subscribe({
+        next: slack => {
+          this.slack = slack;
+          this.slackSettings.loadSettings(this.slack);
+          this.loadSlackAvailability();
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError('Unable to display Slack Integrations properties');
+          this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}`]);
+        },
+        complete: () => {
+          this.loading = false;
+          this.detailBodyStyle = 'detail-body ready';
+        }
+      });
   }
 
   private loadSlackAvailability(): void {

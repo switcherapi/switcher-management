@@ -75,15 +75,18 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
         this.loading = true;
         this.configService.createConfig(this.groupId, result.key, result.description)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.ngOnInit();
+              }
+            },
+            error: error => {
               this.ngOnInit();
+              this.toastService.showError(`Unable to create a new switcher. ${error.error}`);
+              ConsoleLogger.printError(error);
             }
-        }, error => {
-          this.ngOnInit();
-          this.toastService.showError(`Unable to create a new switcher. ${error.error}`);
-          ConsoleLogger.printError(error);
-        });
+          });
       }
     });
   }
@@ -107,21 +110,25 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   private loadConfigs(environmentName: string) {
     this.configService.getConfigsByGroup(this.groupId, this.skip, 'id,key,activated')
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.configs = data;
-          super.loadEnvironments(environmentName);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.configs = data;
+            super.loadEnvironments(environmentName);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+          this.error = this.errorHandler.doError(error);
+        },
+        complete: () => {
+          if (!this.configs) {
+            this.error = 'Failed to connect to Switcher API';
+          }
+          this.loading = false;
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      if (!this.configs) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loading = false;
-    });
+      });
   }
 
   private readPermissionToObject(): void {
@@ -150,15 +157,18 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   private loadGroup(): void {
     this.groupService.getGroupById(this.groupId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.domainRouteService.updateView(data.name, 0);
-          this.domainRouteService.updatePath(data.id, data.name, Types.GROUP_TYPE, 
-            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${data.id}`);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.domainRouteService.updateView(data.name, 0);
+            this.domainRouteService.updatePath(data.id, data.name, Types.GROUP_TYPE, 
+              `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${data.id}`);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
 }

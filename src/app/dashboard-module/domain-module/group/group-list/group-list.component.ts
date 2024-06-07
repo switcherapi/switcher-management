@@ -74,15 +74,18 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
         this.loading = true;
         this.groupService.createGroup(this.domainId, result.name, result.description)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.ngOnInit();
+              }
+            },
+            error: error => {
               this.ngOnInit();
+              this.toastService.showError(`Unable to create a new group. ${error.error}`);
+              ConsoleLogger.printError(error);
             }
-        }, error => {
-          this.ngOnInit();
-          this.toastService.showError(`Unable to create a new group. ${error.error}`);
-          ConsoleLogger.printError(error);
-        });
+          });
       }
     });
   }
@@ -111,22 +114,26 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   private loadGroups(environmentName: string) {
     this.groupService.getGroupsByDomain(this.domainId, this.skip, 'id,name,activated,admin')
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.groups = data;
-          super.loadEnvironments(environmentName);
-          this.domainRouteService.updateView(decodeURIComponent(this.domainName), 0);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.groups = data;
+            super.loadEnvironments(environmentName);
+            this.domainRouteService.updateView(decodeURIComponent(this.domainName), 0);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+          this.error = this.errorHandler.doError(error);
+        },
+        complete: () => {
+          if (!this.groups) {
+            this.error = 'Failed to connect to Switcher API';
+          }
+          this.loading = false;
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      if (!this.groups) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loading = false;
-    });
+      });
   }
 
   private readPermissionToObject(): void {

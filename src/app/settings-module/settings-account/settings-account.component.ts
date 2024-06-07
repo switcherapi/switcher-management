@@ -65,30 +65,36 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     this.blockUI.start('Loading...');
     this.adminService.updateAdmin(this.f.name.value)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-      if (data) {
-        this.authService.setUserInfo('name', this.f.name.value);
-          this.resetSuccess = 'Account updated with success';
-      }
-      this.blockUI.stop();
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.error = error;
-      this.blockUI.stop();
-    });
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.authService.setUserInfo('name', this.f.name.value);
+            this.resetSuccess = 'Account updated with success';
+          }
+          this.blockUI.stop();
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error;
+          this.blockUI.stop();
+        }
+      });
   }
 
   onSendResetPassord() {
     this.adminService.requestPasswordReset(this.userEmail)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-      if (data) {
-          this.resetSuccess = 'Password reset successfully sent';
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.error = error;
-    });
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.resetSuccess = 'Password reset successfully sent';
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error;
+        }
+      });
   }
 
   onDelete() {
@@ -97,14 +103,18 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = `Are you sure you want to delete this account?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.adminService.deleteAdmin().pipe(takeUntil(this.unsubscribe)).subscribe(admin => {
-          if (admin) {
-            this.authService.logout(true);
-            this.router.navigate(['/']);
+        this.adminService.deleteAdmin().pipe(takeUntil(this.unsubscribe))
+        .subscribe({
+          next: admin => {
+            if (admin) {
+              this.authService.logout(true);
+              this.router.navigate(['/']);
+            }
+          },
+          error: error => {
+            ConsoleLogger.printError(error);
+            this.error = error;
           }
-        }, error => {
-          ConsoleLogger.printError(error);
-          this.error = error;
         });
       }
     });
@@ -136,14 +146,18 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
   }
   
   private loadDomains(): void {
-    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      if (data) {
-        this.domains = data.length;
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.error = 'Something went wrong when attepting to verify your profile';
-    });
+    this.domainService.getDomains().pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.domains = data.length;
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error;
+        }
+      });
   }
 
 }

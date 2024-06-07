@@ -48,18 +48,21 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   onConfirm(code: string) {
     this.loading = true;
 
-    this.authService.authorize(code).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-        if (success) {
-          this.router.navigate(['/dashboard']);
-          this.authService.releaseOldSessions.emit(true);
+    this.authService.authorize(code).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: (success) => {
+          if (success) {
+            this.router.navigate(['/dashboard']);
+            this.authService.releaseOldSessions.emit(true);
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          ConsoleLogger.printError(error);
+          this.error = 'Invalid code';
+          this.loading = false;
         }
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.error = 'Invalid code';
-        this.loading = false;
-      }
-    );
+      });
   }
 
   onSubmit() {
@@ -82,9 +85,12 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   get f() { return this.codeConfirmationForm.controls; }
 
   private isAlive(): void {
-    this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe(null, error => {
-        this.status = 'Offline for Maintenance';
-    });
+    this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        error: (_error) => {
+          this.status = 'Offline for Maintenance';
+        }
+      });
 }
 
 }

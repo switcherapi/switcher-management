@@ -1,7 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, mapTo, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
 import { Tokens } from '../models/tokens';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -41,7 +41,7 @@ export class AuthService {
           this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
         }),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -52,7 +52,7 @@ export class AuthService {
           this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
         }),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -63,7 +63,7 @@ export class AuthService {
           this.doLoginUser(auth.admin, auth.jwt);
           this.currentTokenSubject.next(auth.jwt.token);
         }),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -71,7 +71,7 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/admin/signup`, user)
       .pipe(
         tap(signup => signup != undefined),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -115,8 +115,11 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/admin/refresh/me`, {
       'refreshToken': this.getRefreshToken()
     }).pipe(
-      tap((tokens: Tokens) => this.storeJwtToken(tokens), 
-      () => this.cleanSession()));
+      tap({
+        next: (tokens: Tokens) => this.storeJwtToken(tokens),
+        error: () => this.cleanSession()
+      })
+    );
   }
 
   isAlive(): Observable<any> {
@@ -155,7 +158,7 @@ export class AuthService {
       errorMessage = `Switcher API is offline`;
     }
     
-    return throwError(errorMessage);
+    return throwError(() => errorMessage);
   }
 
   private doLoginUser(user: any, tokens: Tokens) {

@@ -52,18 +52,21 @@ export class LoginResetComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     this.authService.resetPassword(this.code, this.f.password.value, this.recaptcha_token)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-        if (success) {
-          this.router.navigateByUrl('/dashboard');
-          this.authService.releaseOldSessions.emit(true);
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: success => {
+          if (success) {
+            this.router.navigateByUrl('/dashboard');
+            this.authService.releaseOldSessions.emit(true);
+          }
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = 'Invalid password format';
+          this.loading = false;
         }
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.error = 'Invalid password format';
-        this.loading = false;
-      }
-    );
+      });
   }
 
   ngOnDestroy() {

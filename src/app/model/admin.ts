@@ -5,5 +5,5 @@ export class Admin {
     active: boolean;
     name: string;
     email: string;
-    teams: Team[] | any;
+    teams: Team[];
 }

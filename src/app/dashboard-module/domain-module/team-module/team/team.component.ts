@@ -80,16 +80,20 @@ export class TeamComponent implements OnInit, OnDestroy {
 
       this.teamService.createTeam(this.domainId, teamName)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(team => {
-          if (team) {
-            this.teams.push(team);
-            this.toastService.showSuccess('Team created with success');
+        .subscribe({
+          next: team => {
+            if (team) {
+              this.teams.push(team);
+              this.toastService.showSuccess('Team created with success');
+            }
+          },
+          error: error => {
+            this.toastService.showError(error.error);
+            ConsoleLogger.printError(error);
+          },
+          complete: () => {
+            this.creating = false;
           }
-        }, error => {
-          this.toastService.showError(error.error);
-          ConsoleLogger.printError(error);
-        }, () => {
-          this.creating = false;
         });
     } else {
       this.toastService.showError('Unable to create this team');
@@ -106,19 +110,23 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.readPermissionToObject();
     this.teamService.getTeamsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.teams = data;
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.teams = data;
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+          this.classStatus = "card mt-4 ready";
+          if (!this.teams)
+            this.error = 'Failed to connect to Switcher API';
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-      this.classStatus = "card mt-4 ready";
-      if (!this.teams)
-        this.error = 'Failed to connect to Switcher API';
-    });
+      });
   }
 
   private readPermissionToObject(): void {

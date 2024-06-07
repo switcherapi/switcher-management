@@ -8,7 +8,7 @@ export class ApiService {
         if (error.error instanceof ErrorEvent) {
             errorMessage = `Error: ${error.error.message}`;
         } else if (error.status === 401) {
-            return throwError(error);
+            return throwError(() => error);
         } else if (error.status === 422) {
             errorMessage = 'Invalid arguments';
         } else if (error.status === 404) {
@@ -19,6 +19,6 @@ export class ApiService {
             errorMessage = error.error;
         }
 
-        return throwError(errorMessage);
+        return throwError(() => errorMessage);
     }
 }

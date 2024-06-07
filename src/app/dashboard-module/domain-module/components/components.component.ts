@@ -87,16 +87,20 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
     this.compService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(components => {
-        this.components = components;
-    }, error => {
-      this.error = error;
-      this.loading = false;
-      this.error = this.errorHandler.doError(error);
-    }, () => {
-      this.loading = false;
-      this.classStatus = "card mt-4 ready";
-    });
+      .subscribe({
+        next: (components: SwitcherComponent[]) => {
+          this.components = components;
+        },
+        error: (error: any) => {
+          this.error = error;
+          this.loading = false;
+          this.error = this.errorHandler.doError(error);
+        },
+        complete: () => {
+          this.loading = false;
+          this.classStatus = "card mt-4 ready";
+        }
+      });
   }
 
   private readPermissionToObject(): void {
@@ -127,16 +131,20 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
       this.compService.createComponent(this.domainId, componentName)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(data => {
-          if (data.component) {
-            this.components.push(data.component);
-            this.confirmKeyCreated(data.apiKey, data.component.name);
+        .subscribe({
+          next: data => {
+            if (data.component) {
+              this.components.push(data.component);
+              this.confirmKeyCreated(data.apiKey, data.component.name);
+            }
+          },
+          error: error => {
+            this.toastService.showError(error.error);
+            ConsoleLogger.printError(error);
+          },
+          complete: () => {
+            this.creating = false;
           }
-        }, error => {
-          this.toastService.showError(error.error);
-          ConsoleLogger.printError(error);
-        }, () => {
-          this.creating = false;
         });
     } else {
       this.toastService.showError('Unable to create this Component');
@@ -153,14 +161,17 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
         this.compService.deleteComponent(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(env => {
-          if (env) {
-            this.components.splice(this.components.indexOf(component[0]), 1);
-            this.toastService.showSuccess('Component removed with success');
+        .subscribe({
+          next: env => {
+            if (env) {
+              this.components.splice(this.components.indexOf(component[0]), 1);
+              this.toastService.showSuccess('Component removed with success');
+            }
+          },
+          error: error => {
+            ConsoleLogger.printError(error);
+            this.toastService.showError('Unable to remove this Component');
           }
-        }, error => {
-          ConsoleLogger.printError(error);
-          this.toastService.showError('Unable to remove this Component');
         });
       }
     })
@@ -183,15 +194,18 @@ export class ComponentsComponent implements OnInit, OnDestroy {
 
         this.compService.updateComponent(selectedComponent.id, body.name)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
-              selectedComponent.name = componentChanged.name;
-              this.toastService.showSuccess(`Component updated with success`);
+          .subscribe({
+            next: data => {
+              if (data) {
+                selectedComponent.name = componentChanged.name;
+                this.toastService.showSuccess(`Component updated with success`);
+              }
+            },
+            error: error => {
+              ConsoleLogger.printError(error);
+              this.toastService.showError(`Unable to update component`);
             }
-        }, error => {
-          ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update component`);
-        });
+          });
       }
     });
   }
@@ -205,16 +219,19 @@ export class ComponentsComponent implements OnInit, OnDestroy {
         this.blockUI.start('Generating API Key...');
         this.compService.generateApiKey(selectedComponent.id)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
+          .subscribe({
+            next: data => {
+              if (data) {
+                this.blockUI.stop();
+                this.confirmKeyCreated(data.apiKey, selectedComponent.name);
+              }
+            },
+            error: error => {
               this.blockUI.stop();
-              this.confirmKeyCreated(data.apiKey, selectedComponent.name);
+              this.toastService.showError(`Unable to generate an API Key`);
+              ConsoleLogger.printError(error);
             }
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(`Unable to generate an API Key`);
-          ConsoleLogger.printError(error);
-        });
+          });
       }
     })
   }

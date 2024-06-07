@@ -97,18 +97,21 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
       this.domainService.executeSnapshotQuery(
         this.domainId, environment, component, this.includeStatus, this.includeDescription)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(result => {
-          if (result) {
-            const omitTypename = (key: any, value: any) => key === "__typename" ? undefined : value;
-            this.snapshot = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
-            this.lockEnvSelection();
-            this.toastService.showSuccess(`Snapshot downloaded with success`);
+        .subscribe({
+          next: result => {
+            if (result) {
+              const omitTypename = (key: any, value: any) => key === "__typename" ? undefined : value;
+              this.snapshot = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
+              this.lockEnvSelection();
+              this.toastService.showSuccess(`Snapshot downloaded with success`);
+            }
+            this.blockUI.stop();
+          },
+          error: error => {
+            ConsoleLogger.printError(error);
+            this.blockUI.stop();
           }
-          this.blockUI.stop();
-      }, error => {
-        ConsoleLogger.printError(error);
-        this.blockUI.stop();
-      });
+        });
     }      
   }
 

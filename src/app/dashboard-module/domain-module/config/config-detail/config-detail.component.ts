@@ -176,15 +176,18 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.blockUI.start('Removing switcher...');
         this.configService.deleteConfig(this.config.id)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(_data => {
-            this.blockUI.stop();
-            this.router.navigate([this.domainRouteService.getPreviousPath()]);
-            this.toastService.showSuccess(`Switcher removed with success`);
-        }, error => {
-          this.blockUI.stop();
-          this.toastService.showError(`Unable to remove this switcher`);
-          ConsoleLogger.printError(error);
-        });
+          .subscribe({
+            next: _data => {
+              this.blockUI.stop();
+              this.router.navigate([this.domainRouteService.getPreviousPath()]);
+              this.toastService.showSuccess(`Switcher removed with success`);
+            },
+            error: error => {
+              this.blockUI.stop();
+              this.toastService.showError(`Unable to remove this switcher`);
+              ConsoleLogger.printError(error);
+            }
+          });
       }
     });
   }
@@ -207,12 +210,15 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             result.strategy, 
             result.operation, 
             this.currentEnvironment, 
-            result.values).subscribe(_data => {
-              this.loadStrategies(true);
-              this.toastService.showSuccess('Strategy created with success');
-            }, error => {
-              this.toastService.showError(error ? error.error : 'Unable to add strategy');
-              ConsoleLogger.printError(error);
+            result.values).subscribe({
+              next: _data => {
+                this.loadStrategies(true);
+                this.toastService.showSuccess('Strategy created with success');
+              },
+              error: error => {
+                this.toastService.showError(error ? error.error : 'Unable to add strategy');
+                ConsoleLogger.printError(error);
+              }
             });
       }
     });
@@ -327,49 +333,58 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private loadConfig() {
     this.configService.getConfigById(this.configId, true)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(config => {
-        if (config) {
+      .subscribe({
+        next: config => {
           this.updateData(config);
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to load this Switcher`);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to load this Switcher`);
-    });
+      });
   }
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE'], 
       'SWITCHER', 'key', this.config.key, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-          this.relayUpdatable = data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
-          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
-          this.envEnable.next(
-            data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
-            data.find(permission => permission.action === 'UPDATE').result === 'nok'
-          );
+      .subscribe({
+        next: data => {
+          if (data.length) {
+            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+            this.relayUpdatable = data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
+            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.envEnable.next(
+              data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
+              data.find(permission => permission.action === 'UPDATE').result === 'nok'
+            );
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        },
+        complete: () => {
+          this.loading = false;
+          this.detailBodyStyle = 'detail-body ready';
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
+      });
 
     this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'STRATEGY', undefined, undefined, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data.length) {
-          this.strategiesCreatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+      .subscribe({
+        next: data => {
+          if (data.length) {
+            this.strategiesCreatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        },
+        complete: () => {
+          this.loading = false;
+          this.detailBodyStyle = 'detail-body ready';
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-    }, () => {
-      this.loading = false;
-      this.detailBodyStyle = 'detail-body ready';
-    });
+      });
   }
 
   public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
@@ -377,33 +392,39 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.selectEnvironment(env);
     this.configService.setConfigEnvironmentStatus(this.config.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Environment updated with success`);
+          }
+        },
+        error: error => {
           this.blockUI.stop();
-          this.toastService.showSuccess(`Environment updated with success`);
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.blockUI.stop();
-      this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
-    });
+      });
   }
 
   public removeEnvironmentStatus(env: any): void {
     this.blockUI.start('Removing environment status...');
     this.configService.removeDomainEnvironmentStatus(this.config.id, env)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.config.activated = data.activated;
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.config.activated = data.activated;
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Environment removed with success`);
+          }
+        },
+        error: error => {
           this.blockUI.stop();
-          this.toastService.showSuccess(`Environment removed with success`);
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to remove the environment '${env}'`);
         }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to remove the environment '${env}'`);
-    });
+      });
   }
 
   private loadComponents(): void {
@@ -429,22 +450,26 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.configService.updateConfig(this.config.id,
       body.key != this.config.key ? body.key : undefined,
       body.description != this.config.description ? body.description : undefined, updateDisableMetrics)
-      .pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-        if (data) {
-          this.config.key = body.key;
-          this.config.description = body.description;
-          this.updateConfigComponents();
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.config.key = body.key;
+            this.config.description = body.description;
+            this.updateConfigComponents();
 
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Switcher updated with success`);
+            this.editing = false;
+          }
+        },
+        error: error => {
           this.blockUI.stop();
-          this.toastService.showSuccess(`Switcher updated with success`);
-          this.editing = false;
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update switcher`);
+          this.classStatus = 'header editing';
+          this.editing = true;
         }
-      }, error => {
-        this.blockUI.stop();
-        ConsoleLogger.printError(error);
-        this.toastService.showError(`Unable to update switcher`);
-        this.classStatus = 'header editing';
-        this.editing = true;
       });
   }
 
@@ -470,15 +495,18 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     this.configService.updateConfigComponents(this.config.id, componentsToUpdate)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.config.components = data.components;
-          this.toastService.showSuccess(`Switcher Components updated with success`);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.config.components = data.components;
+            this.toastService.showSuccess(`Switcher Components updated with success`);
+          }
+        },
+        error: error => {
+          this.toastService.showError(error ? error.error : 'Something went wront when updating components');
+          ConsoleLogger.printError(error);
         }
-    }, error => {
-      this.toastService.showError(error ? error.error : 'Something went wront when updating components');
-      ConsoleLogger.printError(error);
-    });
+      });
   }
 
   private loadStrategies(focus?: boolean) {
@@ -486,23 +514,27 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.error = '';
     this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.hasStrategies = data.length > 0;
-          this.strategies.next(data);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.hasStrategies = data.length > 0;
+            this.strategies.next(data);
 
-          if (this.hasStrategies && focus)
-            this.updateNavTab(1);
+            if (this.hasStrategies && focus)
+              this.updateNavTab(1);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.loadingStrategies = false;
+        },
+        complete: () => {
+          if (!this.strategies.getValue().length) {
+            this.error = 'Failed to connect to Switcher API';
+          }
+          this.loadingStrategies = false;
         }
-    }, error => {
-      ConsoleLogger.printError(error);
-      this.loadingStrategies = false;
-    }, () => {
-      if (!this.strategies.getValue().length) {
-        this.error = 'Failed to connect to Switcher API';
-      }
-      this.loadingStrategies = false;
-    });
+      });
   }
 
   private filterComponent(value: string): string[] {

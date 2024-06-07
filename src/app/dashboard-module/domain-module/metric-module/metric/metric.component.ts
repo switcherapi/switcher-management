@@ -120,31 +120,36 @@ export class MetricComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadMetricStatistics(environment?: string, dateBefore?: string, dateAfter?: string): void {
+  private loadMetricStatistics(environment: string = this.environment, dateBefore?: string, dateAfter?: string): void {
     this.loading = true;
     this.error = '';
-    this.metricService.getMetricStatistics(this.domainId, 
-      environment ? environment : this.environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
+    this.metricService.getMetricStatistics(
+      this.domainId, environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(statistics => {
-        this.loading = false;
-        if (statistics) {
-          this.metrics.statistics = statistics;
-        }
-      }, error => this.onError(error), 
-      () => this.classStatus = "ready");
+      .subscribe({
+        next: statistics => {
+          this.loading = false;
+          if (statistics) {
+            this.metrics.statistics = statistics;
+          }
+        },
+        error: error => this.onError(error),
+        complete: () => this.classStatus = "ready"
+      });
   }
 
-  public loadDataMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
-    return this.metricService.getMetrics(this.domainId, 
-      environment ? environment : this.environment, page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
-        .pipe(takeUntil(this.unsubscribe));
+  public loadDataMetrics(page: number, environment: string = this.environment, dateBefore?: string, dateAfter?: string): Observable<Metric> {
+    return this.metricService.getMetrics(
+      this.domainId, environment, page, this.switcher, this.dateGroupPattern, dateBefore, dateAfter)
+      .pipe(takeUntil(this.unsubscribe));
   }
 
   private loadMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): void {
     this.loading = true;
     this.error = '';
-    this.loadDataMetrics(page, environment, dateBefore, dateAfter).subscribe(metrics => {
+    this.loadDataMetrics(page, environment, dateBefore, dateAfter)
+    .subscribe({
+      next: metrics => {
         this.loading = false;
         this.loadMetricStatistics(environment, dateBefore, dateAfter);
         if (metrics) {
@@ -154,8 +159,10 @@ export class MetricComponent implements OnInit, OnDestroy {
             this.metrics.data = null;
           }
         }
-      }, error => this.onError(error), 
-      () => this.classStatus = "ready");
+      },
+      error: error => this.onError(error),
+      complete: () => this.classStatus = "ready"
+    });
   }
 
   private onError(error: any) {

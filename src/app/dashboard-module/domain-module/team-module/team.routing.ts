@@ -1,5 +1,5 @@
 import { NgModule }             from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
 import { TeamComponent } from './team/team.component';
 import { AuthGuard } from 'src/app/auth/guards/auth.guard';
 import { TeamDetailComponent } from './team-detail/team-detail.component';
@@ -7,11 +7,11 @@ import { TeamDetailComponent } from './team-detail/team-detail.component';
 const routes: Routes = [
   {
     path: '',
-    component: TeamComponent, canActivate: [AuthGuard]
+    component: TeamComponent, canActivate: mapToCanActivate([AuthGuard])
   },
   {
     path: ':teamid',
-    component: TeamDetailComponent, canActivate: [AuthGuard]
+    component: TeamDetailComponent, canActivate: mapToCanActivate([AuthGuard])
   }
 ];
 

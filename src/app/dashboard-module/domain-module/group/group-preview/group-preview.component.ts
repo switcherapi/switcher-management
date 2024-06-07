@@ -83,17 +83,20 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
 
     this.groupService.setGroupEnvironmentStatus(this.group.id, this.selectedEnv, event.checked)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.group.activated = data.activated;
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.group.activated = data.activated;
+            this.blockUI.stop();
+            this.toastService.showSuccess(`Environment updated with success`);
+          }
+        },
+        error: error => {
           this.blockUI.stop();
-          this.toastService.showSuccess(`Environment updated with success`);
+          ConsoleLogger.printError(error);
+          this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
         }
-    }, error => {
-      this.blockUI.stop();
-      ConsoleLogger.printError(error);
-      this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
-    });
+      });
   }
 
   private loadOperationSelectionComponent(): void {

@@ -2,7 +2,6 @@ import { NgModule, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { MarkdownModule } from 'ngx-markdown';
-import { HttpClientModule } from '@angular/common/http';
 import { DocumentationRoutingModule } from './documentation.routing';
 import { SetupComponent } from './docs/setup.component';
 import { EnvironmentComponent } from './docs/environment.component';
@@ -45,7 +44,6 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     DocumentationRoutingModule,
-    HttpClientModule,
     MatIconModule,
     MarkdownModule.forRoot({
       sanitize: SecurityContext.NONE
