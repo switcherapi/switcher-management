@@ -110,6 +110,18 @@ html.dark-mode .btn-red {
     background-color: #eee;
 }
 
+html.dark-mode .header.activated {
+    background: linear-gradient(to right, #549bfb 0, #549bfb 10px, #fff 10px, #fff 100%) no-repeat;
+}
+
+html.dark-mode .header.deactivated {
+    background: linear-gradient(to right, #9e9e9e 0, #9e9e9e 10px, #fff 10px, #fff 100%) no-repeat;
+}
+
+html.dark-mode .header.editing {
+    background: linear-gradient(to right, #ff3333 0, #ff3333 10px, #fff 10px, #fff 100%) no-repeat;
+}
+
 html.dark-mode #switcher-slack-banner,
 html.dark-mode .doc-icon,
 html.dark-mode .ngb-toasts {

@@ -13,12 +13,12 @@
                 </canvas>
             </div>
             <div id="metric-statistics-buttons" style="display: flex;">
-                <button mat-button class="btn-element" 
+                <button mat-mini-fab class="btn-element" 
                     (click)="getSwitcherDateTimeGroupStats().onPrevious()" 
                     [disabled]="!getSwitcherDateTimeGroupStats().hasPrevious()">
                     <mat-icon style="font-size: larger;">arrow_back</mat-icon>
                 </button>
-                <button mat-button class="btn-element" 
+                <button mat-mini-fab class="btn-element" 
                     (click)="getSwitcherDateTimeGroupStats().loadSwitcherDateTimeGroupView()" 
                     [disabled]="!getSwitcherDateTimeGroupStats().hasNext()">
                     <mat-icon style="font-size: larger;">arrow_forward</mat-icon>

@@ -1,0 +1,40 @@
+name: Re-deploy CI
+run-name: Re-deploying - ${{ github.event.inputs.version }} by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag'
+        required: true
+
+jobs:
+  update-kustomize:
+    name: Deploy
+    needs: [ docker ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Kustomize
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ARGOCD_PAT }}
+          repository: switcherapi/switcher-deployment
+          ref: master
+
+      - name: Set up arkade-get
+        uses: alexellis/arkade-get@master
+        with:
+          kubectl: latest
+          kustomize: latest
+
+      - name: Update GitOps repository
+        run: |
+          cd switcher-management/base
+          echo RELEASE_TIME=`date` > environment-properties.env
+          kustomize edit set image trackerforce/switcher-management:latest=trackerforce/switcher-management:${{ github.event.inputs.tag }}
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git add .
+          git commit -m "[argocd] switcher-management: ${{ github.event.inputs.tag }}"
+          git push

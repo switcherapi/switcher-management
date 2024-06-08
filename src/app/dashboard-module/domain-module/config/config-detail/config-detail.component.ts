@@ -200,20 +200,23 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(result => {
       if (result) {
+        this.blockUI.start('Adding Strategy...');
         this.hasNewStrategy = true;
-          this.strategyService.createStrategy(
-            this.config.id, 
-            result.description, 
-            result.strategy, 
-            result.operation, 
-            this.currentEnvironment, 
-            result.values).subscribe(_data => {
-              this.loadStrategies(true);
-              this.toastService.showSuccess('Strategy created with success');
-            }, error => {
-              this.toastService.showError(error ? error.error : 'Unable to add strategy');
-              ConsoleLogger.printError(error);
-            });
+        this.strategyService.createStrategy(
+          this.config.id, 
+          result.description, 
+          result.strategy, 
+          result.operation, 
+          this.currentEnvironment, 
+          result.values).subscribe(_data => {
+            this.blockUI.stop();
+            this.loadStrategies(true);
+            this.toastService.showSuccess('Strategy created with success');
+          }, error => {
+            this.blockUI.stop();
+            this.toastService.showError(error ? error.error : 'Unable to add strategy');
+            ConsoleLogger.printError(error);
+          });
       }
     });
   }
@@ -309,7 +312,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.disableMetrics = this.config.disable_metrics ? 
       this.config.disable_metrics[this.currentEnvironment] : false;
     this.loadComponents();
-    this.loadStrategies();
     this.keyFormControl.setValue(config.key);
 
     this.readPermissionToObject();
@@ -497,8 +499,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.hasStrategies = data.length > 0;
           this.strategies.next(data);
 
-          if (this.hasStrategies && focus)
+          if (this.hasStrategies && focus) {
             this.updateNavTab(1);
+          }
         }
     }, error => {
       ConsoleLogger.printError(error);
