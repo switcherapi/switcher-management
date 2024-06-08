@@ -10,11 +10,6 @@
   padding-right: 20px;
 }
 
-.options-section-label {
-  vertical-align: baseline !important;
-  display: contents;
-}
-
 .mat-elevation-z8 {
   border: none;
   box-shadow: none;
@@ -25,8 +20,6 @@ th,
   background-color: rgb(251, 251, 251) !important;
 }
 
-@media only screen and (max-width: 560px) {
-  .options-section-label {
-    display: none;
-  }
+td {
+  word-wrap: anywhere;
 }

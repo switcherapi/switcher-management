@@ -1,12 +1,12 @@
 <div class="filter-member-style">
-    <mat-form-field class="filter-input">
-        <mat-label>Filter / Email</mat-label>
-        <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
-    </mat-form-field>
     <button mat-button class="btn-element" (click)="inviteMember(inputMember.value)" [disabled]="inputMember.value.length < 2 || !creatable">
         <mat-icon style="font-size: large;">perm_identity</mat-icon>
         Invite
     </button>
+    <mat-form-field class="filter-input">
+        <mat-label>Filter / Email</mat-label>
+        <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
+    </mat-form-field>
 </div>
 <div *ngIf="loading" class="card-body loader-div">
     <div class="loader"></div>

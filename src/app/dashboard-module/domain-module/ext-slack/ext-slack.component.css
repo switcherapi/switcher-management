@@ -25,6 +25,7 @@ h3 {
 
 .card {
     margin-top: 10px;
+    border: 1px solid #d3d3d3;
 }
 
 @media only screen and (max-width: 570px) {

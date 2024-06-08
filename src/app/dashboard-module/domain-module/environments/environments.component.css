@@ -15,6 +15,10 @@
   width: 600px;
 }
 
+.input-name {
+  padding-left: 14px;
+}
+
 .toggle-section {
   /* columns: 2; */
   /* display: inline-table; */
@@ -62,6 +66,10 @@
   .label-env-name {
     width: 300px;
   }
+
+  .grid-container {
+    border-radius: unset !important;
+  }
 }
 
 @media only screen and (max-width: 800px) {
@@ -73,6 +81,10 @@
 @media only screen and (max-width: 550px) {
   .label-env-name {
     width: 100%;
+  }
+
+  .input-name {
+    width: 70%;
   }
 }
 
@@ -86,15 +98,11 @@
     display: block !important;
   }
 
-  .options-section-label {
-    display: none;
-  }
-
   .label-env-name {
     font-size: unset;
   }
 
-  .btn-element {
+  .grid-container .btn-element {
     width: 50%;
   }
 }

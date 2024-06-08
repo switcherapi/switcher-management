@@ -19,7 +19,7 @@
 .env-delete-btn {
   float: right; 
   margin-top: -5px;
-  color: inherit !important;
+  background-color: unset !important;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {

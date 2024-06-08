@@ -1,13 +1,13 @@
 <block-ui>
     <div class="filter-permission-style">
+        <button mat-button class="btn-element" (click)="createPermission()" [disabled]="!creatable">
+            <mat-icon style="font-size: large;">create</mat-icon>
+            Create
+        </button>
         <mat-form-field class="filter-input">
             <mat-label>Filter</mat-label>
             <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
         </mat-form-field>
-        <button mat-button class="btn-element" (click)="createPermission()" [disabled]="!creatable">
-            <mat-icon style="font-size: large;">build</mat-icon>
-            Create
-        </button>
     </div>
     <div *ngIf="loading" class="card-body loader-div">
         <div class="loader"></div>
@@ -46,7 +46,7 @@
 
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Permission</th>
-                <td mat-cell *matCellDef="let element">{{ formatContent(element.action) }}</td>
+                <td mat-cell *matCellDef="let element" matTooltip="{{ element.action }}">{{ formatContent(element.action) }}</td>
             </ng-container>
 
             <ng-container matColumnDef="environments">

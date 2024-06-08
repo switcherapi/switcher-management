@@ -3,7 +3,7 @@ mat-icon {
 }
 
 .grid-container {
-  border-radius: var(--mdc-text-button-container-shape);
+  border-radius: var(--mdc-text-button-container-shape) !important;
 }
 
 .btn-element {
@@ -100,9 +100,5 @@ mat-icon {
   .environment-style {
     float: right; 
     margin-top: 10px;
-  }
-
-  .options-section-label {
-    display: none;
   }
 }

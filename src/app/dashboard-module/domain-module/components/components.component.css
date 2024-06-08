@@ -15,6 +15,10 @@
   width: 600px;
 }
 
+.input-name {
+  padding-left: 14px;
+}
+
 .toggle-section {
   /* columns: 2; */
   /* display: inline-table; */
@@ -75,6 +79,10 @@
   .label-env-name {
     width: 300px;
   }
+
+  .grid-container {
+    border-radius: unset !important;
+  }
 }
 
 @media only screen and (max-width: 800px) {
@@ -82,7 +90,7 @@
     width: 200px;
   }
 
-  .btn-element {
+  .grid-container .btn-element {
     margin-bottom: 5px;
     width: 100%;
   }
@@ -92,12 +100,21 @@
   .label-env-name {
     width: 100%;
   }
+
+  .input-name {
+    width: 70%;
+  }
 }
 
 @media only screen and (max-width: 450px) {
   .toggle-section {
     display: flex;
     margin: auto;
+  }
+
+  .grid-container .mat-mdc-button .mat-icon {
+    margin-right: unset !important;
+    margin-left: unset !important;
   }
 
   .grid-container {

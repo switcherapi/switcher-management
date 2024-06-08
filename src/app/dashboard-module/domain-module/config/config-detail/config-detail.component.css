@@ -1,7 +1,3 @@
-.strategy-section.relay {
-  min-height: 450px;
-}
-
 .switcher-component-section {
   display: grid; 
   padding: 15px;
@@ -52,6 +48,11 @@
 @media only screen and (max-width: 540px) {
   .options-section-label {
     display: none;
+  }
+
+  .strategy-control-style .mat-mdc-button .mat-icon {
+    margin-right: unset !important;
+    margin-left: unset !important;
   }
 
   :host ::ng-deep .nav {

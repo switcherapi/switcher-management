@@ -21,4 +21,9 @@
   .options-section-label {
     display: none;
   }
+
+  .mat-mdc-button .mat-icon {
+    margin-right: unset !important;
+    margin-left: unset !important;
+  }
 }

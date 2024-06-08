@@ -1,18 +1,12 @@
 .filter-member-style {
   white-space: nowrap;
-  display: block;
   padding-top: 10px;
+  display: flex;
 }
 
 .filter-input {
-  float: left;
   width: 330px;
-  padding-right: 20px;
-}
-
-.options-section-label {
-  vertical-align: baseline !important;
-  display: contents;
+  padding-left: 1rem;
 }
 
 .mat-elevation-z8 {
@@ -20,13 +14,27 @@
   box-shadow: none;
 }
 
+.btn-element {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 th,
 .mat-mdc-paginator {
   background-color: rgb(251, 251, 251) !important;
 }
 
+td {
+  word-wrap: anywhere;
+}
+
 @media only screen and (max-width: 560px) {
-  .options-section-label {
-    display: none;
+  .filter-member-style {
+    white-space: unset;
+    display: block;
+  }
+
+  .filter-input {
+    width: 100%;
   }
 }

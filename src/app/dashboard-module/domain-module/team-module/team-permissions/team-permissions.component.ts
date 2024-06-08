@@ -164,7 +164,7 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   }
 
   formatContent(value: string): string {
-    if (window.screen.width < 380)
+    if (window.screen.width < 560)
       return value.substring(0, 3);
     else
       return value;

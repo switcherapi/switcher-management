@@ -62,6 +62,12 @@
   .options-section-label {
     display: none;
   }
+
+  .strategy-values-control .mat-mdc-button .mat-icon,
+  .strategy-control-style .mat-mdc-button .mat-icon {
+    margin-right: unset !important;
+    margin-left: unset !important;
+  }
 }
 
 @media only screen and (max-width: 430px) {

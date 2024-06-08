@@ -5,13 +5,13 @@
 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
 <div [ngClass]="classStatus">
     <div class="header-style">
-        <div style="display: flex;">
+        <div style="display: contents;">
             <button mat-button class="btn-element create" (click)="createComponent()" [disabled]="inputComponentName.value.length < 2 || !creatable">
                 <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
-                <mat-icon *ngIf="!creating"style="font-size: large;">build</mat-icon>
+                <mat-icon *ngIf="!creating"style="font-size: large;">create</mat-icon>
                 Create
             </button>
-            <mat-form-field style="padding-left: 14px;">
+            <mat-form-field class="input-name">
                 <mat-label>Component name</mat-label>
                 <input #inputComponentName matInput maxlength="30"  
                     special-chars [formControl]="compFormControl" autocomplete="off">
