@@ -16,7 +16,7 @@ RUN npm ci --force
 RUN npm run build:local
 
 # Remove dev dependencies
-RUN npm prune --production
+RUN npm prune --force --production
 
 # ---------- Release ----------
 FROM nginx:1.25.3-alpine-slim
