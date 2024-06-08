@@ -10,7 +10,7 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 # Install all dependencies, both production and development
-RUN npm ci
+RUN npm ci --force
 
 # Build
 RUN npm run build:local

@@ -27,7 +27,7 @@ jobs:
 
       - name: Build & Lint
         run: |
-          npm ci
+          npm ci --force
           npm run lint
   
   docker:
