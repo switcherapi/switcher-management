@@ -7,8 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build-lint-deploy:
-    name: Build - Lint - Deploy
+  build-lint:
+    name: Build & Lint
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     concurrency: ci-${{ github.ref }}
@@ -31,7 +31,7 @@ jobs:
 
   docker:
     name: Publish Docker Image
-    needs: [ build-lint-deploy ]
+    needs: [ build-lint ]
     runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/master'
 
@@ -65,11 +65,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: 'master'
-
       - name: Checkout Kustomize
         uses: actions/checkout@v4
         with:

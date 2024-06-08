@@ -15,7 +15,8 @@
                     (change)="changeStatus($event)" formControlName="environmentStatusSelection">
                 </mat-slide-toggle>
             </div>
-            <button [disabled]="isDisableToRemove()" mat-button style="float: right; margin-top: -5px;" (click)="removeEnvironment()">
+            <button [disabled]="isDisableToRemove()" mat-button style="float: right; margin-top: -5px;" (click)="removeEnvironment()"
+                matTooltip="Reset environment to default">
                 <mat-icon>delete</mat-icon>
             </button>
         </div>

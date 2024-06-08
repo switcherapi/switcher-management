@@ -42,6 +42,10 @@ body {
   box-shadow: 0 0 5px #757575;
 }
 
+.btn-element:disabled {
+  opacity: 0.5;
+}
+
 .btn-red {
   background: #fb5454 !important;
 }
