@@ -8,7 +8,7 @@
         <div style="display: flex;">
             <button mat-button class="btn-element create" (click)="createEnvironment()" [disabled]="inputEnvironmentName.value.length < 2 || !creatable">
                 <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
-                <mat-icon *ngIf="!creating"style="font-size: large;">build</mat-icon>
+                <mat-icon *ngIf="!creating"style="font-size: large;">create</mat-icon>
                 Create
             </button>
             <mat-form-field style="padding-left: 14px;">

@@ -4,7 +4,7 @@
             <input #inputMember matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         </mat-form-field>
         <button mat-button class="btn-element" (click)="createPermission()" [disabled]="!creatable">
-            <mat-icon style="font-size: large;">build</mat-icon>
+            <mat-icon style="font-size: large;">create</mat-icon>
             Create
         </button>
     </div>
