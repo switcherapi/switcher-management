@@ -1,6 +1,6 @@
 {
   "name": "switcher-management",
-  "version": "1.2.6",
+  "version": "2.0.0",
   "description": "Manage Switcher API settings, teams, integrations and more.",
   "author": {
     "name": "Roger Floriano (petruki)",
