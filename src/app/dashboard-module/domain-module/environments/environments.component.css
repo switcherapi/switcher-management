@@ -20,8 +20,6 @@
 }
 
 .toggle-section {
-  /* columns: 2; */
-  /* display: inline-table; */
   padding: 5px;
   background-color: #0000 !important;
 }
@@ -69,6 +67,10 @@
 
   .grid-container {
     border-radius: unset !important;
+  }
+
+  .toggle-section {
+    background-color: white !important;
   }
 }
 

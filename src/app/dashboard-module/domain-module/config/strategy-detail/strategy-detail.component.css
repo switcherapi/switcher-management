@@ -105,10 +105,6 @@
     width: 80%;
   }
 
-  .strategy-values-control {
-    display: grid;
-  }
-
   .strategy-control-style {
     display: grid !important;
     width: 80%;

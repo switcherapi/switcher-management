@@ -12,7 +12,7 @@
                     (chartClick)="getSwitcherDateTimeGroupStats().onClick($event)">
                 </canvas>
             </div>
-            <div id="metric-statistics-buttons" style="display: flex;">
+            <div id="metric-statistics-buttons" style="display: flex; margin: 1rem;">
                 <button mat-mini-fab class="btn-element" 
                     (click)="getSwitcherDateTimeGroupStats().onPrevious()" 
                     [disabled]="!getSwitcherDateTimeGroupStats().hasPrevious()">
