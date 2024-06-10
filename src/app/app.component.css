@@ -30,6 +30,19 @@ button {
   display: block;
 }
 
+#signUp {
+  border: 1px solid;
+  margin-left: .5rem;
+}
+
+#toggleTheme:hover {
+  transform: scale(1.2, 1.2);
+}
+
+#toggleTheme.transition {
+  transition: all .2s cubic-bezier(0.100, 0.50, 0.30, 1);
+}
+
 .navigation-nested:hover {
   display: block;
 }

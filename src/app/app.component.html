@@ -10,7 +10,12 @@
         <a class="nav-item nav-link" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
         <a class="nav-item nav-link" routerLink="/documentation">Documentation</a>
         <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
-        <a class="nav-item nav-link menu-border-left" routerLink="/signup" *ngIf="!currentToken">Sign up</a>
+        <div class="menu-border-left" *ngIf="!currentToken">
+            <a id="toggleTheme" class="nav-item nav-link transition" (click)="toggleDarkMode()">
+                <mat-icon>{{ darkMode ? 'brightness_7' : 'brightness_4' }}</mat-icon>
+            </a>
+            <a id="signUp" class="nav-item nav-link" routerLink="/signup">Sign up</a>
+        </div>
         <div id="menuProfile" *ngIf="currentToken" class="profile-btn menu-border-left">
             <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="User avatar">
             <mat-icon class="icon-color" style="transform: translateY(6px);">keyboard_arrow_down</mat-icon>

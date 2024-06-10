@@ -1,31 +1,14 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AuthService } from '../auth/services/auth.service';
-
+import { Component } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
-
-  darkPrefix: string;
-
-  constructor(private authService: AuthService) {
-    this.authService.userInfoSubject.pipe(takeUntil(this.unsubscribe)).subscribe(_user => {
-      this.darkPrefix = this.authService.getUserInfo("darkMode") == 'true' ? '_dark' : '';
-    });
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
+export class HomeComponent {
 
   getImage(resource: string): string {
-    return `assets/${resource}${this.darkPrefix}.png`;
+    const darkPrefix = document.documentElement.classList.contains("dark-mode") ? '_dark' : '';
+    return `assets/${resource}${darkPrefix}.png`;
   }
 
 }

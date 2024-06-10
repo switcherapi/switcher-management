@@ -130,7 +130,7 @@ h4 {
 
 .menu-border-left {
   margin-left: auto;
-  border: 1px solid;
+  display: flex;
 }
 
 .switcher-logo:hover {

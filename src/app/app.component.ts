@@ -13,6 +13,7 @@ export class AppComponent implements OnInit, OnDestroy {
   currentToken: string;
   loggedUserName: string;
   profileAvatar: string;
+  darkMode: boolean;
 
   constructor(
       private router: Router,
@@ -44,8 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
       document.documentElement.classList.remove("dark-mode");
       this.authService.setUserInfo("darkMode", String(false));
     } else {
-      const darkMode = document.documentElement.classList.toggle("dark-mode");
-      this.authService.setUserInfo("darkMode", String(darkMode));
+      this.darkMode = document.documentElement.classList.toggle("dark-mode");
+      this.authService.setUserInfo("darkMode", String(this.darkMode));
     }
   }
 
