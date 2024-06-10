@@ -1,11 +1,6 @@
 .btn-remove {
   background: #fb5454;
-  display: block;
   margin-right: 20px;
-}
-
-.btn-edit {
-  display: block ruby !important;
 }
 
 .options-section-label {

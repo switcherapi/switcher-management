@@ -1,11 +1,6 @@
 .btn-remove {
   background: #fb5454;
-  display: block;
   margin-right: 20px;
-}
-
-.btn-edit {
-  display: block ruby !important;
 }
 
 .options-section-label {
@@ -28,7 +23,7 @@
 
 .detail-body {
   padding-top: 0px;
-  padding-bottom: 5rem;
+  padding-bottom: .5rem;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {

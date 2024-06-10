@@ -6,8 +6,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
-const negativeTemplate = { label: 'Negative', backgroundColor: '#ffa1b5', fill: 'origin' };
-const positiveTemplate = { label: 'Positive', backgroundColor: '#86c7f3', fill: 'origin' };
+const negativeTemplate = { label: 'False', backgroundColor: '#ffa1b595', borderColor: '#ffa1b5', fill: 'origin' };
+const positiveTemplate = { label: 'True', backgroundColor: '#86c7f395', borderColor: '#3c7aa3', fill: 'origin' };
 
 @Component({
   selector: 'app-metric-statistics',
