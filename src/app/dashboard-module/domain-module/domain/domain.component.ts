@@ -182,8 +182,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   gotoMetrics() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/metrics`], 
-      { state: { fetch: false } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/metrics`]);
   }
 
   gotoChangeLog() {
@@ -192,18 +191,15 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   gotoComponents() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/components`], 
-      { state: { fetch: false } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/components`]);
   }
 
   gotoEnvironments() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/environments`], 
-      { state: { fetch: false } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/environments`]);
   }
 
   gotoTeams() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/teams`], 
-      { state: { fetch: false } });
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/teams`]);
   }
 
   gotoSlackIntegration() {

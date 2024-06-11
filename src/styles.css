@@ -1,6 +1,5 @@
 @import url("styles-dark-theme.css");
 
-
 app-domain .mat-mdc-button,
 app-domain-list .mat-mdc-button {
   color: white !important;
@@ -128,6 +127,10 @@ h4 {
   padding-bottom: .1rem;
 }
 
+#main-menu {
+  box-shadow: 0px 5px 5px #42474d;
+}
+
 .menu-border-left {
   margin-left: auto;
   display: flex;
@@ -163,8 +166,9 @@ h4 {
   color: white;
 }
 
-.card {
+.container.card {
   border: 0;
+  box-shadow: 0 5px 5px -3px #0003,0 8px 10px 1px #00000024,0 3px 14px 2px #0000001f;
 }
 
 ngb-modal-backdrop {

@@ -19,26 +19,33 @@
   margin-bottom: auto;
 }
 
+.permission-header {
+  width: 10%;
+}
+
 th,
 .mat-mdc-paginator {
   background-color: rgb(251, 251, 251) !important;
 }
 
-@media only screen and (max-width: 560px) {
+@media only screen and (max-width: 780px) {
   td {
-    padding: .2rem;
+    vertical-align: middle !important;
+    padding: inherit;
   }
 
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 560px) {
   .mat-elevation-z8 {
     display: grid;
   }
 
   .table-header-resize {
     width: 80px;
-  }
-
-  .hide-on-mobile {
-    display: none;
   }
 
   .filter-permission-style {
@@ -48,5 +55,11 @@ th,
 
   .filter-input {
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  th {
+    display: none;
   }
 }

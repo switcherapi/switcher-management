@@ -63,6 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const darkMode = this.authService.getUserInfo("darkMode");
     if (darkMode === "true") {
+      this.darkMode = true;
       document.documentElement.classList.add("dark-mode");
     }
   }
