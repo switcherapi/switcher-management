@@ -186,8 +186,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   gotoChangeLog() {
-    this.router.navigate([`${this.currentPath.path}/change-log`], 
-      { state: { fetch: false } });
+    this.router.navigate([`${this.currentPath.path}/change-log`]);
   }
 
   gotoComponents() {

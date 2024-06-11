@@ -18,7 +18,7 @@
                     </mat-form-field>
                 </div>
                 <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">
-                    <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API logo"/>
+                    <mat-icon>thumb_up</mat-icon>
                     <span class="label-color" style="color: white; padding-left: 5px;">Accept</span>
                 </button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>

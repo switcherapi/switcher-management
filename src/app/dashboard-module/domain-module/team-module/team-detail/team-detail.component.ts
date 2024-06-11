@@ -64,7 +64,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     this.activatedRoute.paramMap.pipe(map(() => window.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
-        this.updateRoute(data.fetch == undefined);
+        this.updateRoute(data.navigationId === 1);
 
         if (data.team) {
           this.team = JSON.parse(data.team);
