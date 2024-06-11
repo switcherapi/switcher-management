@@ -57,7 +57,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.activatedRoute.paramMap
       .pipe(map(() => window.history.state))
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.fetch = data.fetch == undefined);
+      .subscribe(data => this.fetch = data.navigationId === 1);
   }
 
   ngOnInit() {

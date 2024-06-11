@@ -180,7 +180,6 @@ html.dark-mode .mat-mdc-dialog-container app-changelog {
 }
 
 html.dark-mode .card {
-    box-shadow: none;
     background: #191919;
     border: 1px solid rgba(255, 254, 254, 0.13);
 }
@@ -196,6 +195,7 @@ html.dark-mode .mat-mdc-dialog-surface {
     background: #191919 !important;
 }
 
+html.dark-mode ul hr,
 html.dark-mode .card-body hr {
     border-top: 1px solid rgba(179, 179, 179, 0.1);
 }

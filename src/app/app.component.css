@@ -1,3 +1,8 @@
+#appContent {
+  margin-bottom: 60px;
+  position: relative;
+}
+
 button {
   outline: none;
 }
@@ -28,6 +33,8 @@ button {
 
 #menuProfile:hover + #profileMenu {
   display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 #signUp {
@@ -45,6 +52,8 @@ button {
 
 .navigation-nested:hover {
   display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 .navigation-nested {
@@ -57,11 +66,14 @@ button {
   border: 1px solid #F7F7F7;
   border-radius: 2px;
   box-shadow: 0 0 5px 2px rgba(0,0,0,.15);
-  display: none;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
   position: absolute;
   top: 80%;
   right: 10px;
   margin: 0;
+  transition: visibility .3s linear, opacity .3s linear;
 }
 
 .navigation-nested .username {
@@ -115,6 +127,10 @@ button {
 
 .hide-menu {
   display: none;
+}
+
+.menu-item-icon {
+  margin-right: .5rem;
 }
 
 @media only screen and (max-width: 500px) {
