@@ -1,74 +1,72 @@
-<block-ui>
-    <div *ngIf="!loading" style="padding-top: 20px;">
-        <section [ngClass]="classStatus">
-            <div class="header-container">
-                <div class="description" style="width: 350px;">
-                    <mat-form-field>
-                        <mat-label>Name</mat-label>
-                        <input matInput readonly="{{!editing}}" 
-                            [ngStyle]="editing ? {'color': 'black'} : ''" 
-                            [formControl]="nameFormControl"
-                            autocomplete="off">
-                    </mat-form-field>
-                    <mat-error *ngIf="nameFormControl.hasError('minlength')">
-                        Name must contains at least 2 characters
-                    </mat-error>
-                    <mat-error *ngIf="nameFormControl.hasError('required')">
-                        Name is <strong>required</strong>
-                    </mat-error>
-                    <mat-form-field>
-                        <mat-label>Domain Name</mat-label>
-                        <input matInput [value]="domainName" readonly>
-                    </mat-form-field>
-                </div>
+<div *ngIf="!loading" style="padding-top: 20px;">
+    <section [ngClass]="classStatus">
+        <div class="header-container">
+            <div class="description" style="width: 350px;">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput readonly="{{!editing}}" 
+                        [ngStyle]="editing ? {'color': 'black'} : ''" 
+                        [formControl]="nameFormControl"
+                        autocomplete="off">
+                </mat-form-field>
+                <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                    Name must contains at least 2 characters
+                </mat-error>
+                <mat-error *ngIf="nameFormControl.hasError('required')">
+                    Name is <strong>required</strong>
+                </mat-error>
+                <mat-form-field>
+                    <mat-label>Domain Name</mat-label>
+                    <input matInput [value]="domainName" readonly>
+                </mat-form-field>
             </div>
-        </section>
-        <section class="options-section">
-            <div class="toggle-section">
-                <mat-slide-toggle [checked]="team.active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
-                    (change)="changeStatus($event)" [disabled]="!updatable">
-                </mat-slide-toggle>
-            </div>
-            <button mat-button [ngClass]="editing ? 'btn-element save btn-edit' : 'btn-element btn-edit'" (click)="edit()" [disabled]="!updatable">
-                <mat-icon style="font-size: large;">build</mat-icon>
-                <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
-            </button>
-            <button mat-button class="btn-element btn-remove btn-red" (click)="removeTeam()" [disabled]="!removable">
-                <mat-icon>delete</mat-icon>
-                <div class="options-section-label">Remove</div>
-            </button>
-        </section>
-        <section style="padding-top: 20px;">
-            <div *ngIf="loading" class="card-body loader-div">
-                <div class="loader"></div>
-                <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API" />
-            </div>
-            <div *ngIf="!loading" style="margin-top: 50px;">
-                <nav ngbNav #nav="ngbNav" class="nav-tabs">
-                    <ng-container ngbNavItem>
-                        <a ngbNavLink>Members</a>
-                        <ng-template ngbNavContent>
-                            <app-team-members [team]="team" [creatable]="creatable" [updatable]="updatable"
-                                [removable]="removable"></app-team-members>
-                        </ng-template>
-                    </ng-container>
-                    <ng-container ngbNavItem>
-                        <a ngbNavLink>Permissions</a>
-                        <ng-template ngbNavContent>
-                            <app-team-permissions [team]="team" [creatable]="creatable" [updatable]="updatable"
-                                [removable]="removable"></app-team-permissions>
-                        </ng-template>
-                    </ng-container>
-                    <ng-container ngbNavItem>
-                        <a ngbNavLink>Pending</a>
-                        <ng-template ngbNavContent>
-                            <app-team-pending-members [team]="team" [creatable]="creatable" [updatable]="updatable"
-                                [removable]="removable"></app-team-pending-members>
-                        </ng-template>
-                    </ng-container>
-                </nav>
-                <div [ngbNavOutlet]="nav" class="mt-2"></div>
-            </div>
-        </section>
-    </div>
-</block-ui>
+        </div>
+    </section>
+    <section class="options-section">
+        <div class="toggle-section">
+            <mat-slide-toggle [checked]="team.active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
+                (change)="changeStatus($event)" [disabled]="!updatable">
+            </mat-slide-toggle>
+        </div>
+        <button mat-button [ngClass]="editing ? 'btn-element save btn-edit' : 'btn-element btn-edit'" (click)="edit()" [disabled]="!updatable">
+            <mat-icon style="font-size: large;">build</mat-icon>
+            <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+        </button>
+        <button mat-button class="btn-element btn-remove btn-red" (click)="removeTeam()" [disabled]="!removable">
+            <mat-icon>delete</mat-icon>
+            <div class="options-section-label">Remove</div>
+        </button>
+    </section>
+    <section style="padding-top: 20px;">
+        <div *ngIf="loading" class="card-body loader-div">
+            <div class="loader"></div>
+            <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API" />
+        </div>
+        <div *ngIf="!loading" style="margin-top: 50px;">
+            <nav ngbNav #nav="ngbNav" class="nav-tabs">
+                <ng-container ngbNavItem>
+                    <a ngbNavLink>Members</a>
+                    <ng-template ngbNavContent>
+                        <app-team-members [team]="team" [creatable]="creatable" [updatable]="updatable"
+                            [removable]="removable"></app-team-members>
+                    </ng-template>
+                </ng-container>
+                <ng-container ngbNavItem>
+                    <a ngbNavLink>Permissions</a>
+                    <ng-template ngbNavContent>
+                        <app-team-permissions [team]="team" [creatable]="creatable" [updatable]="updatable"
+                            [removable]="removable"></app-team-permissions>
+                    </ng-template>
+                </ng-container>
+                <ng-container ngbNavItem>
+                    <a ngbNavLink>Pending</a>
+                    <ng-template ngbNavContent>
+                        <app-team-pending-members [team]="team" [creatable]="creatable" [updatable]="updatable"
+                            [removable]="removable"></app-team-pending-members>
+                    </ng-template>
+                </ng-container>
+            </nav>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+    </section>
+</div>

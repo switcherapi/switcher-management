@@ -35,19 +35,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.toggleDarkMode(true);
     this.authService.logout();
     this.router.navigate(['/']);
+    this.reloadTheme();
   }
 
-  toggleDarkMode(logoff?: boolean) {
-    if (logoff) {
-      document.documentElement.classList.remove("dark-mode");
-      this.authService.setUserInfo("darkMode", String(false));
-    } else {
-      this.darkMode = document.documentElement.classList.toggle("dark-mode");
-      this.authService.setUserInfo("darkMode", String(this.darkMode));
-    }
+  toggleDarkMode() {
+    this.darkMode = document.documentElement.classList.toggle("dark-mode");
+    this.authService.setUserInfo("darkMode", String(this.darkMode));
   }
 
   private loadUserSettings(): void {
@@ -61,8 +56,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
     });
 
+    this.reloadTheme();
+  }
+
+  private reloadTheme() {
     const darkMode = this.authService.getUserInfo("darkMode");
-    if (darkMode === "true") {
+    if (!darkMode) {
+      this.darkMode = document.documentElement.classList.contains("dark-mode");
+      this.authService.setUserInfo("darkMode", String(this.darkMode));
+    } else if (darkMode === "true") {
       this.darkMode = true;
       document.documentElement.classList.add("dark-mode");
     }

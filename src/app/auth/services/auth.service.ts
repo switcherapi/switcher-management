@@ -94,7 +94,7 @@ export class AuthService {
         }));
   }
 
-  cleanSession() {
+  cleanLocal() {
     this.currentTokenSubject.next(null);
     this.doLogoutUser();
   }
@@ -117,7 +117,7 @@ export class AuthService {
     }).pipe(
       tap({
         next: (tokens: Tokens) => this.storeJwtToken(tokens),
-        error: () => this.cleanSession()
+        error: () => this.cleanLocal()
       })
     );
   }
@@ -130,11 +130,19 @@ export class AuthService {
     return localStorage.getItem(AuthService.JWT_TOKEN);
   }
 
-  setUserInfo(key: string, value: string): void {
+  setUserInfo(key: string, value: string, propagate = false): void {
+    let userData = {};
+
     if (localStorage.getItem(AuthService.USER_INFO)) {
-      const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO));
+      userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO));
       userData[`${key}`] = value;
-      localStorage.setItem(AuthService.USER_INFO, JSON.stringify(userData));
+    } else {
+      userData[`${key}`] = value;
+    }
+      
+    localStorage.setItem(AuthService.USER_INFO, JSON.stringify(userData));
+
+    if (propagate) {
       this.userInfoSubject.next(userData);
     }
   }
@@ -163,16 +171,13 @@ export class AuthService {
 
   private doLoginUser(user: any, tokens: Tokens) {
     const loggegWith = this.getLoggedWith(user);
-    const userData = JSON.stringify({ 
-      name: user.name,
-      email: loggegWith === 'Switcher API' ? user.email : `Logged @${loggegWith}`,
-      sessionid: user.id,
-      avatar: user._avatar,
-      platform: loggegWith
-    });
-
-    localStorage.setItem(AuthService.USER_INFO, userData);
-    this.userInfoSubject.next(userData);
+    
+    this.setUserInfo('name', user.name);
+    this.setUserInfo('email', user.email);
+    this.setUserInfo('sessionid', user.id);
+    this.setUserInfo('avatar', user._avatar);
+    this.setUserInfo('platform', loggegWith, true);
+    
     this.loggedUser = user.email;
     this.storeTokens(tokens);
   }

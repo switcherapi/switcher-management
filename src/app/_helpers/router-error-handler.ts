@@ -18,7 +18,7 @@ export class RouterErrorHandler {
             if (error.error && error.error.code === 401) {
                 return '';
             }
-            this.authService.cleanSession();
+            this.authService.cleanLocal();
             this.router.navigate(['/login']);
         }
         
