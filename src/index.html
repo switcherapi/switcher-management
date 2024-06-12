@@ -42,6 +42,12 @@
 </head>
 
 <body>
+  <script>
+    const theme = localStorage.getItem('THEME') || 'light';
+    if (theme === 'dark') {
+      document.documentElement.classList.add("dark-mode");
+    }
+  </script>
   <div id="page-container">
     <div id="content-wrap">
       <app-root></app-root>

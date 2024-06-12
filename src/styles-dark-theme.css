@@ -20,7 +20,8 @@ html.dark-mode a:hover {
 html.dark-mode body,
 html.dark-mode .backgroud-style,
 html.dark-mode .card-header {
-    background: #2e2e2e !important;
+    background-color: #2e2e2e !important;
+    transition: background-color 0.3s;
 }
 
 html.dark-mode .backgroud-style,

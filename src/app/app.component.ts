@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toggleDarkMode() {
     this.darkMode = document.documentElement.classList.toggle("dark-mode");
-    this.authService.setUserInfo("darkMode", String(this.darkMode));
+    this.updateTheme();
   }
 
   private loadUserSettings(): void {
@@ -60,14 +60,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private reloadTheme() {
-    const darkMode = this.authService.getUserInfo("darkMode");
+    const darkMode = localStorage.getItem("THEME");
     if (!darkMode) {
       this.darkMode = document.documentElement.classList.contains("dark-mode");
-      this.authService.setUserInfo("darkMode", String(this.darkMode));
-    } else if (darkMode === "true") {
+      this.updateTheme();
+    } else if (darkMode === "dark") {
       this.darkMode = true;
       document.documentElement.classList.add("dark-mode");
     }
+  }
+
+  private updateTheme() {
+    localStorage.setItem("THEME", this.darkMode ? "dark" : "light");
   }
   
 }
