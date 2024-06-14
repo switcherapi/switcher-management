@@ -24,7 +24,11 @@ export class DocumentationComponent implements OnInit, OnDestroy {
     };
   }
 
-  toggleMenu(): void {
+  toggleMenu(selection?: HTMLElement): void {
+    if (selection) {
+      this.setMenuSelection(selection.id);
+    }
+
     if (document.getElementById('sidebar').className == 'active') {
       document.getElementById('sidebar').className = "";
       document.getElementById('content').className = "";
@@ -51,6 +55,17 @@ export class DocumentationComponent implements OnInit, OnDestroy {
           document.getElementById("sidebarCollapse").style.top = "-60px";
       }
       this.prevScrollpos = currentScrollPos;
+    }
+  }
+
+  private setMenuSelection(selectionMenu?: string) {
+    const selectedItems = Array.from(document.getElementsByClassName('selected-item'));
+    for (const element of selectedItems) {
+      element.classList.remove('selected-item');
+    }
+  
+    if (selectionMenu) {
+      document.getElementById(selectionMenu)?.classList.add('selected-item');
     }
   }
 

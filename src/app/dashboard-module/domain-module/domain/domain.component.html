@@ -43,7 +43,7 @@
             <a (click)="gotoListChildren()">
                 <mat-icon id="iconListChildren" style="color: white;" matTooltip="{{ getLabelListChildren() }}">format_list_bulleted</mat-icon>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" (click)="navToggled()"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" (click)="navToggled()"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Domain menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -61,25 +61,28 @@
 
                 <div class="navbar-nav nav-menu-hidden">
                     <a class="nav-item nav-link" (click)="gotoDetails()" 
-                         data-toggle="collapse" data-target="#navbarContent">Details</a>
+                         data-bs-toggle="collapse" data-bs-target="#navbarContent">Details</a>
                     <a class="nav-item nav-link" (click)="gotoListChildren()" 
-                        data-toggle="collapse" data-target="#navbarContent">{{ getLabelListChildren() }}</a>
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent">{{ getLabelListChildren() }}</a>
                     <a class="nav-item nav-link" (click)="gotoMetrics()"
-                        data-toggle="collapse" data-target="#navbarContent">Metrics</a>
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent">Metrics</a>
                     <a class="nav-item nav-link" (click)="gotoChangeLog()" 
-                        data-toggle="collapse" data-target="#navbarContent">Change Log</a>
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent">Change Log</a>
                     <a class="nav-item nav-link" (click)="gotoComponents()"
-                        data-toggle="collapse" data-target="#navbarContent">Components</a>
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent">Components</a>
                     <a class="nav-item nav-link" (click)="gotoEnvironments()"
-                        data-toggle="collapse" data-target="#navbarContent">Environments</a>
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent">Environments</a>
                     <a class="nav-item nav-link" (click)="gotoTeams()"
-                        data-toggle="collapse" data-target="#navbarContent">Teams</a>
+                        data-bs-toggle="collapse" data-bs-target="#navbarContent">Teams</a>
                 </div>
                 <element-autocomplete class="element-filter" [parentComponent]="this"></element-autocomplete>
             </div>
         </nav>
 
-        <div class="div-router-history">
+        <div *ngIf="loading" class="div-router-history loading-spinner">
+            <mat-spinner [diameter]="25"></mat-spinner>
+        </div>
+        <div *ngIf="!loading" class="div-router-history">
             <a *ngIf="domain" class="router-history" (click)="gotoDetails(selectedDomainPath)">
                 <span class="badge"></span>{{ domain.name }}
             </a>

@@ -10,31 +10,31 @@
                 <div class="spacer"></div>
                 <ul class="list-unstyled components">
                     <li class="active">
-                        <a href="#quickstartSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quickstart</a>
+                        <a href="#quickstartSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quickstart</a>
                         <ul class="collapse list-unstyled" id="quickstartSubmenu">
-                            <li><a routerLink="/documentation/setup" (click)="toggleMenu()">- Setup</a></li>
-                            <li><a routerLink="/documentation/environment" (click)="toggleMenu()">- Environment</a></li>
-                            <li><a routerLink="/documentation/components" (click)="toggleMenu()">- Components</a></li>
-                            <li><a routerLink="/documentation/shortcuts" (click)="toggleMenu()">- Shortcuts</a></li>
+                            <li><a id="quick_setup" #quick_setup routerLink="/documentation/setup" (click)="toggleMenu(quick_setup)">- Setup</a></li>
+                            <li><a id="quick_environment" #quick_environment routerLink="/documentation/environment" (click)="toggleMenu(quick_environment)">- Environment</a></li>
+                            <li><a id="quick_components" #quick_components routerLink="/documentation/components" (click)="toggleMenu(quick_components)">- Components</a></li>
+                            <li><a id="quick_shotcuts" #quick_shotcuts routerLink="/documentation/shortcuts" (click)="toggleMenu(quick_shotcuts)">- Shortcuts</a></li>
                         </ul>
                     </li>
-                    <li><a routerLink="/documentation/team" (click)="toggleMenu()">Teams</a></li>
-                    <li><a routerLink="/documentation/metrics" (click)="toggleMenu()">Metrics</a></li>
-                    <li><a routerLink="/documentation/strategies" (click)="toggleMenu()">Strategies</a></li>
-                    <li><a routerLink="/documentation/api" (click)="toggleMenu()">Switcher API</a></li>
-                    <li><a routerLink="/documentation/relay" (click)="toggleMenu()">Switcher Relay</a></li>
+                    <li><a id="teams" #teams routerLink="/documentation/team" (click)="toggleMenu(teams)">Teams</a></li>
+                    <li><a id="metrics" #metrics routerLink="/documentation/metrics" (click)="toggleMenu(metrics)">Metrics</a></li>
+                    <li><a id="strategies" #strategies routerLink="/documentation/strategies" (click)="toggleMenu(strategies)">Strategies</a></li>
+                    <li><a id="api" #api routerLink="/documentation/api" (click)="toggleMenu(api)">Switcher API</a></li>
+                    <li><a id="relay" #relay routerLink="/documentation/relay" (click)="toggleMenu(relay)">Switcher Relay</a></li>
                     <li class="active">
-                        <a href="#librariesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher SDK</a>
+                        <a href="#librariesSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher SDK</a>
                         <ul class="collapse list-unstyled" id="librariesSubmenu">
-                            <li><a routerLink="/documentation/libjava" (click)="toggleMenu()">- Java</a></li>
-                            <li><a routerLink="/documentation/libjavascript" (click)="toggleMenu()">- JavaScript</a></li>
+                            <li><a id="sdk_java" #sdk_java routerLink="/documentation/libjava" (click)="toggleMenu(sdk_java)">- Java</a></li>
+                            <li><a id="sdk_js" #sdk_js routerLink="/documentation/libjavascript" (click)="toggleMenu(sdk_js)">- JavaScript</a></li>
                         </ul>
                     </li>
                     <li class="active">
-                        <a href="#slackSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Slack App</a>
+                        <a href="#slackSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Switcher Slack App</a>
                         <ul class="collapse list-unstyled" id="slackSubmenu">
-                            <li><a routerLink="/documentation/slackinstallation" (click)="toggleMenu()">- Installation</a></li>
-                            <li><a routerLink="/documentation/slackfeatures" (click)="toggleMenu()">- Features</a></li>
+                            <li><a id="slack_installation" #slack_installation routerLink="/documentation/slackinstallation" (click)="toggleMenu(slack_installation)">- Installation</a></li>
+                            <li><a id="slack_features" #slack_features routerLink="/documentation/slackfeatures" (click)="toggleMenu(slack_features)">- Features</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -49,7 +49,7 @@
                         <button class="input-group-text red lighten-3" (click)="onSearch(searchQuery.value)">
                             <mat-icon>search</mat-icon>
                         </button>
-                        <button type="button" id="sidebarCollapseBtn" class="btn btn-info" (click)="toggleMenu()">
+                        <button type="button" id="sidebarCollapseBtn" class="btn btn-info input-group-text" (click)="toggleMenu()">
                             <mat-icon>menu</mat-icon>
                         </button>
                     </div>
