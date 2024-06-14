@@ -2,7 +2,7 @@ import { OnDestroy, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { SETTINGS_PARAM, Slack } from 'src/app/model/slack';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { SlackService } from 'src/app/services/slack.service';
@@ -34,9 +34,10 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   slackUpdate: boolean = false;
   loading: boolean = true;
   slack: Slack;
+  fetch = true;
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private domainRouteService: DomainRouteService,
     private slackService: SlackService,
     private featureService: FeatureService,
@@ -44,15 +45,21 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     private router: Router,
     private _modalService: NgbModal
   ) { 
-    this.route.parent.params.subscribe(params => {
+    this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
     });
+
+    this.activatedRoute.paramMap
+      .pipe(map(() => window.history.state))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => this.fetch = data.navigationId === 1);
   }
 
   ngOnInit(): void {
     this.domainRouteService.updateView(this.domainName, 0);
     this.loadSlack();
+    this.updateRoute();
   }
 
   ngOnDestroy() {
@@ -163,6 +170,13 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       this.slackUpdate = feature?.status;
       this.slackSettings.updatable = this.slackUpdate;
     });
+  }
+
+  private updateRoute(): void {
+    if (this.fetch) {
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+        `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    }
   }
   
 }

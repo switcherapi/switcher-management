@@ -33,6 +33,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   private unsubscribe: Subject<void> = new Subject();
   @BlockUI() blockUI: NgBlockUI;
 
+  loading: boolean = true;
   title: string;
   icon: number;
 
@@ -223,6 +224,8 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   private loadConfiguration(forceFetch: boolean = false) {
+    this.loading = true;
+
     const path = this.domainRouteService.getStoredPath();
     if (path) {
       this.currentPath = path;
@@ -246,6 +249,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
       },
       error: error => {
         ConsoleLogger.printError(error);
+        this.loading = false;
       }
     });
   }
@@ -258,6 +262,8 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.selectedDomainPath = `/dashboard/domain/${this.domainName}/${this.domainId}`;
     this.selectedGroupPath = `${this.selectedDomainPath}/groups/${this.group?.id}`;
     this.selectedConfigPath = `${this.selectedGroupPath}/switchers/${this.config?.id}`;
+
+    this.loading = false;
   }
 
   private checkDomainOwner() {

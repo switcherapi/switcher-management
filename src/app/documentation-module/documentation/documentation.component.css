@@ -13,6 +13,10 @@ a:focus {
   transition: all 0.3s;
 }
 
+nav {
+  padding: 0;
+}
+
 .navbar {
   padding: 15px 10px;
   background: #fff;
@@ -77,6 +81,11 @@ a[aria-expanded="true"] {
   background: #24292E;
 }
 
+.selected-item {
+  color: #24292E !important;
+  background: #fff;
+}
+
 .sticky {
   position: -webkit-sticky;
   position: sticky;
@@ -84,7 +93,7 @@ a[aria-expanded="true"] {
   margin-bottom: 20px;
 }
 
-a[data-toggle="collapse"] {
+a[data-bs-toggle="collapse"] {
   position: relative;
 }
 
@@ -166,6 +175,14 @@ a[data-toggle="collapse"] {
 
 .form-control {
   height: auto;
+}
+
+.input-group-append {
+  display: flex;
+}
+
+.input-group-text {
+  border-radius: 0%;
 }
 
 @media only screen and (max-width: 990px) {

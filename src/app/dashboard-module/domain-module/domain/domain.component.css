@@ -40,7 +40,15 @@ h4 {
 .div-router-history {
   padding-left: 16px;
   padding-top: 8px;
-  display: -webkit-inline-box;
+}
+
+.loading-spinner {
+  transform: translateY(.3rem);
+  margin-left: .5rem;
+}
+
+.loading-spinner ::ng-deep .mat-mdc-progress-spinner circle {
+  stroke: #549cfb82;
 }
 
 .btn-element {
@@ -97,7 +105,6 @@ h4 {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    margin-bottom: 20px;
     display: flex;
   }
 
