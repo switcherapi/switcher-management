@@ -196,6 +196,10 @@ html.dark-mode .mat-mdc-dialog-surface {
     background: #191919 !important;
 }
 
+html.dark-mode hr {
+    opacity: 1;
+}
+
 html.dark-mode ul hr,
 html.dark-mode .card-body hr {
     border-top: 1px solid rgba(179, 179, 179, 0.1);
