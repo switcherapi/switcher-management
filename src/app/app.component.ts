@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 import { PwaService } from './services/pwa.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,10 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleDarkMode() {
     this.darkMode = document.documentElement.classList.toggle("dark-mode");
     this.updateTheme();
+  }
+
+  showHome() {
+    return environment.allowHomeView;
   }
 
   private loadUserSettings(): void {

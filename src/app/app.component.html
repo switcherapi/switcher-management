@@ -1,27 +1,68 @@
 <nav id="main-menu" class="navbar navbar-expand navbar-dark bg-dark backgroud-style">
     <a routerLink="/">
         <img src="assets\switcherapi_mark_white.png" 
-            class="switcher-logo transition" 
-            style="width: 40px; margin-bottom: 16px; margin-top: 16px;"
+            class="switcher-logo transition hide-main-menu"
             alt="Switcher API logo"/>
     </a>
+    <img id="menuMain" src="assets\switcherapi_mark_white.png" 
+        class="switcher-logo transition hide-non-mobile" 
+        alt="Switcher API logo"/>
+    <ul id="mainMenu" class="navigation-nested nav-main">
+        <li class="menu-header navigation-nested__header">
+            <div>Menu</div>
+        </li>
+        <li>
+            <a *ngIf="showHome()" class="topbar-menu-item" routerLink="/" title="Home">
+                <mat-icon class="menu-item-icon">home</mat-icon>
+                Home
+            </a>
+        </li>
+        <hr style="margin: 0;">
+        <li>
+            <a *ngIf="currentToken" class="topbar-menu-item" routerLink="/dashboard" title="Dashboard">
+                <mat-icon class="menu-item-icon">dashboard</mat-icon>
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a class="topbar-menu-item" routerLink="/documentation" title="Documentation">
+                <mat-icon class="menu-item-icon">description</mat-icon>
+                Documentation
+            </a>
+        </li>
+        <li>
+            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/login" title="Sign in">
+                <mat-icon class="menu-item-icon">login</mat-icon>
+                Sign in
+            </a>
+        </li>
+        <hr style="margin: 0;">
+        <li>
+            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/signup" title="Sign up">
+                <mat-icon class="menu-item-icon">person_add</mat-icon>
+                Sign up
+            </a>
+        </li>
+    </ul>
+
     <mat-divider class="divider-style"></mat-divider>
+
     <div class="navbar-nav" style="width: 100%;">
-        <a class="nav-item nav-link" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
-        <a class="nav-item nav-link" routerLink="/documentation">Documentation</a>
-        <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
+        <a class="nav-item nav-link hide-main-menu" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
+        <a class="nav-item nav-link hide-main-menu" routerLink="/documentation">Documentation</a>
+        <a class="nav-item nav-link hide-main-menu" routerLink="/login" *ngIf="!currentToken">Sign in</a>
+        <span id="appTitle" class="nav-item nav-link hide-non-mobile">Switcher Management</span>
         <div class="menu-border-left" *ngIf="!currentToken">
             <a id="toggleTheme" class="nav-item nav-link transition" (click)="toggleDarkMode()">
                 <mat-icon>{{ darkMode ? 'brightness_7' : 'brightness_4' }}</mat-icon>
             </a>
-            <a id="signUp" class="nav-item nav-link" routerLink="/signup">Sign up</a>
+            <a id="signUp" class="nav-item nav-link hide-main-menu" routerLink="/signup">Sign up</a>
         </div>
         <div id="menuProfile" *ngIf="currentToken" class="profile-btn menu-border-left">
             <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="User avatar">
-            <mat-icon class="icon-color" style="transform: translateY(6px);">keyboard_arrow_down</mat-icon>
         </div>
-        <ul id="profileMenu" *ngIf="currentToken" class="navigation-nested">
-            <li class="username navigation-nested__header">
+        <ul id="profileMenu" *ngIf="currentToken" class="navigation-nested nav-user">
+            <li class="menu-header navigation-nested__header">
                 <div>{{ loggedUserName }}</div>
             </li>
             <li>

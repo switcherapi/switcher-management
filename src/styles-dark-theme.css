@@ -36,11 +36,13 @@ html.dark-mode .username {
     border-bottom-color: #2e2e2e !important;
 }
 
+html.dark-mode #mainMenu,
 html.dark-mode #profileMenu {
     background: #191919 !important;
     border: 1px solid #2b2b2b;
 }
 
+html.dark-mode #mainMenu a:hover,
 html.dark-mode #profileMenu a:hover {
     color: #b7b7b7;
     background: #2e2e2e !important;
@@ -211,7 +213,6 @@ html.dark-mode .fade {
 
 html.dark-mode app-settings-account .mat-mdc-form-field-label,
 html.dark-mode app-settings-account .description,
-html.dark-mode .nav-item.nav-link,
 html.dark-mode .router-history,
 html.dark-mode .mat-mdc-select-value,
 html.dark-mode .mat-mdc-form-field-infix,
