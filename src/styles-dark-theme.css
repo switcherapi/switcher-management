@@ -213,6 +213,8 @@ html.dark-mode .fade {
 
 html.dark-mode app-settings-account .mat-mdc-form-field-label,
 html.dark-mode app-settings-account .description,
+html.dark-mode app-team-detail .nav-item.nav-link,
+html.dark-mode app-config-detail .nav-item.nav-link,
 html.dark-mode .router-history,
 html.dark-mode .mat-mdc-select-value,
 html.dark-mode .mat-mdc-form-field-infix,
@@ -221,8 +223,10 @@ html.dark-mode p,
 html.dark-mode mat-toolbar span,
 html.dark-mode #iconListChildren {
     color: #959393;
+    transition: none;
 }
 
+html.dark-mode app-config-detail .nav-item.nav-link:hover:not(.active),
 html.dark-mode .router-history:hover {
     color: #e0e0e0;
 }
