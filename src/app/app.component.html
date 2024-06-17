@@ -12,33 +12,33 @@
             <div>Menu</div>
         </li>
         <li>
-            <a *ngIf="showHome()" class="topbar-menu-item" routerLink="/" title="Home">
+            <a *ngIf="showHome()" class="topbar-menu-item" routerLink="/" title="Home" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">home</mat-icon>
                 Home
             </a>
         </li>
         <hr style="margin: 0;">
         <li>
-            <a *ngIf="currentToken" class="topbar-menu-item" routerLink="/dashboard" title="Dashboard">
+            <a *ngIf="currentToken" class="topbar-menu-item" routerLink="/dashboard" title="Dashboard" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">dashboard</mat-icon>
                 Dashboard
             </a>
         </li>
         <li>
-            <a class="topbar-menu-item" routerLink="/documentation" title="Documentation">
+            <a class="topbar-menu-item" routerLink="/documentation" title="Documentation" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">description</mat-icon>
                 Documentation
             </a>
         </li>
         <li>
-            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/login" title="Sign in">
+            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/login" title="Sign in" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">login</mat-icon>
                 Sign in
             </a>
         </li>
         <hr style="margin: 0;">
         <li>
-            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/signup" title="Sign up">
+            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/signup" title="Sign up" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">person_add</mat-icon>
                 Sign up
             </a>
@@ -51,7 +51,7 @@
         <a class="nav-item nav-link hide-main-menu" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
         <a class="nav-item nav-link hide-main-menu" routerLink="/documentation">Documentation</a>
         <a class="nav-item nav-link hide-main-menu" routerLink="/login" *ngIf="!currentToken">Sign in</a>
-        <span id="appTitle" class="nav-item nav-link hide-non-mobile">Switcher Management</span>
+        <a id="appTitle" class="nav-item nav-link hide-non-mobile" routerLink="/">Switcher Management</a>
         <div class="menu-border-left" *ngIf="!currentToken">
             <a id="toggleTheme" class="nav-item nav-link transition" (click)="toggleDarkMode()">
                 <mat-icon>{{ darkMode ? 'brightness_7' : 'brightness_4' }}</mat-icon>
@@ -66,7 +66,7 @@
                 <div>{{ loggedUserName }}</div>
             </li>
             <li>
-                <a class="topbar-menu-item" routerLink="/settings/account" title="Profile Panel">
+                <a class="topbar-menu-item" routerLink="/settings/account" title="Profile Panel" (click)="onMenuClick('profileMenu')">
                     <mat-icon class="menu-item-icon">account_circle</mat-icon>
                     Settings
                 </a>
@@ -79,7 +79,7 @@
             </li>
             <hr style="margin: 0;">
             <li>
-                <a class="topbar-menu-item" (click)="logout()" title="Sign Out">
+                <a class="topbar-menu-item" (click)="logout()" title="Sign Out" (click)="onMenuClick('profileMenu')">
                     <mat-icon class="menu-item-icon">exit_to_app</mat-icon>
                     Sign Out
                 </a>

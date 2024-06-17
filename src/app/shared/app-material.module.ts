@@ -24,7 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -100,6 +100,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSortModule,
     MatPaginatorModule,
     MatNativeDateModule
+  ],
+  providers: [
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { showDelay: 250, hideDelay: 5, touchendHideDelay: 5, touchGestures: 'auto' } },
   ]
 })
 export class AppMaterialModule { }

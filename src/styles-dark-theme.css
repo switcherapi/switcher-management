@@ -31,7 +31,7 @@ html.dark-mode .home-section {
 }
 
 html.dark-mode app-settings-account .mdc-line-ripple::before,
-html.dark-mode .username {
+html.dark-mode .menu-header {
     background: #2e2e2e !important;
     border-bottom-color: #2e2e2e !important;
 }

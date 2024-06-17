@@ -7,6 +7,10 @@ app-domain-list .mat-mdc-button {
   line-height: 36px !important;
 }
 
+[allowScroll] {
+  touch-action: auto !important;
+}
+
 .mat-mdc-button>.mat-icon {
   vertical-align: middle !important;
 }

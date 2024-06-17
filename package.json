@@ -44,7 +44,6 @@
     "core-js": "^3.37.1",
     "graphql": "^16.8.2",
     "graphql-tag": "^2.12.6",
-    "hammerjs": "^2.0.8",
     "ng-block-ui": "^4.0.1",
     "ng-recaptcha": "^13.2.1",
     "ng2-charts": "^6.0.1",

@@ -46,7 +46,7 @@
                                     </mat-card-header>
                                     <mat-card-content style="overflow-y: scroll; height: 100px;">
                                         <mat-selection-list #strategyValueSelection>
-                                            <mat-list-option *ngFor="let value of data.values" [value]="value" matTooltip="{{ value }}">
+                                            <mat-list-option *ngFor="let value of data.values" [value]="value" matTooltip="{{ value }}" allowScroll>
                                                 {{ showResumed(value, 25) }}
                                             </mat-list-option>
                                         </mat-selection-list>

@@ -50,6 +50,10 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     }
   }
 
+  showTooltip(item: any): string {
+    return `[${item.name}]: ${item.description}`;
+  }
+
   private loadKeys(domainId: string): void {
     if (!domainId)
       return;
@@ -57,18 +61,22 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     this.query = this.domainService.executeConfigurationTreeQuery(
       domainId, this.switchers, this.groups, this.components);
 
-    this.query.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-      if (result?.data?.domain?.group) {
-        this.searchListItems = [];
-        this.loadByGroup(result.data.domain.group);
-        this.loadBySwitcher(result.data.domain.group);
-        this.loadByComponent(result.data.domain.group);
-        
-        this.searchListItems = this.searchListItems.filter(item => item != undefined);
-      }
-    }, error => {
-      ConsoleLogger.printError(error);
-    });
+    this.query.valueChanges.pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: result => {
+          if (result?.data?.domain?.group) {
+            this.searchListItems = [];
+            this.loadByGroup(result.data.domain.group);
+            this.loadBySwitcher(result.data.domain.group);
+            this.loadByComponent(result.data.domain.group);
+            
+            this.searchListItems = this.searchListItems.filter(item => item != undefined);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        }
+      });
 
     this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(
       startWith(''),

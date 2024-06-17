@@ -50,6 +50,17 @@ export class AppComponent implements OnInit, OnDestroy {
     return environment.allowHomeView;
   }
 
+  onMenuClick(menuId: string) {
+    const mainMenu = document.getElementById(menuId);
+    if (mainMenu) {
+      mainMenu.style.display = "none";
+    }
+
+    setTimeout(() => {
+      mainMenu.style.display = "block";
+    }, 500);
+  }
+
   private loadUserSettings(): void {
     this.authService.currentToken.subscribe(x => {
       this.currentToken = x;

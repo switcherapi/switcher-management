@@ -73,7 +73,6 @@ button {
 }
 
 .navigation-nested:hover {
-  display: block;
   visibility: visible;
   opacity: 1;
 }
@@ -88,7 +87,6 @@ button {
   border: 1px solid #F7F7F7;
   border-radius: 2px;
   box-shadow: 0 0 5px 2px rgba(0,0,0,.15);
-  display: block;
   visibility: hidden;
   opacity: 0;
   position: absolute;
@@ -146,17 +144,12 @@ button {
   display: initial;
 }
 
-.hide-menu {
-  display: none;
-}
-
 .menu-item-icon {
   margin-right: .5rem;
 }
 
 @media only screen and (max-width: 500px) {
   #menuMain:hover + #mainMenu {
-    display: block;
     visibility: visible;
     opacity: 1;
   }
@@ -167,10 +160,6 @@ button {
 
   .hide-nav {
     display: none;
-  }
-
-  .hide-menu {
-    display: initial;
   }
 
   .hide-main-menu {

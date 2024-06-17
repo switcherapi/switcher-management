@@ -43,6 +43,7 @@
             <a (click)="gotoListChildren()">
                 <mat-icon id="iconListChildren" style="color: white;" matTooltip="{{ getLabelListChildren() }}">format_list_bulleted</mat-icon>
             </a>
+            <element-autocomplete class="element-filter mobile-only" [parentComponent]="this"></element-autocomplete>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" (click)="navToggled()"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Domain menu">
                 <span class="navbar-toggler-icon"></span>
@@ -75,7 +76,7 @@
                     <a class="nav-item nav-link" (click)="gotoTeams()"
                         data-bs-toggle="collapse" data-bs-target="#navbarContent">Teams</a>
                 </div>
-                <element-autocomplete class="element-filter" [parentComponent]="this"></element-autocomplete>
+                <element-autocomplete class="element-filter non-mobile-only" [parentComponent]="this"></element-autocomplete>
             </div>
         </nav>
 
