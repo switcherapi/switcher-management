@@ -1,3 +1,13 @@
+.header-style {
+    height: 80px;
+}
+
 .btn-element {
-    margin-bottom: 1rem;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 380px) {
+    :host ::ng-deep .mat-mdc-form-field-infix {
+        width: 150px;
+    }
 }
