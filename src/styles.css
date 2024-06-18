@@ -39,6 +39,11 @@ app-domain-list .mat-mdc-button {
   border-radius: 100% !important;
 }
 
+.mat-mdc-menu-panel {
+  box-shadow: 0 0 5px 2px #00000026 !important;
+  background-color: white !important;
+}
+
 .mat-mdc-text-field-wrapper {
   padding-left: 0 !important;
 }

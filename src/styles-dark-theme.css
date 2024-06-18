@@ -5,8 +5,7 @@ html.dark-mode {
 
 html.dark-mode .mat-mdc-menu-panel {
     border-radius: 10px;
-    box-shadow: 0 2px 4px -1px #35353533,0 4px 5px #ffffff24,0 1px 10px #ffffff1f;
-    background: #1c1b1c;
+    background-color: #1c1b1c !important;
 }
 
 html.dark-mode .link:hover {

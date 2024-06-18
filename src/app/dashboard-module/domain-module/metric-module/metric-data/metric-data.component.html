@@ -36,7 +36,7 @@
                 <div class="element-detail-panel"
                     [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'">
                     <div class="element-detail">
-                        <mat-list role="list" *ngFor="let entry of element.entry">
+                        <mat-list *ngFor="let entry of element.entry">
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{entry.strategy}}</mat-label>
                                 <input matInput [value]="entry.input" readonly autocomplete="off">

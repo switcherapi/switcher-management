@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { trigger, state, style } from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DatePipe } from '@angular/common';
@@ -32,7 +32,10 @@ import { Types } from 'src/app/model/path-route';
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' }))
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', [
+        animate('.1s')
+      ]),
     ]),
   ],
 })

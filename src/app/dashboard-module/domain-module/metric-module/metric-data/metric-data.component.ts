@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { trigger, state, style } from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
@@ -24,7 +24,10 @@ import { MetricService } from 'src/app/services/metric.service';
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' }))
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', [
+        animate('.1s')
+      ]),
     ]),
   ],
 })
