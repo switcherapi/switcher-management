@@ -29,7 +29,7 @@ import { Config, ConfigRelay } from 'src/app/model/config';
   selector: 'app-config-detail',
   templateUrl: './config-detail.component.html',
   styleUrls: [
-    '../../common/css/detail.component.css', 
+    '../../common/css/detail.component.css',
     './config-detail.component.css'
   ]
 })
@@ -38,16 +38,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   @BlockUI() blockUI: NgBlockUI;
 
-  @ViewChild('descElement', { static: true }) 
+  @ViewChild('descElement', { static: true })
   descElement: ElementRef;
 
-  @ViewChild('keyElement', { static: true }) 
+  @ViewChild('keyElement', { static: true })
   keyElement: ElementRef;
-  
-  @ViewChild('componentInput') 
+
+  @ViewChild('componentInput')
   componentInput: ElementRef<HTMLInputElement>;
-  
-  @ViewChild('auto') 
+
+  @ViewChild('auto')
   matAutocomplete: MatAutocomplete;
 
   envEnable = new Subject<boolean>();
@@ -56,10 +56,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     Validators.required,
     Validators.minLength(3)
   ]);
-  
+
   classStrategySection: string;
   disableMetrics: boolean;
-  
+
   domainId: string;
   domainName: string;
   groupId: string;
@@ -98,7 +98,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     private toastService: ToastService,
     private _modalService: NgbModal,
     private dialog: MatDialog
-  ) { 
+  ) {
     super();
   }
 
@@ -143,20 +143,20 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           key: this.keyElement.nativeElement.value,
           description: this.descElement.nativeElement.value
         };
-        
-        if (super.validateEdition({ 
-              key: this.config.key, 
-              description: this.config.description,
-              components: String(this.config.components.map(component => component.name)),
-              disable_metrics: this.config.disable_metrics != undefined ? 
-                this.config.disable_metrics[this.currentEnvironment] : false
-            },
-            { 
-              key: body.key, 
-              description: body.description,
-              components: String(this.components),
-              disable_metrics: this.disableMetrics
-            })) {
+
+        if (super.validateEdition({
+          key: this.config.key,
+          description: this.config.description,
+          components: String(this.config.components.map(component => component.name)),
+          disable_metrics: this.config.disable_metrics != undefined ?
+            this.config.disable_metrics[this.currentEnvironment] : false
+        },
+          {
+            key: body.key,
+            description: body.description,
+            components: String(this.components),
+            disable_metrics: this.disableMetrics
+          })) {
           this.blockUI.stop();
           this.editing = false;
           return;
@@ -206,11 +206,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.blockUI.start('Adding Strategy...');
         this.hasNewStrategy = true;
         this.strategyService.createStrategy(
-          this.config.id, 
-          result.description, 
-          result.strategy, 
-          result.operation, 
-          this.currentEnvironment, 
+          this.config.id,
+          result.description,
+          result.strategy,
+          result.operation,
+          this.currentEnvironment,
           result.values).subscribe({
             next: _data => {
               this.blockUI.stop();
@@ -243,7 +243,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   hasRelay() {
-    return this.config?.relay?.activated ? 
+    return this.config?.relay?.activated ?
       this.config.relay.activated[this.currentEnvironment] != undefined : false;
   }
 
@@ -309,13 +309,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
 
     this.loadStrategies();
-    this.disableMetrics = this.config.disable_metrics ? 
-      this.config.disable_metrics[this.currentEnvironment] : false;
+    this.disableMetrics = this.isMetricDisabled();
   }
 
   updateData(config: Config): void {
     this.config = config;
-    this.disableMetrics = this.config.disable_metrics ? 
+    this.disableMetrics = this.config.disable_metrics ?
       this.config.disable_metrics[this.currentEnvironment] : false;
     this.loadComponents();
     this.keyFormControl.setValue(config.key);
@@ -323,7 +322,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.readPermissionToObject();
 
     this.domainRouteService.updateView(this.config.key, 0);
-    this.domainRouteService.updatePath(this.config.id, this.config.key, Types.CONFIG_TYPE, 
+    this.domainRouteService.updatePath(this.config.id, this.config.key, Types.CONFIG_TYPE,
       `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.config.id}`);
   }
 
@@ -336,6 +335,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
 
     this.config.relay = relay;
+  }
+
+  private isMetricDisabled() {
+    if (this.config.disable_metrics[this.currentEnvironment] === undefined) {
+      return true;
+    }
+    
+    return this.config.disable_metrics[this.currentEnvironment];
   }
 
   private loadConfig() {
@@ -353,7 +360,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private readPermissionToObject(): void {
-    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE'], 
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE'],
       'SWITCHER', 'key', this.config.key, this.currentEnvironment)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -437,7 +444,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   private loadComponents(): void {
     this.components = this.config.components.map(component => component.name);
-    
+
     this.componentService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(values => {
@@ -462,8 +469,10 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       .subscribe({
         next: data => {
           if (data) {
-            this.config.key = body.key;
-            this.config.description = body.description;
+            this.config.key = data.key;
+            this.config.description = data.description;
+            this.config.disable_metrics = data.disable_metrics;
+            this.disableMetrics = this.isMetricDisabled();
             this.updateConfigComponents();
 
             this.blockUI.stop();
@@ -484,14 +493,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private getDisableMetricsChange(): any {
     if (!this.config.disable_metrics)
       this.config.disable_metrics = new Map<string, boolean>();
-    
+
     this.config.disable_metrics[this.currentEnvironment] = this.disableMetrics;
     return this.config.disable_metrics;
   }
 
   private updateConfigComponents() {
     const currentConfigComponents = this.config.components.map(component => component.name);
-    
+
     if (this.components.length == currentConfigComponents.length &&
       this.components.every((u, i) => u == currentConfigComponents[i])) {
       return;
@@ -551,5 +560,5 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     return this.listComponents.filter(component => component.toLowerCase().startsWith(filterValue));
   }
-  
+
 }
