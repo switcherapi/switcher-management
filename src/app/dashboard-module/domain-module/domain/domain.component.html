@@ -28,10 +28,10 @@
                         <mat-icon>next_week</mat-icon>
                         {{ transferLabel }}
                     </button>
-                    <div style="margin-bottom: .5rem; border-bottom: 1px solid rgba(179,179,179,.1); width: 100%;">
-                        <span style="margin-left: 1rem; color: #6c757d;">Integrations</span>
-                    </div>
                     <div *ngIf="hasSlackIntegration()">
+                        <div style="margin-bottom: .5rem; border-bottom: 1px solid rgba(179,179,179,.1); width: 100%;">
+                            <span style="margin-left: 1rem; color: #6c757d;">Integrations</span>
+                        </div>
                         <button *ngIf="hasSlackInstalled()" mat-menu-item (click)="gotoSlackIntegration()">
                             <img src="assets\slack.svg" class="slack-img" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Slack App

@@ -6,9 +6,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
     template: `
       <div class="modal-header">
         <h4 class="modal-title" id="modal-title">{{ title }}</h4>
-        <button type="button" class="close" aria-describedby="modal-title" (click)="nok()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button"class="btn-close" aria-describedby="modal-title" (click)="nok()"></button>
       </div>
       <div class="modal-body">
         <p><strong>{{ question }}</strong></p>

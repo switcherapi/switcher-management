@@ -92,6 +92,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     // select production
     this.selectedEnvName = 'default';
     this.selectedEnvStatus = this.configuredEnvironments[this.selectedEnvName];
+    this.toggleEnv.checked = this.selectedEnvStatus;
     this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
     this.outputEnvChanged.emit(new EnvironmentChangeEvent(this.selectedEnvName, this.selectedEnvStatus, true));
   }
