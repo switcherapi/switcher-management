@@ -100,7 +100,6 @@ export class MetricDataComponent implements OnInit, OnDestroy {
           .subscribe({
             next: data => {
               if (data) {
-                this.parent.switcher = null;
                 this.dataSource = new MatTableDataSource(null);
                 this.toastService.showSuccess(`Metrics reseted with success`);
               }

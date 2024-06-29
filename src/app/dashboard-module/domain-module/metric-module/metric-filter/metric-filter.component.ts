@@ -55,7 +55,10 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   }
 
   onCleanFilter(data: any) {
-    this.selectedFilter = '';
+    if (!this.lockFilter) {
+      this.selectedFilter = '';
+    }
+    
     this.onFilter(data);
   }
 
