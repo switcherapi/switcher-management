@@ -17,6 +17,6 @@ export class SlackFeaturesDocsComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/slack_features.md');
-   }
+  }
 
 }

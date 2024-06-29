@@ -43,6 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toggleDarkMode() {
     this.darkMode = document.documentElement.classList.toggle("dark-mode");
+    document.documentElement.dispatchEvent(new Event("dark-mode"));
     this.updateTheme();
   }
 

@@ -179,18 +179,24 @@ export class ReasonsStatisticsTab {
   constructor(private statistics: MetricStatistics) {}
 
   public chartType: ChartType = 'bar';
-  public chartLegend = false;
+  public chartLegend = true;
 
   public chartLabels: string[] = [];
   public chartData: ChartData<'bar'>;
 
   public chartOptions: ChartOptions = {
     responsive: true,
+    indexAxis: 'y',
     scales: {
       y: {
         ticks: {
           display: true
         }
+      }
+    },
+    plugins: {
+      legend: {
+        display: true
       }
     }
   };

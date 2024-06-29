@@ -17,6 +17,6 @@ export class RelayComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/relay.md');
-   }
+  }
 
 }

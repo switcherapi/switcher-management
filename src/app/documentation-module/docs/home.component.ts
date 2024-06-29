@@ -17,6 +17,6 @@ export class HomeComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/overview.md');
-   }
+  }
 
 }

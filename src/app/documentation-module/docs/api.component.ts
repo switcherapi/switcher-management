@@ -17,6 +17,6 @@ export class ApiComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/api.md');
-   }
+  }
 
 }

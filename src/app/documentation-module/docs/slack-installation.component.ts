@@ -17,6 +17,6 @@ export class SlackInstallationDocsComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/slack_installation.md');
-   }
+  }
 
 }

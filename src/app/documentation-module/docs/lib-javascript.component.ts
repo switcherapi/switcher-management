@@ -17,6 +17,6 @@ export class LibJavaScriptComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/libjavascript.md');
-   }
+  }
 
 }

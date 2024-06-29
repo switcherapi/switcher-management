@@ -143,8 +143,11 @@ html.dark-mode .mat-mdc-ripple {
 }
 
 html.dark-mode .dark-invert {
-    filter: invert(100%) hue-rotate(180deg);
-    border-radius: 10px;
+    filter: invert(100%) hue-rotate(180deg) contrast(1.3);
+}
+
+html.dark-mode .shadow {
+    box-shadow: 0 .5rem 1rem #67676726 !important;
 }
 
 html.dark-mode :not(pre) > code[class*="language-"], 
@@ -175,6 +178,10 @@ html.dark-mode mat-datepicker-content,
 html.dark-mode .btn-element.create,
 html.dark-mode #docContainer {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);
+}
+
+html.dark-mode metric-statistics-data-dialog .mat-mdc-dialog-content {
+    filter: none;
 }
 
 html.dark-mode .mat-mdc-dialog-container app-changelog {
@@ -214,6 +221,7 @@ html.dark-mode app-settings-account .mat-mdc-form-field-label,
 html.dark-mode app-settings-account .description,
 html.dark-mode app-team-detail .nav-item.nav-link,
 html.dark-mode app-config-detail .nav-item.nav-link,
+html.dark-mode app-metric .nav-item.nav-link,
 html.dark-mode .router-history,
 html.dark-mode .mat-mdc-select-value,
 html.dark-mode .mat-mdc-form-field-infix,
