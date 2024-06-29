@@ -17,7 +17,7 @@ export class MetricsComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/metrics.md');
-   }
+  }
 
 }
 

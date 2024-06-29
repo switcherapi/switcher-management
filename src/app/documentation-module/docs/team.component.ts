@@ -17,6 +17,6 @@ export class TeamComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/team.md');
-   }
+  }
 
 }

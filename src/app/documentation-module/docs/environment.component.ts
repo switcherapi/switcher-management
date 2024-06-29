@@ -17,6 +17,6 @@ export class EnvironmentComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/environment.md');
-   }
+  }
 
 }

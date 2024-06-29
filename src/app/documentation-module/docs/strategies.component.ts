@@ -17,6 +17,6 @@ export class StrategiesComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/strategies.md');
-   }
+  }
 
 }

@@ -17,6 +17,6 @@ export class SetupComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/setup.md');
-   }
+  }
 
 }

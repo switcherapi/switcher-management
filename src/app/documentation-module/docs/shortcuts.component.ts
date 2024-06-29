@@ -17,6 +17,6 @@ export class ShortcutsComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/shortcuts.md');
-   }
+  }
 
 }

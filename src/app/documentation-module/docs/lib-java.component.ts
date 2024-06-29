@@ -17,6 +17,6 @@ export class LibJavaComponent extends MarkdownInjector {
 
   constructor(private markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/libjava.md');
-   }
+  }
 
 }
