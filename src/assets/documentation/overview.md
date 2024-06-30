@@ -5,28 +5,19 @@
 **Switcher API** is a *Feature Flag* API focused on decreasing the friction caused by changes providing a simple and flexible interface.
 
 Main features:
-- Control & track more using little effort by sharing switchers among application components.
-- Cross environment. Generate zero impact when manipulating your project features.
-- Customizable environment strategies. Setup switchers using variables per environment.
-- Delegate Switcher analysis to external services with secured Switcher Relay.
-- Create manageable teams to collaborate.
-- Keep track of every modification and features usage.
-- Detailed metrics.
-- SDKs support zero-latency mode for performance improvement.
-- Exclusive Slack App to control and test changes.
+- Easy to setup and seemless integration with your application using our lightweight Client SDKs.
+- Shareable Switchers can be used across multiple applications with high support to observability.
+- Multi-environment support. Create and manage features across different environments.
+- Add extra layer of verification with custom conditions using Strategies.
+- Delegate Switcher criteria decision to external services with Switcher Relay.
+- Support to multiple teams and granular access control.
+- Integrate with Slack usign Switcher Slack App to enable release flow requests.
+- Detailed metrics and logs to help you understand how your features are being used.
+- Open Source and free to use.
 
 </br></br>
 
-## Project overview
-* * *
-
-<a href="[$ASSETS_LOCATION]/documentation/images/overview/macro_overview.jpg" target="_blank">
-<img src="[$ASSETS_LOCATION]/documentation/images/overview/macro_overview.jpg" class="image-style center width-70" alt=""/>
-</a>
-
-</br></br>
-
-## Under the hood
+## How it works
 * * *
 
 Orchestrate changes based on business strategies without worrying about what should be done under the hood. Switcher API has the responsibility to evaluate all conditions provided and redirect the flow based on the configuration made during the implementation of the new feature.
@@ -59,14 +50,20 @@ Sometimes covering 100% of tests does not guarantee a successful deployment, nor
 ## Source
 * * *
 
-- **Switcher API**: (https://github.com/switcherapi/switcher-api)
-- **Switcher Management**: (https://github.com/switcherapi/switcher-management)
-- **Library: JavaScript**: (https://github.com/switcherapi/switcher-client-js)
-- **Library: Java**: (https://github.com/switcherapi/switcher-client-java)
-- **Library: Deno**: (https://github.com/switcherapi/switcher-client-deno)
-- **Slack App**: (https://github.com/switcherapi/switcher-slack-app)
-- **Slack Webhook**: (https://github.com/switcherapi/switcher-slash-webhook)
-- **Load Balance**: (https://github.com/switcherapi/switcher-load-balance)
+| Repository                 | Description                                    |
+| -------------------------- | ---------------------------------------------- |
+| [**Switcher API**](https://github.com/switcherapi/switcher-api) | Core API that manages all Switcher API configurations |
+| [**Switcher Resolver Node**](https://github.com/switcherapi/switcher-resolver-node) | Resolver Node API for Component Switchers |
+| [**Switcher Management**](https://github.com/switcherapi/switcher-management) | Portal for managing Switcher API |
+| [**Switcher API Helm Charts**](https://github.com/switcherapi/helm-charts) | Switcher API Helm Charts |
+| [**Switcher GitOps**](https://github.com/switcherapi/switcher-gitops) | GitOps Domain Snapshot Orchestrator for Switcher API |
+| [**Switcher Client - JavaScript SDK**](https://github.com/switcherapi/switcher-client-js) | Switcher Client - JavaScript SDK |
+| [**Switcher Client - Java SDK**](https://github.com/switcherapi/switcher-client-java) | Switcher Client - Java SDK |
+| [**Switcher Client - Deno SDK**](https://github.com/switcherapi/switcher-client-deno) | Switcher Client - Deno Native SDK |
+| [**Switcher Client - Tutorials**](https://github.com/switcherapi/switcherapi-tutorials) | Switcher Client SDK tutorials and code snippets |
+| [**Switcher Client - Benchmark**](https://github.com/switcherapi/feature-flag-benchmark) | Benchmark evaluating Switcher SDKs against 5 different Feature Flag main vendors |
+| [**Switcher Slack App**](https://github.com/switcherapi/switcher-slack-app) | Switcher API App for Slack |
+| [**Switcher Account Control**](https://github.com/switcherapi/switcher-ac) | Relay service to manage accounts in Switcher API |
 
 
 * * *
