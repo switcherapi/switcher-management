@@ -291,7 +291,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
         if (this.prevScrollpos > currentScrollPos) {
             document.getElementById("navbarMenu").style.top = "0";
         } else {
-            document.getElementById("navbarMenu").style.top = "-60px";
+            document.getElementById("navbarMenu").style.top = "-90px";
         }
         this.prevScrollpos = currentScrollPos;
       } else {
