@@ -19,8 +19,8 @@ import { ToastService } from './toast.service';
     </ngb-toast>
   `,
   host: {
-    'class': 'toast-container position-fixed top-0 end-0 p-3', 
-    'style': 'z-index: 1200; bottom: 0; right: 0;'
+    'class': 'toast-container position-fixed bottom-0 start-50 translate-middle-x', 
+    'style': 'z-index: 1200; margin-bottom: .5rem;'
   }
 })
 export class ToastsContainerComponent {
