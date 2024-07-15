@@ -15,22 +15,26 @@ export class AppVersionComponent implements OnInit {
 
   @Input() apiVersion: string;
   apiReleaseTime: string;
-  smVersion: string = environment.version;
-  smReleaseTime: string = environment.releaseTime;
+  smVersion: string;
+  smReleaseTime: string;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (!this.apiVersion)
-      this.loadData();
+    this.smVersion = environment.version;
+    this.smReleaseTime = this.toLocaleString(environment.releaseTime);
+
+    if (!this.apiVersion) {
+      this.loadApiMetadata();
+    }
   }
 
-  private loadData(): void {
+  private loadApiMetadata(): void {
     this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe({
       next: (data) => {
         if (data) {
           this.apiVersion = data.attributes.version;
-          this.apiReleaseTime = data.attributes.release_time;
+          this.apiReleaseTime = this.toLocaleString(data.attributes.release_time);
         }
       },
       error: (error) => {
@@ -38,6 +42,13 @@ export class AppVersionComponent implements OnInit {
         this.apiVersion = '[offline]';
       }
     });
+  }
+
+  private toLocaleString(utcDateString: string): string {
+    const utcDate = new Date(utcDateString);
+    const localDateString = utcDate.toLocaleString();
+    
+    return localDateString;
   }
 
 }
