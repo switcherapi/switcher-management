@@ -21,7 +21,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './signup/signup.component';
 
-import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { RecaptchaModule, RecaptchaFormsModule } from './ng-recaptcha-module';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 import { LocationStrategy, PathLocationStrategy, CommonModule } from '@angular/common';
