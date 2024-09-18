@@ -24,7 +24,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -37,7 +37,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   domainName: string;
   teamId: string;
   team: Team;
-  loading: boolean = false;
+  loading = false;
 
   constructor(
     private adminService: AdminService,

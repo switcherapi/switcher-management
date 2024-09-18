@@ -17,7 +17,7 @@ export class MetricService extends ApiService {
 
   public getMetrics(domainId: string, env: string, page: number, key?: string, 
       dateGroupPattern?: string, dateBefore?: string, dateAfter?: string): Observable<Metric> {
-    let params: any = {}
+    const params: any = {}
 
     params.environment = env;
     params.domainid = domainId;
@@ -32,9 +32,9 @@ export class MetricService extends ApiService {
     return this.http.get<Metric>(`${environment.apiUrl}/metric/data`, { params }).pipe(catchError(super.handleError));
   }
 
-  public getMetricStatistics(domainId: string , env: string, statistics: string = 'all', key?: string, type?: string, 
+  public getMetricStatistics(domainId: string , env: string, statistics = 'all', key?: string, type?: string, 
       dateGroupPattern?: string, dateBefore?: string, dateAfter?: string): Observable<MetricStatistics> {
-    let params: any = {}
+    const params: any = {}
 
     params.environment = env;
     params.domainid = domainId;
@@ -53,7 +53,7 @@ export class MetricService extends ApiService {
   }
 
   public resetMetricsForSwitcher(domainid: string, switcher: string): Observable<any> {
-    let params: any = {}
+    const params: any = {}
     params.domainid = domainid;
     params.key = switcher;
 

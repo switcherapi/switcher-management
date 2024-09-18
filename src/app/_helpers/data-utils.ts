@@ -22,7 +22,7 @@ export class DataUtils {
   }
 
   public static valueInputValidator(format: string): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
+    return (control: AbstractControl): Record<string, any> | null => {
       if (!control.value.match(format)) {
         return [control.value]
       }

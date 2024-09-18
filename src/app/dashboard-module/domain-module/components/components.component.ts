@@ -26,7 +26,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class ComponentsComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -37,9 +37,9 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     Validators.minLength(2)
   ]);
 
-  updatable: boolean = false;
-  removable: boolean = false;
-  creatable: boolean = false;
+  updatable = false;
+  removable = false;
+  creatable = false;
 
   domainId: string;
   domainName: string;

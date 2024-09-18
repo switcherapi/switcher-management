@@ -25,7 +25,7 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   ]
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -117,7 +117,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         this.groupService.deleteGroup(this.group.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
-            next: _data => {
+            next: () => {
               this.blockUI.stop();
               this.router.navigate([this.domainRouteService.getPreviousPath()]);
               this.toastService.showSuccess(`Group removed with success`);

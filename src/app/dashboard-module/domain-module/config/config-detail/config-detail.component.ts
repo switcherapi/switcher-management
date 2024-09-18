@@ -34,7 +34,7 @@ import { Config, ConfigRelay } from 'src/app/model/config';
   ]
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -76,7 +76,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   error = '';
 
   //tabset control
-  strategy_section_height: string = '450px';
+  strategy_section_height = '450px';
   currentTab = 1;
 
   // Component attributes
@@ -177,7 +177,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         this.configService.deleteConfig(this.config.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
-            next: _data => {
+            next: () => {
               this.blockUI.stop();
               this.router.navigate([this.domainRouteService.getPreviousPath()]);
               this.toastService.showSuccess(`Switcher removed with success`);
@@ -212,7 +212,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           result.operation,
           this.currentEnvironment,
           result.values).subscribe({
-            next: _data => {
+            next: () => {
               this.blockUI.stop();
               this.loadStrategies(true);
               this.toastService.showSuccess('Strategy created with success');

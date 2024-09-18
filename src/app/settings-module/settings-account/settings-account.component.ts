@@ -20,13 +20,13 @@ import { Router } from '@angular/router';
 })
 export class SettingsAccountComponent implements OnInit, OnDestroy {
 
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @BlockUI() blockUI: NgBlockUI;
 
   accountForm: FormGroup;
   resetSuccess: string;
-  error: string = '';
-  domains: number = 1;
+  error = '';
+  domains = 1;
 
   userEmail: string;
   userPlatform: string;

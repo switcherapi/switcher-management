@@ -20,11 +20,11 @@ import { TeamInvite } from 'src/app/model/team-invite';
     './team-members.component.css']
 })
 export class TeamMembersComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @Input() team: Team;
-  @Input() updatable: boolean = false;
-  @Input() creatable: boolean = false;
-  @Input() removable: boolean = false;
+  @Input() updatable = false;
+  @Input() creatable = false;
+  @Input() removable = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('inputMember', { static: true }) inputMember: ElementRef;
@@ -32,7 +32,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Admin>;
   dataColumns = ['remove', 'name', 'email'];
 
-  loading: boolean = false;
+  loading = false;
 
   constructor(
     private teamService: TeamService,

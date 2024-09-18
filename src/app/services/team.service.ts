@@ -26,7 +26,7 @@ export class TeamService extends ApiService {
   }
 
   public createTeam(domainId: string, name: string): Observable<Team> {
-    let body = {
+    const body = {
       name,
       domain: domainId
     };
@@ -35,7 +35,7 @@ export class TeamService extends ApiService {
   }
 
   public updateTeam(id: string, name: string, active: string): Observable<Team> {
-    let body = {
+    const body = {
       name,
       active
     };
@@ -44,7 +44,7 @@ export class TeamService extends ApiService {
   }
 
   public inviteTeamMember(id: string, email: string): Observable<TeamInvite> {
-    let body = {
+    const body = {
       email
     };
 
@@ -68,7 +68,7 @@ export class TeamService extends ApiService {
   }
 
   public removeTeamMember(id: string, member: string): Observable<Team> {
-    let body = {
+    const body = {
       member
     };
 
@@ -76,7 +76,7 @@ export class TeamService extends ApiService {
   }
 
   public removeTeamPermission(id: string, permission: string): Observable<Team> {
-    let body = {
+    const body = {
       permission
     };
 

@@ -26,7 +26,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   ]
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -39,7 +39,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   domainId: string;
   domainForm: FormGroup;
 
-  collabUser: boolean = false;
+  collabUser = false;
 
   constructor(
     private domainRouteService: DomainRouteService,
@@ -132,7 +132,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         this.domainService.deleteDomain(this.domain.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
-            next: _data => {
+            next: () => {
               this.blockUI.stop();
               this.router.navigate(['/dashboard']);
               this.toastService.showSuccess(`Domain removed with success`);

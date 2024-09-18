@@ -20,7 +20,7 @@ import { Config } from 'src/app/model/config';
   ]
 })
 export class ConfigPreviewComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -38,10 +38,10 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   classStatus: string;
   classBtnStatus: string;
 
-  updatable: boolean = false;
-  removable: boolean = false;
+  updatable = false;
+  removable = false;
 
-  toggleSectionStyle: string = 'toggle-section deactivated';
+  toggleSectionStyle = 'toggle-section deactivated';
 
   constructor(
     private router: Router,

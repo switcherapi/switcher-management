@@ -26,7 +26,7 @@ import { DomainService } from 'src/app/services/domain.service';
   ]
 })
 export class RelayDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -54,7 +54,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   relayTypeFormControl = new FormControl('');
   relayMethodFormControl = new FormControl('');
 
-  relayVerificationEnabled: boolean = false;
+  relayVerificationEnabled = false;
   relayVerificationCode: string;
 
   constructor(

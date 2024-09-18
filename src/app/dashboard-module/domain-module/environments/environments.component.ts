@@ -24,7 +24,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class EnvironmentsComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   environments: Environment[];
 
@@ -33,9 +33,9 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     Validators.minLength(2)
   ]);
 
-  updatable: boolean = false;
-  removable: boolean = false;
-  creatable: boolean = false;
+  updatable = false;
+  removable = false;
+  creatable = false;
 
   domainId: string;
   domainName: string;

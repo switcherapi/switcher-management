@@ -20,11 +20,11 @@ import { Types } from 'src/app/model/path-route';
     './metric.component.css']
 })
 export class MetricComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @Input() switcher: string;
-  @Input() environment: string = 'default';
-  filterType: string = 'Switcher';
-  lockFilter: boolean = false;
+  @Input() environment = 'default';
+  filterType = 'Switcher';
+  lockFilter = false;
   dateGroupPattern: string;
 
   metricViewClass = 'metrics-view graphics';
@@ -113,7 +113,7 @@ export class MetricComponent implements OnInit, OnDestroy {
     this.onFilter(key);
   }
   
-  onNavChange(_$event: NgbNavChangeEvent) {
+  onNavChange(_event: NgbNavChangeEvent) {
     if (this.metricViewClass === 'metrics-view data') {
       this.metricViewClass = 'metrics-view graphics';
     } else {

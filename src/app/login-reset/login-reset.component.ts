@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./login-reset.component.css']
 })
 export class LoginResetComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   loginForm: FormGroup;
 

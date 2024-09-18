@@ -18,18 +18,18 @@ import { TeamService } from 'src/app/services/team.service';
     './team-pending-members.component.css']
 })
 export class TeamPendingMembersComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @Input() team: Team;
-  @Input() updatable: boolean = false;
-  @Input() creatable: boolean = false;
-  @Input() removable: boolean = false;
+  @Input() updatable = false;
+  @Input() creatable = false;
+  @Input() removable = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   dataSource: MatTableDataSource<any>;
   dataColumns = ['remove', 'email', 'createdAt', 'request'];
 
-  loading: boolean = false;
+  loading = false;
 
   constructor(
     private teamService: TeamService,

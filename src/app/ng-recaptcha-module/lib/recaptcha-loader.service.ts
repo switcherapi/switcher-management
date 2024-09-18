@@ -35,7 +35,7 @@ export class RecaptchaLoaderService {
   private options?: RecaptchaLoaderOptions;
 
   constructor(
-    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    @Inject(PLATFORM_ID) private readonly platformId: object,
     @Optional() @Inject(RECAPTCHA_LOADER_OPTIONS) options?: RecaptchaLoaderOptions,
   ) {
     this.options = options;

@@ -5,19 +5,19 @@ import { Environment } from 'src/app/model/environment';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 export class DetailComponent {
-    childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent> = new EventEmitter();
-    detailBodyStyle: string = 'detail-body loading';
+    childEnvironmentEmitter = new EventEmitter<EnvironmentChangeEvent>();
+    detailBodyStyle = 'detail-body loading';
     
     classStatus: string;
     editing: boolean;
     currentStatus: boolean;
-    currentEnvironment: string = 'default';
+    currentEnvironment = 'default';
     environments: Environment[];
     loading: boolean;
 
-    updatable: boolean = false;
-    removable: boolean = false;
-    creatable: boolean = false;
+    updatable = false;
+    removable = false;
+    creatable = false;
 
     protected selectEnvironment(event: EnvironmentChangeEvent): void {
         this.currentEnvironment = event.environmentName;
@@ -64,11 +64,11 @@ export class DetailComponent {
     }
 
     updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
-        ConsoleLogger.printError('Method not implemented.');
+        ConsoleLogger.printError('Method not implemented. Event: ' + JSON.stringify(env));
     }
 
     removeEnvironmentStatus(env: any): void {
-        ConsoleLogger.printError('Method not implemented.');
+        ConsoleLogger.printError('Method not implemented. Event: ' + JSON.stringify(env));
     }
 
 }

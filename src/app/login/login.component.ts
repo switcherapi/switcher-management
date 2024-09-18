@@ -15,15 +15,15 @@ import { AdminService } from '../services/admin.service';
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-    private unsubscribe: Subject<void> = new Subject();
+    private unsubscribe = new Subject<void>();
 
     loginForm: FormGroup;
     loading = false;
     forgotPassword = false;
     apiVersion: string;
-    error: string = '';
-    success: string = '';
-    status: string = ''; 
+    error = '';
+    success = '';
+    status = ''; 
 
     constructor(
         private formBuilder: FormBuilder,

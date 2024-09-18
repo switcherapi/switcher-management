@@ -22,14 +22,14 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
     './team-preview.component.css']
 })
 export class TeamPreviewComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
   @Input() team: Team;
   @Input() teamListComponent: TeamComponent;
-  @Input() updatable: boolean = false;
-  @Input() removable: boolean = false;
+  @Input() updatable = false;
+  @Input() removable = false;
 
   nameFormControl = new FormControl('', [
     Validators.required,
@@ -38,7 +38,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
 
   editing: boolean;
 
-  toggleSectionStyle: string = 'toggle-style deactivated';
+  toggleSectionStyle = 'toggle-style deactivated';
 
   constructor(
     private router: Router,

@@ -16,7 +16,7 @@ import { ToastService } from '../_helpers/toast.service';
   styleUrls: ['./slack-auth.component.css']
 })
 export class SlackAuthComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   private enterprise_id: string;
   private team_id: string;
@@ -110,7 +110,7 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
     this.slackService.authorizeInstallation(this.selectedDomain.id, this.team_id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
-        next: _ => {
+        next: () => {
           this.toastService.showSuccess(`Slack App succesfully installed for ${this.selectedDomain.name}`);
           this.router.navigate(['/dashboard']);
         },
@@ -127,7 +127,7 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
     this.slackService.declineInstallation(this.enterprise_id, this.team_id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
-        next: _ => {
+        next: () => {
           this.router.navigate(['/dashboard']);
         },
         error: error => {

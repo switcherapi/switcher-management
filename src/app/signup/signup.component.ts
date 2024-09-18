@@ -14,16 +14,16 @@ import { ConsoleLogger } from '../_helpers/console-logger';
     styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit, OnDestroy {
-    private unsubscribe: Subject<void> = new Subject();
+    private unsubscribe = new Subject<void>();
 
     loginForm: FormGroup;
     loading = false;
     waitingConfirmation = false;
     returnUrl: string;
     apiVersion: string;
-    error: string = '';
+    error = '';
     recaptcha_token: string;
-    status: string = '';
+    status = '';
 
     constructor(
         private formBuilder: FormBuilder,
@@ -95,7 +95,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.unsubscribe.complete();
     }
 
-    onKey(_event: any) {
+    onKey() {
         this.error = '';
     }
 

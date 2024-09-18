@@ -30,7 +30,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   permissions: Permissions[];
   groups: Group[];
 
-  creatable: boolean = false;
+  creatable = false;
 
   constructor(
     protected fb: FormBuilder,

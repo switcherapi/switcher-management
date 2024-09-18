@@ -19,13 +19,13 @@ import { Domain } from 'src/app/model/domain';
   ]
 })
 export class DomainListComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   domains: Domain[];
   collabDomains: Domain[] = [];
 
-  cardListContainerStyle: string = 'card mt-4 loading';
-  cardCollabListContainerStyle: string = 'card mt-4 loading';
+  cardListContainerStyle = 'card mt-4 loading';
+  cardCollabListContainerStyle = 'card mt-4 loading';
   loading = false;
   loadingCollab = false;
   error = '';

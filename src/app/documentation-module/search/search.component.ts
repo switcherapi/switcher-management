@@ -14,11 +14,11 @@ import { SearchDocsResponse } from '../model/searchdocs-response';
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   query: string;
   searchDocsResponse: SearchDocsResponse;
-  loading: boolean = true;
+  loading = true;
 
   constructor(
     private searchDocsService: SearchDocsService,

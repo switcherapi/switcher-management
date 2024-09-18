@@ -22,7 +22,7 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   ]
 })
 export class StrategyCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   operations: string[] = [];
   strategies: string[] = [];

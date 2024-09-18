@@ -11,7 +11,7 @@ import { ConsoleLogger } from '../_helpers/console-logger';
   styleUrls: ['./app-version.component.css']
 })
 export class AppVersionComponent implements OnInit {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @Input() apiVersion: string;
   apiReleaseTime: string;

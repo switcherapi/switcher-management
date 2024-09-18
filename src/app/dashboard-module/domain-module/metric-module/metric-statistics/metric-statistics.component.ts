@@ -18,7 +18,7 @@ const positiveTemplate = { label: 'True', backgroundColor: '#86c7f395', borderCo
   ]
 })
 export class MetricStatisticsComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @Input() data: Metric;
   @Input() switcher: string;
@@ -120,8 +120,8 @@ export class SwitchersStatisticsTab {
 
   public loadSwitchersView(): void {
     const switcherStatistics = this.statistics.switchers;
-    let negative = { ...negativeTemplate, data: [] };
-    let positive = { ...positiveTemplate, data: [] };
+    const negative = { ...negativeTemplate, data: [] };
+    const positive = { ...positiveTemplate, data: [] };
 
     switcherStatistics.forEach(switcherStats => {
       this.barChartLabels.push(switcherStats.switcher);
@@ -161,8 +161,8 @@ export class ComponentsStatisticsTab {
 
   public loadComponentsView(): void {
     const componentsStatistics = this.statistics.components;
-    let negative = { ...negativeTemplate, data: [] };
-    let positive = { ...positiveTemplate, data: [] };
+    const negative = { ...negativeTemplate, data: [] };
+    const positive = { ...positiveTemplate, data: [] };
 
     componentsStatistics.forEach(componentStats => {
       this.barChartLabels.push(componentStats.component);
@@ -230,9 +230,9 @@ export class SwitcherDateTimeGroupedTab {
   public chartLegend = true;
 
   public selectedData: MetricData[][] = [];
-  public chartDatasets: Array<any> = [];
-  public chartLabels: Array<any> = [];
-  public chartShortLabels: Array<any> = [];
+  public chartDatasets: any[] = [];
+  public chartLabels: any[] = [];
+  public chartShortLabels: any[] = [];
 
   public chartOptions: ChartOptions = {
     responsive: true,
@@ -254,8 +254,8 @@ export class SwitcherDateTimeGroupedTab {
     this.chartShortLabels = [];
     
     const switcherStatistics = this.parent.data.statistics.switchers;
-    let negative = { ...negativeTemplate, data: [] };
-    let positive = { ...positiveTemplate, data: [] };
+    const negative = { ...negativeTemplate, data: [] };
+    const positive = { ...positiveTemplate, data: [] };
 
     switcherStatistics.forEach(switcherStats => {
       this.total_content = switcherStats.dateTimeStatistics.length;

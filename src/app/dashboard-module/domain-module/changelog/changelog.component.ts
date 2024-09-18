@@ -40,12 +40,12 @@ import { Types } from 'src/app/model/path-route';
   ],
 })
 export class ChangelogComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
   @Input() domainName: string;
   @Input() strategy: Strategy;
-  removable: boolean = false;
+  removable = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -321,7 +321,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let sortedData = [...data].sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'newValue': return this.compare(this.formatResumedData(a.newValue), this.formatResumedData(b.newValue), isAsc);

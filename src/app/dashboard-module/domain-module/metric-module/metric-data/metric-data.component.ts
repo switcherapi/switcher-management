@@ -32,7 +32,7 @@ import { MetricService } from 'src/app/services/metric.service';
   ],
 })
 export class MetricDataComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @Input() data: MetricData[];
   @Input() switcher: string;
   @Input() date: string;
@@ -46,12 +46,12 @@ export class MetricDataComponent implements OnInit, OnDestroy {
 
   expandedElement: MetricData | null;
 
-  removable: boolean = false;
+  removable = false;
 
   totalPages: number;
-  page: number = 1;
-  pageLoaded: number = 0;
-  currentPageSize: number = 0;
+  page = 1;
+  pageLoaded = 0;
+  currentPageSize = 0;
 
   constructor(
     private adminService: AdminService,
@@ -119,7 +119,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     }
     
     const data = this.dataSource.data.slice();
-    let sortedData = [...data].sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'switcher': return this.compare(a.config.key, b.config.key, isAsc);

@@ -11,8 +11,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 })
 export class AuthService {
 
-  @Output() logoff: EventEmitter<string> = new EventEmitter();
-  @Output() releaseOldSessions: EventEmitter<any> = new EventEmitter();
+  @Output() logoff = new EventEmitter<string>();
+  @Output() releaseOldSessions = new EventEmitter<any>();
 
   public static readonly USER_INFO = 'USER_INFO';
   public static readonly JWT_TOKEN = 'JWT_TOKEN';
@@ -99,7 +99,7 @@ export class AuthService {
     this.doLogoutUser();
   }
 
-  logout(deleted: boolean = false) {
+  logout(deleted = false) {
     if (!deleted) {
       this.http.post<any>(`${environment.apiUrl}/admin/logout`, null).subscribe();
     }

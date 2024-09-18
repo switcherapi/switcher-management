@@ -20,7 +20,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class TeamComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   teamFormControl = new FormControl('', [
     Validators.required,
@@ -37,10 +37,10 @@ export class TeamComponent implements OnInit, OnDestroy {
   error = '';
   fetch = true;
 
-  readable: boolean = false;
-  updatable: boolean = false;
-  removable: boolean = false;
-  creatable: boolean = false;
+  readable = false;
+  updatable = false;
+  removable = false;
+  creatable = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,

@@ -19,7 +19,7 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   ]
 })
 export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   routers: string[] = [];
   actions: string[] = [];
