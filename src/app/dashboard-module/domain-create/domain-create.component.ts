@@ -14,7 +14,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   ]
 })
 export class DomainCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   nameFormControl = new FormControl('', [
     Validators.required,

@@ -30,7 +30,7 @@ export class StrategyService extends ApiService {
   }
 
   public getAvailableOperations(strategy: Strategy, requirements: StrategyReq): string[] {
-    let operations = [];
+    const operations = [];
 
     requirements.operationRequirements.forEach(opReq => {
       if (opReq.max >= strategy.values.length) {

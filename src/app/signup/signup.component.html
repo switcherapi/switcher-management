@@ -9,21 +9,21 @@
                     <div class="form-group">
                         <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <mat-label>Name</mat-label>
-                            <input matInput type="text" id="name" (keyup)="onKey($event)" maxlength="50"
+                            <input matInput type="text" id="name" (keyup)="onKey()" maxlength="50"
                                 autocomplete="off" formControlName="name" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
                         <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <mat-label>Email</mat-label>
-                            <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50"
+                            <input matInput type="email" id="email" (keyup)="onKey()" maxlength="50"
                                 autocomplete="off" formControlName="email" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
                         <mat-form-field *ngIf="hasInternalAuthEnabled()">
                             <mat-label>Password</mat-label>
-                            <input matInput type="password" id="password" (keyup)="onKey($event)" formControlName="password" required>
+                            <input matInput type="password" id="password" (keyup)="onKey()" formControlName="password" required>
                         </mat-form-field>
                     </div>
                     <re-captcha *ngIf="getRecaptchaPublicKey()" class="g-recaptcha" (resolved)="resolved($event)" 

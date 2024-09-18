@@ -8,9 +8,9 @@ import { Subject } from 'rxjs';
 })
 export class SettingsComponent implements OnDestroy {
 
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
-  navControl: boolean = false;
+  navControl = false;
 
   navToggled() {
     this.navControl = !this.navControl;

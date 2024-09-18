@@ -7,7 +7,7 @@ import { MarkdownService } from 'ngx-markdown';
   template: `
     <div class="doc-header">
       <h3 class="doc-title">Slack App Installation</h3>
-      <img src="assets/switcherapi_mark_white.png" class="doc-icon" />
+      <img src="assets/switcherapi_mark_white.png" class="doc-icon" alt="Switcher API">
     </div>
     <markdown [data]="markdown"></markdown>
   `,

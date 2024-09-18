@@ -23,7 +23,7 @@ import { PermissionService } from 'src/app/services/permission.service';
   ]
 })
 export class TeamPermissionsComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @Input() team: Team;
 
   @BlockUI() blockUI: NgBlockUI;
@@ -34,11 +34,11 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Permission>;
   dataColumns = ['remove', 'edit', 'router', 'action', 'environments', 'active'];
 
-  @Input() updatable: boolean = false;
-  @Input() creatable: boolean = false;
-  @Input() removable: boolean = false;
+  @Input() updatable = false;
+  @Input() creatable = false;
+  @Input() removable = false;
 
-  loading: boolean = false;
+  loading = false;
 
   constructor(
     private permissionService: PermissionService,
@@ -176,7 +176,7 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
     }
     
     const data = this.permissions.slice();
-    let sortedData = [...data].sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'router': return this.compare(a.router, b.router, isAsc);

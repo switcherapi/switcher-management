@@ -18,7 +18,7 @@ import { OnElementAutocomplete } from '../../common/element-autocomplete/element
   ]
 })
 export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutocomplete {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   dateGroupPattern: string;
 
@@ -28,8 +28,8 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
 
   environments: Environment[];
   selectedFilter: string;
-  selectedFilterType: string = 'Switcher';
-  lockFilter: boolean = false;
+  selectedFilterType = 'Switcher';
+  lockFilter = false;
   domainId: string;
 
   constructor(

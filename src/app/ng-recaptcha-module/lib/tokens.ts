@@ -7,7 +7,7 @@ export const RECAPTCHA_SETTINGS = new InjectionToken<RecaptchaSettings>("recaptc
 /**
  * Specifies the options for loading the reCAPTCHA script tag.
  */
-export type RecaptchaLoaderOptions = {
+export interface RecaptchaLoaderOptions {
   /**
    * Invoked before the `<script>` tag is appended to the DOM.
    * Use this function as an opportunity to set `nonce`, as well as modify the URL of the tag.
@@ -102,7 +102,7 @@ export type RecaptchaLoaderOptions = {
    * ```
    */
   onLoaded?(recaptcha: ReCaptchaV2.ReCaptcha): ReCaptchaV2.ReCaptcha;
-};
+}
 
 /**
  * See the documentation for `RecaptchaLoaderOptions`.

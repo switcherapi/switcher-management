@@ -30,10 +30,10 @@ import { FeatureService } from 'src/app/services/feature.service';
 })
 export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete {
 
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   @BlockUI() blockUI: NgBlockUI;
 
-  loading: boolean = true;
+  loading = true;
   title: string;
   icon: number;
 
@@ -50,9 +50,9 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   
   currentPath = new PathRoute();
   prevScrollpos = window.scrollY;
-  navControl: boolean = false;
-  slackIntegration: boolean = false;
-  transferLabel: string = '';
+  navControl = false;
+  slackIntegration = false;
+  transferLabel = '';
 
   constructor(
     private dialog: MatDialog,
@@ -229,7 +229,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     this.navControl = !this.navControl;
   }
 
-  private loadConfiguration(forceFetch: boolean = false) {
+  private loadConfiguration(forceFetch = false) {
     this.loading = true;
 
     const path = this.domainRouteService.getStoredPath();

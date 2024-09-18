@@ -12,7 +12,7 @@ import { DomainService } from 'src/app/services/domain.service';
   styleUrls: ['./signup-domain.component.css']
 })
 export class SignupDomainComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   loading = false;
   error = '';
@@ -57,7 +57,7 @@ export class SignupDomainComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
   }
 }

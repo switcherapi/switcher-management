@@ -16,11 +16,11 @@ export class Config {
 
 export class ConfigRelay {
   type: string;
-  description: string = '';
+  description = '';
   activated: Map<string, boolean> = new Map<string, boolean>();
   endpoint: Map<string, string> = new Map<string, string>();
   method: string;
-  auth_prefix: string = '';
+  auth_prefix = '';
   auth_token: Map<string, string> = new Map<string, string>();
   verified: Map<string, boolean> = new Map<string, boolean>();
 }

@@ -49,14 +49,14 @@ export class PermissionService extends ApiService {
   }
 
   public updatePermission(id: string, action: string, router: string, identifiedBy?: string, 
-    environments: string[] = [], values: string[] = [], active: boolean = true): Observable<Permission> {
-    let body = { action, router, identifiedBy, environments, values, active: active ? 'true' : 'false' };
+    environments: string[] = [], values: string[] = [], active = true): Observable<Permission> {
+    const body = { action, router, identifiedBy, environments, values, active: active ? 'true' : 'false' };
 
     return this.http.patch<Permission>(`${environment.apiUrl}/permission/${id}`, body).pipe(catchError(super.handleError));
   }
 
-  public updatePermissionStatus(id: string, active: boolean = true): Observable<Permission> {
-    let body = { active: active ? 'true' : 'false' };
+  public updatePermissionStatus(id: string, active = true): Observable<Permission> {
+    const body = { active: active ? 'true' : 'false' };
 
     return this.http.patch<Permission>(`${environment.apiUrl}/permission/${id}`, body).pipe(catchError(super.handleError));
   }

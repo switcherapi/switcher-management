@@ -23,16 +23,16 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
-  detailBodyStyle: string = 'detail-body loading';
+  private unsubscribe = new Subject<void>();
+  detailBodyStyle = 'detail-body loading';
 
   @ViewChild(SlackSettingsComponent) 
   slackSettings: SlackSettingsComponent;
 
   domainId: string;
   domainName: string;
-  slackUpdate: boolean = false;
-  loading: boolean = true;
+  slackUpdate = false;
+  loading = true;
   slack: Slack;
   fetch = true;
 
@@ -73,7 +73,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       this.slackService.updateEnvironments(
         this.domainId, SETTINGS_PARAM.IGNORED_ENVIRONMENT, this.slackSettings.ignoredEnvironments)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(_data => this.toastService.showSuccess('Ignored Environments updated'));
+        .subscribe(() => this.toastService.showSuccess('Ignored Environments updated'));
     }
 
     if (DataUtils.isArrDiff(
@@ -81,7 +81,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       this.slackService.updateEnvironments(
         this.domainId, SETTINGS_PARAM.FROZEN_ENVIRONMENT, this.slackSettings.frozenEnvironments)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(_data => this.toastService.showSuccess('Frozen Environments updated'));
+        .subscribe(() => this.toastService.showSuccess('Frozen Environments updated'));
     }
 
     this.slackSettings.updateSettings({ 

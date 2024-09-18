@@ -28,7 +28,7 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   ]
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -78,8 +78,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     this.unsubscribe.complete();
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(_event?: any) {
+  @HostListener('window:resize')
+  onResize() {
     this.strategyValuesLength = 30;
     if (window.innerWidth < 1200 && window.innerWidth > 770) {
       this.strategyValuesLength = 50;
@@ -123,7 +123,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         this.strategyService.deleteStrategy(this.strategy.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
-            next: _data => {
+            next: () => {
               this.strategyList.reloadStrategies(this.strategy);
               this.blockUI.stop();
               this.toastService.showSuccess(`Strategy removed with success`);
@@ -168,7 +168,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
                   this.strategy.operation,
                   result.environment,
                   this.strategy.values).subscribe({
-                    next: _data => this.toastService.showSuccess(`Strategy cloned with success`),
+                    next: () => this.toastService.showSuccess(`Strategy cloned with success`),
                     error: error => {
                       this.toastService.showError(error.error);
                       ConsoleLogger.printError(error);
@@ -274,7 +274,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   }
 
   private loadOperationSelectionComponent(): void {
-    let toSelect = this.strategyOperations.find(operation => operation === this.strategy.operation);
+    const toSelect = this.strategyOperations.find(operation => operation === this.strategy.operation);
     this.operationCategoryFormControl.setValue(toSelect);
   }
 

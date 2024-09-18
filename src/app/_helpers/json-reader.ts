@@ -1,7 +1,9 @@
+import { ConsoleLogger } from "./console-logger";
+
 export class JsonReader {
 
     public static payloadReader(payload: any): string[] {
-        let payloadRead = payload + '' === payload || payload || 0;
+        const payloadRead = payload + '' === payload || payload || 0;
         if (Array.isArray(payloadRead)) {
             return payloadRead.flatMap(p => JsonReader.payloadReader(p));
         }
@@ -23,6 +25,7 @@ export class JsonReader {
             const parsed = JSON.parse(value);
             return parsed && typeof parsed === "object";
         } catch (e) {
+            ConsoleLogger.printError(e);
             return false;
         }
     }

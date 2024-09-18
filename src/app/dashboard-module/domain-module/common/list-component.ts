@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 
 @Directive()
 export class ListComponent implements AfterViewInit {
-    protected unsubscribe: Subject<void> = new Subject();
+    protected unsubscribe = new Subject<void>();
     
     @ViewChildren("envSelectionChange")
     public component: QueryList<MatSelect>
@@ -22,14 +22,14 @@ export class ListComponent implements AfterViewInit {
 
     @Input() environments: Environment[];
     @Input() childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent>;
-    @Output() environmentSelectionChange: EventEmitter<string> = new EventEmitter();
+    @Output() environmentSelectionChange = new EventEmitter<string>();
 
-    cardListContainerStyle: string = 'card mt-4 loading';
+    cardListContainerStyle = 'card mt-4 loading';
     domainId: string;
     domainName: string;
     groupId: string;
 
-    skip: number = 0;
+    skip = 0;
     loading = false;
     error = '';
 

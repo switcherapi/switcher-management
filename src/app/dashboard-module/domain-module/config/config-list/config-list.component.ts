@@ -31,7 +31,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
   permissions: Permissions[];
   configs: Config[];
 
-  creatable: boolean = false;
+  creatable = false;
 
   constructor(
     protected fb: FormBuilder,

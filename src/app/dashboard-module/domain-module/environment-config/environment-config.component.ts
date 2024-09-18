@@ -16,17 +16,17 @@ import { EnvironmentService } from 'src/app/services/environment.service';
     './environment-config.component.css']
 })
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
   @Input() selectedEnvName: string;
   @Input() configuredEnvironments: Map<string, boolean>;
   @Input() notSelectableEnvironments: boolean;
   @Input() enable: Subject<boolean>;
-  @Output() outputEnvChanged: EventEmitter<EnvironmentChangeEvent> = new EventEmitter();
-  @Output() outputStatusChanged: EventEmitter<any> = new EventEmitter();
-  @Output() outputEnvRemoved: EventEmitter<any> = new EventEmitter();
-  @Output() outputEnvLoaded: EventEmitter<Environment[]> = new EventEmitter();
+  @Output() outputEnvChanged = new EventEmitter<EnvironmentChangeEvent>();
+  @Output() outputStatusChanged = new EventEmitter<any>();
+  @Output() outputEnvRemoved = new EventEmitter<any>();
+  @Output() outputEnvLoaded = new EventEmitter<Environment[]>();
 
   @ViewChild(MatSelect, { static: true })
   private envSelectionChange: MatSelect;
@@ -34,7 +34,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   @ViewChild(MatSlideToggle, { static: true })
   private toggleEnv: MatSlideToggle;
 
-  toggleClass: string = 'toggle-style deactivated';
+  toggleClass = 'toggle-style deactivated';
 
   environmentSelection: FormGroup;
   environmentStatusSelection: FormGroup;

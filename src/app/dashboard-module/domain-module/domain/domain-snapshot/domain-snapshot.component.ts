@@ -22,7 +22,7 @@ import { SwitcherComponent } from 'src/app/model/switcher-component';
   ]
 })
 export class DomainSnapshotComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
   
@@ -37,8 +37,8 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
 
   private domainId: string;
 
-  includeStatus: boolean = true;
-  includeDescription: boolean = true;
+  includeStatus = true;
+  includeDescription = true;
   snapshot: string;
 
   constructor(

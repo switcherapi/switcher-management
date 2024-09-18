@@ -12,7 +12,7 @@ import { TeamService } from '../services/team.service';
   styleUrls: ['./signup-team.component.css']
 })
 export class SignupTeamComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   loading = false;
   error = '';
@@ -80,7 +80,7 @@ export class SignupTeamComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
   }
 }

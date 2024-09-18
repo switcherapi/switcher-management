@@ -2,11 +2,11 @@ import { Input, Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'ngbd-modal-confirm',
+    selector: 'app-modal-confirm',
     template: `
       <div class="modal-header">
         <h4 class="modal-title" id="modal-title">{{ title }}</h4>
-        <button type="button"class="btn-close" aria-describedby="modal-title" (click)="nok()"></button>
+        <button type="button"class="btn-close" aria-describedby="modal-title" (click)="nok()"> </button>
       </div>
       <div class="modal-body">
         <p><strong>{{ question }}</strong></p>

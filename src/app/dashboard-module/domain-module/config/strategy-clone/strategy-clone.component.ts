@@ -15,7 +15,7 @@ import { EnvironmentService } from 'src/app/services/environment.service';
     './strategy-clone.component.css']
 })
 export class StrategyCloneComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   environmentSelection = new FormControl('', [
     Validators.required

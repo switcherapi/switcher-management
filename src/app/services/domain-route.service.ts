@@ -3,10 +3,10 @@ import { PathRoute, Types } from '../model/path-route';
 
 @Injectable()
 export class DomainRouteService {
-  @Output() pathChange: EventEmitter<PathRoute> = new EventEmitter();
-  @Output() viewHeaderEvent: EventEmitter<ViewHeader> = new EventEmitter();
+  @Output() pathChange = new EventEmitter<PathRoute>();
+  @Output() viewHeaderEvent = new EventEmitter<ViewHeader>();
 
-  updatePath(id: string, name: string, type: string, path: string, forceFetch: boolean = false): void {
+  updatePath(id: string, name: string, type: string, path: string, forceFetch = false): void {
     const pathRoute = new PathRoute();
     pathRoute.id = id;
     pathRoute.name = name;

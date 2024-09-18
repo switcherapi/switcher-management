@@ -12,16 +12,16 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./signup-auth.component.css']
 })
 export class SignupAuthComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
 
   codeConfirmationForm: FormGroup;
 
   loading = false;
-  error: string = '';
+  error = '';
   code: string;
   team: string;
   domain: string;
-  status: string = '';
+  status = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -78,7 +78,7 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
   }
 
@@ -88,6 +88,7 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
     this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
       .subscribe({
         error: (_error) => {
+          ConsoleLogger.printError(_error);
           this.status = 'Offline for Maintenance';
         }
       });

@@ -3,7 +3,7 @@ export class PathRoute {
   name: string;
   path: string;
   type: string;
-  forceFetch: boolean = false;
+  forceFetch = false;
 }
 
 export class Types {

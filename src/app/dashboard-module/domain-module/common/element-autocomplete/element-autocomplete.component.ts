@@ -13,14 +13,14 @@ import { DomainService } from 'src/app/services/domain.service';
 })
 export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
-  private unsubscribe: Subject<void> = new Subject();
+  private unsubscribe = new Subject<void>();
   
   @Input() parentComponent: OnElementAutocomplete;
-  @Input() switchers: boolean = true;
-  @Input() groups: boolean = true;
-  @Input() components: boolean = true;
-  @Input() value: string = '';
-  @Input() lockFilter: boolean = false;
+  @Input() switchers = true;
+  @Input() groups = true;
+  @Input() components = true;
+  @Input() value = '';
+  @Input() lockFilter = false;
   
   smartSearchFormControl = new FormControl('');
   searchListItems: any[] = [];
@@ -88,7 +88,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     if (!this.components)
       return;
 
-    let filtered = groups?.map(
+    const filtered = groups?.map(
       group => group.config?.map(config => {
         return {
           type: 'Component',
@@ -107,7 +107,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     if (!this.switchers || !groups)
       return;
 
-    let filtered = groups.map(
+    const filtered = groups.map(
       group => group.config?.map(config => {
         return {
           type: 'Switcher',
@@ -126,7 +126,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     if (!this.groups || !groups)
       return;
       
-    let filtered = groups.map(group => {
+    const filtered = groups.map(group => {
       return {
         type: 'Group',
         _id: group._id,

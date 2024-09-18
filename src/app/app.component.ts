@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.currentToken = x;
     });
 
-    this.authService.currentUser.subscribe(_ => {
+    this.authService.currentUser.subscribe(() => {
       this.loggedUserName = this.authService.getUserInfo("name");
       const avatar = this.authService.getUserInfo("avatar");
       this.profileAvatar = avatar || "assets\\switcherapi_mark_white.png";
