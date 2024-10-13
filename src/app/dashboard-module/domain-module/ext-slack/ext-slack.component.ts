@@ -23,7 +23,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   detailBodyStyle = 'detail-body loading';
 
   @ViewChild(SlackSettingsComponent) 
@@ -37,13 +37,13 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   fetch = true;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private domainRouteService: DomainRouteService,
-    private slackService: SlackService,
-    private featureService: FeatureService,
-    private toastService: ToastService,
-    private router: Router,
-    private _modalService: NgbModal
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly slackService: SlackService,
+    private readonly featureService: FeatureService,
+    private readonly toastService: ToastService,
+    private readonly router: Router,
+    private readonly _modalService: NgbModal
   ) { 
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;

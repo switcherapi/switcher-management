@@ -26,7 +26,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class ComponentsComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -50,13 +50,13 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   fetch = true;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private domainRouteService: DomainRouteService,
-    private adminService: AdminService,
-    private compService: ComponentService,
-    private errorHandler: RouterErrorHandler,
-    private toastService: ToastService,
-    private _modalService: NgbModal,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly adminService: AdminService,
+    private readonly compService: ComponentService,
+    private readonly errorHandler: RouterErrorHandler,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal,
     public dialog: MatDialog
   ) {
     this.activatedRoute.parent.params.subscribe(params => {
@@ -266,7 +266,7 @@ export class ComponentEditDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ComponentEditDialogComponent>,
-    private toastService: ToastService,
+    private readonly toastService: ToastService,
     @Inject(MAT_DIALOG_DATA) public data: SwitcherComponent) { }
 
   onSave(data: SwitcherComponent): void {

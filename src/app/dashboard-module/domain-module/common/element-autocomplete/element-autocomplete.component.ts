@@ -13,7 +13,7 @@ import { DomainService } from 'src/app/services/domain.service';
 })
 export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   
   @Input() parentComponent: OnElementAutocomplete;
   @Input() switchers = true;
@@ -28,7 +28,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   private query: QueryRef<any>;
 
   constructor(
-    private domainService: DomainService
+    private readonly domainService: DomainService
   ) { }
 
   ngOnInit() {

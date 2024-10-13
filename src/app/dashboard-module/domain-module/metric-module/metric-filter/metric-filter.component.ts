@@ -18,7 +18,7 @@ import { OnElementAutocomplete } from '../../common/element-autocomplete/element
   ]
 })
 export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutocomplete {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   dateGroupPattern: string;
 
@@ -33,8 +33,8 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   domainId: string;
 
   constructor(
-    private environmentService: EnvironmentService,
-    private datepipe: DatePipe,
+    private readonly environmentService: EnvironmentService,
+    private readonly datepipe: DatePipe,
     public dialogRef: MatDialogRef<MetricFilterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 

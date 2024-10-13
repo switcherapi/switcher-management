@@ -28,7 +28,7 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   ]
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -38,7 +38,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   private strategyReq: StrategyReq;
 
   @ViewChild(MatSelectionList, { static: true })
-  private strategyValueSelection: MatSelectionList;
+  private readonly strategyValueSelection: MatSelectionList;
 
   @ViewChild('descElement', { static: true })
   descElement: ElementRef;
@@ -53,11 +53,11 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   strategyValuesLength: number;
 
   constructor(
-    private strategyService: StrategyService,
-    private adminService: AdminService,
-    private toastService: ToastService,
-    private _modalService: NgbModal,
-    private dialog: MatDialog
+    private readonly strategyService: StrategyService,
+    private readonly adminService: AdminService,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal,
+    private readonly dialog: MatDialog
   ) {
     super();
     this.onResize();

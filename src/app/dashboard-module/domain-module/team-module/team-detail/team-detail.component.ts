@@ -24,7 +24,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -40,12 +40,12 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   loading = false;
 
   constructor(
-    private adminService: AdminService,
-    private domainRouteService: DomainRouteService,
-    private activatedRoute: ActivatedRoute,
-    private teamService: TeamService,
-    private toastService: ToastService,
-    private router: Router
+    private readonly adminService: AdminService,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly teamService: TeamService,
+    private readonly toastService: ToastService,
+    private readonly router: Router
   ) {
     super();
     this.activatedRoute.parent.parent.params.subscribe(params => {

@@ -28,17 +28,23 @@
                         <mat-icon>next_week</mat-icon>
                         {{ transferLabel }}
                     </button>
+                    <div style="margin-bottom: .5rem; border-bottom: 1px solid rgba(179,179,179,.1); width: 100%;">
+                        <span style="margin-left: 1rem; color: #6c757d;">Integrations</span>
+                    </div>
+                    <div>
+                        <button mat-menu-item (click)="gotoGitOpsIntegration()">
+                            <img src="assets\gitops.png" style="width: 26px; margin-right: .5rem;" alt="GitOps" />
+                            Switcher GitOps
+                        </button>
+                    </div>
                     <div *ngIf="hasSlackIntegration()">
-                        <div style="margin-bottom: .5rem; border-bottom: 1px solid rgba(179,179,179,.1); width: 100%;">
-                            <span style="margin-left: 1rem; color: #6c757d;">Integrations</span>
-                        </div>
                         <button *ngIf="hasSlackInstalled()" mat-menu-item (click)="gotoSlackIntegration()">
-                            <img src="assets\slack.svg" class="slack-img" style="width: 25px; margin-right: .5rem;" alt="Slack" />
+                            <img src="assets\slack.svg" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Slack App
                         </button>
                         <a *ngIf="!hasSlackInstalled()" mat-menu-item style="text-decoration: none;"
                             href="{{ getSlackUrl() }}" target="_parent">
-                            <img src="assets\slack.svg" class="slack-img" style="width: 25px; margin-right: .5rem;" alt="Slack" />
+                            <img src="assets\slack.svg" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Install Slack App
                         </a>
                     </div>

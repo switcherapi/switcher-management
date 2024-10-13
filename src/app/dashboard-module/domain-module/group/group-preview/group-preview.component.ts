@@ -20,7 +20,7 @@ import { Permissions } from 'src/app/model/permission';
   ]
 })
 export class GroupPreviewComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
   
@@ -43,10 +43,10 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   toggleSectionStyle = 'toggle-section deactivated';
 
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private groupService: GroupService,
-    private toastService: ToastService
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly groupService: GroupService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {

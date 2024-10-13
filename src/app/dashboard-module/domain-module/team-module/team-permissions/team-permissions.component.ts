@@ -23,7 +23,7 @@ import { PermissionService } from 'src/app/services/permission.service';
   ]
 })
 export class TeamPermissionsComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @Input() team: Team;
 
   @BlockUI() blockUI: NgBlockUI;
@@ -41,9 +41,9 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(
-    private permissionService: PermissionService,
-    private toastService: ToastService,
-    private dialog: MatDialog
+    private readonly permissionService: PermissionService,
+    private readonly toastService: ToastService,
+    private readonly dialog: MatDialog
   ) { }
 
   ngOnInit() {

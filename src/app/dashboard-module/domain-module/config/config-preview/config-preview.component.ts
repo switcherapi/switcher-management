@@ -20,7 +20,7 @@ import { Config } from 'src/app/model/config';
   ]
 })
 export class ConfigPreviewComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -44,10 +44,10 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   toggleSectionStyle = 'toggle-section deactivated';
 
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private configService: ConfigService,
-    private toastService: ToastService
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly configService: ConfigService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {

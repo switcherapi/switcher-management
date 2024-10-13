@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 })
 export class SettingsAccountComponent implements OnInit, OnDestroy {
 
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @BlockUI() blockUI: NgBlockUI;
 
   accountForm: FormGroup;
@@ -33,12 +33,12 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
   profileAvatar: string;
 
   constructor(
-    private router: Router,
-    private adminService: AdminService,
-    private authService: AuthService,
-    private domainService: DomainService,
-    private formBuilder: FormBuilder,
-    private _modalService: NgbModal) { }
+    private readonly router: Router,
+    private readonly adminService: AdminService,
+    private readonly authService: AuthService,
+    private readonly domainService: DomainService,
+    private readonly formBuilder: FormBuilder,
+    private readonly _modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.blockUI.start('Loading...');

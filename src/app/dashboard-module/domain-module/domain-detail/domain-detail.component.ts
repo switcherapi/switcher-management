@@ -26,12 +26,12 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   ]
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild('descElement', { static: true }) 
-  private descElement: ElementRef;
+  private readonly descElement: ElementRef;
 
   envEnable = new Subject<boolean>();
 
@@ -42,14 +42,14 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   collabUser = false;
 
   constructor(
-    private domainRouteService: DomainRouteService,
-    private domainService: DomainService,
-    private adminService: AdminService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private toastService: ToastService,
-    private _modalService: NgbModal
+    private readonly domainRouteService: DomainRouteService,
+    private readonly domainService: DomainService,
+    private readonly adminService: AdminService,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal
   ) {
     super();
     this.route.params.subscribe(params => this.domainId = params.domainid);

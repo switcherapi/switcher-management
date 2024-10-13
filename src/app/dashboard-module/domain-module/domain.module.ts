@@ -38,6 +38,8 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
 import { RelayDetailComponent, RelayVerificationDialogComponent } from './config/relay-detail/relay-detail.component';
 import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-settings.component';
+import { ExtGitOpsComponent } from './ext-gitops/ext-gitops.component';
+import { GitOpsSettingsComponent } from './ext-gitops/gitops-settings/gitops-settings.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-setting
     DomainTransferDialogComponent,
     SpecialCharacterDirective,
     ExtSlackComponent,
-    SlackSettingsComponent
+    SlackSettingsComponent,
+    ExtGitOpsComponent,
+    GitOpsSettingsComponent
   ],
   imports: [
     FormsModule,

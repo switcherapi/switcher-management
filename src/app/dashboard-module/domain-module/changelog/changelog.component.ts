@@ -40,7 +40,7 @@ import { Types } from 'src/app/model/path-route';
   ],
 })
 export class ChangelogComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
   @Input() domainName: string;
@@ -79,17 +79,17 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   fetch = true;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private domainRouteService: DomainRouteService,
-    private adminService: AdminService,
-    private domainService: DomainService,
-    private groupService: GroupService,
-    private configService: ConfigService,
-    private strategyService: StrategyService,
-    private toastService: ToastService,
-    private _modalService: NgbModal,
-    private datepipe: DatePipe,
-    private errorHandler: RouterErrorHandler
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly adminService: AdminService,
+    private readonly domainService: DomainService,
+    private readonly groupService: GroupService,
+    private readonly configService: ConfigService,
+    private readonly strategyService: StrategyService,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal,
+    private readonly datepipe: DatePipe,
+    private readonly errorHandler: RouterErrorHandler
   ) { 
     this.activatedRoute.parent?.params.subscribe(params => {
       this.domainId = params.domainid;

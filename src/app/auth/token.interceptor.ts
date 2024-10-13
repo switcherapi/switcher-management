@@ -10,9 +10,11 @@ import { Router } from '@angular/router';
 export class TokenInterceptor implements HttpInterceptor, OnDestroy {
 
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private readonly refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private authService: AuthService, private router: Router) { 
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router) { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
     })

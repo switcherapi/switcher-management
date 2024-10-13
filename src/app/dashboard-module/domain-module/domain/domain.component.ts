@@ -30,7 +30,7 @@ import { FeatureService } from 'src/app/services/feature.service';
 })
 export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete {
 
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @BlockUI() blockUI: NgBlockUI;
 
   loading = true;
@@ -55,16 +55,16 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   transferLabel = '';
 
   constructor(
-    private dialog: MatDialog,
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private domainRouteService: DomainRouteService,
-    private domainService: DomainService,
-    private configService: ConfigService,
-    private groupService: GroupService,
-    private featureService: FeatureService,
-    private toastService: ToastService
+    private readonly dialog: MatDialog,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly domainService: DomainService,
+    private readonly configService: ConfigService,
+    private readonly groupService: GroupService,
+    private readonly featureService: FeatureService,
+    private readonly toastService: ToastService
   ) {
     this.route.params.subscribe(params => {
       this.domainId = params.domainid;
@@ -210,6 +210,11 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   gotoSlackIntegration() {
     this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/integration/slack`], 
+      { state: { fetch: false } });
+  }
+
+  gotoGitOpsIntegration() {
+    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/integration/gitops`], 
       { state: { fetch: false } });
   }
 

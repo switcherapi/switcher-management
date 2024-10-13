@@ -17,7 +17,7 @@ export class SearchItemComponent {
   searchDocsResult: SearchDocsResult;
 
   constructor(
-    private router: Router
+    private readonly router: Router
   ) { }
   
   gotoDocument(file: string) {

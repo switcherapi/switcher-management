@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   export class TeamInviteDialogComponent {
   
     constructor(
-      private toastService: ToastService,
+      private readonly toastService: ToastService,
       public dialogRef: MatDialogRef<TeamInviteDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) { }
   

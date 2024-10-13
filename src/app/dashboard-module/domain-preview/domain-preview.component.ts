@@ -17,7 +17,7 @@ export class DomainPreviewComponent implements OnInit {
   classBtnStatus: string;
 
   constructor(
-    private router: Router
+    private readonly router: Router
   ) { }
 
   ngOnInit() {

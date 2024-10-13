@@ -16,7 +16,7 @@ import { ToastService } from '../_helpers/toast.service';
   styleUrls: ['./slack-auth.component.css']
 })
 export class SlackAuthComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   private enterprise_id: string;
   private team_id: string;
@@ -30,11 +30,11 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
   error = '';
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private domainService: DomainService,
-    private slackService: SlackService,
-    private toastService: ToastService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly domainService: DomainService,
+    private readonly slackService: SlackService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit(): void {

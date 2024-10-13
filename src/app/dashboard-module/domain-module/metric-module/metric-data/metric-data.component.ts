@@ -32,7 +32,7 @@ import { MetricService } from 'src/app/services/metric.service';
   ],
 })
 export class MetricDataComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @Input() data: MetricData[];
   @Input() switcher: string;
   @Input() date: string;
@@ -54,10 +54,10 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   currentPageSize = 0;
 
   constructor(
-    private adminService: AdminService,
-    private metricService: MetricService,
-    private toastService: ToastService,
-    private _modalService: NgbModal
+    private readonly adminService: AdminService,
+    private readonly metricService: MetricService,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal
   ) { }
 
   ngOnInit() {

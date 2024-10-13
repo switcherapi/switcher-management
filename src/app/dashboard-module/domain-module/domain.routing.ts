@@ -13,6 +13,7 @@ import { ConfigListComponent } from './config/config-list/config-list.component'
 import { ConfigDetailComponent } from './config/config-detail/config-detail.component';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { ExtSlackComponent } from './ext-slack/ext-slack.component';
+import { ExtGitOpsComponent } from './ext-gitops/ext-gitops.component';
 
 const routes: Routes = [
   {
@@ -70,6 +71,10 @@ const routes: Routes = [
       {
         path: 'integration/slack',
         component: ExtSlackComponent, canActivate: mapToCanActivate([AuthGuard])
+      },
+      {
+        path: 'integration/gitops',
+        component: ExtGitOpsComponent, canActivate: mapToCanActivate([AuthGuard])
       },
       { path: '**', redirectTo: '/dashboard/domain' }
     ]

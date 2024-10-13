@@ -19,7 +19,7 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   ]
 })
 export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   routers: string[] = [];
   actions: string[] = [];
@@ -48,10 +48,10 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<TeamPermissionCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private permissionService: PermissionService,
-    private environmentService: EnvironmentService,
-    private formBuilder: FormBuilder,
-    private toastService: ToastService
+    private readonly permissionService: PermissionService,
+    private readonly environmentService: EnvironmentService,
+    private readonly formBuilder: FormBuilder,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {

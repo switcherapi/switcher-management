@@ -15,7 +15,7 @@ import { AdminService } from '../services/admin.service';
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-    private unsubscribe = new Subject<void>();
+    private readonly unsubscribe = new Subject<void>();
 
     loginForm: FormGroup;
     loading = false;
@@ -26,11 +26,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     status = ''; 
 
     constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private authService: AuthService,
-        private adminService: AdminService
+        private readonly formBuilder: FormBuilder,
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly authService: AuthService,
+        private readonly adminService: AdminService
     ) {
         if (this.authService.isLoggedIn()) {
             this.router.navigate(['/dashboard']);

@@ -11,7 +11,7 @@ export class DocumentationComponent implements OnInit, OnDestroy {
   prevScrollpos = window.scrollY;
 
   constructor(
-    private router: Router,
+    private readonly router: Router,
   ) { }
 
   ngOnInit() {

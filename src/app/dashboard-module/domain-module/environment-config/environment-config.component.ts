@@ -16,7 +16,7 @@ import { EnvironmentService } from 'src/app/services/environment.service';
     './environment-config.component.css']
 })
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
   @Input() selectedEnvName: string;
@@ -29,10 +29,10 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   @Output() outputEnvLoaded = new EventEmitter<Environment[]>();
 
   @ViewChild(MatSelect, { static: true })
-  private envSelectionChange: MatSelect;
+  private readonly envSelectionChange: MatSelect;
 
   @ViewChild(MatSlideToggle, { static: true })
-  private toggleEnv: MatSlideToggle;
+  private readonly toggleEnv: MatSlideToggle;
 
   toggleClass = 'toggle-style deactivated';
 
@@ -42,8 +42,8 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   selectedEnvStatus: boolean;
 
   constructor(
-    private fb: FormBuilder,
-    private environmentService: EnvironmentService
+    private readonly fb: FormBuilder,
+    private readonly environmentService: EnvironmentService
   ) { }
 
   ngOnInit() {

@@ -26,7 +26,7 @@ import { DomainService } from 'src/app/services/domain.service';
   ]
 })
 export class RelayDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -58,12 +58,12 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   relayVerificationCode: string;
 
   constructor(
-    private adminService: AdminService,
-    private domainService: DomainService,
-    private configService: ConfigService,
-    private authService: AuthService,
-    private toastService: ToastService,
-    private _modalService: NgbModal,
+    private readonly adminService: AdminService,
+    private readonly domainService: DomainService,
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal,
     public dialog: MatDialog
   ) {
     super();

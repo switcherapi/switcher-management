@@ -15,7 +15,7 @@ import { EnvironmentService } from 'src/app/services/environment.service';
     './strategy-clone.component.css']
 })
 export class StrategyCloneComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   environmentSelection = new FormControl('', [
     Validators.required
@@ -26,7 +26,7 @@ export class StrategyCloneComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<StrategyCloneComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private environmentService: EnvironmentService) { }
+    private readonly environmentService: EnvironmentService) { }
 
   ngOnInit() {
     this.environmentService.getEnvironmentsByDomainId(this.data.domainId)

@@ -9,8 +9,8 @@ import { Injectable } from '@angular/core';
 export class RouterErrorHandler {
 
     constructor(
-        private router: Router,
-        private authService: AuthService
+        private readonly router: Router,
+        private readonly authService: AuthService
       ) { }
 
     doError(error: any): string {

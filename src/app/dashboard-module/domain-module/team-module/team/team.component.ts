@@ -20,7 +20,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class TeamComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   teamFormControl = new FormControl('', [
     Validators.required,
@@ -43,11 +43,11 @@ export class TeamComponent implements OnInit, OnDestroy {
   creatable = false;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private domainRouteService: DomainRouteService,
-    private adminService: AdminService,
-    private teamService: TeamService,
-    private toastService: ToastService
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly adminService: AdminService,
+    private readonly teamService: TeamService,
+    private readonly toastService: ToastService
   ) { 
     this.activatedRoute.parent.parent.params.subscribe(params => {
       this.domainId = params.domainid;

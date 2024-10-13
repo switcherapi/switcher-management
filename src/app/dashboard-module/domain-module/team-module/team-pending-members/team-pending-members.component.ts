@@ -18,7 +18,7 @@ import { TeamService } from 'src/app/services/team.service';
     './team-pending-members.component.css']
 })
 export class TeamPendingMembersComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @Input() team: Team;
   @Input() updatable = false;
   @Input() creatable = false;
@@ -32,8 +32,8 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(
-    private teamService: TeamService,
-    private toastService: ToastService,
+    private readonly teamService: TeamService,
+    private readonly toastService: ToastService,
     public dialog: MatDialog
   ) { }
 

@@ -34,9 +34,9 @@ export class ListComponent implements AfterViewInit {
     error = '';
 
     constructor(
-        private activatedRoute: ActivatedRoute,
-        private formBuilder: FormBuilder,
-        private envService: EnvironmentService
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly formBuilder: FormBuilder,
+        private readonly envService: EnvironmentService
     ) {
         this.activatedRoute.parent.params.subscribe(params => {
             this.domainId = params.domainid;

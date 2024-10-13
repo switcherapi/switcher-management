@@ -20,7 +20,7 @@ import { Types } from 'src/app/model/path-route';
     './metric.component.css']
 })
 export class MetricComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @Input() switcher: string;
   @Input() environment = 'default';
   filterType = 'Switcher';
@@ -40,11 +40,11 @@ export class MetricComponent implements OnInit, OnDestroy {
   metrics: Metric;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private domainRouteService: DomainRouteService,
-    private metricService: MetricService,
-    private dialog: MatDialog,
-    private errorHandler: RouterErrorHandler
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly metricService: MetricService,
+    private readonly dialog: MatDialog,
+    private readonly errorHandler: RouterErrorHandler
   ) {
     this.activatedRoute.parent.parent.params.subscribe(params => {
       this.domainId = params.domainid;

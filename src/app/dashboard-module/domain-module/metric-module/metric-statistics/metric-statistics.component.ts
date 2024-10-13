@@ -18,7 +18,7 @@ const positiveTemplate = { label: 'True', backgroundColor: '#86c7f395', borderCo
   ]
 })
 export class MetricStatisticsComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @Input() data: Metric;
   @Input() switcher: string;
@@ -83,8 +83,8 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
 
 export class SwitchersStatisticsTab {
   constructor(
-    private statistics: MetricStatistics,
-    private parent: MetricComponent
+    private readonly statistics: MetricStatistics,
+    private readonly parent: MetricComponent
   ) {}
 
   public barChartType: ChartType = 'bar';
@@ -135,7 +135,7 @@ export class SwitchersStatisticsTab {
 }
 
 export class ComponentsStatisticsTab {
-  constructor(private statistics: MetricStatistics) {}
+  constructor(private readonly statistics: MetricStatistics) {}
 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
@@ -176,7 +176,7 @@ export class ComponentsStatisticsTab {
 }
 
 export class ReasonsStatisticsTab {
-  constructor(private statistics: MetricStatistics) {}
+  constructor(private readonly statistics: MetricStatistics) {}
 
   public chartType: ChartType = 'bar';
   public chartLegend = true;
@@ -220,7 +220,7 @@ export class ReasonsStatisticsTab {
 }
 
 export class SwitcherDateTimeGroupedTab {
-  constructor(private parent: MetricStatisticsComponent) {
+  constructor(private readonly parent: MetricStatisticsComponent) {
       this.MAX_CONTENT = 5;
       this.content_index = -1;
       this.total_content = 0;
@@ -243,7 +243,7 @@ export class SwitcherDateTimeGroupedTab {
     }
   };
 
-  private MAX_CONTENT: number;
+  private readonly MAX_CONTENT: number;
   private content_index: number;
   private total_content: number;
 
