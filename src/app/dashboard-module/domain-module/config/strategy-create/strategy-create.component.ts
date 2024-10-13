@@ -22,7 +22,7 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   ]
 })
 export class StrategyCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   operations: string[] = [];
   strategies: string[] = [];
@@ -50,14 +50,14 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
   ]);
 
   @ViewChild(MatSelectionList, { static: true })
-  private strategyValueSelection: MatSelectionList;
+  private readonly strategyValueSelection: MatSelectionList;
 
   constructor(
     public dialogRef: MatDialogRef<ConfigCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder,
-    private strategyService: StrategyService,
-    private toastService: ToastService
+    private readonly formBuilder: FormBuilder,
+    private readonly strategyService: StrategyService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit(): void {

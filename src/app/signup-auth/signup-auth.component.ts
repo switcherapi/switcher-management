@@ -12,7 +12,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./signup-auth.component.css']
 })
 export class SignupAuthComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   codeConfirmationForm: FormGroup;
 
@@ -24,10 +24,10 @@ export class SignupAuthComponent implements OnInit, OnDestroy {
   status = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService
+    private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly authService: AuthService
   ) { }
 
   ngOnInit() {

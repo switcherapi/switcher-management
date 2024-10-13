@@ -37,14 +37,14 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     protected fb: FormBuilder,
     protected route: ActivatedRoute,
     protected environmentService: EnvironmentService,
-    private domainRouteService: DomainRouteService,
-    private dialog: MatDialog,
-    private adminService: AdminService,
-    private configService: ConfigService,
-    private groupService: GroupService,
-    private permissionService: PermissionService,
-    private toastService: ToastService,
-    private errorHandler: RouterErrorHandler
+    private readonly domainRouteService: DomainRouteService,
+    private readonly dialog: MatDialog,
+    private readonly adminService: AdminService,
+    private readonly configService: ConfigService,
+    private readonly groupService: GroupService,
+    private readonly permissionService: PermissionService,
+    private readonly toastService: ToastService,
+    private readonly errorHandler: RouterErrorHandler
   ) { 
     super(route, fb, environmentService);
   }

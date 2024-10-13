@@ -36,13 +36,13 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
     protected fb: FormBuilder,
     protected route: ActivatedRoute,
     protected environmentService: EnvironmentService,
-    private dialog: MatDialog,
-    private domainRouteService: DomainRouteService,
-    private adminService: AdminService,
-    private groupService: GroupService,
-    private permissionService: PermissionService,
-    private toastService: ToastService,
-    private errorHandler: RouterErrorHandler
+    private readonly dialog: MatDialog,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly adminService: AdminService,
+    private readonly groupService: GroupService,
+    private readonly permissionService: PermissionService,
+    private readonly toastService: ToastService,
+    private readonly errorHandler: RouterErrorHandler
   ) {
     super(route, fb, environmentService);
   }

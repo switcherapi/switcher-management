@@ -25,7 +25,7 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   ]
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -48,13 +48,13 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   ]);
 
   constructor(
-    private domainRouteService: DomainRouteService,
-    private groupService: GroupService,
-    private adminService: AdminService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private toastService: ToastService,
-    private _modalService: NgbModal
+    private readonly domainRouteService: DomainRouteService,
+    private readonly groupService: GroupService,
+    private readonly adminService: AdminService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal
   ) { 
     super();
   }

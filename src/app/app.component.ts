@@ -17,9 +17,9 @@ export class AppComponent implements OnInit, OnDestroy {
   darkMode: boolean;
 
   constructor(
-      private router: Router,
-      private authService: AuthService,
-      private pwaService: PwaService
+      private readonly router: Router,
+      private readonly authService: AuthService,
+      private readonly pwaService: PwaService
   ) {
     this.loadUserSettings();
   }

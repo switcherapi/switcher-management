@@ -12,7 +12,7 @@ import { DomainService } from 'src/app/services/domain.service';
   styleUrls: ['./signup-domain.component.css']
 })
 export class SignupDomainComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   loading = false;
   error = '';
@@ -20,10 +20,10 @@ export class SignupDomainComponent implements OnInit, OnDestroy {
   domain: string;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private domainService: DomainService,
-    private toastService: ToastService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly domainService: DomainService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {

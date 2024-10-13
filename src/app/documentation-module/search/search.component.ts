@@ -14,15 +14,15 @@ import { SearchDocsResponse } from '../model/searchdocs-response';
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   query: string;
   searchDocsResponse: SearchDocsResponse;
   loading = true;
 
   constructor(
-    private searchDocsService: SearchDocsService,
-    private route: ActivatedRoute
+    private readonly searchDocsService: SearchDocsService,
+    private readonly route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {

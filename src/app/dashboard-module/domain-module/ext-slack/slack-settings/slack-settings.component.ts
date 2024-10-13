@@ -19,7 +19,7 @@ export class SlackSettingsComponent {
   updatable = false;
 
   loadSettings(slack: Slack): void {
-    this.settings = Object.assign({}, slack.settings);
+    this.settings = { ...slack.settings };
     this.ignoredEnvironments = Object.assign([], slack.settings.ignored_environments);
     this.frozenEnvironments = Object.assign([], slack.settings.frozen_environments);
   }

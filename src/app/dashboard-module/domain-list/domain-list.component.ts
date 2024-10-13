@@ -19,7 +19,7 @@ import { Domain } from 'src/app/model/domain';
   ]
 })
 export class DomainListComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   domains: Domain[];
   collabDomains: Domain[] = [];
@@ -32,11 +32,11 @@ export class DomainListComponent implements OnInit, OnDestroy {
   errorCollab = '';
 
   constructor(
-    private dialog: MatDialog,
-    private adminService: AdminService,
-    private domainService: DomainService,
-    private toastService: ToastService,
-    private errorHandler: RouterErrorHandler
+    private readonly dialog: MatDialog,
+    private readonly adminService: AdminService,
+    private readonly domainService: DomainService,
+    private readonly toastService: ToastService,
+    private readonly errorHandler: RouterErrorHandler
   ) { }
 
   ngOnInit() {

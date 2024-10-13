@@ -20,7 +20,7 @@ import { TeamInvite } from 'src/app/model/team-invite';
     './team-members.component.css']
 })
 export class TeamMembersComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
   @Input() team: Team;
   @Input() updatable = false;
   @Input() creatable = false;
@@ -35,8 +35,8 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(
-    private teamService: TeamService,
-    private toastService: ToastService,
+    private readonly teamService: TeamService,
+    private readonly toastService: ToastService,
     public dialog: MatDialog
   ) { }
 

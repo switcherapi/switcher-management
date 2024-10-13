@@ -24,7 +24,7 @@ import { Types } from 'src/app/model/path-route';
   ]
 })
 export class EnvironmentsComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   environments: Environment[];
 
@@ -46,13 +46,13 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   fetch = true;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private domainRouteService: DomainRouteService,
-    private adminService: AdminService,
-    private envService: EnvironmentService,
-    private toastService: ToastService,
-    private _modalService: NgbModal,
-    private errorHandler: RouterErrorHandler
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly domainRouteService: DomainRouteService,
+    private readonly adminService: AdminService,
+    private readonly envService: EnvironmentService,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal,
+    private readonly errorHandler: RouterErrorHandler
   ) { 
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;

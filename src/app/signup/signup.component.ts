@@ -14,7 +14,7 @@ import { ConsoleLogger } from '../_helpers/console-logger';
     styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit, OnDestroy {
-    private unsubscribe = new Subject<void>();
+    private readonly unsubscribe = new Subject<void>();
 
     loginForm: FormGroup;
     loading = false;
@@ -26,9 +26,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     status = '';
 
     constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private authService: AuthService
+        private readonly formBuilder: FormBuilder,
+        private readonly router: Router,
+        private readonly authService: AuthService
     ) {
         if (this.authService.isLoggedIn()) {
             this.router.navigate(['/dashboard']);

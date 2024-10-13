@@ -22,7 +22,7 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
     './team-preview.component.css']
 })
 export class TeamPreviewComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -41,10 +41,10 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   toggleSectionStyle = 'toggle-style deactivated';
 
   constructor(
-    private router: Router,
-    private _modalService: NgbModal,
-    private teamService: TeamService,
-    private toastService: ToastService
+    private readonly router: Router,
+    private readonly _modalService: NgbModal,
+    private readonly teamService: TeamService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {

@@ -18,7 +18,7 @@ export class AuthService {
   public static readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
-  private currentTokenSubject: BehaviorSubject<string>;
+  private readonly currentTokenSubject: BehaviorSubject<string>;
   public currentToken: Observable<string>;
 
   public userInfoSubject: BehaviorSubject<any>;
@@ -26,7 +26,7 @@ export class AuthService {
 
   loggedUser: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN));
     this.currentToken = this.currentTokenSubject.asObservable();
 

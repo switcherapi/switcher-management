@@ -11,14 +11,14 @@ import { ConsoleLogger } from '../_helpers/console-logger';
   styleUrls: ['./app-version.component.css']
 })
 export class AppVersionComponent implements OnInit {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @Input() apiVersion: string;
   apiReleaseTime: string;
   smVersion: string;
   smReleaseTime: string;
 
-  constructor(private authService: AuthService) { }
+  constructor(private readonly authService: AuthService) { }
 
   ngOnInit(): void {
     this.smVersion = environment.version;

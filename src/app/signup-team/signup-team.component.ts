@@ -12,7 +12,7 @@ import { TeamService } from '../services/team.service';
   styleUrls: ['./signup-team.component.css']
 })
 export class SignupTeamComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   loading = false;
   error = '';
@@ -21,10 +21,10 @@ export class SignupTeamComponent implements OnInit, OnDestroy {
   domain: string;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private teamService: TeamService,
-    private toastService: ToastService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly teamService: TeamService,
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {

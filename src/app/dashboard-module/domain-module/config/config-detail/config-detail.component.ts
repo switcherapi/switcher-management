@@ -34,7 +34,7 @@ import { Config, ConfigRelay } from 'src/app/model/config';
   ]
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
 
@@ -88,16 +88,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   listComponents: string[] = [];
 
   constructor(
-    private domainRouteService: DomainRouteService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private configService: ConfigService,
-    private adminService: AdminService,
-    private strategyService: StrategyService,
-    private componentService: ComponentService,
-    private toastService: ToastService,
-    private _modalService: NgbModal,
-    private dialog: MatDialog
+    private readonly domainRouteService: DomainRouteService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly configService: ConfigService,
+    private readonly adminService: AdminService,
+    private readonly strategyService: StrategyService,
+    private readonly componentService: ComponentService,
+    private readonly toastService: ToastService,
+    private readonly _modalService: NgbModal,
+    private readonly dialog: MatDialog
   ) {
     super();
   }

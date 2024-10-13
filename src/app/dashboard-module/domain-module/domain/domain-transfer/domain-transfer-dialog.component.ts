@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   export class DomainTransferDialogComponent {
   
     constructor(
-      private toastService: ToastService,
+      private readonly toastService: ToastService,
       public dialogRef: MatDialogRef<DomainTransferDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) { }
   

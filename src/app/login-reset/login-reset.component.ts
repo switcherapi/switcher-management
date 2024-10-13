@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./login-reset.component.css']
 })
 export class LoginResetComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   loginForm: FormGroup;
 
@@ -23,10 +23,10 @@ export class LoginResetComponent implements OnInit, OnDestroy {
   recaptcha_token: string;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService
+    private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly authService: AuthService
   ) { }
 
   ngOnInit() {

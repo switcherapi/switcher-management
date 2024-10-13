@@ -22,7 +22,7 @@ import { SwitcherComponent } from 'src/app/model/switcher-component';
   ]
 })
 export class DomainSnapshotComponent implements OnInit, OnDestroy {
-  private unsubscribe = new Subject<void>();
+  private readonly unsubscribe = new Subject<void>();
 
   @BlockUI() blockUI: NgBlockUI;
   
@@ -35,7 +35,7 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
   components: SwitcherComponent[];
   environments: Environment[];
 
-  private domainId: string;
+  private readonly domainId: string;
 
   includeStatus = true;
   includeDescription = true;
@@ -44,10 +44,10 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<DomainSnapshotComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private environmentService: EnvironmentService,
-    private componentService: ComponentService,
-    private domainService: DomainService,
-    private toastService: ToastService
+    private readonly environmentService: EnvironmentService,
+    private readonly componentService: ComponentService,
+    private readonly domainService: DomainService,
+    private readonly toastService: ToastService
   ) { 
     this.domainId = data.domainId;
   }
