@@ -88,6 +88,7 @@ html.dark-mode .dropdown-toggle {
     background: #151515 !important;
 }
 
+html.dark-mode app-ext-gitops .card-body,
 html.dark-mode app-ext-slack .card-body {
     background: white;
 }
@@ -164,6 +165,7 @@ html.dark-mode app-metric .mat-mdc-tab-header,
 html.dark-mode app-strategy-list .mat-mdc-tab-header,
 html.dark-mode app-metric-statistics canvas,
 html.dark-mode app-settings-account .btn-element,
+html.dark-mode app-ext-gitops .card-body,
 html.dark-mode app-ext-slack .card-body,
 html.dark-mode .mat-mdc-dialog-content,
 html.dark-mode .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible,
@@ -224,6 +226,7 @@ html.dark-mode app-metric .nav-item.nav-link,
 html.dark-mode .router-history,
 html.dark-mode .mat-mdc-select-value,
 html.dark-mode .mat-mdc-form-field-infix,
+html.dark-mode .panel-gitops-detail,
 html.dark-mode .panel-slack-detail,
 html.dark-mode p,
 html.dark-mode mat-toolbar span,

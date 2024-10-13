@@ -1,0 +1,40 @@
+h3 {
+    margin-bottom: auto;
+    margin-left: .2rem;
+}
+
+.ticket_stats:hover {
+    color: red;
+    text-decoration: none;
+}
+
+.panel-gitops-detail {
+    display: flex;
+    padding-bottom: 1rem;
+}
+
+.options-section-label {
+    display: initial;
+}
+
+.options-section {
+    bottom: 1rem;
+    position: absolute;
+    right: 1rem;
+}
+
+.card {
+    margin-top: 10px;
+    border: 1px solid #d3d3d3;
+}
+
+@media only screen and (max-width: 570px) {
+    .h-100 {
+        height: auto !important;
+    }
+
+    .options-section {
+        float: right;
+        position: relative;
+    }
+}
