@@ -49,6 +49,17 @@ export class MetricData {
     date: Date;
 }
 
+export class MetricStatisticsRequest {
+    domainId: string;
+    env: string;
+    statistics = 'all';
+    key?: string;
+    type?: string;
+    dateGroupPattern?: string;
+    dateBefore?: string;
+    dateAfter?: string;
+}
+
 class DateTimeStatistics {
     date: string;
     positive: number;

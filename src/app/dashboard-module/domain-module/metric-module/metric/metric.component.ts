@@ -124,8 +124,19 @@ export class MetricComponent implements OnInit, OnDestroy {
   private loadMetricStatistics(environment: string = this.environment, dateBefore?: string, dateAfter?: string): void {
     this.loading = true;
     this.error = '';
-    this.metricService.getMetricStatistics(
-      this.domainId, environment, 'all', this.switcher, this.filterType, this.dateGroupPattern, dateBefore, dateAfter)
+
+    const metricStatisticsRequest = {
+      domainId: this.domainId,
+      env: environment,
+      statistics: 'all',
+      key: this.switcher,
+      type: this.filterType,
+      dateGroupPattern: this.dateGroupPattern,
+      dateBefore: dateBefore,
+      dateAfter: dateAfter
+    };
+
+    this.metricService.getMetricStatistics(metricStatisticsRequest)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: statistics => {

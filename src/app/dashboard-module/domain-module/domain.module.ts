@@ -40,6 +40,7 @@ import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-settings.component';
 import { ExtGitOpsComponent } from './ext-gitops/ext-gitops.component';
 import { GitOpsSettingsComponent } from './ext-gitops/gitops-settings/gitops-settings.component';
+import { GitOpsEnvSelectionComponent } from './ext-gitops/gitops-env-selection/gitops-env-selection.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { GitOpsSettingsComponent } from './ext-gitops/gitops-settings/gitops-set
     ExtSlackComponent,
     SlackSettingsComponent,
     ExtGitOpsComponent,
-    GitOpsSettingsComponent
+    GitOpsSettingsComponent,
+    GitOpsEnvSelectionComponent
   ],
   imports: [
     FormsModule,

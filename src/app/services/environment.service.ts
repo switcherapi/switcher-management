@@ -11,7 +11,7 @@ import { Environment } from '../model/environment';
 })
 export class EnvironmentService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

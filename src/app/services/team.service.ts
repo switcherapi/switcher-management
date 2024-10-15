@@ -13,7 +13,7 @@ import { Admin } from '../model/admin';
 })
 export class TeamService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

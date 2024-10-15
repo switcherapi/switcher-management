@@ -23,8 +23,8 @@ import {
 export class DomainService extends ApiService {
 
   constructor(
-    private http: HttpClient,
-    private apollo: Apollo) {
+    private readonly http: HttpClient,
+    private readonly apollo: Apollo) {
     super();
   }
 

@@ -7,4 +7,10 @@ export class ConsoleLogger {
             console.error(error, object);
         }
     }
+
+    public static printInfo(info: string, object?: any) {
+        if (!environment.production) {
+            console.info(info, object);
+        }
+    }
 }

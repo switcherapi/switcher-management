@@ -11,7 +11,7 @@ import { Settings, SETTINGS_PARAM, Slack, SlackInstallation } from '../model/sla
 })
 export class SlackService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

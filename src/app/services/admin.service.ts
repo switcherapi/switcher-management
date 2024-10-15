@@ -12,7 +12,7 @@ import { ResultPermission } from '../model/permission';
 })
 export class AdminService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

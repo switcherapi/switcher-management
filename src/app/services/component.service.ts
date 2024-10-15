@@ -11,7 +11,7 @@ import { SwitcherComponent } from '../model/switcher-component';
 })
 export class ComponentService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 
