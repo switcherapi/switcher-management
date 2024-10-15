@@ -11,6 +11,7 @@ import { GitOpsAccount } from 'src/app/model/gitops';
 import { MatDialog } from '@angular/material/dialog';
 import { GitOpsEnvSelectionComponent } from './gitops-env-selection/gitops-env-selection.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-ext-gitops',
@@ -43,11 +44,13 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   loading = true;
   featureFlag = false;
   fetch = true;
+  allowUpdate = false;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly featureService: FeatureService,
     private readonly gitOpsService: GitOpsService,
+    private readonly adminService: AdminService,
     private readonly domainRouteService: DomainRouteService,
     private readonly dialog: MatDialog,
     private readonly fb: FormBuilder
@@ -76,12 +79,11 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
     this.formEnvironment.valueChanges.subscribe(value => {
       const account = this.gitOpsAccounts.find(account => account.environment === value);
-      if (account) {
-        this.selectAccount(account);
-      }
+      this.gitOpsSelected = account;
     });
 
     this.domainRouteService.updateView(this.domainName, 0);
+    this.loadPermissions();
     this.updateRoute();
     this.readFeatureFlag();
   }
@@ -130,9 +132,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     }).subscribe({
       next: data => {
         this.featureFlag = data.status;
-        if (this.featureFlag) {
-          this.loadAccounts();
-        }
+        this.loadAccounts();
       },
       error: () => {
         this.loading = false;
@@ -156,6 +156,19 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
           this.detailBodyStyle = 'detail-body ready'
         }
       });
+  }
+
+  private loadPermissions(): void {
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE'], 'ADMIN')
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        data.forEach(perm => {
+          if (perm.action === 'UPDATE') {
+            this.allowUpdate = perm.result === 'ok';
+          }
+        });
+      }
+    );
   }
 
   private updateRoute(): void {
@@ -190,7 +203,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
   private selectAccount(account: GitOpsAccount): void {
     this.gitOpsSelected = account;
-    this.formGroup.patchValue({ environment: account.environment });
+    this.formEnvironment.setValue(account.environment);
   }
   
 }

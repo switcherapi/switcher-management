@@ -17,12 +17,15 @@
         <h3>GitOps Integration</h3>
     </div>
     <div *ngIf="gitOpsAccounts.length === 0">
-        <div class="card-body">
+        <div *ngIf="allowUpdate" class="card-body">
             <p>No GitOps accounts found. Please add a GitOps account to get started.</p>
             <button mat-button class="btn-element" (click)="startNewAccount()">
                 <mat-icon style="font-size: large;">open_in_new</mat-icon>
                 <div class="options-section-label">New Account</div>
             </button>
+        </div>
+        <div *ngIf="!allowUpdate" class="card-body">
+            <p>No GitOps accounts found. Please contact your administrator to add a GitOps account.</p>
         </div>
     </div>
     <div *ngIf="gitOpsAccounts.length > 0" class="container-fluid content-row">
@@ -95,9 +98,9 @@
                             </div>
                         </form>
 
-                        <hr/>
+                        <hr *ngIf="allowUpdate"/>
                         
-                        <div class="options-section">
+                        <div *ngIf="allowUpdate" class="options-section">
                             <button mat-button class="btn-element" (click)="startNewAccount()">
                                 <mat-icon style="font-size: large;">open_in_new</mat-icon>
                                 <div class="options-section-label">New Account</div>

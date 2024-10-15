@@ -42,7 +42,7 @@
                             <img src="assets\slack.svg" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Slack App
                         </button>
-                        <a *ngIf="!hasSlackInstalled()" mat-menu-item style="text-decoration: none;"
+                        <a *ngIf="!hasSlackInstalled() && canInstallSlack()" mat-menu-item style="text-decoration: none;"
                             href="{{ getSlackUrl() }}" target="_parent">
                             <img src="assets\slack.svg" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Install Slack App

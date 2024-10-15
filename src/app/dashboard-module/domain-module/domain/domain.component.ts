@@ -223,11 +223,15 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   hasSlackIntegration(): boolean {
-    return this.slackIntegration && this.transferLabel.length > 0;
+    return this.slackIntegration;
   }
 
   hasSlackInstalled(): boolean {
-    return this.domain.integrations?.slack != undefined;
+    return this.domain?.integrations?.slack != undefined;
+  }
+
+  canInstallSlack(): boolean {
+    return this.transferLabel.length > 0;
   }
 
   navToggled() {
@@ -279,7 +283,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
 
   private checkDomainOwner() {
     const currentUserId = this.authService.getUserInfo('sessionid');
-    if (currentUserId == this.domain.owner) {
+    if (currentUserId == this.domain?.owner) {
       if (this.domain.transfer)
         this.transferLabel = 'Cancel Transfer';
       else

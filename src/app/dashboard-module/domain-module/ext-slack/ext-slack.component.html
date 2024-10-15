@@ -18,21 +18,15 @@
                                 <mat-label>Team Name</mat-label>
                                 <input matInput [value]="slack.team_name" readonly>
                             </mat-form-field>
-                        </div>
-                        <div class="description">
                             <mat-form-field>
                                 <mat-label>Approval Channel</mat-label>
                                 <input matInput [value]="slack.channel" readonly>
                             </mat-form-field>
-                        </div>
-                        <div class="description">
                             <mat-form-field>
                                 <mat-label>Installed At</mat-label>
                                 <input matInput [value]="slack.installed_at * 1000 | date:'medium'" readonly>
                             </mat-form-field>
-                        </div>
-                        <div class="description">
-                            <a class="ticket_stats" style="text-align: center;" title="Clean opened tickets" (click)="onResetTicketsHistory()">
+                            <a *ngIf="allowUpdate" class="ticket_stats" style="text-align: center;" title="Clean opened tickets" (click)="onResetTicketsHistory()">
                                 <mat-icon>fiber_new</mat-icon> {{slack.tickets_opened}}
                             </a>
                         </div>
@@ -45,7 +39,7 @@
                         <h5 class="card-title">Settings</h5>
                         <app-slack-settings></app-slack-settings>
 
-                        <div class="options-section">
+                        <div *ngIf="allowUpdate" class="options-section">
                             <button *ngIf="slackUpdate" mat-button class="btn-element" (click)="onUpdate()">
                                 <mat-icon style="font-size: large;">build</mat-icon>
                                 <div class="options-section-label">Update</div>

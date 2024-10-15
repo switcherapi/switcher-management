@@ -13,6 +13,7 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { SlackSettingsComponent } from './slack-settings/slack-settings.component';
 import { FeatureService } from 'src/app/services/feature.service';
 import { Types } from 'src/app/model/path-route';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-ext-slack',
@@ -35,6 +36,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   loading = true;
   slack: Slack;
   fetch = true;
+  allowUpdate = false;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
@@ -43,6 +45,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     private readonly featureService: FeatureService,
     private readonly toastService: ToastService,
     private readonly router: Router,
+    private readonly adminService: AdminService,
     private readonly _modalService: NgbModal
   ) { 
     this.activatedRoute.parent.params.subscribe(params => {
@@ -58,6 +61,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.domainRouteService.updateView(this.domainName, 0);
+    this.loadPermissions();
     this.loadSlack();
     this.updateRoute();
   }
@@ -170,6 +174,19 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
       this.slackUpdate = feature?.status;
       this.slackSettings.updatable = this.slackUpdate;
     });
+  }
+
+  private loadPermissions(): void {
+    this.adminService.readCollabPermission(this.domainId, ['UPDATE'], 'ADMIN')
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        data.forEach(perm => {
+          if (perm.action === 'UPDATE') {
+            this.allowUpdate = perm.result === 'ok';
+          }
+        });
+      }
+    );
   }
 
   private updateRoute(): void {
