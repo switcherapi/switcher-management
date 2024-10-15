@@ -5,8 +5,8 @@ import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class PwaService {
-    constructor(private swUpdate: SwUpdate, 
-        private snackbar: MatSnackBar) {
+    constructor(private readonly swUpdate: SwUpdate, 
+        private readonly snackbar: MatSnackBar) {
     }
 
     checkForUpdate(): void {

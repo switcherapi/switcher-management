@@ -11,7 +11,7 @@ import { Observable } from "rxjs";
 })
 export class FeatureService extends ApiService {
 
-    private http: HttpClient;
+    private readonly http: HttpClient;
 
     constructor(handler: HttpBackend) {
       super();

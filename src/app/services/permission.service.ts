@@ -14,8 +14,8 @@ import { permissionQuery } from '../model/graphql-schemas';
 export class PermissionService extends ApiService {
 
   constructor(
-    private http: HttpClient,
-    private apollo: Apollo) {
+    private readonly http: HttpClient,
+    private readonly apollo: Apollo) {
     super();
   }
 

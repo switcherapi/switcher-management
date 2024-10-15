@@ -12,7 +12,7 @@ import { History } from '../model/history';
 })
 export class GroupService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
   

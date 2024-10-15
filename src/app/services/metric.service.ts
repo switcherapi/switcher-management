@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { Metric, MetricStatistics } from '../model/metric';
+import { Metric, MetricStatistics, MetricStatisticsRequest } from '../model/metric';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetricService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 
@@ -32,9 +32,9 @@ export class MetricService extends ApiService {
     return this.http.get<Metric>(`${environment.apiUrl}/metric/data`, { params }).pipe(catchError(super.handleError));
   }
 
-  public getMetricStatistics(domainId: string , env: string, statistics = 'all', key?: string, type?: string, 
-      dateGroupPattern?: string, dateBefore?: string, dateAfter?: string): Observable<MetricStatistics> {
+  public getMetricStatistics(metricStatisticsRequest: MetricStatisticsRequest): Observable<MetricStatistics> {
     const params: any = {}
+    const { domainId, env, statistics, key, type, dateGroupPattern, dateBefore, dateAfter } = metricStatisticsRequest;
 
     params.environment = env;
     params.domainid = domainId;

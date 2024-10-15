@@ -13,7 +13,7 @@ import { History } from '../model/history';
 })
 export class StrategyService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 
