@@ -113,18 +113,25 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     const element = this.permissions.filter(p => p.id === this.config.id)[0];
     this.updatable = element.permissions.find(p => p.action === 'UPDATE').result === 'ok';
     this.removable = element.permissions.find(p => p.action === 'DELETE').result === 'ok';
-    this.setEnvStatusControl(
-      element.permissions.find(p => p.action === 'UPDATE_ENV_STATUS').result === 'ok' ||
-      element.permissions.find(p => p.action === 'UPDATE').result === 'ok'
-    );
+    
+    if (this.isEnvStatusChangeAllowed(element)) {
+      this.enableEnvStatusControl();
+    } else {
+      this.disableEnvStatusControl();
+    }
   }
 
-  private setEnvStatusControl(enable: boolean): void {
-    if (enable) {
-      this.toggleSectionStyle = 'toggle-section';
-    } else {
-      this.environmentStatusSelection.disable({ onlySelf: true });
-    }
+  private enableEnvStatusControl(): void {
+    this.toggleSectionStyle = 'toggle-section';
+  }
+
+  private disableEnvStatusControl(): void {
+    this.environmentStatusSelection.disable({ onlySelf: true });
+  }
+
+  private isEnvStatusChangeAllowed(element: Permissions): boolean {
+    return element.permissions.find(p => p.action === 'UPDATE_ENV_STATUS').result === 'ok' ||
+      element.permissions.find(p => p.action === 'UPDATE').result === 'ok'
   }
 
 }
