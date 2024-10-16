@@ -1,17 +1,17 @@
-import { OnDestroy, Component, OnInit, ViewChild } from '@angular/core';
+import { OnDestroy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { GitOpsSettingsComponent } from './gitops-settings/gitops-settings.component';
 import { Types } from 'src/app/model/path-route';
 import { FeatureService } from 'src/app/services/feature.service';
 import { GitOpsService } from 'src/app/services/gitops.service';
-import { GitOpsAccount } from 'src/app/model/gitops';
+import { buildNewGitOpsAccount, GitOpsAccount } from 'src/app/model/gitops';
 import { MatDialog } from '@angular/material/dialog';
 import { GitOpsEnvSelectionComponent } from './gitops-env-selection/gitops-env-selection.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
+import { GitOpsUpdateTokensComponent } from './gitops-update-tokens/gitops-update-tokens.component';
 
 @Component({
   selector: 'app-ext-gitops',
@@ -25,17 +25,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
   detailBodyStyle = 'detail-body loading';
 
-  @ViewChild(GitOpsSettingsComponent) 
-  gitOpsSettings: GitOpsSettingsComponent;
-
   formGroup: FormGroup;
-  formEnvironment = new FormControl();
-  formRepository = new FormControl();
-  formBranch = new FormControl();
-  formToken = new FormControl();
-  formSettingsActive = new FormControl();
-  formSettingsWindow = new FormControl();
-  formSettingsForcePrune = new FormControl();
 
   gitOpsAccounts: GitOpsAccount[] = [];
   gitOpsSelected: GitOpsAccount;
@@ -67,22 +57,8 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.formGroup = this.fb.group({
-      environment: this.formEnvironment,
-      repository: this.formRepository,
-      branch: this.formBranch,
-      token: this.formToken,
-      settingsActive: this.formSettingsActive,
-      settingsWindow: this.formSettingsWindow,
-      settingsForcePrune: this.formSettingsForcePrune
-    });
-
-    this.formEnvironment.valueChanges.subscribe(value => {
-      const account = this.gitOpsAccounts.find(account => account.environment === value);
-      this.gitOpsSelected = account;
-    });
-
     this.domainRouteService.updateView(this.domainName, 0);
+    this.formInit();
     this.loadPermissions();
     this.updateRoute();
     this.readFeatureFlag();
@@ -93,7 +69,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  startNewAccount(): void {
+  onStartNewAccount(): void {
     const dialogRef = this.dialog.open(GitOpsEnvSelectionComponent, {
       width: '400px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
@@ -112,15 +88,43 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
       }
 
       if (result) {
-        const account = this.buildNewAccount(result.environment);
+        const account = buildNewGitOpsAccount(result.environment, this.domainId, this.domainName);
         this.gitOpsAccounts.push(account);
         this.selectAccount(account);
       }
     });
   }
 
+  onUpdateTokens(): void {
+    const dialogRef = this.dialog.open(GitOpsUpdateTokensComponent, {
+      width: '400px',
+      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      data: { 
+        environments: this.gitOpsAccounts
+          .filter(account => account.ID)
+          .map(account => account.environment)
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('result', result);
+      }
+    });
+  }
+
   getDomainEnvironments(): string[] {
     return this.gitOpsAccounts.map(account => account.environment);
+  }
+
+  private formInit(): void {
+    this.formGroup = this.fb.group({
+      environment: new FormControl('')
+    });
+
+    this.formGroup.get('environment').valueChanges.subscribe(value => {
+      this.gitOpsSelected = this.gitOpsAccounts.find(account => account.environment === value);
+    });
   }
 
   private readFeatureFlag(): void {
@@ -178,32 +182,9 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private buildNewAccount(environment: string): GitOpsAccount {
-    return {
-      environment,
-      repository: '',
-      branch: '',
-      token: '',
-      domain: {
-        id: this.domainId,
-        name: this.domainName,
-        version: 0,
-        lastcommit: '',
-        lastdate: '',
-        status: 'Pending',
-        message: 'Creating GitOps Account'
-      },
-      settings: {
-        active: true,
-        window: '1m',
-        forceprune: false
-      }
-    };
-  }
-
   private selectAccount(account: GitOpsAccount): void {
     this.gitOpsSelected = account;
-    this.formEnvironment.setValue(account.environment);
+    this.formGroup.get('environment').setValue(account.environment);
   }
   
 }

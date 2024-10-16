@@ -23,3 +23,26 @@ export class GitOpsSettings {
     window: string;
     forceprune: boolean;
 }
+
+export function buildNewGitOpsAccount(environment: string, domainId: string, domainName: string): GitOpsAccount {
+    return {
+      environment,
+      repository: '',
+      branch: '',
+      token: '',
+      domain: {
+        id: domainId,
+        name: domainName,
+        version: 0,
+        lastcommit: '',
+        lastdate: '',
+        status: 'Pending',
+        message: 'Creating GitOps Account'
+      },
+      settings: {
+        active: true,
+        window: '1m',
+        forceprune: false
+      }
+    };
+  }

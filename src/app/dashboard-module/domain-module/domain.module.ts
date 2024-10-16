@@ -39,8 +39,8 @@ import { RelayDetailComponent, RelayVerificationDialogComponent } from './config
 import { ExtSlackComponent } from './ext-slack/ext-slack.component';
 import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-settings.component';
 import { ExtGitOpsComponent } from './ext-gitops/ext-gitops.component';
-import { GitOpsSettingsComponent } from './ext-gitops/gitops-settings/gitops-settings.component';
 import { GitOpsEnvSelectionComponent } from './ext-gitops/gitops-env-selection/gitops-env-selection.component';
+import { GitOpsUpdateTokensComponent } from './ext-gitops/gitops-update-tokens/gitops-update-tokens.component';
 
 @NgModule({
   declarations: [
@@ -74,8 +74,8 @@ import { GitOpsEnvSelectionComponent } from './ext-gitops/gitops-env-selection/g
     ExtSlackComponent,
     SlackSettingsComponent,
     ExtGitOpsComponent,
-    GitOpsSettingsComponent,
-    GitOpsEnvSelectionComponent
+    GitOpsEnvSelectionComponent,
+    GitOpsUpdateTokensComponent
   ],
   imports: [
     FormsModule,

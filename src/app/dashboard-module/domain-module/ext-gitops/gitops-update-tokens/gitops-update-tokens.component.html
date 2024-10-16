@@ -1,6 +1,6 @@
 <h4 mat-dialog-title>
     <mat-toolbar class="dialog-header">
-        <span>New GitOps Account</span>
+        <span>Update Token(s)</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
             <mat-icon mat-list-icon>close</mat-icon>
@@ -13,11 +13,15 @@
             <div class="description">
                 <mat-form-field>
                     <mat-label>Environment selection</mat-label>
-                    <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
-                        <mat-option *ngFor="let environment of environments" [value]="environment.name">
-                            {{environment.name}}
+                    <mat-select cdkFocusInitial multiple [formControl]="formGroup.get('environment')">
+                        <mat-option *ngFor="let environment of environments" [value]="environment">
+                            {{environment}}
                         </mat-option>
                     </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Token</mat-label>
+                    <input matInput [formControl]="formGroup.get('token')">
                 </mat-form-field>
             </div>
         </div>
@@ -26,7 +30,7 @@
 <div mat-dialog-actions style="float: right;">
     <button class="btn-save" mat-button (click)="onSave(data)" cdkFocusInitial>
         <mat-icon>save</mat-icon>
-        <div class="options-section-label"> Select</div>
+        <div class="options-section-label"> Update</div>
     </button>
     <button class="btn-cancel" mat-button (click)="onCancel()">
         <mat-icon>close</mat-icon>

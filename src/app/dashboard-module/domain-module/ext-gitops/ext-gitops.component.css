@@ -8,14 +8,32 @@ h3 {
     padding-bottom: 1rem;
 }
 
-.options-section-label {
-    vertical-align: baseline !important;
-    display: contents;
-}
-
 .card {
     margin-top: 10px;
+    margin-bottom: 2rem;
     border: 1px solid #d3d3d3;
+}
+
+#gitopsMenu {
+    color: #2d3135 !important;
+    border: 1px solid #999;
+    margin-left: 1rem;
+    right: 2rem;
+    position: absolute;
+}
+
+.gitops-menu-item {
+    outline: none;
+}
+
+.options-section-label {
+    display: initial;
+}
+
+.options-section {
+    bottom: 1rem;
+    position: absolute;
+    right: 1rem;
 }
 
 @media only screen and (max-width: 570px) {
@@ -25,14 +43,14 @@ h3 {
 
     .options-section {
         margin: auto;
+        position: relative;
+        bottom: auto;
+        right: auto;
     }
 
-    .options-section-label {
-        display: none;
+    #gitopsMenu {
+        right: unset;
+        position: relative;
     }
 
-    .options-section .mat-mdc-button .mat-icon {
-        margin-right: unset !important;
-        margin-left: unset !important;
-    }
 }

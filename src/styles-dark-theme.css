@@ -58,12 +58,13 @@ html.dark-mode .mat-mdc-toolbar,
 html.dark-mode .mat-mdc-tab-label .mat-mdc-tab-label-content,
 html.dark-mode .mat-mdc-select-arrow,
 html.dark-mode .mat-mdc-select,
+html.dark-mode #gitopsMenu,
 html.dark-mode #modal-title {
     color: #959393 !important;
 }
 
 html.dark-mode .header-section.activated:hover,
-html.dark-mode .mat-mdc-button:not(#domainOptions):not(#domainCreateBtn):not(.mat-mdc-button-disabled),
+html.dark-mode .mat-mdc-button:not(#gitopsMenu):not(#domainOptions):not(#domainCreateBtn):not(.mat-mdc-button-disabled),
 html.dark-mode .doc-title,
 html.dark-mode .svg-inline--fa,
 html.dark-mode .new-feature-text,

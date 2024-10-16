@@ -13,13 +13,27 @@
 </div>
 <div *ngIf="featureFlag" [ngClass]="detailBodyStyle">
     <div class="panel-gitops-detail">
-        <img src="assets\gitops.png" style="width: 40px;" alt="gitops" />
+        <img src="assets\gitops.png" style="width: 40px; height: 40px;" alt="gitops" />
         <h3>GitOps Integration</h3>
+        <button *ngIf="allowUpdate" id="gitopsMenu" mat-button [matMenuTriggerFor]="belowMenu">
+            <mat-icon class="menu-icon">arrow_drop_down</mat-icon>
+            Options
+        </button>
+        <mat-menu #belowMenu="matMenu" yPosition="below">
+            <button mat-menu-item class="gitops-menu-item" (click)="onStartNewAccount()">
+                <mat-icon>open_in_new</mat-icon>
+                New Account
+            </button>
+            <button mat-menu-item class="gitops-menu-item" (click)="onUpdateTokens()">
+                <mat-icon>lock</mat-icon>
+                Update Tokens
+            </button>
+        </mat-menu>
     </div>
     <div *ngIf="gitOpsAccounts.length === 0">
         <div *ngIf="allowUpdate" class="card-body">
             <p>No GitOps accounts found. Please add a GitOps account to get started.</p>
-            <button mat-button class="btn-element" (click)="startNewAccount()">
+            <button mat-button class="btn-element" (click)="onStartNewAccount()">
                 <mat-icon style="font-size: large;">open_in_new</mat-icon>
                 <div class="options-section-label">New Account</div>
             </button>
@@ -56,6 +70,13 @@
                                 <input matInput [value]="gitOpsSelected.domain.version" readonly>
                             </mat-form-field>
                         </div>
+
+                        <div *ngIf="allowUpdate && gitOpsSelected.ID" class="options-section">
+                            <button mat-button class="btn-element">
+                                <mat-icon style="font-size: large;">build</mat-icon>
+                                <div class="options-section-label">Force Refresh</div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,52 +85,48 @@
                     <div class="card-body">
                         <h5 class="card-title">Settings</h5>
 
-                        <form [formGroup]="formGroup">
-                            <div class="description">
-                                <mat-form-field>
-                                    <mat-label>Environment</mat-label>
-                                    <mat-select [formControl]="formEnvironment">
-                                        <mat-option *ngFor="let environment of getDomainEnvironments()" [value]="environment">
-                                            {{environment}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>Repository</mat-label>
-                                    <input matInput [value]="gitOpsSelected.repository">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>Repository</mat-label>
-                                    <input matInput [value]="gitOpsSelected.branch">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>Token</mat-label>
-                                    <input matInput type="password" [value]="gitOpsSelected.token">
-                                </mat-form-field>
+                        <div class="description">
+                            <mat-form-field>
+                                <mat-label>Environment</mat-label>
+                                <mat-select [formControl]="formGroup.get('environment')">
+                                    <mat-option *ngFor="let environment of getDomainEnvironments()" [value]="environment">
+                                        {{environment}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Repository</mat-label>
+                                <input matInput [value]="gitOpsSelected.repository">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Repository</mat-label>
+                                <input matInput [value]="gitOpsSelected.branch">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Token</mat-label>
+                                <input matInput type="password" [value]="gitOpsSelected.token">
+                            </mat-form-field>
 
-                                <div>
-                                    <mat-form-field>
-                                        <mat-label>Window</mat-label>
-                                        <input matInput [value]="gitOpsSelected.settings.window">
-                                    </mat-form-field>
-                                    <mat-slide-toggle [checked]="gitOpsSelected.settings.active">Active</mat-slide-toggle>
-                                    <mat-slide-toggle [checked]="gitOpsSelected.settings.forceprune" style="padding-left: 1rem;">Force Prune</mat-slide-toggle>
-                                </div>
+                            <div>
+                                <mat-form-field>
+                                    <mat-label>Window</mat-label>
+                                    <input matInput [value]="gitOpsSelected.settings.window">
+                                </mat-form-field>
+                                <mat-slide-toggle [checked]="gitOpsSelected.settings.active">Active</mat-slide-toggle>
+                                <mat-slide-toggle [checked]="gitOpsSelected.settings.forceprune" style="padding-left: 1rem;">Force Prune</mat-slide-toggle>
                             </div>
-                        </form>
+                        </div>
 
-                        <hr *ngIf="allowUpdate"/>
-                        
                         <div *ngIf="allowUpdate" class="options-section">
-                            <button mat-button class="btn-element" (click)="startNewAccount()">
-                                <mat-icon style="font-size: large;">open_in_new</mat-icon>
-                                <div class="options-section-label">New Account</div>
-                            </button>
-                            <button mat-button class="btn-element">
-                                <mat-icon style="font-size: large;">build</mat-icon>
+                            <button *ngIf="gitOpsSelected.ID" mat-button class="btn-element">
                                 <div class="options-section-label">Update</div>
+                                <mat-icon style="font-size: large;">build</mat-icon>
                             </button>
-                            <button mat-button class="btn-element btn-red">
+                            <button *ngIf="!gitOpsSelected.ID" mat-button class="btn-element">
+                                <div class="options-section-label">Create</div>
+                                <mat-icon style="font-size: large;">open_in_new</mat-icon>
+                            </button>
+                            <button *ngIf="gitOpsSelected.ID" mat-button class="btn-element btn-red">
                                 <mat-icon style="font-size: large;">cloud_off</mat-icon>
                                 <div class="options-section-label">Unsubscribe</div>
                             </button>
