@@ -34,7 +34,7 @@ export function buildNewGitOpsAccount(environment: string, domainId: string, dom
         id: domainId,
         name: domainName,
         version: 0,
-        lastcommit: '',
+        lastcommit: 'refresh',
         lastdate: '',
         status: 'Pending',
         message: 'Creating GitOps Account'

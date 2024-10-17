@@ -9,9 +9,11 @@ import { GitOpsService } from 'src/app/services/gitops.service';
 import { buildNewGitOpsAccount, GitOpsAccount } from 'src/app/model/gitops';
 import { MatDialog } from '@angular/material/dialog';
 import { GitOpsEnvSelectionComponent } from './gitops-env-selection/gitops-env-selection.component';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 import { GitOpsUpdateTokensComponent } from './gitops-update-tokens/gitops-update-tokens.component';
+import { windowValidator } from './gitops-validator';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-ext-gitops',
@@ -43,6 +45,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     private readonly adminService: AdminService,
     private readonly domainRouteService: DomainRouteService,
     private readonly dialog: MatDialog,
+    private readonly toastService: ToastService,
     private readonly fb: FormBuilder
   ) { 
     this.activatedRoute.parent.params.subscribe(params => {
@@ -95,6 +98,23 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     });
   }
 
+  onUpdate(): void {
+    if (!this.isValid()) {
+      return;
+    }
+
+    this.toastService.showSuccess('GitOps account updated successfully');
+  }
+
+  onCreate(): void {
+    if (!this.isValid()) {
+      return;
+    }
+
+    this.toastService.showSuccess('GitOps account created successfully');
+    this.gitOpsSelected.ID = 'new';
+  }
+
   onUpdateTokens(): void {
     const dialogRef = this.dialog.open(GitOpsUpdateTokensComponent, {
       width: '400px',
@@ -108,22 +128,68 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('result', result);
+        this.toastService.showSuccess('GitOps account tokens updated successfully');
       }
     });
+  }
+
+  onUnsubscribe(): void {
+    this.gitOpsAccounts.splice(this.gitOpsAccounts.indexOf(this.gitOpsSelected), 1);
+
+    if (this.gitOpsAccounts.length > 0) {
+      this.selectAccount(this.gitOpsAccounts[0]);
+    }
+
+    this.toastService.showSuccess('GitOps account unsubscribed successfully');
+  }
+
+  onForceRefresh(): void {
+    this.gitOpsSelected.domain.lastcommit = 'refresh';
+    this.gitOpsSelected.domain.message = 'Refreshing GitOps Account';
+
+    this.toastService.showSuccess('GitOps account refresh command sent successfully');
+  }
+
+  onReload(): void {
+    this.loading = true;
+    this.detailBodyStyle = 'detail-body loading';
+    
+    this.loadAccounts();
   }
 
   getDomainEnvironments(): string[] {
     return this.gitOpsAccounts.map(account => account.environment);
   }
 
+  hasChanges(): boolean {
+    const gitOpsSelectedForm = this.formGroup.value;
+
+    return this.gitOpsSelected.repository !== gitOpsSelectedForm.repository ||
+      this.gitOpsSelected.branch !== gitOpsSelectedForm.branch ||
+      this.gitOpsSelected.token !== gitOpsSelectedForm.token ||
+      this.gitOpsSelected.settings.active !== gitOpsSelectedForm.active ||
+      this.gitOpsSelected.settings.forceprune !== gitOpsSelectedForm.forceprune ||
+      this.gitOpsSelected.settings.window !== gitOpsSelectedForm.window;
+  }
+
+  canRefresh(): boolean {
+    return this.gitOpsSelected.ID && this.gitOpsSelected.domain.lastcommit !== 'refresh'; 
+  }
+
   private formInit(): void {
     this.formGroup = this.fb.group({
-      environment: new FormControl('')
+      environment: new FormControl('', [Validators.required]),
+      repository: new FormControl('', [Validators.required]),
+      branch: new FormControl('', [Validators.required]),
+      token: new FormControl('', [Validators.required]),
+      active: new FormControl(true),
+      forceprune: new FormControl(false),
+      window: new FormControl('', [windowValidator(), Validators.maxLength(4)]),
     });
 
     this.formGroup.get('environment').valueChanges.subscribe(value => {
       this.gitOpsSelected = this.gitOpsAccounts.find(account => account.environment === value);
+      this.selectAccount(this.gitOpsSelected, false);
     });
   }
 
@@ -182,9 +248,39 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private selectAccount(account: GitOpsAccount): void {
+  private selectAccount(account: GitOpsAccount, selectEnv = true): void {
     this.gitOpsSelected = account;
-    this.formGroup.get('environment').setValue(account.environment);
+
+    this.formGroup.patchValue({
+      repository: account.repository,
+      branch: account.branch,
+      token: account.token,
+      active: account.settings.active,
+      forceprune: account.settings.forceprune,
+      window: account.settings.window
+    });
+
+    if (selectEnv) {
+      this.formGroup.patchValue({
+        environment: account.environment
+      });
+    }
   }
-  
+
+  private isValid(): boolean {
+    if (!this.formGroup.valid) {
+      return false
+    }
+
+    const gitOpsSelectedForm = this.formGroup.value;
+    
+    this.gitOpsSelected.repository = gitOpsSelectedForm.repository;
+    this.gitOpsSelected.branch = gitOpsSelectedForm.branch;
+    this.gitOpsSelected.token = gitOpsSelectedForm.token;
+    this.gitOpsSelected.settings.active = gitOpsSelectedForm.active;
+    this.gitOpsSelected.settings.forceprune = gitOpsSelectedForm.forceprune;
+    this.gitOpsSelected.settings.window = gitOpsSelectedForm.window;
+
+    return true;
+  }
 }

@@ -8,10 +8,19 @@ h3 {
     padding-bottom: 1rem;
 }
 
+.options-icon {
+    font-size: large;
+}
+
 .card {
     margin-top: 10px;
     margin-bottom: 2rem;
     border: 1px solid #d3d3d3;
+}
+
+.settings-padding {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
 }
 
 #gitopsMenu {
