@@ -2,6 +2,7 @@ export class GitOpsAccount {
     ID?: string;
     repository: string;
     branch?: string;
+    path?: string;
     token?: string;
     environment: string;
     domain: GitOpsDomain;
@@ -29,6 +30,7 @@ export function buildNewGitOpsAccount(environment: string, domainId: string, dom
       environment,
       repository: '',
       branch: '',
+      path: '',
       token: '',
       domain: {
         id: domainId,

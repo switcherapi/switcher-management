@@ -30,7 +30,7 @@
             </button>
         </mat-menu>
     </div>
-    <div *ngIf="!loading && gitOpsAccounts.length === 0">
+    <div *ngIf="!loading && gitOpsAccounts.length === 0" class="header">
         <div *ngIf="allowUpdate" class="card-body">
             <p>No GitOps accounts found. Please add a GitOps account to get started.</p>
             <button mat-button class="btn-element" (click)="onStartNewAccount()">
@@ -45,7 +45,7 @@
     <div *ngIf="!loading && gitOpsAccounts.length > 0" class="container-fluid content-row">
         <div class="row">
             <div class="col-sm-6">
-                <div class="card h-100">
+                <div [ngClass]="accountDetailsStyle">
                     <div class="card-body">
                         <h5 class="card-title">Details</h5>
                         <div class="description">
@@ -73,12 +73,12 @@
 
                         <div class="options-section">
                             <div *ngIf="allowUpdate && canRefresh()">
-                                <button mat-button class="btn-element" (click)="onForceRefresh()">
+                                <button mat-button class="btn-element" (click)="onForceRefresh()" matTooltip="Force refresh current environment account">
                                     <mat-icon style="font-size: large;">cloud_download</mat-icon>
                                     <div class="options-section-label">Force Refresh</div>
                                 </button>
                             </div>
-                            <button mat-button class="btn-element" (click)="onReload()">
+                            <button mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
                                 <mat-icon style="font-size: large;">refresh</mat-icon>
                                 <div class="options-section-label">Reload</div>
                             </button>
@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="card h-100">
+                <div [ngClass]="accountSettingsStyle">
                     <div class="card-body">
                         <h5 class="card-title">Settings</h5>
 
@@ -104,10 +104,18 @@
                                 <mat-label>Repository</mat-label>
                                 <input matInput [formControl]="formGroup.get('repository')" [value]="gitOpsSelected.repository">
                             </mat-form-field>
-                            <mat-form-field>
-                                <mat-label>Branch</mat-label>
-                                <input matInput [formControl]="formGroup.get('branch')" [value]="gitOpsSelected.branch">
-                            </mat-form-field>
+                            <div class="container-fluid content-row">
+                                <div class="row">
+                                    <mat-form-field class="col-sm-6">
+                                        <mat-label>Branch</mat-label>
+                                        <input matInput [formControl]="formGroup.get('branch')" [value]="gitOpsSelected.branch">
+                                    </mat-form-field>
+                                    <mat-form-field class="col-sm-6">
+                                        <mat-label>Path</mat-label>
+                                        <input matInput [formControl]="formGroup.get('path')" [value]="gitOpsSelected.path">
+                                    </mat-form-field>
+                                </div>
+                            </div>
                             <mat-form-field>
                                 <mat-label>Token</mat-label>
                                 <input matInput type="password" [formControl]="formGroup.get('token')" [value]="gitOpsSelected.token">
@@ -118,8 +126,14 @@
                                     <mat-label>Window - (s,m,h) greater than 30s</mat-label>
                                     <input matInput [formControl]="formGroup.get('window')" [value]="gitOpsSelected.settings.window">
                                 </mat-form-field>
-                                <mat-slide-toggle [formControl]="formGroup.get('active')" [checked]="gitOpsSelected.settings.active">Active</mat-slide-toggle>
-                                <mat-slide-toggle [formControl]="formGroup.get('forceprune')" [checked]="gitOpsSelected.settings.forceprune" class="settings-padding">Force Prune</mat-slide-toggle>
+                                <mat-slide-toggle 
+                                    [formControl]="formGroup.get('active')" 
+                                    [checked]="gitOpsSelected.settings.active">Active</mat-slide-toggle>
+                                <mat-slide-toggle 
+                                    matTooltip="When enabled allow it to fully synchronize the repository with the API"
+                                    [formControl]="formGroup.get('forceprune')" 
+                                    [checked]="gitOpsSelected.settings.forceprune" 
+                                    class="settings-padding">Force Prune</mat-slide-toggle>
                             </div>
                         </div>
 

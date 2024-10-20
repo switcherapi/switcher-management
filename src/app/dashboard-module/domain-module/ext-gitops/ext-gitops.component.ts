@@ -14,6 +14,8 @@ import { AdminService } from 'src/app/services/admin.service';
 import { GitOpsUpdateTokensComponent } from './gitops-update-tokens/gitops-update-tokens.component';
 import { windowValidator } from './gitops-validator';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 
 @Component({
   selector: 'app-ext-gitops',
@@ -26,6 +28,8 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 export class ExtGitOpsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
   detailBodyStyle = 'detail-body loading';
+  accountDetailsStyle = 'card h-100 header activated';
+  accountSettingsStyle = 'card h-100 header transparent';
 
   formGroup: FormGroup;
 
@@ -46,6 +50,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     private readonly domainRouteService: DomainRouteService,
     private readonly dialog: MatDialog,
     private readonly toastService: ToastService,
+    private readonly modalService: NgbModal,
     private readonly fb: FormBuilder
   ) { 
     this.activatedRoute.parent.params.subscribe(params => {
@@ -113,6 +118,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
     this.toastService.showSuccess('GitOps account created successfully');
     this.gitOpsSelected.ID = 'new';
+    this.selectAccount(this.gitOpsSelected);
   }
 
   onUpdateTokens(): void {
@@ -134,13 +140,20 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   }
 
   onUnsubscribe(): void {
-    this.gitOpsAccounts.splice(this.gitOpsAccounts.indexOf(this.gitOpsSelected), 1);
+    const modalConfirmation = this.modalService.open(NgbdModalConfirmComponent);
+    modalConfirmation.componentInstance.title = `Unsubscribe account for ${this.gitOpsSelected.environment}`;
+    modalConfirmation.componentInstance.question = 'Are you sure you want to delete this GitOps account?';
+    modalConfirmation.result.then((result) => {
+      if (result) {
+        this.gitOpsAccounts.splice(this.gitOpsAccounts.indexOf(this.gitOpsSelected), 1);
 
-    if (this.gitOpsAccounts.length > 0) {
-      this.selectAccount(this.gitOpsAccounts[0]);
-    }
-
-    this.toastService.showSuccess('GitOps account unsubscribed successfully');
+        if (this.gitOpsAccounts.length > 0) {
+          this.selectAccount(this.gitOpsAccounts[0]);
+        }
+    
+        this.toastService.showSuccess('GitOps account unsubscribed successfully');
+      }
+    });
   }
 
   onForceRefresh(): void {
@@ -166,6 +179,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
     return this.gitOpsSelected.repository !== gitOpsSelectedForm.repository ||
       this.gitOpsSelected.branch !== gitOpsSelectedForm.branch ||
+      this.gitOpsSelected.path !== gitOpsSelectedForm.path ||
       this.gitOpsSelected.token !== gitOpsSelectedForm.token ||
       this.gitOpsSelected.settings.active !== gitOpsSelectedForm.active ||
       this.gitOpsSelected.settings.forceprune !== gitOpsSelectedForm.forceprune ||
@@ -181,6 +195,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
       environment: new FormControl('', [Validators.required]),
       repository: new FormControl('', [Validators.required]),
       branch: new FormControl('', [Validators.required]),
+      path: new FormControl(''),
       token: new FormControl('', [Validators.required]),
       active: new FormControl(true),
       forceprune: new FormControl(false),
@@ -249,11 +264,13 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   }
 
   private selectAccount(account: GitOpsAccount, selectEnv = true): void {
+    this.setStatusStyle(account);
     this.gitOpsSelected = account;
 
     this.formGroup.patchValue({
       repository: account.repository,
       branch: account.branch,
+      path: account.path,
       token: account.token,
       active: account.settings.active,
       forceprune: account.settings.forceprune,
@@ -267,6 +284,16 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     }
   }
 
+  private setStatusStyle(account: GitOpsAccount): void {
+    if (account.domain.status === 'Synced') {
+      this.accountDetailsStyle = 'card h-100 header activated';
+    } else if (account.domain.status === 'Error') {
+      this.accountDetailsStyle = 'card h-100 header editing';
+    } else {
+      this.accountDetailsStyle = 'card h-100 header deactivated';
+    }
+  }
+
   private isValid(): boolean {
     if (!this.formGroup.valid) {
       return false
@@ -276,6 +303,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     
     this.gitOpsSelected.repository = gitOpsSelectedForm.repository;
     this.gitOpsSelected.branch = gitOpsSelectedForm.branch;
+    this.gitOpsSelected.path = gitOpsSelectedForm.path;
     this.gitOpsSelected.token = gitOpsSelectedForm.token;
     this.gitOpsSelected.settings.active = gitOpsSelectedForm.active;
     this.gitOpsSelected.settings.forceprune = gitOpsSelectedForm.forceprune;
