@@ -89,7 +89,6 @@ html.dark-mode .dropdown-toggle {
     background: #151515 !important;
 }
 
-html.dark-mode app-ext-gitops .card-body,
 html.dark-mode app-ext-slack .card-body {
     background: white;
 }
@@ -125,6 +124,10 @@ html.dark-mode .header.activated {
 
 html.dark-mode .header.deactivated {
     background: linear-gradient(to right, #9e9e9e 0, #9e9e9e 10px, #fff 10px, #fff 100%) no-repeat;
+}
+
+html.dark-mode .header.transparent {
+    background: linear-gradient(to right,#efefef 0,#e8e8e8 10px,#fff 10px, #fff 100%) no-repeat;
 }
 
 html.dark-mode .header.editing {
@@ -166,7 +169,6 @@ html.dark-mode app-metric .mat-mdc-tab-header,
 html.dark-mode app-strategy-list .mat-mdc-tab-header,
 html.dark-mode app-metric-statistics canvas,
 html.dark-mode app-settings-account .btn-element,
-html.dark-mode app-ext-gitops .card-body,
 html.dark-mode app-ext-slack .card-body,
 html.dark-mode .mat-mdc-dialog-content,
 html.dark-mode .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible,
