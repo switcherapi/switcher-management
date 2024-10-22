@@ -45,6 +45,11 @@ h3 {
     right: 1rem;
 }
 
+.options-spinner {
+    margin: auto;
+    padding-bottom: .5rem;
+}
+
 @media only screen and (max-width: 570px) {
     .h-100 {
         height: auto !important;

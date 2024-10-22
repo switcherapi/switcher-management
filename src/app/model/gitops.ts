@@ -1,3 +1,5 @@
+export const TOKEN_VALUE = '********************************';
+
 export class GitOpsAccount {
     ID?: string;
     repository: string;

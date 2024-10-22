@@ -78,10 +78,15 @@
                                     <div class="options-section-label">Force Refresh</div>
                                 </button>
                             </div>
-                            <button mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
-                                <mat-icon style="font-size: large;">refresh</mat-icon>
-                                <div class="options-section-label">Reload</div>
-                            </button>
+                            <div style="width: 6.5rem; display: flex;">
+                                <div *ngIf="reloading" class="options-spinner">
+                                    <mat-spinner [diameter]="25"></mat-spinner>
+                                </div>
+                                <button *ngIf="!reloading" mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
+                                    <mat-icon style="font-size: large;">refresh</mat-icon>
+                                    <div class="options-section-label">Reload</div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
