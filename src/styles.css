@@ -203,6 +203,11 @@ nav {
 
 .container .card-header {
   padding: .75rem 1.25rem;
+  border-radius: 10px 10px 0 0;
+}
+
+.card {
+  border-radius: 10px 10px 0 0;
 }
 
 .col-md-6 {

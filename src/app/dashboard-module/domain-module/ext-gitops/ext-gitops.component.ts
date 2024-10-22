@@ -6,7 +6,7 @@ import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
 import { FeatureService } from 'src/app/services/feature.service';
 import { GitOpsService } from 'src/app/services/gitops.service';
-import { buildNewGitOpsAccount, GitOpsAccount } from 'src/app/model/gitops';
+import { buildNewGitOpsAccount, GitOpsAccount, TOKEN_VALUE } from 'src/app/model/gitops';
 import { MatDialog } from '@angular/material/dialog';
 import { GitOpsEnvSelectionComponent } from './gitops-env-selection/gitops-env-selection.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -27,6 +27,7 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 })
 export class ExtGitOpsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
+
   detailBodyStyle = 'detail-body loading';
   accountDetailsStyle = 'card h-100 header activated';
   accountSettingsStyle = 'card h-100 header transparent';
@@ -38,6 +39,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   domainId: string;
   domainName: string;
   loading = true;
+  reloading = false;
   featureFlag = false;
   fetch = true;
   allowUpdate = false;
@@ -108,7 +110,17 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.toastService.showSuccess('GitOps account updated successfully');
+    this.gitOpsService.updateGitOpsAccount(this.gitOpsSelected)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          this.selectAccount(data, false);
+          this.toastService.showSuccess('GitOps account updated successfully');
+        },
+        error: () => {
+          this.toastService.showError('Failed to update GitOps account');
+        }
+      });
   }
 
   onCreate(): void {
@@ -157,17 +169,38 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   }
 
   onForceRefresh(): void {
-    this.gitOpsSelected.domain.lastcommit = 'refresh';
-    this.gitOpsSelected.domain.message = 'Refreshing GitOps Account';
-
-    this.toastService.showSuccess('GitOps account refresh command sent successfully');
+    this.gitOpsService.forceRefreshGitOpsAccount(this.gitOpsSelected)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          this.selectAccount(data, false);
+          this.toastService.showSuccess('GitOps account refresh command sent successfully');
+        },
+        error: () => {
+          this.toastService.showError('Failed to send refresh command to GitOps account');
+        }
+      });
   }
 
   onReload(): void {
-    this.loading = true;
-    this.detailBodyStyle = 'detail-body loading';
+    this.reloading = true;
     
-    this.loadAccounts();
+    this.gitOpsService.findGitOpsAccount(this.gitOpsSelected)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          setTimeout(() => {
+            if (data.length) {
+              this.selectAccount(data[0], false);
+            }
+
+            this.reloading = false;
+          }, 5000);
+        },
+        error: () => {
+          this.reloading = false;
+        }
+      });
   }
 
   getDomainEnvironments(): string[] {
@@ -265,6 +298,9 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
   private selectAccount(account: GitOpsAccount, selectEnv = true): void {
     this.setStatusStyle(account);
+
+    // Mask token value
+    account.token = account.token?.length ? TOKEN_VALUE : '';
     this.gitOpsSelected = account;
 
     this.formGroup.patchValue({
