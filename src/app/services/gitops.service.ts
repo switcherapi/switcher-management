@@ -3,7 +3,7 @@ import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs';
-import { GitOpsAccount, TOKEN_VALUE } from '../model/gitops';
+import { GitOpsAccount, GitOpsAccountTokenResponse, TOKEN_VALUE } from '../model/gitops';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,32 @@ export class GitOpsService extends ApiService {
 
   constructor(private readonly http: HttpClient) {
     super();
+  }
+
+  public subscribeGitOpsAccount(gitOpsAccount: GitOpsAccount) {
+    return this.http.post<GitOpsAccount>(`${environment.apiUrl}/gitops/v1/account/subscribe`, {
+      environment: gitOpsAccount.environment,
+      repository: gitOpsAccount.repository,
+      branch: gitOpsAccount.branch,
+      path: gitOpsAccount.path,
+      token: gitOpsAccount.token,
+      settings: gitOpsAccount.settings,
+      domain: {
+        id: gitOpsAccount.domain.id,
+        name: gitOpsAccount.domain.name
+      }
+    })
+      .pipe(catchError(super.handleError));
+  }
+
+  public unsubscribeGitOpsAccount(gitOpsAccount: GitOpsAccount) {
+    return this.http.post<GitOpsAccount>(`${environment.apiUrl}/gitops/v1/account/unsubscribe`, {
+      environment: gitOpsAccount.environment,
+      domain: {
+        id: gitOpsAccount.domain.id
+      }
+    })
+      .pipe(catchError(super.handleError));
   }
 
   public findGitOpsAccounts(domainId: string) {
@@ -43,11 +69,22 @@ export class GitOpsService extends ApiService {
       branch: gitOpsAccount.branch,
       path: gitOpsAccount.path,
       token: gitOpsAccount.token === TOKEN_VALUE ? '' : gitOpsAccount.token,
+      settings: gitOpsAccount.settings,
       domain: {
         id: gitOpsAccount.domain.id,
         name: gitOpsAccount.domain.name
-      },
-      settings: gitOpsAccount.settings,
+      }
+    })
+      .pipe(catchError(super.handleError));
+  }
+
+  public updateGitOpsAccountTokens(token: string, domainId: string, environments: string[]) {
+    return this.http.put<GitOpsAccountTokenResponse>(`${environment.apiUrl}/gitops/v1/account/tokens`, {
+      token,
+      environments,
+      domain: {
+        id: domainId
+      }
     })
       .pipe(catchError(super.handleError));
   }

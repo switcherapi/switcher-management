@@ -21,7 +21,7 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
   selector: 'app-ext-gitops',
   templateUrl: './ext-gitops.component.html',
   styleUrls: [
-    '../common/css/detail.component.css', 
+    '../common/css/detail.component.css',
     './ext-gitops.component.css'
   ]
 })
@@ -54,7 +54,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     private readonly toastService: ToastService,
     private readonly modalService: NgbModal,
     private readonly fb: FormBuilder
-  ) { 
+  ) {
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
@@ -83,7 +83,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(GitOpsEnvSelectionComponent, {
       width: '400px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
-      data: { 
+      data: {
         excludeEnvironments: this.gitOpsAccounts
           .filter(account => account.ID)
           .map(account => account.environment),
@@ -92,10 +92,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.gitOpsAccounts = this.gitOpsAccounts.filter(account => account.ID);
-      if (this.gitOpsAccounts.length > 0) {
-        this.selectAccount(this.gitOpsAccounts[0]);
-      }
+      this.purgePendingAccounts();
 
       if (result) {
         const account = buildNewGitOpsAccount(result.environment, this.domainId, this.domainName);
@@ -128,16 +125,30 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.toastService.showSuccess('GitOps account created successfully');
-    this.gitOpsSelected.ID = 'new';
-    this.selectAccount(this.gitOpsSelected);
+    this.gitOpsService.subscribeGitOpsAccount(this.gitOpsSelected)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: data => {
+          this.selectAccount(data, false);
+          this.gitOpsAccounts = this.gitOpsAccounts.map(account => account.environment === data.environment ? data : account);
+
+          this.toastService.showSuccess('GitOps account created successfully');
+        },
+        error: () => {
+          this.toastService.showError('Failed to create GitOps account');
+        }
+      });
+  }
+
+  onDiscard(): void {
+    this.purgePendingAccounts();
   }
 
   onUpdateTokens(): void {
     const dialogRef = this.dialog.open(GitOpsUpdateTokensComponent, {
       width: '400px',
       minWidth: window.innerWidth < 450 ? '95vw' : '',
-      data: { 
+      data: {
         environments: this.gitOpsAccounts
           .filter(account => account.ID)
           .map(account => account.environment)
@@ -146,7 +157,20 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.toastService.showSuccess('GitOps account tokens updated successfully');
+        this.gitOpsService.updateGitOpsAccountTokens(result.token, this.domainId, result.environments)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: data => {
+              if (data?.result) {
+                this.toastService.showSuccess('GitOps account tokens updated successfully');
+              } else {
+                this.toastService.showError('Failed to update GitOps account tokens: ' + data?.message);
+              }
+            },
+            error: () => {
+              this.toastService.showError('Failed to update GitOps account tokens');
+            }
+          });
       }
     });
   }
@@ -157,13 +181,22 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = 'Are you sure you want to delete this GitOps account?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.gitOpsAccounts.splice(this.gitOpsAccounts.indexOf(this.gitOpsSelected), 1);
+        this.gitOpsService.unsubscribeGitOpsAccount(this.gitOpsSelected)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: () => {
+              this.gitOpsAccounts.splice(this.gitOpsAccounts.indexOf(this.gitOpsSelected), 1);
 
-        if (this.gitOpsAccounts.length > 0) {
-          this.selectAccount(this.gitOpsAccounts[0]);
-        }
-    
-        this.toastService.showSuccess('GitOps account unsubscribed successfully');
+              if (this.gitOpsAccounts.length > 0) {
+                this.selectAccount(this.gitOpsAccounts[0]);
+              }
+              
+              this.toastService.showSuccess('GitOps account unsubscribed successfully');
+            },
+            error: () => {
+              this.toastService.showError('Failed to unsubscribe GitOps account');
+            }
+          });
       }
     });
   }
@@ -174,6 +207,8 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: data => {
           this.selectAccount(data, false);
+          this.gitOpsAccounts = this.gitOpsAccounts.map(account => account.environment === data.environment ? data : account);
+
           this.toastService.showSuccess('GitOps account refresh command sent successfully');
         },
         error: () => {
@@ -184,16 +219,17 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
   onReload(): void {
     this.reloading = true;
-    
+
     this.gitOpsService.findGitOpsAccount(this.gitOpsSelected)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
+          if (data.length) {
+            this.selectAccount(data[0], false);
+            this.gitOpsAccounts = this.gitOpsAccounts.map(account => account.environment === data[0].environment ? data[0] : account);
+          }
+          
           setTimeout(() => {
-            if (data.length) {
-              this.selectAccount(data[0], false);
-            }
-
             this.reloading = false;
           }, 5000);
         },
@@ -220,7 +256,11 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   }
 
   canRefresh(): boolean {
-    return this.gitOpsSelected.ID && this.gitOpsSelected.domain.lastcommit !== 'refresh'; 
+    return this.gitOpsSelected.ID && this.gitOpsSelected.domain.lastcommit !== 'refresh';
+  }
+
+  canReload(): boolean {
+    return this.gitOpsSelected.ID?.length && !this.reloading;
   }
 
   private formInit(): void {
@@ -242,8 +282,8 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   }
 
   private readFeatureFlag(): void {
-    this.featureService.isEnabled({ 
-      feature: 'GITOPS_INTEGRATION', 
+    this.featureService.isEnabled({
+      feature: 'GITOPS_INTEGRATION',
       parameters: {
         value: this.domainId
       }
@@ -286,12 +326,12 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
           }
         });
       }
-    );
+      );
   }
 
   private updateRoute(): void {
     if (this.fetch) {
-      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
+      this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE,
         `/dashboard/domain/${this.domainName}/${this.domainId}`);
     }
   }
@@ -336,7 +376,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     }
 
     const gitOpsSelectedForm = this.formGroup.value;
-    
+
     this.gitOpsSelected.repository = gitOpsSelectedForm.repository;
     this.gitOpsSelected.branch = gitOpsSelectedForm.branch;
     this.gitOpsSelected.path = gitOpsSelectedForm.path;
@@ -346,5 +386,12 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     this.gitOpsSelected.settings.window = gitOpsSelectedForm.window;
 
     return true;
+  }
+
+  private purgePendingAccounts(): void {
+    this.gitOpsAccounts = this.gitOpsAccounts.filter(account => account.ID);
+    if (this.gitOpsAccounts.length > 0) {
+      this.selectAccount(this.gitOpsAccounts[0]);
+    }
   }
 }
