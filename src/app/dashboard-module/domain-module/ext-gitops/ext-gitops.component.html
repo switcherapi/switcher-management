@@ -82,7 +82,7 @@
                                 <div *ngIf="reloading" class="options-spinner">
                                     <mat-spinner [diameter]="25"></mat-spinner>
                                 </div>
-                                <button *ngIf="!reloading" mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
+                                <button *ngIf="canReload()" mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
                                     <mat-icon style="font-size: large;">refresh</mat-icon>
                                     <div class="options-section-label">Reload</div>
                                 </button>
@@ -149,7 +149,11 @@
                             </button>
                             <button *ngIf="!gitOpsSelected.ID" mat-button class="btn-element" (click)="onCreate()">
                                 <div class="options-section-label">Create</div>
-                                <mat-icon style="font-size: large;">open_in_new</mat-icon>
+                                <mat-icon style="font-size: large;">save</mat-icon>
+                            </button>
+                            <button *ngIf="!gitOpsSelected.ID" mat-button class="btn-element" (click)="onDiscard()">
+                                <div class="options-section-label">Discard</div>
+                                <mat-icon style="font-size: large;">close</mat-icon>
                             </button>
                             <button *ngIf="gitOpsSelected.ID" mat-button class="btn-element btn-red" (click)="onUnsubscribe()">
                                 <mat-icon style="font-size: large;">cloud_off</mat-icon>
