@@ -15,7 +15,7 @@ import { MarkdownService } from 'ngx-markdown';
 })
 export class MetricsComponent extends MarkdownInjector {
 
-  constructor(private markdownComponentService: MarkdownService) {
+  constructor(private readonly markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/metrics.md');
   }
 

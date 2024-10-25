@@ -17,6 +17,7 @@ import { ShortcutsComponent } from './docs/shortcuts.component';
 import { RelayComponent } from './docs/relay.component';
 import { SlackInstallationDocsComponent } from './docs/slack-installation.component';
 import { SlackFeaturesDocsComponent } from './docs/slack-features.component';
+import { GitOpsDocsComponent } from './docs/gitops.component';
 
 const routes: Routes = [
 
@@ -35,6 +36,7 @@ const routes: Routes = [
       { path: 'api', component: ApiComponent },
       { path: 'shortcuts', component: ShortcutsComponent },
       { path: 'relay', component: RelayComponent },
+      { path: 'gitops', component: GitOpsDocsComponent },
       { path: 'slackinstallation', component: SlackInstallationDocsComponent },
       { path: 'slackfeatures', component: SlackFeaturesDocsComponent }
     ]  

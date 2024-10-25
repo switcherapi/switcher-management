@@ -15,7 +15,7 @@ import { MarkdownInjector } from './markdown-injector.component';
 })
 export class ComponentsComponent extends MarkdownInjector {
 
-  constructor(private markdownComponentService: MarkdownService) {
+  constructor(private readonly markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/components.md');
   }
 

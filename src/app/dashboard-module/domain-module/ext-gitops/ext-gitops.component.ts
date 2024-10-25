@@ -12,7 +12,7 @@ import { GitOpsEnvSelectionComponent } from './gitops-env-selection/gitops-env-s
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 import { GitOpsUpdateTokensComponent } from './gitops-update-tokens/gitops-update-tokens.component';
-import { windowValidator } from './gitops-validator';
+import { pathValidator, windowValidator } from './gitops-validator';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
@@ -268,7 +268,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
       environment: new FormControl('', [Validators.required]),
       repository: new FormControl('', [Validators.required]),
       branch: new FormControl('', [Validators.required]),
-      path: new FormControl(''),
+      path: new FormControl('', [pathValidator(), Validators.maxLength(255)]),
       token: new FormControl('', [Validators.required]),
       active: new FormControl(true),
       forceprune: new FormControl(false),

@@ -15,7 +15,7 @@ import { MarkdownService } from 'ngx-markdown';
 })
 export class SetupComponent extends MarkdownInjector {
 
-  constructor(private markdownComponentService: MarkdownService) {
+  constructor(private readonly markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/setup.md');
   }
 

@@ -15,7 +15,7 @@ import { MarkdownService } from 'ngx-markdown';
 })
 export class SlackFeaturesDocsComponent extends MarkdownInjector {
 
-  constructor(private markdownComponentService: MarkdownService) {
+  constructor(private readonly markdownComponentService: MarkdownService) {
     super(markdownComponentService, 'documentation/slack_features.md');
   }
 

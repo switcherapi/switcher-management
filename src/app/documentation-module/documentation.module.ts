@@ -20,6 +20,7 @@ import { RelayComponent } from './docs/relay.component';
 import { SlackInstallationDocsComponent } from './docs/slack-installation.component';
 import { SlackFeaturesDocsComponent } from './docs/slack-features.component';
 import { MatIconModule } from '@angular/material/icon';
+import { GitOpsDocsComponent } from './docs/gitops.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { MatIconModule } from '@angular/material/icon';
     ShortcutsComponent,
     RelayComponent,
     SlackInstallationDocsComponent,
-    SlackFeaturesDocsComponent
+    SlackFeaturesDocsComponent,
+    GitOpsDocsComponent
   ],
   imports: [
     CommonModule,
