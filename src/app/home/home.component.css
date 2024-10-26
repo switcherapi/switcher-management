@@ -136,11 +136,6 @@
   border-radius: 100px;
 }
 
-.collab-patreon {
-  width: 120px;
-  float: left;
-}
-
 #footer {
   position: absolute;
   width: 100%;
@@ -266,11 +261,6 @@
     display: inline-flex;
     margin-top: 20px;
   }
-
-  .collab-patreon {
-    float: unset;
-  }
-
 }
 
 @media only screen and (max-width: 450px) {

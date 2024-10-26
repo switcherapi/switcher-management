@@ -141,7 +141,6 @@ html.dark-mode .ngb-toasts {
 }
 
 html.dark-mode simple-snack-bar .mat-mdc-button,
-html.dark-mode .collab-patreon,
 html.dark-mode .mat-mdc-ripple {
     filter: invert(100%) hue-rotate(180deg);
 }
