@@ -66,7 +66,7 @@
             </div>
         </section>
     </div>
-    <div *ngIf="environments" class="config-list">
+    <div *ngIf="!loading && environments" class="config-list">
         <hr>
         <app-config-list [childEnvironmentEmitter]="childEnvironmentEmitter" [environments]="environments"></app-config-list>
     </div>

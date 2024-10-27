@@ -2,6 +2,7 @@ import { Admin } from './admin';
 import { Config } from './config';
 
 export class Group {
+  _id: string;
   id: string;
   name: string;
   description: string;

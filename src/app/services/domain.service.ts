@@ -119,9 +119,10 @@ export class DomainService extends ApiService {
     });
   }
 
-  public executeConfigurationTreeQuery(domainId: string, switchers: boolean, groups: boolean, components: boolean) {
-    return this.apollo.watchQuery<any>({
+  public executeConfigurationTreeQuery(domainId: string, switchers: boolean, groups: boolean, components: boolean, forceFetch = false) {
+    return this.apollo.query<any>({
       query: configurationTreeQuery(switchers, groups, components),
+      fetchPolicy: forceFetch ? 'network-only' : 'cache-first',
       variables: { 
         id: domainId,
       }

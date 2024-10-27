@@ -1,6 +1,7 @@
 import { Admin } from "./admin";
 
 export class Config {
+  _id: string;
   id: string;
   key: string;
   description: string;

@@ -1,6 +1,6 @@
 <mat-form-field style="width: 100%;">
     <mat-label>Smart Search</mat-label>
-    <input id="smartSearchInput" #smartSearchInput class="smart-search" matInput (click)="loadComponent()"
+    <input id="smartSearchInput" #smartSearchInput class="smart-search" matInput (keyup)="loadComponent($event)" (click)="loadComponent($event)"
         matTooltip="Use 'S:' for Switchers, 'G:' for Groups and 'C:' for Components"
         readonly="{{ lockFilter }}"
         [formControl]="smartSearchFormControl"
