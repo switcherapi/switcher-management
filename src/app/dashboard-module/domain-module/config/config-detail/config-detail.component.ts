@@ -111,11 +111,19 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.domainId = params.domainid;
       this.domainName = params.name;
     });
-
+    
     this.route.params.subscribe(params => {
       this.groupId = params.groupid;
       this.configId = params.configid;
-      this.loadConfig();
+
+      const configFromState = this.router.getCurrentNavigation()?.extras.state?.element;
+      if (configFromState) {
+        this.config = JSON.parse(configFromState);
+        this.updateData(this.config);
+        this.loadStrategies();
+      } else {
+        this.loadConfig();
+      }
     });
 
     this.hasNewStrategy = false;
@@ -307,7 +315,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if ($event.reloadPermissions) {
       this.readPermissionToObject();
     }
-
+    
     this.loadStrategies();
     this.disableMetrics = this.isMetricDisabled();
   }

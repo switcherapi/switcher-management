@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { takeUntil, startWith, map } from 'rxjs/operators';
+import { takeUntil, startWith, map, debounceTime } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
-import { QueryRef } from 'apollo-angular';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl } from '@angular/forms';
 import { DomainService } from 'src/app/services/domain.service';
+import { Group } from 'src/app/model/group';
+import { ApolloQueryResult } from '@apollo/client';
 
 @Component({
   selector: 'element-autocomplete',
@@ -25,13 +26,18 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   smartSearchFormControl = new FormControl('');
   searchListItems: any[] = [];
   searchedValues: Observable<string[]>;
-  private query: QueryRef<any>;
+  private query: Observable<ApolloQueryResult<any>>;
 
   constructor(
     private readonly domainService: DomainService
   ) { }
 
   ngOnInit() {
+    this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.filter(value))
+    );
+    
     if (this.value) {
       this.smartSearchFormControl.setValue(this.value);
     }
@@ -42,11 +48,11 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  loadComponent() {
-    if (!this.query) {
-      this.loadKeys(this.parentComponent.getDomainId());
+  loadComponent($event: any) {
+    if ($event instanceof MouseEvent) {
+      this.loadKeys(this.parentComponent.getDomainId(), true);
     } else {
-      this.query?.refetch();
+      this.loadKeys(this.parentComponent.getDomainId());
     }
   }
 
@@ -54,14 +60,15 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
     return `[${item.name}]: ${item.description}`;
   }
 
-  private loadKeys(domainId: string): void {
-    if (!domainId)
+  private loadKeys(domainId: string, forceRefresh = false): void {
+    if (!domainId) {
       return;
+    }
 
     this.query = this.domainService.executeConfigurationTreeQuery(
-      domainId, this.switchers, this.groups, this.components);
+      domainId, this.switchers, this.groups, this.components, forceRefresh);
 
-    this.query.valueChanges.pipe(takeUntil(this.unsubscribe))
+    this.query.pipe(takeUntil(this.unsubscribe), debounceTime(500))
       .subscribe({
         next: result => {
           if (result?.data?.domain?.group) {
@@ -77,16 +84,12 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
           ConsoleLogger.printError(error);
         }
       });
-
-    this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this.filter(value))
-    );
   }
 
-  private loadByComponent(groups?: any) {
-    if (!this.components)
+  private loadByComponent(groups?: Group[]) {
+    if (!this.components) {
       return;
+    }
 
     const filtered = groups?.map(
       group => group.config?.map(config => {
@@ -103,9 +106,10 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       this.searchListItems.push(...filtered.flat());
   }
 
-  private loadBySwitcher(groups: any) {
-    if (!this.switchers || !groups)
+  private loadBySwitcher(groups: Group[]) {
+    if (!this.switchers || !groups) {
       return;
+    }
 
     const filtered = groups.map(
       group => group.config?.map(config => {
@@ -122,9 +126,10 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       this.searchListItems.push(...filtered.flat());
   }
 
-  private loadByGroup(groups: any) {
-    if (!this.groups || !groups)
+  private loadByGroup(groups: Group[]) {
+    if (!this.groups || !groups) {
       return;
+    }
       
     const filtered = groups.map(group => {
       return {

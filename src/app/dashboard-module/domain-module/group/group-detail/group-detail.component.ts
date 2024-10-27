@@ -68,8 +68,16 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
 
     this.route.params.subscribe(params => {
+      this.detailBodyStyle = 'detail-body loading';
+      this.loading = true;
       this.groupId = params.groupid;
-      this.loadGroup();
+      
+      const groupFromState = this.router.getCurrentNavigation()?.extras.state?.element;
+      if (groupFromState) {
+        this.updateData(JSON.parse(groupFromState));
+      } else {
+        this.loadGroup();
+      }
     });
   }
 

@@ -38,7 +38,7 @@ export class DetailComponent {
     }
 
     protected showResumed(value: string, length: number): string {
-        return  DataUtils.showResumed(value, length);
+        return DataUtils.showResumed(value, length);
     }
 
     scrollToElement($element: any): void {
