@@ -59,6 +59,14 @@ export const snapshotQuery = (includeStatusByEnv = true, includeDescription = tr
                 operation
                 values
               }
+              relay {
+                relay_type
+                relay_method
+                relay_endpoint
+                activated
+                ${includeDescription ? 'description' : ''}
+                ${includeStatusByEnv ? STATUS_BY_ENV : ''}
+              }
               components
             }
           }
