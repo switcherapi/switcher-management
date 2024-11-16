@@ -73,7 +73,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loading = true;
-        this.configService.createConfig(this.groupId, result.key, result.description)
+        this.configService.createConfig(this.groupId, result.key.toUpperCase(), result.description)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: data => {
