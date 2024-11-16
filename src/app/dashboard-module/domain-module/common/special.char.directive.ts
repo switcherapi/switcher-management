@@ -10,7 +10,7 @@ export class SpecialCharacterDirective {
     @Input() autoLower = false;
     @Input() autoUnderscore = false;
 
-    constructor(private el: ElementRef) { }
+    constructor(private readonly el: ElementRef) { }
 
     @HostListener('input', ['$event']) onInput(event) {
         if (this.autoUpper)
