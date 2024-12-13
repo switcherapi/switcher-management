@@ -31,13 +31,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         private readonly router: Router,
         private readonly authService: AuthService,
         private readonly adminService: AdminService
-    ) {
+    ) { }
+
+    ngOnInit() {
         if (this.authService.isLoggedIn()) {
             this.router.navigate(['/dashboard']);
         }
-    }
 
-    ngOnInit() {
         this.route.queryParams.subscribe(params => {
             const platform =  params['platform'];
             const code =  params['code'];
