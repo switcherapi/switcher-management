@@ -21,7 +21,8 @@ import { Types } from 'src/app/model/path-route';
     '../common/css/list.component.css',
     '../common/css/preview.component.css',
     './environments.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class EnvironmentsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

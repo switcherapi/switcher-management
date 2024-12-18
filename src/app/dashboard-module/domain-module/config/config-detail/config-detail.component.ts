@@ -31,7 +31,8 @@ import { Config, ConfigRelay } from 'src/app/model/config';
   styleUrls: [
     '../../common/css/detail.component.css',
     './config-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

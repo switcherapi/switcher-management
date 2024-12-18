@@ -19,7 +19,8 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
     './strategy-create.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class StrategyCreateComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

@@ -23,7 +23,8 @@ import { DomainService } from 'src/app/services/domain.service';
   styleUrls: [
     '../../common/css/detail.component.css',
     './relay-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class RelayDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
@@ -370,7 +371,8 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   styleUrls: [
     '../../common/css/create.component.css',
     './relay-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class RelayVerificationDialogComponent {
 

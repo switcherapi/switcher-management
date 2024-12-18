@@ -29,6 +29,7 @@ export type RecaptchaErrorParameters = Parameters<NeverUndefined<ReCaptchaV2.Par
   exportAs: "reCaptcha",
   selector: "re-captcha",
   template: ``,
+  standalone: false
 })
 export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   @Input()
@@ -61,9 +62,9 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   private executeRequested: boolean;
 
   constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private loader: RecaptchaLoaderService,
-    private zone: NgZone,
+    private readonly elementRef: ElementRef<HTMLElement>,
+    private readonly loader: RecaptchaLoaderService,
+    private readonly zone: NgZone,
     @Optional() @Inject(RECAPTCHA_SETTINGS) settings?: RecaptchaSettings,
   ) {
     if (settings) {

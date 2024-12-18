@@ -11,7 +11,8 @@ import { MarkdownService } from 'ngx-markdown';
     </div>
     <markdown [data]="markdown"></markdown>
   `,
-  styleUrls: ['../documentation/documentation.component.css']
+  styleUrls: ['../documentation/documentation.component.css'],
+  standalone: false
 })
 export class HomeComponent extends MarkdownInjector {
 

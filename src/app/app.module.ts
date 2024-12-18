@@ -21,7 +21,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './signup/signup.component';
 
-import { RecaptchaModule, RecaptchaFormsModule } from './ng-recaptcha-module';
+import { RecaptchaModule, RecaptchaFormsModule } from '../libs/ng-recaptcha-module';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 import { LocationStrategy, PathLocationStrategy, CommonModule } from '@angular/common';
@@ -34,7 +34,7 @@ import { environment } from '../environments/environment';
 import { PwaService } from './services/pwa.service';
 import { SlackAuthComponent } from './slack-auth/slack-auth.component';
 import { AppVersionComponent } from './app-version/app-version.component';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from '../libs/ng2-charts/src/lib/ng-charts.provider';
 
 @NgModule({
     imports: [

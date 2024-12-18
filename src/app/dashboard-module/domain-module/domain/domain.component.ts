@@ -26,7 +26,8 @@ import { FeatureService } from 'src/app/services/feature.service';
 @Component({
   selector: 'app-domain',
   templateUrl: './domain.component.html',
-  styleUrls: ['./domain.component.css']
+  styleUrls: ['./domain.component.css'],
+  standalone: false
 })
 export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete {
 

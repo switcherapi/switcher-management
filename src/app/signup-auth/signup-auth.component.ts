@@ -9,7 +9,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-signup-auth',
   templateUrl: './signup-auth.component.html',
-  styleUrls: ['./signup-auth.component.css']
+  styleUrls: ['./signup-auth.component.css'],
+  standalone: false
 })
 export class SignupAuthComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

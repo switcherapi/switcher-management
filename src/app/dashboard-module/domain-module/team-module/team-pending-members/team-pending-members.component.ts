@@ -15,7 +15,9 @@ import { TeamService } from 'src/app/services/team.service';
   templateUrl: './team-pending-members.component.html',
   styleUrls: [
     '../../common/css/detail.component.css',
-    './team-pending-members.component.css']
+    './team-pending-members.component.css'
+  ],
+  standalone: false
 })
 export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

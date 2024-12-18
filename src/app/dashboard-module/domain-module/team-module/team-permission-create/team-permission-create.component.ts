@@ -16,7 +16,8 @@ import { EnvironmentService } from 'src/app/services/environment.service';
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
     './team-permission-create.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

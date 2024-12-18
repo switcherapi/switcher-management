@@ -21,7 +21,8 @@ import { AdminService } from 'src/app/services/admin.service';
   styleUrls: [
     '../common/css/detail.component.css', 
     './ext-slack.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

@@ -11,7 +11,8 @@ import { ConsoleLogger } from '../_helpers/console-logger';
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.css']
+    styleUrls: ['./signup.component.css'],
+    standalone: false
 })
 export class SignupComponent implements OnInit, OnDestroy {
     private readonly unsubscribe = new Subject<void>();
@@ -29,13 +30,13 @@ export class SignupComponent implements OnInit, OnDestroy {
         private readonly formBuilder: FormBuilder,
         private readonly router: Router,
         private readonly authService: AuthService
-    ) {
+    ) { }
+
+    ngOnInit() {
         if (this.authService.isLoggedIn()) {
             this.router.navigate(['/dashboard']);
         }
-    }
 
-    ngOnInit() {
         this.loginForm = this.formBuilder.group({
             name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],

@@ -26,7 +26,7 @@ import { ToasterModule } from 'src/app/_helpers/toaster/toaster.module';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
-import { BaseChartDirective } from 'ng2-charts';
+import { BaseChartDirective } from '../../../libs/ng2-charts/src/lib/base-chart.directive';
 import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
 import { TeamInviteDialogComponent } from './team-module/team-invite-dialog/team-invite-dialog.component';

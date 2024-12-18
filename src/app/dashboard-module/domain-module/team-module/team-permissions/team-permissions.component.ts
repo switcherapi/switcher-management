@@ -20,7 +20,8 @@ import { PermissionService } from 'src/app/services/permission.service';
     '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
     './team-permissions.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class TeamPermissionsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

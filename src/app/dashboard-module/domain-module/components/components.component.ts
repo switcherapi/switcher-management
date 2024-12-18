@@ -23,7 +23,8 @@ import { Types } from 'src/app/model/path-route';
     '../common/css/list.component.css',
     '../common/css/preview.component.css',
     './components.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ComponentsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
@@ -260,7 +261,8 @@ export class ComponentsComponent implements OnInit, OnDestroy {
   styleUrls: [
     '../common/css/create.component.css',
     './components.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ComponentEditDialogComponent {
 

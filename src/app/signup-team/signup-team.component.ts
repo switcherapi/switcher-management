@@ -9,7 +9,8 @@ import { TeamService } from '../services/team.service';
 @Component({
   selector: 'app-signup-team',
   templateUrl: './signup-team.component.html',
-  styleUrls: ['./signup-team.component.css']
+  styleUrls: ['./signup-team.component.css'],
+  standalone: false
 })
 export class SignupTeamComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

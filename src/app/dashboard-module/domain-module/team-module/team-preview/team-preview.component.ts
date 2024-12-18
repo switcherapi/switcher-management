@@ -19,7 +19,9 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
   styleUrls: [
     '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
-    './team-preview.component.css']
+    './team-preview.component.css'
+  ],
+  standalone: false
 })
 export class TeamPreviewComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

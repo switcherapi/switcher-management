@@ -9,7 +9,8 @@ import { DomainService } from 'src/app/services/domain.service';
 @Component({
   selector: 'signup-domain',
   templateUrl: './signup-domain.component.html',
-  styleUrls: ['./signup-domain.component.css']
+  styleUrls: ['./signup-domain.component.css'],
+  standalone: false
 })
 export class SignupDomainComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

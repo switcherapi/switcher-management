@@ -8,7 +8,9 @@ import { environment } from 'src/environments/environment';
     templateUrl: 'team-invite-dialog.html',
     styleUrls: [
       '../../common/css/create.component.css',
-      '../team-members/team-members.component.css']
+      '../team-members/team-members.component.css'
+    ],
+    standalone: false
   })
   export class TeamInviteDialogComponent {
   

@@ -10,7 +10,8 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-login-reset',
   templateUrl: './login-reset.component.html',
-  styleUrls: ['./login-reset.component.css']
+  styleUrls: ['./login-reset.component.css'],
+  standalone: false
 })
 export class LoginResetComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

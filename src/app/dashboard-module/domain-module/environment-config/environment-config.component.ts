@@ -13,7 +13,9 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   templateUrl: './environment-config.component.html',
   styleUrls: [
     '../common/css/detail.component.css',
-    './environment-config.component.css']
+    './environment-config.component.css'
+  ],
+  standalone: false
 })
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

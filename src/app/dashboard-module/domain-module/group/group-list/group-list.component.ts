@@ -24,7 +24,8 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   styleUrls: [
     '../../common/css/list.component.css', 
     './group-list.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy {
   permissions: Permissions[];

@@ -10,7 +10,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: [
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
-    './gitops-update-tokens.component.css']
+    './gitops-update-tokens.component.css'
+  ],
+  standalone: false
 })
 export class GitOpsUpdateTokensComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

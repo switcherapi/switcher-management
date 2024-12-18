@@ -8,7 +8,8 @@ import { Settings, Slack } from 'src/app/model/slack';
   templateUrl: './slack-settings.component.html',
   styleUrls: [
     '../../common/css/detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class SlackSettingsComponent {
 

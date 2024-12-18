@@ -17,7 +17,8 @@ import { Types } from 'src/app/model/path-route';
   styleUrls: [
     '../../common/css/list.component.css',
     './team.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class TeamComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

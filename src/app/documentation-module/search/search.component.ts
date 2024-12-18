@@ -11,7 +11,8 @@ import { SearchDocsResponse } from '../model/searchdocs-response';
   styleUrls: [
     './search.component.css',
     '../documentation/documentation.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

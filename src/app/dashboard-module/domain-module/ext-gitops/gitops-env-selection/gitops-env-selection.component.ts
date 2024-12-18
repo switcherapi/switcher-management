@@ -12,7 +12,9 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   styleUrls: [
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
-    './gitops-env-selection.component.css']
+    './gitops-env-selection.component.css'
+  ],
+  standalone: false
 })
 export class GitOpsEnvSelectionComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
