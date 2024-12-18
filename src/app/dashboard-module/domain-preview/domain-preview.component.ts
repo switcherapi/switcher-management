@@ -8,7 +8,8 @@ import { Domain } from 'src/app/model/domain';
   styleUrls: [
     '../domain-module/common/css/preview.component.css', 
     './domain-preview.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class DomainPreviewComponent implements OnInit {
   @Input() domain: Domain;

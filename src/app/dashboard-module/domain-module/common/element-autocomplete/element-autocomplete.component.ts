@@ -10,7 +10,8 @@ import { ApolloQueryResult } from '@apollo/client';
 @Component({
   selector: 'element-autocomplete',
   templateUrl: './element-autocomplete.component.html',
-  styleUrls: ['./element-autocomplete.component.css']
+  styleUrls: ['./element-autocomplete.component.css'],
+  standalone: false
 })
 export class ElementAutocompleteComponent implements OnInit, OnDestroy {
 

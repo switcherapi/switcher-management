@@ -6,7 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'app-strategy-list',
   templateUrl: './strategy-list.component.html',
-  styleUrls: ['./strategy-list.component.css']
+  styleUrls: ['./strategy-list.component.css'],
+  standalone: false
 })
 export class StrategyListComponent {
   @Input() strategies: BehaviorSubject<Strategy[]>;

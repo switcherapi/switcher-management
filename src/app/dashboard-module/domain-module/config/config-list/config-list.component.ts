@@ -25,7 +25,8 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   styleUrls: [
     '../../common/css/list.component.css', 
     './config-list.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
   permissions: Permissions[];

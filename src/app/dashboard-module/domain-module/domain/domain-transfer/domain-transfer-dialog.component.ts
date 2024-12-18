@@ -8,7 +8,9 @@ import { environment } from 'src/environments/environment';
     templateUrl: 'domain-transfer-dialog.html',
     styleUrls: [
       '../../common/css/create.component.css',
-      './domain-transfer.component.css']
+      './domain-transfer.component.css'
+    ],
+    standalone: false
   })
   export class DomainTransferDialogComponent {
   

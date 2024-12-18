@@ -30,6 +30,7 @@ import { MetricService } from 'src/app/services/metric.service';
       ]),
     ]),
   ],
+  standalone: false
 })
 export class MetricDataComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

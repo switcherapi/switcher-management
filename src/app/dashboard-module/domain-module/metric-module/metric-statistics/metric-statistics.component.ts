@@ -15,7 +15,8 @@ const positiveTemplate = { label: 'True', backgroundColor: '#86c7f395', borderCo
   styleUrls: [
     '../../common/css/detail.component.css',
     './metric-statistics.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class MetricStatisticsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
@@ -358,7 +359,8 @@ export class SwitcherDateTimeGroupedTab {
         display: inline-table;
       }
     }
-  `]
+  `],
+  standalone: false
 })
 export class SwitcherDataStatsDialogComponent {
 

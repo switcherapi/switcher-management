@@ -19,7 +19,8 @@ import { SwitcherComponent } from 'src/app/model/switcher-component';
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
     './domain-snapshot.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class DomainSnapshotComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

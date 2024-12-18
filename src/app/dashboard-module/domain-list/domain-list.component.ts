@@ -16,7 +16,8 @@ import { Domain } from 'src/app/model/domain';
   styleUrls: [
     './domain-list.component.css',
     '../domain-module/common/css/list.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class DomainListComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

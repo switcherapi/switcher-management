@@ -17,7 +17,9 @@ import { TeamInvite } from 'src/app/model/team-invite';
   templateUrl: './team-members.component.html',
   styleUrls: [
     '../../common/css/detail.component.css',
-    './team-members.component.css']
+    './team-members.component.css'
+  ],
+  standalone: false
 })
 export class TeamMembersComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

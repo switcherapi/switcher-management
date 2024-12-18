@@ -21,7 +21,8 @@ import { Types } from 'src/app/model/path-route';
     '../../common/css/preview.component.css',
     '../../common/css/detail.component.css',
     './team-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

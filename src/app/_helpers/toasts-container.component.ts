@@ -21,7 +21,8 @@ import { ToastService } from './toast.service';
   host: {
     'class': 'toast-container position-fixed bottom-0 start-50 translate-middle-x', 
     'style': 'z-index: 1200; margin-bottom: .5rem;'
-  }
+  },
+  standalone: false
 })
 export class ToastsContainerComponent {
   constructor(public toastService: ToastService) { }

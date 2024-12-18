@@ -15,7 +15,8 @@ import { OnElementAutocomplete } from '../../common/element-autocomplete/element
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
     './metric-filter.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutocomplete {
   private readonly unsubscribe = new Subject<void>();

@@ -23,7 +23,8 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
   styleUrls: [
     '../common/css/detail.component.css',
     './ext-gitops.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ExtGitOpsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

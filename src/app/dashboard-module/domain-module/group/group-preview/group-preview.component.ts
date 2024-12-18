@@ -17,7 +17,8 @@ import { Permissions } from 'src/app/model/permission';
   styleUrls: [
     '../../common/css/preview.component.css', 
     './group-preview.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class GroupPreviewComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

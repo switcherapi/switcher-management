@@ -38,6 +38,7 @@ import { Types } from 'src/app/model/path-route';
       ]),
     ]),
   ],
+  standalone: false
 })
 export class ChangelogComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

@@ -11,7 +11,8 @@ import { MarkdownInjector } from './markdown-injector.component';
     </div>
     <markdown [data]="markdown"></markdown>
   `,
-  styleUrls: ['../documentation/documentation.component.css']
+  styleUrls: ['../documentation/documentation.component.css'],
+  standalone: false
 })
 export class ComponentsComponent extends MarkdownInjector {
 

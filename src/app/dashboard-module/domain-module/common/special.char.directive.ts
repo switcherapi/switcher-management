@@ -1,7 +1,8 @@
 import { Directive, Input, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
-    selector: '[special-chars]'
+    selector: '[special-chars]',
+    standalone: false
 })
 export class SpecialCharacterDirective {
 

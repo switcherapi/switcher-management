@@ -16,7 +16,9 @@ import { Router } from '@angular/router';
   templateUrl: './settings-account.component.html',
   styleUrls: [
     '../../dashboard-module/domain-module/common/css/detail.component.css',
-    './settings-account.component.css']
+    './settings-account.component.css'
+  ],
+  standalone: false
 })
 export class SettingsAccountComponent implements OnInit, OnDestroy {
 

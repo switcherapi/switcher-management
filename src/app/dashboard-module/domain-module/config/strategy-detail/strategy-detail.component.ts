@@ -25,7 +25,8 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   styleUrls: [
     '../../common/css/detail.component.css',
     './strategy-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
@@ -387,7 +388,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       padding: 10px;
       border-radius: 20px;
     }
-  `]
+  `],
+  standalone: false
 })
 export class ChangeLogDialogComponent {
 

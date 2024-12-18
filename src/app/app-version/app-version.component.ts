@@ -8,7 +8,8 @@ import { ConsoleLogger } from '../_helpers/console-logger';
 @Component({
   selector: 'app-version',
   templateUrl: './app-version.component.html',
-  styleUrls: ['./app-version.component.css']
+  styleUrls: ['./app-version.component.css'],
+  standalone: false
 })
 export class AppVersionComponent implements OnInit {
   private readonly unsubscribe = new Subject<void>();

@@ -13,7 +13,8 @@ import { ToastService } from '../_helpers/toast.service';
 @Component({
   selector: 'app-slack-auth',
   templateUrl: './slack-auth.component.html',
-  styleUrls: ['./slack-auth.component.css']
+  styleUrls: ['./slack-auth.component.css'],
+  standalone: false
 })
 export class SlackAuthComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

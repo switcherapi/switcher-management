@@ -22,7 +22,8 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   styleUrls: [
     '../../common/css/detail.component.css', 
     './group-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

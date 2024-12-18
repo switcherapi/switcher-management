@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: [
     '../../dashboard-module/domain-module/common/css/detail.component.css',
     './search-item.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class SearchItemComponent {
 

@@ -17,7 +17,9 @@ import { Types } from 'src/app/model/path-route';
   templateUrl: './metric.component.html',
   styleUrls: [
     '../../common/css/detail.component.css',
-    './metric.component.css']
+    './metric.component.css'
+  ],
+  standalone: false
 })
 export class MetricComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

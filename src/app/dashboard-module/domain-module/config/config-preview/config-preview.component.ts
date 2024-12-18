@@ -17,7 +17,8 @@ import { Config } from 'src/app/model/config';
   styleUrls: [
     '../../common/css/preview.component.css', 
     './config-preview.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class ConfigPreviewComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

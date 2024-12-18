@@ -11,7 +11,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     '../domain-module/common/css/detail.component.css',
     '../domain-module/common/css/create.component.css',
     './domain-create.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class DomainCreateComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

@@ -23,7 +23,8 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: [
     '../common/css/detail.component.css', 
     './domain-detail.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();

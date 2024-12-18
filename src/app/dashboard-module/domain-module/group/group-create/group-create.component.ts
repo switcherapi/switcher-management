@@ -11,7 +11,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     '../../common/css/detail.component.css',
     '../../common/css/create.component.css',
     './group-create.component.css'
-  ]
+  ],
+  standalone: false
 })
 export class GroupCreateComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
