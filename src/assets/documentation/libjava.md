@@ -102,6 +102,7 @@ switcher.truststore.password -> Truststore password
 
 # Time in ms given to the API to respond - 3000 default value
 switcher.timeout -> Time in ms given to the API to respond - 3000 default value
+switcher.poolsize -> Number of threads used to execute the API - 2 default value
 
 (Java 8 applications only)
 switcher.regextimeout -> Time in ms given to Timed Match Worker used for local Regex (ReDoS safety mechanism) - 3000 default value
@@ -128,7 +129,29 @@ Or simply define a custom file properties to load everything from it.
 MyAppFeatures.loadProperties("switcherapi-test");
 ```
 
+Or using configureClient() with @PostConstruct to handle all the configuration build boilerplate.
+
+```java
+@ConfigurationProperties
+class MySwitcherClientConfig extends SwitcherContextBase {
+
+	@SwitcherKey
+	public static final String MY_SWITCHER = "MY_SWITCHER";
+	
+	@Override
+	@PostConstruct
+	public void configureClient() {
+		// you can add pre-configuration here
+		super.configureClient();
+		// you can add post-configuration here
+	}
+}
+```
+
 2. Defining your features
+
+Create a class that extends SwitcherContext if you are loading the configuration from the switcherapi.properties file.
+Or use SwitcherContextBase to define the configuration using the ContextBuilder or SwitcherConfig.
 
 ```java
 public class MyAppFeatures extends SwitcherContext {
@@ -155,13 +178,13 @@ Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
 switcher.isItOn();
 ```
 
-Or, you can submit the switcher request and get the criteria response, which contains result, reason and metadata that can be used for any additional verification.
+Or, you can submit the switcher request and get the switcher result, which contains result, reason and metadata that can be used for any additional verification.
 
 ```java
-CriteriaResponse response = switcher.submit();
-response.isItOn(); // true/false
-response.getReason(); // Descriptive response based on result value
-response.getMetadata(YourMetadata.class); // Additional information
+SwitcherResult result = switcher.submit();
+result.isItOn(); // true/false
+result.getReason(); // Descriptive response based on result value
+result.getMetadata(YourMetadata.class); // Additional information
 ```
 
 2. **Strategy validation - preparing input**
@@ -292,11 +315,21 @@ Write automated tests using this built-in test annotation to guide your test sce
 ```java
 Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01);
 
-SwitcherExecutor.assume(FEATURE01, false);
+SwitcherBypass.assume(FEATURE01, false);
 switcher.isItOn(); // 'false'
 
-SwitcherExecutor.forget(FEATURE01);
+SwitcherBypass.forget(FEATURE01);
 switcher.isItOn(); // Now, it's going to return the result retrieved from the API or the Snapshot file
+```
+
+For more complex scenarios where you need to test features based on specific inputs, you can use test conditions.
+
+```java
+Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01).checkValue("My value").build();
+
+SwitcherBypass.assume(FEATURE01, true).when(StrategyValidator.VALUE, "My value");
+switcher.isItOn(); // 'true'
+
 ```
 
 </br>
@@ -345,6 +378,34 @@ void testMyFeature() {
    assertTrue(instance.myFeature());
 }
 ```
+
+Using SwitcherTestWhen to define a specific condition for the test:
+```java
+@SwitcherTest(key = MY_SWITCHER, when = @SwitcherTestWhen(value = "My value"))
+void testMyFeature() {
+   assertTrue(instance.myFeature());
+}
+```
+
+#### Native Image
+Switcher Client is fully compatible with GraalVM Native Image out of the box.
+</br>Here is how you can configure the SDK to work with GraalVM:
+
+```java
+@ConfigurationProperties
+public class MyNativeAppFeatureFlags extends SwitcherContextBase {
+	
+    public static final String MY_SWITCHER = "MY_SWITCHER";
+	
+    @Override 
+    @PostConstruct 
+    protected void configureClient() {
+        super.registerSwitcherKeys(MY_SWITCHER);
+        super.configureClient();
+    }
+}
+```
+Check out more code examples in the [Switcher Tutorials](https://github.com/switcherapi/switcherapi-tutorials) repository.
 
 * * *
 
