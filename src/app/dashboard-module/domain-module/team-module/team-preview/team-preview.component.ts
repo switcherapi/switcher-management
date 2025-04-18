@@ -5,13 +5,13 @@ import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { TeamComponent } from '../team/team.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
+import { BasicComponent } from '../../common/basic-component';
 
 @Component({
   selector: 'app-team-preview',
@@ -23,10 +23,8 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
   ],
   standalone: false
 })
-export class TeamPreviewComponent implements OnInit, OnDestroy {
+export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   @Input() team: Team;
   @Input() teamListComponent: TeamComponent;
@@ -47,7 +45,9 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
     private readonly _modalService: NgbModal,
     private readonly teamService: TeamService,
     private readonly toastService: ToastService
-  ) { }
+  ) { 
+    super();
+  }
 
   ngOnInit() {
     this.nameFormControl.setValue(this.team.name);
@@ -71,13 +71,13 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${this.team.name}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.blockUI.start('Removing team...');
+        this.setBlockUI(true, 'Removing team...');
         this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: team => {
               if (team) {
                 this.teamListComponent.removeTeamFromList(team);
-                this.blockUI.stop();
+                this.setBlockUI(false);
                 this.toastService.showSuccess(`Team removed with success`);
               }
             },
@@ -102,7 +102,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
 
       if (valid) {
         this.editing = false;
-        this.blockUI.start('Updating Team...');
+        this.setBlockUI(true, 'Updating team...');
         this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
@@ -114,7 +114,7 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(event: MatSlideToggleChange) {
-    this.blockUI.start('Updating status...');
+    this.setBlockUI(true, 'Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -130,14 +130,14 @@ export class TeamPreviewComponent implements OnInit, OnDestroy {
   }
 
   private onError(error: any, message: string): void {
-    this.blockUI.stop();
+    this.setBlockUI(false);
     ConsoleLogger.printError(error);
     this.toastService.showError(message);
   }
 
   private onSuccess(team: Team): void {
     this.team = team;
-    this.blockUI.stop();
+    this.setBlockUI(false);
     this.toastService.showSuccess(`Team updated with success`);
   }
 

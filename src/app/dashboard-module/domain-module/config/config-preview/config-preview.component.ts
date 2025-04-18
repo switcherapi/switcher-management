@@ -4,12 +4,12 @@ import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ConfigService } from 'src/app/services/config.service';
 import { Permissions } from 'src/app/model/permission';
 import { Config } from 'src/app/model/config';
+import { BasicComponent } from '../../common/basic-component';
 
 @Component({
   selector: 'app-config-preview',
@@ -20,10 +20,8 @@ import { Config } from 'src/app/model/config';
   ],
   standalone: false
 })
-export class ConfigPreviewComponent implements OnInit, OnDestroy {
+export class ConfigPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   @Input() domainId: string;
   @Input() domainName: string;
@@ -49,7 +47,9 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly configService: ConfigService,
     private readonly toastService: ToastService
-  ) { }
+  ) { 
+    super();
+  }
 
   ngOnInit() {
     this.readPermissionToObject();
@@ -69,7 +69,7 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
-    this.blockUI.start('Updating environment...');
+    this.setBlockUI(true, 'Updating environment...');
     this.config.activated[this.selectedEnv] = event.checked;
     this.selectEnvironment(this.selectedEnv);
 
@@ -79,12 +79,12 @@ export class ConfigPreviewComponent implements OnInit, OnDestroy {
         next: data => {
           if (data) {
             this.config.activated = data.activated;
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
         }

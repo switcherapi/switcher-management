@@ -4,12 +4,12 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Group } from 'src/app/model/group';
 import { GroupService } from 'src/app/services/group.service';
 import { Permissions } from 'src/app/model/permission';
+import { BasicComponent } from '../../common/basic-component';
 
 @Component({
   selector: 'app-group-preview',
@@ -20,10 +20,8 @@ import { Permissions } from 'src/app/model/permission';
   ],
   standalone: false
 })
-export class GroupPreviewComponent implements OnInit, OnDestroy {
+export class GroupPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
   
   @Input() domainId: string;
   @Input() domainName: string;
@@ -48,7 +46,9 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly groupService: GroupService,
     private readonly toastService: ToastService
-  ) { }
+  ) { 
+    super();
+  }
 
   ngOnInit() {
     this.readPermissionToObject();
@@ -78,7 +78,7 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
-    this.blockUI.start('Updating environment...');
+    this.setBlockUI(true, 'Updating environment...');
     this.group.activated[this.selectedEnv] = event.checked;
     this.selectEnvironment(this.selectedEnv);
 
@@ -88,12 +88,12 @@ export class GroupPreviewComponent implements OnInit, OnDestroy {
         next: data => {
           if (data) {
             this.group.activated = data.activated;
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
         }

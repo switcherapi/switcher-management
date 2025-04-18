@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AdminService } from 'src/app/services/admin.service';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -10,6 +9,7 @@ import { DomainService } from 'src/app/services/domain.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { Router } from '@angular/router';
+import { BasicComponent } from 'src/app/dashboard-module/domain-module/common/basic-component';
 
 @Component({
   selector: 'app-settings-account',
@@ -20,10 +20,8 @@ import { Router } from '@angular/router';
   ],
   standalone: false
 })
-export class SettingsAccountComponent implements OnInit, OnDestroy {
-
+export class SettingsAccountComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-  @BlockUI() blockUI: NgBlockUI;
 
   accountForm: FormGroup;
   resetSuccess: string;
@@ -40,10 +38,12 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly domainService: DomainService,
     private readonly formBuilder: FormBuilder,
-    private readonly _modalService: NgbModal) { }
+    private readonly _modalService: NgbModal) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.blockUI.start('Loading...');
+    this.setBlockUI(true);
 
     this.accountForm = this.formBuilder.group({
       name: ['', Validators.required]
@@ -51,7 +51,7 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
 
     this.loadDomains();
     this.loadAdmin();
-    this.blockUI.stop();
+    this.setBlockUI(false);
   }
 
   ngOnDestroy() {
@@ -64,7 +64,7 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.blockUI.start('Loading...');
+    this.setBlockUI(true);
     this.adminService.updateAdmin(this.f.name.value)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -73,12 +73,12 @@ export class SettingsAccountComponent implements OnInit, OnDestroy {
             this.authService.setUserInfo('name', this.f.name.value);
             this.resetSuccess = 'Account updated with success';
           }
-          this.blockUI.stop();
+          this.setBlockUI(false);
         },
         error: error => {
           ConsoleLogger.printError(error);
           this.error = error;
-          this.blockUI.stop();
+          this.setBlockUI(false);
         }
       });
   }

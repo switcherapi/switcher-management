@@ -8,7 +8,6 @@ import { FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { DomainService } from 'src/app/services/domain.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { Domain } from 'src/app/model/domain';
@@ -28,8 +27,6 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild('descElement', { static: true }) 
   private readonly descElement: ElementRef;
@@ -79,18 +76,18 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to leave this domain?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.blockUI.start('Leaving...');
+        this.setBlockUI(true, 'Leaving domain...');
         this.adminService.leaveDomain(this.domain.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: admin => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               if (admin) {
                 this.toastService.showSuccess(`Left with success`);
               }
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(`Unable to leave this domain`);
               ConsoleLogger.printError(error);
             },
@@ -107,14 +104,12 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
       this.classStatus = 'header editing';
       this.editing = true;
     } else {
-      this.blockUI.start('Saving changes...');
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
       const newDescription = this.descElement.nativeElement.value;
       if (super.validateEdition(
           { description: this.domain.description }, 
           { description: newDescription})) {
-        this.blockUI.stop();
         this.editing = false;
         return;
       }
@@ -129,17 +124,17 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this domain?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.blockUI.start('Removing domain...');
+        this.setBlockUI(true, 'Removing domain...');
         this.domainService.deleteDomain(this.domain.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: () => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.router.navigate(['/dashboard']);
               this.toastService.showSuccess(`Domain removed with success`);
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(`Unable to remove this domain`);
               ConsoleLogger.printError(error);
             }
@@ -183,20 +178,22 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private editDomain(newDescription: string) {
+    this.setBlockUI(true, 'Saving changes...');
+
     this.domainService.updateDomain(this.domain.id, newDescription)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
             this.domain.description = newDescription;
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Domain updated with success`);
             this.editing = false;
           }
         },
         error: error => {
-          this.blockUI.stop();
           ConsoleLogger.printError(error);
+          this.setBlockUI(false);
           this.toastService.showError(`Unable to update '${this.domain.name}' domain`);
           this.editing = false;
         }
@@ -204,19 +201,19 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
-    this.blockUI.start('Updating environment...');
+    this.setBlockUI(true, 'Updating environment...');
     this.domainService.setDomainEnvironmentStatus(this.domain.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
             this.selectEnvironment(env);
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
         }
@@ -224,18 +221,18 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   public removeEnvironmentStatus(env: any): void {
-    this.blockUI.start('Removing environment status...');
+    this.setBlockUI(true, 'Removing environment status...');
     this.domainService.removeDomainEnvironmentStatus(this.domain.id, env)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Environment removed with success`);
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to remove the environment '${env}'`);
         }
@@ -266,7 +263,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           this.loading = false;
           this.detailBodyStyle = 'detail-body ready';
         }

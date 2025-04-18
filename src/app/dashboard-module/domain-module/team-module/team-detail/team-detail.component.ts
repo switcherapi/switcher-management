@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -26,8 +25,6 @@ import { Types } from 'src/app/model/path-route';
 })
 export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   nameFormControl = new FormControl('', [
     Validators.required,
@@ -100,7 +97,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
 
       if (valid) {
         this.editing = false;
-        this.blockUI.start('Updating Team...');
+        this.setBlockUI(true, 'Updating Team...');
         this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
@@ -112,7 +109,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   }
 
   changeStatus(event: MatSlideToggleChange) {
-    this.blockUI.start('Updating status...');
+    this.setBlockUI(true, 'Updating status...');
     this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -122,12 +119,12 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   }
 
   removeTeam() {
-    this.blockUI.start('Removing team...');
+    this.setBlockUI(true, 'Removing team...');
     this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: team => {
           if (team) {
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}/teams`]);
             this.toastService.showSuccess(`Team removed with success`);
           }
@@ -140,13 +137,13 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     if (team) {
       this.team = team;
       this.setHeaderStyle();
-      this.blockUI.stop();
+      this.setBlockUI(false);
       this.toastService.showSuccess(`Team updated with success`);
     }
   }
 
   private onError(error: any, message: string): void {
-    this.blockUI.stop();
+    this.setBlockUI(false);
     ConsoleLogger.printError(error);
     this.toastService.showError(message);
   }

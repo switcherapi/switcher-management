@@ -15,6 +15,9 @@ export class DetailComponent {
     environments: Environment[];
     loading: boolean;
 
+    blockuiEnabled = false;
+    blockuiMessage: string;
+
     updatable = false;
     removable = false;
     creatable = false;
@@ -39,6 +42,11 @@ export class DetailComponent {
 
     protected showResumed(value: string, length: number): string {
         return DataUtils.showResumed(value, length);
+    }
+
+    protected setBlockUI(enable: boolean, message?: string): void {
+        this.blockuiEnabled = enable;
+        this.blockuiMessage = message;
     }
 
     scrollToElement($element: any): void {

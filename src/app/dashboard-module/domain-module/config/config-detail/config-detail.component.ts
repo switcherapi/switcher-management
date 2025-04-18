@@ -11,7 +11,6 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -36,8 +35,6 @@ import { Config, ConfigRelay } from 'src/app/model/config';
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild('descElement', { static: true })
   descElement: ElementRef;
@@ -145,7 +142,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       const { valid } = this.keyFormControl;
 
       if (valid) {
-        this.blockUI.start('Saving changes...');
+        this.setBlockUI(true, 'Saving changes...');
         this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
         const body = {
@@ -166,7 +163,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             components: String(this.components),
             disable_metrics: this.disableMetrics
           })) {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           this.editing = false;
           return;
         }
@@ -182,17 +179,17 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this switcher?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.blockUI.start('Removing switcher...');
+        this.setBlockUI(true, 'Removing switcher...');
         this.configService.deleteConfig(this.config.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: () => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.router.navigate([this.domainRouteService.getPreviousPath()]);
               this.toastService.showSuccess(`Switcher removed with success`);
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(`Unable to remove this switcher`);
               ConsoleLogger.printError(error);
             }
@@ -212,7 +209,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(result => {
       if (result) {
-        this.blockUI.start('Adding Strategy...');
+        this.setBlockUI(true, 'Adding Strategy...');
         this.hasNewStrategy = true;
         this.strategyService.createStrategy(
           this.config.id,
@@ -222,12 +219,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.currentEnvironment,
           result.values).subscribe({
             next: () => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.loadStrategies(true);
               this.toastService.showSuccess('Strategy created with success');
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(error ? error.error : 'Unable to add strategy');
               ConsoleLogger.printError(error);
             }
@@ -412,19 +409,19 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
-    this.blockUI.start('Updating environment...');
+    this.setBlockUI(true, 'Updating environment...');
     this.selectEnvironment(env);
     this.configService.setConfigEnvironmentStatus(this.config.id, env.environmentName, env.status)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
         }
@@ -432,19 +429,19 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   public removeEnvironmentStatus(env: any): void {
-    this.blockUI.start('Removing environment status...');
+    this.setBlockUI(true, 'Removing environment status...');
     this.configService.removeDomainEnvironmentStatus(this.config.id, env)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
             this.config.activated = data.activated;
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Environment removed with success`);
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to remove the environment '${env}'`);
         }
@@ -465,7 +462,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           startWith(null as string),
           map((component: string | null) => component ? this.filterComponent(component) : this.listComponents.slice()));
 
-        this.blockUI.stop();
+        this.setBlockUI(false);
       });
   }
 
@@ -484,13 +481,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             this.disableMetrics = this.isMetricDisabled();
             this.updateConfigComponents();
 
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess(`Switcher updated with success`);
             this.editing = false;
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update switcher`);
           this.classStatus = 'header editing';
