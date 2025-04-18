@@ -8,13 +8,13 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
 import { AdminService } from 'src/app/services/admin.service';
 import { ComponentService } from 'src/app/services/component.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { BasicComponent } from '../common/basic-component';
 
 @Component({
   selector: 'app-components',
@@ -26,10 +26,8 @@ import { Types } from 'src/app/model/path-route';
   ],
   standalone: false
 })
-export class ComponentsComponent implements OnInit, OnDestroy {
+export class ComponentsComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   components: SwitcherComponent[];
 
@@ -60,6 +58,7 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     private readonly _modalService: NgbModal,
     public dialog: MatDialog
   ) {
+    super();
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);
@@ -217,18 +216,18 @@ export class ComponentsComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = 'Are you sure you want to generate a new key for this component?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.blockUI.start('Generating API Key...');
+        this.setBlockUI(true, 'Generating API Key...');
         this.compService.generateApiKey(selectedComponent.id)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: data => {
               if (data) {
-                this.blockUI.stop();
+                this.setBlockUI(false);
                 this.confirmKeyCreated(data.apiKey, selectedComponent.name);
               }
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(`Unable to generate an API Key`);
               ConsoleLogger.printError(error);
             }

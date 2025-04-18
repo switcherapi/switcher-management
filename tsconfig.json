@@ -10,11 +10,11 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2020",
+    "target": "ES2022",
     "types": ["grecaptcha"],
     "typeRoots": ["node_modules/@types"],
     "lib": [
-      "ES2020",
+      "ES2022",
       "dom"
     ]
   },

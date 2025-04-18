@@ -8,7 +8,6 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AdminService } from 'src/app/services/admin.service';
 import { Config, ConfigRelayStatus } from 'src/app/model/config';
 import { ConfigService } from 'src/app/services/config.service';
@@ -28,8 +27,6 @@ import { DomainService } from 'src/app/services/domain.service';
 })
 export class RelayDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
 
   @Input() config: Config;
   @Input() parent: ConfigDetailComponent;
@@ -115,7 +112,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
           auth_token: this.authTokenElement.nativeElement.value,
           auth_prefix: this.authPrefixElement.nativeElement.value
         })) {
-        this.blockUI.stop();
+        this.setBlockUI(false);
         this.editing = false;
         return;
       }
@@ -130,19 +127,19 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       return;
     }
 
-    this.blockUI.start('Generating verification code...');
+    this.setBlockUI(true, 'Generating verification code...');
     this.domainService.getVerificationCode(this.parent.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           if (data?.code) {
             this.relayVerificationCode = data.code;
             this.openRelayVerificationDialog();
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           this.toastService.showError(`Unable to generate a verification code`);
           ConsoleLogger.printError(error);
         }
@@ -160,7 +157,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     modalConfirmation.componentInstance.question = 'Are you sure you want to remove this relay?';
     modalConfirmation.result.then((result) => {
       if (result) {
-        this.blockUI.start('Removing relay...');
+        this.setBlockUI(true, 'Removing relay...');
         this.configService.removeConfigRelay(this.config.id, this.currentEnvironment)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
@@ -168,10 +165,10 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
               if (data) {
                 this.updateConfiguredRelay(data);
               }
-              this.blockUI.stop();
+              this.setBlockUI(false);
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(`Unable to remove this relay`);
               ConsoleLogger.printError(error);
             }
@@ -200,7 +197,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.config.relay.auth_token[this.currentEnvironment] = this.authTokenElement.nativeElement.value;
     this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
 
-    this.blockUI.start('Updating relay...');
+    this.setBlockUI(true, 'Updating relay...');
     this.configService.updateConfigRelay(this.config)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -211,13 +208,13 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
             this.editing = false;
             this.parent.updateConfigRelay(data.relay);
           }
-          this.blockUI.stop();
+          this.setBlockUI(false);
         },
         error: error => {
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update relay: ${error.error}`);
           this.editing = false;
-          this.blockUI.stop();
+          this.setBlockUI(false);
 
           this.config.relay = JSON.parse(this.relayOld);
           this.loadRelay();
@@ -266,7 +263,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           this.detailBodyStyle = 'detail-body ready';
         }
       });
@@ -288,7 +285,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     const configRelayStatus = new ConfigRelayStatus();
     configRelayStatus.activated[env.environmentName] = env.status;
 
-    this.blockUI.start('Updating environment...');
+    this.setBlockUI(true, 'Updating environment...');
     this.configService.updateConfigRelayStatus(this.config.id, configRelayStatus)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -298,12 +295,12 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
             this.parent.updateConfigRelay(data.relay);
             this.selectEnvironment(env);
             this.toastService.showSuccess(`Environment updated with success`);
-            this.blockUI.stop();
+            this.setBlockUI(false);
           }
         },
         error: error => {
           this.toastService.showError(`Unable to update the environment '${env.environmentName}'`);
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
         }
       });
@@ -331,13 +328,12 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
-
-        this.blockUI.start('Verifying Relay...');
+        this.setBlockUI(true, 'Verifying Relay...');
         this.configService.verifyRelay(this.config.id, this.currentEnvironment)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: response => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               if (response.status === 'verified') {
                 this.toastService.showSuccess(`Relay verified with success`);
                 this.config.relay.verified[this.currentEnvironment] = true;
@@ -346,7 +342,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
               }
             },
             error: error => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
               this.toastService.showError(`Unable to verify Relay`);
               ConsoleLogger.printError(error);
             }

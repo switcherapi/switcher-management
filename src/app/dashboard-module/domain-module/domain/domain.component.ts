@@ -10,7 +10,6 @@ import { GroupService } from 'src/app/services/group.service';
 import { DomainTransferDialogComponent } from './domain-transfer/domain-transfer-dialog.component';
 import { DomainService } from 'src/app/services/domain.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
 import { environment } from 'src/environments/environment';
 import { Domain } from 'src/app/model/domain';
@@ -22,6 +21,7 @@ import { Configuration, GraphQLConfigurationResultSet } from 'src/app/model/conf
 import { ApolloQueryResult } from '@apollo/client/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FeatureService } from 'src/app/services/feature.service';
+import { BasicComponent } from '../common/basic-component';
 
 @Component({
   selector: 'app-domain',
@@ -29,10 +29,8 @@ import { FeatureService } from 'src/app/services/feature.service';
   styleUrls: ['./domain.component.css'],
   standalone: false
 })
-export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete {
-
+export class DomainComponent extends BasicComponent implements OnInit, OnDestroy, OnElementAutocomplete {
   private readonly unsubscribe = new Subject<void>();
-  @BlockUI() blockUI: NgBlockUI;
 
   loading = true;
   title: string;
@@ -67,6 +65,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
     private readonly featureService: FeatureService,
     private readonly toastService: ToastService
   ) {
+    super();
     this.route.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = params.name;
@@ -121,7 +120,7 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
   }
 
   onDomainTransfer() {
-    this.blockUI.start('Creating request...');
+    this.setBlockUI(true, 'Creating request...');
     this.domainService.requestDomainTransfer(this.currentPath.id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -145,10 +144,10 @@ export class DomainComponent implements OnInit, OnDestroy, OnElementAutocomplete
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.blockUI.stop();
+          this.setBlockUI(false);
         },
         complete: () => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
         }
       });
   }

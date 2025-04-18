@@ -22,6 +22,6 @@ export class RouterErrorHandler {
             this.router.navigate(['/login']);
         }
         
-        return error.error || 'Something went wrong';
+        return error.error ?? 'Something went wrong';
     }
 }

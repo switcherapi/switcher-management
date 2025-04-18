@@ -3,7 +3,7 @@ import { ConsoleLogger } from "./console-logger";
 export class JsonReader {
 
     public static payloadReader(payload: any): string[] {
-        const payloadRead = payload + '' === payload || payload || 0;
+        const payloadRead = (payload + '' === payload || payload) ?? 0;
         if (Array.isArray(payloadRead)) {
             return payloadRead.flatMap(p => JsonReader.payloadReader(p));
         }

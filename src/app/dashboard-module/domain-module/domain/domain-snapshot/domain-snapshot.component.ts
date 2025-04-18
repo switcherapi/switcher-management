@@ -4,13 +4,13 @@ import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { DomainService } from 'src/app/services/domain.service';
 import { ComponentService } from 'src/app/services/component.service';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
+import { BasicComponent } from '../../common/basic-component';
 
 @Component({
   selector: 'app-domain-snapshot',
@@ -22,10 +22,8 @@ import { SwitcherComponent } from 'src/app/model/switcher-component';
   ],
   standalone: false
 })
-export class DomainSnapshotComponent implements OnInit, OnDestroy {
+export class DomainSnapshotComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
-
-  @BlockUI() blockUI: NgBlockUI;
   
   componentSelection = new FormControl('-', []);
   environmentSelection = new FormControl('default', [
@@ -49,7 +47,8 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     private readonly componentService: ComponentService,
     private readonly domainService: DomainService,
     private readonly toastService: ToastService
-  ) { 
+  ) {
+    super();
     this.domainId = data.domainId;
   }
 
@@ -92,8 +91,8 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
     if (valid) {
       const component = this.componentSelection.value === '-' ? null : this.componentSelection.value;
       const environment = this.environmentSelection.value;
-
-      this.blockUI.start('Downloading...');
+      
+      this.setBlockUI(true, 'Downloading...');
       this.snapshot = null;
       this.domainService.executeSnapshotQuery(
         this.domainId, environment, component, this.includeStatus, this.includeDescription)
@@ -106,11 +105,11 @@ export class DomainSnapshotComponent implements OnInit, OnDestroy {
               this.lockEnvSelection();
               this.toastService.showSuccess(`Snapshot downloaded with success`);
             }
-            this.blockUI.stop();
+            this.setBlockUI(false);
           },
           error: error => {
             ConsoleLogger.printError(error);
-            this.blockUI.stop();
+            this.setBlockUI(false);
           }
         });
     }      

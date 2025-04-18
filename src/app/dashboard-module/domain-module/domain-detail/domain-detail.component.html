@@ -1,4 +1,4 @@
-<block-ui>
+<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
     <div *ngIf="loading" class="card-body loader-div">
         <div class="loader"></div>
         <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
@@ -69,4 +69,4 @@
         <hr>
         <app-group-list [childEnvironmentEmitter]="childEnvironmentEmitter" [environments]="environments"></app-group-list>
     </div>
-</block-ui>
+</app-block-ui>

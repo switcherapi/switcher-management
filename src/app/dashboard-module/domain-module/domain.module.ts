@@ -27,7 +27,6 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { StrategyCreateComponent } from './config/strategy-create/strategy-create.component';
 import { StrategyCloneComponent } from './config/strategy-clone/strategy-clone.component';
 import { BaseChartDirective } from '../../../libs/ng2-charts/src/lib/base-chart.directive';
-import { BlockUIModule } from 'ng-block-ui';
 import { DomainSnapshotComponent } from './domain/domain-snapshot/domain-snapshot.component';
 import { TeamInviteDialogComponent } from './team-module/team-invite-dialog/team-invite-dialog.component';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
@@ -41,6 +40,7 @@ import { SlackSettingsComponent } from './ext-slack/slack-settings/slack-setting
 import { ExtGitOpsComponent } from './ext-gitops/ext-gitops.component';
 import { GitOpsEnvSelectionComponent } from './ext-gitops/gitops-env-selection/gitops-env-selection.component';
 import { GitOpsUpdateTokensComponent } from './ext-gitops/gitops-update-tokens/gitops-update-tokens.component';
+import { BlockUIComponent } from 'src/app/shared/block-ui/block-ui.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +78,7 @@ import { GitOpsUpdateTokensComponent } from './ext-gitops/gitops-update-tokens/g
     GitOpsUpdateTokensComponent
   ],
   imports: [
+    BlockUIComponent,
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
@@ -87,8 +88,7 @@ import { GitOpsUpdateTokensComponent } from './ext-gitops/gitops-update-tokens/g
     AppMaterialModule,
     ToasterModule,
     BaseChartDirective,
-    MetricModule,
-    BlockUIModule.forRoot()
+    MetricModule
   ],
   providers: [
     DomainRouteService

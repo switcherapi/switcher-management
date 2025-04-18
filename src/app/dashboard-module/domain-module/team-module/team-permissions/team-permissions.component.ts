@@ -4,7 +4,6 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
 import { TeamPermissionCreateComponent } from '../team-permission-create/team-permission-create.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +11,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Team } from 'src/app/model/team';
 import { Permission } from 'src/app/model/permission';
 import { PermissionService } from 'src/app/services/permission.service';
+import { BasicComponent } from '../../common/basic-component';
 
 @Component({
   selector: 'app-team-permissions',
@@ -23,11 +23,9 @@ import { PermissionService } from 'src/app/services/permission.service';
   ],
   standalone: false
 })
-export class TeamPermissionsComponent implements OnInit, OnDestroy {
+export class TeamPermissionsComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
   @Input() team: Team;
-
-  @BlockUI() blockUI: NgBlockUI;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -45,7 +43,9 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
     private readonly permissionService: PermissionService,
     private readonly toastService: ToastService,
     private readonly dialog: MatDialog
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.loadPermissions();
@@ -91,10 +91,10 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
             error: error => {
               this.toastService.showError('Permission denied');
               ConsoleLogger.printError(error);
-              this.blockUI.stop();
+              this.setBlockUI(false);
             },
             complete: () => {
-              this.blockUI.stop();
+              this.setBlockUI(false);
             }
           });
       }
@@ -102,19 +102,19 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   }
 
   removePermission(permission: Permission) {
-    this.blockUI.start('Removing permission...');
+    this.setBlockUI(true, 'Removing permission...');
     this.permissionService.deletePermission(permission._id).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
             this.permissions.splice(this.permissions.indexOf(permission), 1);
             this.loadDataSource(this.permissions);
-            this.blockUI.stop();
+            this.setBlockUI(false);
             this.toastService.showSuccess('Permission removed with success');
           }
         },
         error: error => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
           ConsoleLogger.printError(error);
         }
       });
@@ -144,7 +144,7 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(permission: Permission, event: MatSlideToggleChange) {
-    this.blockUI.start('Updating status...');
+    this.setBlockUI(true, 'Updating status...');
     this.permissionService.updatePermissionStatus(permission._id, event.checked)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -156,10 +156,10 @@ export class TeamPermissionsComponent implements OnInit, OnDestroy {
         error: error => {
           this.toastService.showError('Permission denied');
           ConsoleLogger.printError(error);
-          this.blockUI.stop();
+          this.setBlockUI(false);
         },
         complete: () => {
-          this.blockUI.stop();
+          this.setBlockUI(false);
         }
       });
   }

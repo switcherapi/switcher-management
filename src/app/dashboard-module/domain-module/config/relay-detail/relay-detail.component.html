@@ -1,4 +1,4 @@
-<block-ui>
+<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
     <div [ngClass]="detailBodyStyle">
         <section [ngClass]="classStatus" style="width: 100%;">
             <div class="header-container">
@@ -81,4 +81,4 @@
             </div>
         </section>
     </div>
-</block-ui>
+</app-block-ui>

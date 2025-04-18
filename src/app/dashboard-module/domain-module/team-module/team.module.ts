@@ -9,10 +9,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TeamMembersComponent } from './team-members/team-members.component';
 import { TeamPermissionsComponent } from './team-permissions/team-permissions.component';
 import { TeamPermissionCreateComponent } from './team-permission-create/team-permission-create.component';
-import { BlockUIModule } from 'ng-block-ui';
 import { TeamPendingMembersComponent } from './team-pending-members/team-pending-members.component';
 import { Team } from 'src/app/model/team';
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
+import { BlockUIComponent } from 'src/app/shared/block-ui/block-ui.component';
 
 
 @NgModule({
@@ -26,13 +26,13 @@ import { AppMaterialModule } from 'src/app/shared/app-material.module';
     TeamPendingMembersComponent
   ],
   imports: [
+    BlockUIComponent,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
     TeamRoutingModule,
-    AppMaterialModule,
-    BlockUIModule.forRoot()
+    AppMaterialModule
   ],
   providers: [Team]
 })

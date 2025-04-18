@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { ToasterModule } from '../_helpers/toaster/toaster.module';
 import { SettingsAccountComponent } from './settings-account/settings-account.component';
-import { BlockUIModule } from 'ng-block-ui';
+import { BlockUIComponent } from '../shared/block-ui/block-ui.component';
 
 @NgModule({
   declarations: [
@@ -15,14 +15,14 @@ import { BlockUIModule } from 'ng-block-ui';
     SettingsAccountComponent
   ],
   imports: [
+    BlockUIComponent,
     FormsModule,
     CommonModule,
     NgbModule,
     ReactiveFormsModule,
     AppMaterialModule,
     SettingsRoutingModule,
-    ToasterModule,
-    BlockUIModule.forRoot()
+    ToasterModule
   ]
 })
 export class SettingsModule { }
