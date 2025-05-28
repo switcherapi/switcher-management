@@ -52,7 +52,8 @@ h4 {
 
 .g-recaptcha {
   padding-bottom: 10px;
-  display: block;
+  display: table;
+  margin: auto;
 }
 
 /* Safari */

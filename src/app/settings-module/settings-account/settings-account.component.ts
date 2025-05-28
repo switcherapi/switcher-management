@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { Router } from '@angular/router';
 import { BasicComponent } from 'src/app/dashboard-module/domain-module/common/basic-component';
+import { ToastService } from 'src/app/_helpers/toast.service';
 
 @Component({
   selector: 'app-settings-account',
@@ -24,8 +25,6 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
   private readonly unsubscribe = new Subject<void>();
 
   accountForm: FormGroup;
-  resetSuccess: string;
-  error = '';
   domains = 1;
 
   userEmail: string;
@@ -38,6 +37,7 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
     private readonly authService: AuthService,
     private readonly domainService: DomainService,
     private readonly formBuilder: FormBuilder,
+    private readonly toastService: ToastService,
     private readonly _modalService: NgbModal) {
     super();
   }
@@ -65,36 +65,20 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
     }
 
     this.setBlockUI(true);
-    this.adminService.updateAdmin(this.f.name.value)
+    this.adminService.updateAdmin(this.accountFormControl.name.value)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
-            this.authService.setUserInfo('name', this.f.name.value);
-            this.resetSuccess = 'Account updated with success';
+            this.authService.setUserInfo('name', this.accountFormControl.name.value);
+            this.toastService.showSuccess('Account updated successfully');
           }
           this.setBlockUI(false);
         },
         error: error => {
+          this.toastService.showError('Failed to update account');
           ConsoleLogger.printError(error);
-          this.error = error;
           this.setBlockUI(false);
-        }
-      });
-  }
-
-  onSendResetPassord() {
-    this.adminService.requestPasswordReset(this.userEmail)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe({
-        next: data => {
-          if (data) {
-            this.resetSuccess = 'Password reset successfully sent';
-          }
-        },
-        error: error => {
-          ConsoleLogger.printError(error);
-          this.error = error;
         }
       });
   }
@@ -114,33 +98,32 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
             }
           },
           error: error => {
+            this.toastService.showError('Failed to delete account');
             ConsoleLogger.printError(error);
-            this.error = error;
           }
         });
       }
     });
   }
 
-  onKey(_event: any) {
-    this.error = '';
-    this.resetSuccess = '';
-  }
-
   getPlatformIcon(): string {
-    if (this.userPlatform === 'Switcher API')
+    if (this.userPlatform === 'Switcher API') {
       return "assets\\switcherapi_mark_grey.png";
+    }
 
-    if (this.userPlatform === 'GitHub')
+    if (this.userPlatform === 'GitHub') {
       return "assets\\github.svg";
+    }
 
     return "assets\\bitbucket.svg";
   }
 
-  get f() { return this.accountForm.controls; }
+  private get accountFormControl() { 
+    return this.accountForm.controls; 
+  }
 
   private loadAdmin() {
-    this.f.name.setValue(this.authService.getUserInfo('name'));
+    this.accountFormControl.name.setValue(this.authService.getUserInfo('name'));
     this.userEmail = this.authService.getUserInfo('email');
     this.userPlatform = this.authService.getUserInfo('platform');
     const avatar = this.authService.getUserInfo('avatar');
@@ -156,8 +139,8 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
           }
         },
         error: error => {
+          this.toastService.showError('Failed to load domains');
           ConsoleLogger.printError(error);
-          this.error = error;
         }
       });
   }

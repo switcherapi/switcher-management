@@ -4,7 +4,7 @@
             <h4 class="card-header">
                 <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher Management"/>
             </h4>
-            <div *ngIf="!loading && !waitingConfirmation" class="card-body">
+            <div *ngIf="!loading" class="card-body">
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <mat-form-field *ngIf="hasInternalAuthEnabled()">
@@ -57,14 +57,6 @@
             <div *ngIf="loading" class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API"/>
-            </div>
-
-            <div *ngIf="!loading && waitingConfirmation" class="card-body">
-                <mat-icon class="confirmation-icon">email</mat-icon>
-                <h1 class="confirmation-text">
-                    <p>A confirmation has been sent to your email.</p>
-                    <p>Please check your email and click the confirmation link to complete your sign up.</p>
-                </h1>
             </div>
 
             <app-version [apiVersion]="apiVersion"></app-version>
