@@ -75,15 +75,6 @@ export class AuthService {
         catchError(this.handleError));
   }
 
-  authorize(code: string): Observable<boolean> {
-    return this.http.post<any>(`${environment.apiUrl}/admin/signup/authorization`, null, { params: { code } })
-      .pipe(
-        tap(auth => {
-          this.doLoginUser(auth.admin, auth.jwt);
-          this.currentTokenSubject.next(auth.jwt.token);
-        }));
-  }
-
   resetPassword(code: string, password: string, token: string): Observable<boolean> {
     const body = { code, password, token };
     return this.http.post<any>(`${environment.apiUrl}/admin/login/recovery`, body)

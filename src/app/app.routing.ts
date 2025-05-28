@@ -5,7 +5,6 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignupTeamComponent } from './signup-team/signup-team.component';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
 import { SignupDomainComponent } from './signup-domain/signup-domain.component';
 import { SlackAuthComponent } from './slack-auth/slack-auth.component';
@@ -19,8 +18,6 @@ const routes: Routes = [
     { path: 'login/reset', component: LoginResetComponent },
 
     { path: 'signup', component: SignupComponent },
-
-    { path: 'signup/confirmation', component: SignupAuthComponent },
 
     {
         path: 'settings',

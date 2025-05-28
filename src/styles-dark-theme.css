@@ -254,7 +254,6 @@ html.dark-mode app-login .card-body,
 html.dark-mode app-signup .card-body,
 html.dark-mode signup-domain .card-body,
 html.dark-mode app-slack-auth .card-body .form-group,
-html.dark-mode app-signup-auth .card-body,
 html.dark-mode app-signup-team .card-body {
     filter: invert(80%) hue-rotate(180deg) contrast(1.3);
 }
@@ -272,7 +271,6 @@ html.dark-mode #page-container {
 html.dark-mode app-login .switcher-logo,
 html.dark-mode app-signup .switcher-logo,
 html.dark-mode signup-domain .switcher-logo,
-html.dark-mode app-signup-auth .switcher-logo,
 html.dark-mode app-signup-team .switcher-logo {
     filter: invert(100%) hue-rotate(180deg) contrast(1);
     color: white;

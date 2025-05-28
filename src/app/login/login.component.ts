@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ConsoleLogger } from '../_helpers/console-logger';
-import { AdminService } from '../services/admin.service';
 
 @Component({
     selector: 'app-login',
@@ -20,7 +19,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     loginForm: FormGroup;
     loading = false;
-    forgotPassword = false;
     apiVersion: string;
     error = '';
     success = '';
@@ -30,8 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private readonly formBuilder: FormBuilder,
         private readonly route: ActivatedRoute,
         private readonly router: Router,
-        private readonly authService: AuthService,
-        private readonly adminService: AdminService
+        private readonly authService: AuthService
     ) { }
 
     ngOnInit() {
@@ -65,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        if (this.loginForm.invalid || this.forgotPassword)
+        if (this.loginForm.invalid)
             return;
 
         this.status = '';
@@ -98,30 +95,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     onKey(_event: any) {
         this.error = '';
-    }
-
-    onForgotPassword() {
-        this.forgotPassword = true;
-    }
-
-    onSendResetPassord() {
-        this.f.password.setValue(' ');
-        if (this.loginForm.invalid) {
-            this.error = 'Please, add a valid email';
-        } else {
-            this.loading = true;
-            this.adminService.requestPasswordReset(this.f.email.value)
-                .pipe(takeUntil(this.unsubscribe))
-                .subscribe({
-                    next: data => {
-                        if (data) {
-                            this.success = 'Password recovery successfully sent';
-                        }
-                        this.loading = false;
-                    },
-                    error: error => this.onError(error)
-                });
-        }
     }
 
     hasGithubIntegration(): boolean {

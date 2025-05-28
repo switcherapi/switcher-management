@@ -19,7 +19,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     loginForm: FormGroup;
     loading = false;
-    waitingConfirmation = false;
     returnUrl: string;
     apiVersion: string;
     error = '';
@@ -67,11 +66,8 @@ export class SignupComponent implements OnInit, OnDestroy {
                 token: this.recaptcha_token || ''
             }).pipe(takeUntil(this.unsubscribe))
             .subscribe({
-                next: data => {
-                    if (data) {
-                        this.waitingConfirmation = true;
-                    }
-                    this.loading = false;
+                next: () => {
+                    this.router.navigate(['/login']);
                 },
                 error: error => {
                     ConsoleLogger.printError(error);

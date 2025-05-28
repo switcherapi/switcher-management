@@ -26,7 +26,6 @@ import { SignupTeamComponent } from './signup-team/signup-team.component';
 
 import { LocationStrategy, PathLocationStrategy, CommonModule } from '@angular/common';
 import { SettingsModule } from './settings-module/settings.module';
-import { SignupAuthComponent } from './signup-auth/signup-auth.component';
 import { LoginResetComponent } from './login-reset/login-reset.component';
 import { SignupDomainComponent } from './signup-domain/signup-domain.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -58,7 +57,6 @@ import { provideCharts, withDefaultRegisterables } from '../libs/ng2-charts/src/
       LoginResetComponent,
       HomeComponent,
       SignupComponent,
-      SignupAuthComponent,
       SignupTeamComponent,
       SignupDomainComponent,
       SlackAuthComponent,

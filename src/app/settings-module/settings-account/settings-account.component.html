@@ -9,8 +9,7 @@
                 <div class="description">
                     <mat-form-field>
                         <mat-label>Name</mat-label>
-                        <input matInput id="userName" (keyup)="onKey($event)"
-                            maxlength="50" autocomplete="off" formControlName="name" required>
+                        <input matInput id="userName" maxlength="50" autocomplete="off" formControlName="name" required>
                     </mat-form-field>
                 </div>
                 <div class="description">
@@ -48,8 +47,6 @@
                         Save
                     </button>
                 </div>
-                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-                <div *ngIf="resetSuccess" class="alert alert-success">{{resetSuccess}}</div>
             </form>
         </div>
         <div class="settings-right">
