@@ -8,7 +8,7 @@ ARG USER_GID=$USER_UID
 RUN npm install -g @angular/cli@latest && \
     apk update && \
     apk add --no-cache \
-        git \
-        curl \
         ca-certificates \
+        curl \
+        git \
         openssh
