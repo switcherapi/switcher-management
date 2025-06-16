@@ -55,7 +55,6 @@ export const snapshotQuery = (includeStatusByEnv = true, includeDescription = tr
               strategies {
                 strategy
                 activated
-                ${includeStatusByEnv ? STATUS_BY_ENV : ''}
                 operation
                 values
               }
@@ -65,7 +64,6 @@ export const snapshotQuery = (includeStatusByEnv = true, includeDescription = tr
                 endpoint
                 activated
                 ${includeDescription ? 'description' : ''}
-                ${includeStatusByEnv ? STATUS_BY_ENV : ''}
               }
               components
             }
