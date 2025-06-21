@@ -174,7 +174,6 @@
 }
 
 .link:hover {
-  filter: invert(100%);
   text-decoration: none;
 }
 

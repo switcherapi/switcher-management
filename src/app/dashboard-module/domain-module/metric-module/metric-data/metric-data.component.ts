@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
@@ -33,6 +33,11 @@ import { MetricService } from 'src/app/services/metric.service';
   standalone: false
 })
 export class MetricDataComponent implements OnInit, OnDestroy {
+  private readonly adminService = inject(AdminService);
+  private readonly metricService = inject(MetricService);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+
   private readonly unsubscribe = new Subject<void>();
   @Input() data: MetricData[];
   @Input() switcher: string;
@@ -53,13 +58,6 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   page = 1;
   pageLoaded = 0;
   currentPageSize = 0;
-
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly metricService: MetricService,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal
-  ) { }
 
   ngOnInit() {
     this.loadDataSource(this.data);

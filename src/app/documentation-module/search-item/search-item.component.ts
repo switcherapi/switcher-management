@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { SearchDocsResult } from '../model/searchdocs-response';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -13,13 +13,11 @@ import { environment } from 'src/environments/environment';
   standalone: false
 })
 export class SearchItemComponent {
+  private readonly router = inject(Router);
+
 
   @Input()
   searchDocsResult: SearchDocsResult;
-
-  constructor(
-    private readonly router: Router
-  ) { }
   
   gotoDocument(file: string) {
     if (file === 'overview.md') {

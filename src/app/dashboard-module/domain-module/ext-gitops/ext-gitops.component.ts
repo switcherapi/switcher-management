@@ -1,4 +1,4 @@
-import { OnDestroy, Component, OnInit } from '@angular/core';
+import { OnDestroy, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -27,6 +27,16 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
   standalone: false
 })
 export class ExtGitOpsComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly featureService = inject(FeatureService);
+  private readonly gitOpsService = inject(GitOpsService);
+  private readonly adminService = inject(AdminService);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly dialog = inject(MatDialog);
+  private readonly toastService = inject(ToastService);
+  private readonly modalService = inject(NgbModal);
+  private readonly fb = inject(FormBuilder);
+
   private readonly unsubscribe = new Subject<void>();
 
   detailBodyStyle = 'detail-body loading';
@@ -45,17 +55,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   fetch = true;
   allowUpdate = false;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly featureService: FeatureService,
-    private readonly gitOpsService: GitOpsService,
-    private readonly adminService: AdminService,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly dialog: MatDialog,
-    private readonly toastService: ToastService,
-    private readonly modalService: NgbModal,
-    private readonly fb: FormBuilder
-  ) {
+  constructor() {
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MarkdownInjector } from './markdown-injector.component';
-import { MarkdownService } from 'ngx-markdown';
 
 @Component({
   selector: 'app-team',
@@ -16,8 +15,9 @@ import { MarkdownService } from 'ngx-markdown';
 })
 export class TeamComponent extends MarkdownInjector {
 
-  constructor(private readonly markdownComponentService: MarkdownService) {
-    super(markdownComponentService, 'documentation/team.md');
+  constructor() {
+    super();
+    this.init('documentation/team.md');
   }
 
 }

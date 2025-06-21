@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
@@ -24,6 +24,10 @@ import { BasicComponent } from '../../common/basic-component';
   standalone: false
 })
 export class TeamPermissionsComponent extends BasicComponent implements OnInit, OnDestroy {
+  private readonly permissionService = inject(PermissionService);
+  private readonly toastService = inject(ToastService);
+  private readonly dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
   @Input() team: Team;
 
@@ -39,11 +43,7 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
 
   loading = false;
 
-  constructor(
-    private readonly permissionService: PermissionService,
-    private readonly toastService: ToastService,
-    private readonly dialog: MatDialog
-  ) {
+  constructor() {
     super();
   }
 

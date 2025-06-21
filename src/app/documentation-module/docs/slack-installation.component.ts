@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MarkdownInjector } from './markdown-injector.component';
-import { MarkdownService } from 'ngx-markdown';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +15,9 @@ import { MarkdownService } from 'ngx-markdown';
 })
 export class SlackInstallationDocsComponent extends MarkdownInjector {
 
-  constructor(private readonly markdownComponentService: MarkdownService) {
-    super(markdownComponentService, 'documentation/slack_installation.md');
+  constructor() {
+    super();
+    this.init('documentation/slack_installation.md');
   }
 
 }

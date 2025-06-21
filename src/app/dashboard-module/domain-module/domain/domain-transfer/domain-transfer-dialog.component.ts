@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
@@ -13,11 +13,9 @@ import { environment } from 'src/environments/environment';
     standalone: false
   })
   export class DomainTransferDialogComponent {
-  
-    constructor(
-      private readonly toastService: ToastService,
-      public dialogRef: MatDialogRef<DomainTransferDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any) { }
+    private readonly toastService = inject(ToastService);
+    dialogRef = inject<MatDialogRef<DomainTransferDialogComponent>>(MatDialogRef);
+    data = inject(MAT_DIALOG_DATA);
   
     onCancel() {
       this.dialogRef.close();

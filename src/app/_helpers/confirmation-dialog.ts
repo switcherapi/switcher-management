@@ -1,4 +1,4 @@
-import { Input, Component } from '@angular/core';
+import { Input, Component, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -20,10 +20,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
     standalone: false
   })
   export class NgbdModalConfirmComponent {
+    modal = inject(NgbActiveModal);
+
     @Input() title: string;
     @Input() question: string;
-  
-    constructor(public modal: NgbActiveModal) {}
   
     ok() {
       this.modal.close('ok');

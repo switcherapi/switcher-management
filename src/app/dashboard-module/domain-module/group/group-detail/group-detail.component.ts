@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -25,6 +25,14 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   standalone: false
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly groupService = inject(GroupService);
+  private readonly adminService = inject(AdminService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+
   private readonly unsubscribe = new Subject<void>();
 
   @ViewChild('descElement', { static: true }) 
@@ -45,15 +53,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     Validators.minLength(5)
   ]);
 
-  constructor(
-    private readonly domainRouteService: DomainRouteService,
-    private readonly groupService: GroupService,
-    private readonly adminService: AdminService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal
-  ) { 
+  constructor() { 
     super();
   }
 

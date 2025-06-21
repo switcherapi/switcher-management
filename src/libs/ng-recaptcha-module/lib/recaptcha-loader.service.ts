@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from "@angular/common";
-import { Inject, Injectable, Optional, PLATFORM_ID } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { filter } from "rxjs/operators";
 
@@ -15,6 +15,8 @@ function toNonNullObservable<T>(subject: BehaviorSubject<T | null>): Observable<
 
 @Injectable()
 export class RecaptchaLoaderService {
+  private readonly platformId = inject(PLATFORM_ID);
+
   /**
    * @internal
    * @nocollapse
@@ -24,20 +26,19 @@ export class RecaptchaLoaderService {
   public ready: Observable<ReCaptchaV2.ReCaptcha>;
 
   /** @internal */
-  private language?: string;
+  private readonly language?: string;
   /** @internal */
-  private baseUrl?: string;
+  private readonly baseUrl?: string;
   /** @internal */
-  private nonce?: string;
+  private readonly nonce?: string;
   /** @internal */
-  private v3SiteKey?: string;
+  private readonly v3SiteKey?: string;
   /** @internal */
-  private options?: RecaptchaLoaderOptions;
+  private readonly options?: RecaptchaLoaderOptions;
 
-  constructor(
-    @Inject(PLATFORM_ID) private readonly platformId: object,
-    @Optional() @Inject(RECAPTCHA_LOADER_OPTIONS) options?: RecaptchaLoaderOptions,
-  ) {
+  constructor() {
+    const options = inject<RecaptchaLoaderOptions>(RECAPTCHA_LOADER_OPTIONS, { optional: true });
+
     this.options = options;
     const subject = this.init();
     this.ready = subject ? toNonNullObservable(subject) : of();

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,6 +17,10 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   standalone: false
 })
 export class StrategyCloneComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<StrategyCloneComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  private readonly environmentService = inject(EnvironmentService);
+
   private readonly unsubscribe = new Subject<void>();
 
   environmentSelection = new FormControl('', [
@@ -24,11 +28,6 @@ export class StrategyCloneComponent implements OnInit, OnDestroy {
   ]);
 
   environments: Environment[];
-
-  constructor(
-    public dialogRef: MatDialogRef<StrategyCloneComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private readonly environmentService: EnvironmentService) { }
 
   ngOnInit() {
     this.environmentService.getEnvironmentsByDomainId(this.data.domainId)

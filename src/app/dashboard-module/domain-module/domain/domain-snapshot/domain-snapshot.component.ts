@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -23,6 +23,13 @@ import { BasicComponent } from '../../common/basic-component';
   standalone: false
 })
 export class DomainSnapshotComponent extends BasicComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<DomainSnapshotComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  private readonly environmentService = inject(EnvironmentService);
+  private readonly componentService = inject(ComponentService);
+  private readonly domainService = inject(DomainService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
   
   componentSelection = new FormControl('-', []);
@@ -40,15 +47,10 @@ export class DomainSnapshotComponent extends BasicComponent implements OnInit, O
   includeDescription = true;
   snapshot: string;
 
-  constructor(
-    public dialogRef: MatDialogRef<DomainSnapshotComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private readonly environmentService: EnvironmentService,
-    private readonly componentService: ComponentService,
-    private readonly domainService: DomainService,
-    private readonly toastService: ToastService
-  ) {
+  constructor() {
     super();
+    const data = this.data;
+
     this.domainId = data.domainId;
   }
 

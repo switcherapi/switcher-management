@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -20,6 +20,13 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   standalone: false
 })
 export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<TeamPermissionCreateComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  private readonly permissionService = inject(PermissionService);
+  private readonly environmentService = inject(EnvironmentService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   routers: string[] = [];
@@ -45,15 +52,6 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   valueSelectionFormControl = new FormControl('', [
     Validators.required
   ]);
-
-  constructor(
-    public dialogRef: MatDialogRef<TeamPermissionCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private readonly permissionService: PermissionService,
-    private readonly environmentService: EnvironmentService,
-    private readonly formBuilder: FormBuilder,
-    private readonly toastService: ToastService
-  ) { }
 
   ngOnInit() {
     this.loadRouter();

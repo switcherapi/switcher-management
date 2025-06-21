@@ -52,10 +52,6 @@ app-domain-list .mat-mdc-button {
   background-color: #fff0 !important;
 }
 
-.mdc-switch__icon {
-  fill: white !important;
-}
-
 .mdc-fab {
   display: block !important;
 }
@@ -89,18 +85,8 @@ element-autocomplete .mdc-text-field__input {
   background-color: white !important;
 }
 
-html .mat-mdc-slide-toggle.mat-accent {
-  --mdc-switch-selected-focus-state-layer-color: #5298ff;
-  --mdc-switch-selected-handle-color: #5298ff;
-  --mdc-switch-selected-hover-state-layer-color: #5298ff;
-  --mdc-switch-selected-pressed-state-layer-color: #5298ff;
-  --mdc-switch-selected-focus-handle-color: #5298ff;
-  --mdc-switch-selected-hover-handle-color: #5298ff;
-  --mdc-switch-selected-pressed-handle-color: #5298ff;
-  --mdc-switch-selected-focus-track-color: #5298ff;
-  --mdc-switch-selected-hover-track-color: #5298ff;
-  --mdc-switch-selected-pressed-track-color: #5298ff;
-  --mdc-switch-selected-track-color: #5298ff;
+.mdc-switch__track::after {
+  background-color:  #5298ff !important;
 }
 
 /* ##################### */

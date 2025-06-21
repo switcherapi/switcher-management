@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -17,6 +17,12 @@ import { ToastService } from '../_helpers/toast.service';
   standalone: false
 })
 export class SlackAuthComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly domainService = inject(DomainService);
+  private readonly slackService = inject(SlackService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   private enterprise_id: string;
@@ -30,18 +36,10 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
   loading = false;
   error = '';
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly domainService: DomainService,
-    private readonly slackService: SlackService,
-    private readonly toastService: ToastService
-  ) { }
-
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.enterprise_id = params['e_id'] || '';
-      this.team_id = params['t_id'] || '';
+      this.enterprise_id = params['e_id'] ?? '';
+      this.team_id = params['t_id'] ?? '';
       this.error = this.validate(params['error'], params['reason']);
 
       this.loadDomains();

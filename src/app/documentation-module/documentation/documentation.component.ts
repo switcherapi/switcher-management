@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,12 +8,10 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class DocumentationComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+
   sideBarTopPos: number;
   prevScrollpos = window.scrollY;
-
-  constructor(
-    private readonly router: Router,
-  ) { }
 
   ngOnInit() {
     this.scrollMenuHandler();

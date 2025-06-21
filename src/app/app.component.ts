@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 import { PwaService } from './services/pwa.service';
@@ -11,17 +11,17 @@ import { environment } from 'src/environments/environment';
   standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly pwaService = inject(PwaService);
+
 
   currentToken: string;
   loggedUserName: string;
   profileAvatar: string;
   darkMode: boolean;
 
-  constructor(
-      private readonly router: Router,
-      private readonly authService: AuthService,
-      private readonly pwaService: PwaService
-  ) {
+  constructor() {
     this.loadUserSettings();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
@@ -34,6 +34,17 @@ import { Config, ConfigRelay } from 'src/app/model/config';
   standalone: false
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly configService = inject(ConfigService);
+  private readonly adminService = inject(AdminService);
+  private readonly strategyService = inject(StrategyService);
+  private readonly componentService = inject(ComponentService);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+  private readonly dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
 
   @ViewChild('descElement', { static: true })
@@ -85,18 +96,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   availableComponents: SwitcherComponent[];
   listComponents: string[] = [];
 
-  constructor(
-    private readonly domainRouteService: DomainRouteService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly configService: ConfigService,
-    private readonly adminService: AdminService,
-    private readonly strategyService: StrategyService,
-    private readonly componentService: ComponentService,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal,
-    private readonly dialog: MatDialog
-  ) {
+  constructor() {
     super();
   }
 

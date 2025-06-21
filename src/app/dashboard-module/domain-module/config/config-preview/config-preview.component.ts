@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -21,6 +21,11 @@ import { BasicComponent } from '../../common/basic-component';
   standalone: false
 })
 export class ConfigPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly configService = inject(ConfigService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
@@ -42,12 +47,7 @@ export class ConfigPreviewComponent extends BasicComponent implements OnInit, On
 
   toggleSectionStyle = 'toggle-section deactivated';
 
-  constructor(
-    private readonly router: Router,
-    private readonly fb: FormBuilder,
-    private readonly configService: ConfigService,
-    private readonly toastService: ToastService
-  ) { 
+  constructor() { 
     super();
   }
 

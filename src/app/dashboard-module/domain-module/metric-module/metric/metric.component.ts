@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -22,6 +22,12 @@ import { Types } from 'src/app/model/path-route';
   standalone: false
 })
 export class MetricComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly metricService = inject(MetricService);
+  private readonly dialog = inject(MatDialog);
+  private readonly errorHandler = inject(RouterErrorHandler);
+
   private readonly unsubscribe = new Subject<void>();
   @Input() switcher: string;
   @Input() environment = 'default';
@@ -41,13 +47,7 @@ export class MetricComponent implements OnInit, OnDestroy {
 
   metrics: Metric;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly metricService: MetricService,
-    private readonly dialog: MatDialog,
-    private readonly errorHandler: RouterErrorHandler
-  ) {
+  constructor() {
     this.activatedRoute.parent.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);

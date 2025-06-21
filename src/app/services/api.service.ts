@@ -2,7 +2,7 @@ import { throwError } from "rxjs";
 
 export class ApiService {
     
-    handleError(error) {
+    handleError(error: any) {
         let errorMessage = '';
         
         if (error.error instanceof ErrorEvent) {
@@ -12,7 +12,7 @@ export class ApiService {
         } else if (error.status === 422) {
             errorMessage = 'Invalid arguments';
         } else if (error.status === 404) {
-            errorMessage = error.error || 'Value not found';
+            errorMessage = error.error ?? 'Value not found';
         } else if (error.status === 503 || error.status === 0) {
             errorMessage = 'Switcher API is offline';
         } else {

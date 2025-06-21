@@ -57,6 +57,7 @@ export const snapshotQuery = (includeStatusByEnv = true, includeDescription = tr
                 activated
                 operation
                 values
+                ${includeDescription ? 'description' : ''}
               }
               relay {
                 type

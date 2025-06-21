@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -19,6 +19,11 @@ import { OnElementAutocomplete } from '../../common/element-autocomplete/element
   standalone: false
 })
 export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutocomplete {
+  private readonly environmentService = inject(EnvironmentService);
+  private readonly datepipe = inject(DatePipe);
+  dialogRef = inject<MatDialogRef<MetricFilterComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+
   private readonly unsubscribe = new Subject<void>();
 
   dateGroupPattern: string;
@@ -32,12 +37,6 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   selectedFilterType = 'Switcher';
   lockFilter = false;
   domainId: string;
-
-  constructor(
-    private readonly environmentService: EnvironmentService,
-    private readonly datepipe: DatePipe,
-    public dialogRef: MatDialogRef<MetricFilterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.selectedFilter = this.data.filter || '';

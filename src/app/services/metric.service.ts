@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -10,8 +10,9 @@ import { Metric, MetricStatistics, MetricStatisticsRequest } from '../model/metr
   providedIn: 'root'
 })
 export class MetricService extends ApiService {
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {
+  constructor() {
     super();
   }
 

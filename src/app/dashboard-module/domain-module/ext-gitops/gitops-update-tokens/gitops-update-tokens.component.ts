@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,17 +15,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false
 })
 export class GitOpsUpdateTokensComponent implements OnInit, OnDestroy {
+  data = inject(MAT_DIALOG_DATA);
+  private readonly dialogRef = inject<MatDialogRef<GitOpsUpdateTokensComponent>>(MatDialogRef);
+  private readonly fb = inject(FormBuilder);
+
   private readonly unsubscribe = new Subject<void>();
 
   environments: string[];
   token: string;
   formGroup: FormGroup;
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private readonly dialogRef: MatDialogRef<GitOpsUpdateTokensComponent>,
-    private readonly fb: FormBuilder) { }
-
+  
   ngOnInit() {
     this.environments = this.data.environments;
     this.formInit();

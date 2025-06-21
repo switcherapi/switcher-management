@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -15,16 +15,14 @@ import { SearchDocsResponse } from '../model/searchdocs-response';
   standalone: false
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  private readonly searchDocsService = inject(SearchDocsService);
+  private readonly route = inject(ActivatedRoute);
+
   private readonly unsubscribe = new Subject<void>();
 
   query: string;
   searchDocsResponse: SearchDocsResponse;
   loading = true;
-
-  constructor(
-    private readonly searchDocsService: SearchDocsService,
-    private readonly route: ActivatedRoute
-  ) { }
 
   ngOnInit(): void {
     this.loading = true;

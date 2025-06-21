@@ -1,17 +1,14 @@
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/services/auth.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RouterErrorHandler {
-
-    constructor(
-        private readonly router: Router,
-        private readonly authService: AuthService
-      ) { }
+    private readonly router = inject(Router);
+    private readonly authService = inject(AuthService);
 
     doError(error: any): string {
         if (error.status === 401) {

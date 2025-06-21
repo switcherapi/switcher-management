@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -9,8 +9,9 @@ import { GitOpsAccount, GitOpsAccountTokenResponse, TOKEN_VALUE } from '../model
   providedIn: 'root'
 })
 export class GitOpsService extends ApiService {
-
-  constructor(private readonly http: HttpClient) {
+  private readonly http = inject(HttpClient);
+  
+  constructor() {
     super();
   }
 

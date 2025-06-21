@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -15,6 +15,10 @@ import { ConsoleLogger } from '../_helpers/console-logger';
     standalone: false
 })
 export class SignupComponent implements OnInit, OnDestroy {
+    private readonly formBuilder = inject(FormBuilder);
+    private readonly router = inject(Router);
+    private readonly authService = inject(AuthService);
+
     private readonly unsubscribe = new Subject<void>();
 
     loginForm: FormGroup;
@@ -24,12 +28,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     error = '';
     recaptcha_token: string;
     status = '';
-
-    constructor(
-        private readonly formBuilder: FormBuilder,
-        private readonly router: Router,
-        private readonly authService: AuthService
-    ) { }
 
     ngOnInit() {
         if (this.authService.isLoggedIn()) {

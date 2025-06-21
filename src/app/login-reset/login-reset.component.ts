@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -14,6 +14,11 @@ import { environment } from 'src/environments/environment';
   standalone: false
 })
 export class LoginResetComponent implements OnInit, OnDestroy {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
   private readonly unsubscribe = new Subject<void>();
 
   loginForm: FormGroup;
@@ -22,13 +27,6 @@ export class LoginResetComponent implements OnInit, OnDestroy {
   error = '';
   code: string;
   recaptcha_token: string;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly authService: AuthService
-  ) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({

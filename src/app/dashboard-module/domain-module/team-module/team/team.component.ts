@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
@@ -21,6 +21,12 @@ import { Types } from 'src/app/model/path-route';
   standalone: false
 })
 export class TeamComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly adminService = inject(AdminService);
+  private readonly teamService = inject(TeamService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   teamFormControl = new FormControl('', [
@@ -43,13 +49,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   removable = false;
   creatable = false;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly adminService: AdminService,
-    private readonly teamService: TeamService,
-    private readonly toastService: ToastService
-  ) { 
+  constructor() { 
     this.activatedRoute.parent.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);

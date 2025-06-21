@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -18,6 +18,9 @@ import { EnvironmentService } from 'src/app/services/environment.service';
   standalone: false
 })
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
+  private readonly fb = inject(FormBuilder);
+  private readonly environmentService = inject(EnvironmentService);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
@@ -42,11 +45,6 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   environmentStatusSelection: FormGroup;
   environments: Environment[];
   selectedEnvStatus: boolean;
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly environmentService: EnvironmentService
-  ) { }
 
   ngOnInit() {
     this.loadOperationSelectionComponent();

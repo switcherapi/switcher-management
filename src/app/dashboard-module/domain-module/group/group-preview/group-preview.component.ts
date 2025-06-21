@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -21,6 +21,11 @@ import { BasicComponent } from '../../common/basic-component';
   standalone: false
 })
 export class GroupPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly groupService = inject(GroupService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
   
   @Input() domainId: string;
@@ -41,12 +46,7 @@ export class GroupPreviewComponent extends BasicComponent implements OnInit, OnD
 
   toggleSectionStyle = 'toggle-section deactivated';
 
-  constructor(
-    private readonly router: Router,
-    private readonly fb: FormBuilder,
-    private readonly groupService: GroupService,
-    private readonly toastService: ToastService
-  ) { 
+  constructor() { 
     super();
   }
 
