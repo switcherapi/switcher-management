@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -20,6 +20,12 @@ import { Domain } from 'src/app/model/domain';
   standalone: false
 })
 export class DomainListComponent implements OnInit, OnDestroy {
+  private readonly dialog = inject(MatDialog);
+  private readonly adminService = inject(AdminService);
+  private readonly domainService = inject(DomainService);
+  private readonly toastService = inject(ToastService);
+  private readonly errorHandler = inject(RouterErrorHandler);
+
   private readonly unsubscribe = new Subject<void>();
 
   domains: Domain[];
@@ -31,14 +37,6 @@ export class DomainListComponent implements OnInit, OnDestroy {
   loadingCollab = false;
   error = '';
   errorCollab = '';
-
-  constructor(
-    private readonly dialog: MatDialog,
-    private readonly adminService: AdminService,
-    private readonly domainService: DomainService,
-    private readonly toastService: ToastService,
-    private readonly errorHandler: RouterErrorHandler
-  ) { }
 
   ngOnInit() {
     this.loading = true;

@@ -1,4 +1,4 @@
-import { OnDestroy, Component, OnInit, ViewChild } from '@angular/core';
+import { OnDestroy, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -25,6 +25,15 @@ import { AdminService } from 'src/app/services/admin.service';
   standalone: false
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly slackService = inject(SlackService);
+  private readonly featureService = inject(FeatureService);
+  private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
+  private readonly adminService = inject(AdminService);
+  private readonly _modalService = inject(NgbModal);
+
   private readonly unsubscribe = new Subject<void>();
   detailBodyStyle = 'detail-body loading';
 
@@ -39,16 +48,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   fetch = true;
   allowUpdate = false;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly slackService: SlackService,
-    private readonly featureService: FeatureService,
-    private readonly toastService: ToastService,
-    private readonly router: Router,
-    private readonly adminService: AdminService,
-    private readonly _modalService: NgbModal
-  ) { 
+  constructor() { 
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);

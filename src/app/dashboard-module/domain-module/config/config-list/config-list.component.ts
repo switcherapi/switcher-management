@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
@@ -29,25 +29,33 @@ import { EnvironmentChangeEvent } from '../../environment-config/environment-con
   standalone: false
 })
 export class ConfigListComponent extends ListComponent implements OnInit, OnDestroy {
+  protected fb: FormBuilder;
+  protected route: ActivatedRoute;
+  protected environmentService: EnvironmentService;
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly dialog = inject(MatDialog);
+  private readonly adminService = inject(AdminService);
+  private readonly configService = inject(ConfigService);
+  private readonly groupService = inject(GroupService);
+  private readonly permissionService = inject(PermissionService);
+  private readonly toastService = inject(ToastService);
+  private readonly errorHandler = inject(RouterErrorHandler);
+
   permissions: Permissions[];
   configs: Config[];
 
   creatable = false;
 
-  constructor(
-    protected fb: FormBuilder,
-    protected route: ActivatedRoute,
-    protected environmentService: EnvironmentService,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly dialog: MatDialog,
-    private readonly adminService: AdminService,
-    private readonly configService: ConfigService,
-    private readonly groupService: GroupService,
-    private readonly permissionService: PermissionService,
-    private readonly toastService: ToastService,
-    private readonly errorHandler: RouterErrorHandler
-  ) { 
-    super(route, fb, environmentService);
+  constructor() {
+    const fb = inject(FormBuilder);
+    const route = inject(ActivatedRoute);
+    const environmentService = inject(EnvironmentService);
+ 
+    super();
+  
+    this.fb = fb;
+    this.route = route;
+    this.environmentService = environmentService;
   }
 
   ngOnInit() {
@@ -56,7 +64,7 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
     this.error = '';
 
     this.readPermissionToObject();
-    this.readChildPermissions(this.environmentSelection.get('environmentSelection').value || 'default');
+    this.readChildPermissions(this.environmentSelection.get('environmentSelection').value ?? 'default');
   }
 
   ngOnDestroy() {

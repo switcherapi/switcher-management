@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly http = inject(HttpClient);
+
 
   @Output() logoff = new EventEmitter<string>();
   @Output() releaseOldSessions = new EventEmitter<any>();
@@ -26,7 +28,7 @@ export class AuthService {
 
   loggedUser: string;
 
-  constructor(private readonly http: HttpClient) {
+  constructor() {
     this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN));
     this.currentToken = this.currentTokenSubject.asObservable();
 

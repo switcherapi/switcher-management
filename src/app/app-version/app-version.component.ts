@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -12,14 +12,14 @@ import { ConsoleLogger } from '../_helpers/console-logger';
   standalone: false
 })
 export class AppVersionComponent implements OnInit {
+  private readonly authService = inject(AuthService);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() apiVersion: string;
   apiReleaseTime: string;
   smVersion: string;
   smReleaseTime: string;
-
-  constructor(private readonly authService: AuthService) { }
 
   ngOnInit(): void {
     this.smVersion = environment.version;

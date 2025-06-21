@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -41,6 +41,18 @@ import { Types } from 'src/app/model/path-route';
   standalone: false
 })
 export class ChangelogComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly adminService = inject(AdminService);
+  private readonly domainService = inject(DomainService);
+  private readonly groupService = inject(GroupService);
+  private readonly configService = inject(ConfigService);
+  private readonly strategyService = inject(StrategyService);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+  private readonly datepipe = inject(DatePipe);
+  private readonly errorHandler = inject(RouterErrorHandler);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() domainId: string;
@@ -79,19 +91,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   loading = true;
   fetch = true;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly adminService: AdminService,
-    private readonly domainService: DomainService,
-    private readonly groupService: GroupService,
-    private readonly configService: ConfigService,
-    private readonly strategyService: StrategyService,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal,
-    private readonly datepipe: DatePipe,
-    private readonly errorHandler: RouterErrorHandler
-  ) { 
+  constructor() { 
     this.activatedRoute.parent?.params.subscribe(params => {
       this.domainId = params.domainid;
       this.domainName = decodeURIComponent(params.name);

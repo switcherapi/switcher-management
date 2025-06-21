@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { takeUntil, startWith, map, debounceTime } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -14,6 +14,8 @@ import { ApolloQueryResult } from '@apollo/client';
   standalone: false
 })
 export class ElementAutocompleteComponent implements OnInit, OnDestroy {
+  private readonly domainService = inject(DomainService);
+
 
   private readonly unsubscribe = new Subject<void>();
   
@@ -28,10 +30,6 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   searchListItems: any[] = [];
   searchedValues: Observable<string[]>;
   private query: Observable<ApolloQueryResult<any>>;
-
-  constructor(
-    private readonly domainService: DomainService
-  ) { }
 
   ngOnInit() {
     this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(

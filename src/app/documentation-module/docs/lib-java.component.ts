@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MarkdownInjector } from './markdown-injector.component';
-import { MarkdownService } from 'ngx-markdown';
 
 @Component({
   selector: 'app-libjava',
@@ -15,9 +14,10 @@ import { MarkdownService } from 'ngx-markdown';
   standalone: false
 })
 export class LibJavaComponent extends MarkdownInjector {
-
-  constructor(private readonly markdownComponentService: MarkdownService) {
-    super(markdownComponentService, 'documentation/libjava.md');
+  
+  constructor() {
+    super();
+    this.init('documentation/libjava.md');
   }
 
 }

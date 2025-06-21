@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ChartOptions, ChartType, ChartDataset, ChartData } from 'chart.js';
 import { MetricComponent } from '../metric/metric.component';
@@ -19,6 +19,8 @@ const positiveTemplate = { label: 'True', backgroundColor: '#86c7f395', borderCo
   standalone: false
 })
 export class MetricStatisticsComponent implements OnInit, OnDestroy {
+  dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() data: Metric;
@@ -31,10 +33,6 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   switchersTab: SwitchersStatisticsTab;
   componentsTab: ComponentsStatisticsTab;
   reasonsTab: ReasonsStatisticsTab;
-
-  constructor(
-    public dialog: MatDialog
-  ) {}
 
   ngOnInit() {
     if(!this.data?.statistics)
@@ -363,10 +361,8 @@ export class SwitcherDateTimeGroupedTab {
   standalone: false
 })
 export class SwitcherDataStatsDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<SwitcherDataStatsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+  dialogRef = inject<MatDialogRef<SwitcherDataStatsDialogComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
 
   onClose() {
     this.dialogRef.close();

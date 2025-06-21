@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,6 +15,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false
 })
 export class DomainCreateComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<DomainCreateComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+
   private readonly unsubscribe = new Subject<void>();
 
   nameFormControl = new FormControl('', [
@@ -22,10 +25,6 @@ export class DomainCreateComponent implements OnInit, OnDestroy {
     Validators.minLength(5),
     Validators.maxLength(30)
   ]);
-
-  constructor(
-    public dialogRef: MatDialogRef<DomainCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.nameFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {

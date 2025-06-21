@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
@@ -30,6 +30,17 @@ import { BasicComponent } from '../common/basic-component';
   standalone: false
 })
 export class DomainComponent extends BasicComponent implements OnInit, OnDestroy, OnElementAutocomplete {
+  private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly domainService = inject(DomainService);
+  private readonly configService = inject(ConfigService);
+  private readonly groupService = inject(GroupService);
+  private readonly featureService = inject(FeatureService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   loading = true;
@@ -53,18 +64,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   slackIntegration = false;
   transferLabel = '';
 
-  constructor(
-    private readonly dialog: MatDialog,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly domainService: DomainService,
-    private readonly configService: ConfigService,
-    private readonly groupService: GroupService,
-    private readonly featureService: FeatureService,
-    private readonly toastService: ToastService
-  ) {
+  constructor() {
     super();
     this.route.params.subscribe(params => {
       this.domainId = params.domainid;

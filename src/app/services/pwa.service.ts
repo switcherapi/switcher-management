@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class PwaService {
-    constructor(private readonly swUpdate: SwUpdate, 
-        private readonly snackbar: MatSnackBar) {
-    }
+    private readonly swUpdate = inject(SwUpdate);
+    private readonly snackbar = inject(MatSnackBar);
 
     checkForUpdate(): void {
         if (this.swUpdate.isEnabled) {

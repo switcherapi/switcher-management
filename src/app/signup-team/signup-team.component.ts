@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -13,6 +13,11 @@ import { TeamService } from '../services/team.service';
   standalone: false
 })
 export class SignupTeamComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly teamService = inject(TeamService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   loading = false;
@@ -20,13 +25,6 @@ export class SignupTeamComponent implements OnInit, OnDestroy {
   request: string;
   team: string;
   domain: string;
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly teamService: TeamService,
-    private readonly toastService: ToastService
-  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

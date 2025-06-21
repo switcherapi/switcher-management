@@ -1,4 +1,4 @@
-import { Directive, forwardRef, HostListener } from "@angular/core";
+import { Directive, forwardRef, HostListener, inject } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import { RecaptchaComponent } from "./recaptcha.component";
@@ -15,6 +15,8 @@ import { RecaptchaComponent } from "./recaptcha.component";
   standalone: false
 })
 export class RecaptchaValueAccessorDirective implements ControlValueAccessor {
+  private readonly host = inject(RecaptchaComponent);
+
   /** @internal */
   private onChange: (value: string | null) => void;
 
@@ -22,8 +24,6 @@ export class RecaptchaValueAccessorDirective implements ControlValueAccessor {
   private onTouched: () => void;
 
   private requiresControllerReset = false;
-
-  constructor(private readonly host: RecaptchaComponent) {}
 
   public writeValue(value: string): void {
     if (!value) {

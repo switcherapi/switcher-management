@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -13,19 +13,17 @@ import { DomainService } from 'src/app/services/domain.service';
   standalone: false
 })
 export class SignupDomainComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly domainService = inject(DomainService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   loading = false;
   error = '';
   request: string;
   domain: string;
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly domainService: DomainService,
-    private readonly toastService: ToastService
-  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

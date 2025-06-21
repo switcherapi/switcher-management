@@ -1,4 +1,4 @@
-import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit, Input } from '@angular/core';
+import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit, Input, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { MatSelect } from '@angular/material/select';
@@ -12,6 +12,10 @@ import { Subject } from 'rxjs';
 
 @Directive()
 export class ListComponent implements AfterViewInit {
+    private readonly activatedRoute = inject(ActivatedRoute);
+    private readonly formBuilder = inject(FormBuilder);
+    private readonly envService = inject(EnvironmentService);
+
     protected unsubscribe = new Subject<void>();
     
     @ViewChildren("envSelectionChange")
@@ -33,11 +37,7 @@ export class ListComponent implements AfterViewInit {
     loading = false;
     error = '';
 
-    constructor(
-        private readonly activatedRoute: ActivatedRoute,
-        private readonly formBuilder: FormBuilder,
-        private readonly envService: EnvironmentService
-    ) {
+    constructor() {
         this.activatedRoute.parent.params.subscribe(params => {
             this.domainId = params.domainid;
             this.domainName = params.name;

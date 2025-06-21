@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, HostListener, inject } from '@angular/core';
 import { Validators, FormControl } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
@@ -28,6 +28,12 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   standalone: false
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
+  private readonly strategyService = inject(StrategyService);
+  private readonly adminService = inject(AdminService);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+  private readonly dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() strategy: Strategy;
@@ -50,13 +56,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   strategyOperations: string[] = [];
   strategyValuesLength: number;
 
-  constructor(
-    private readonly strategyService: StrategyService,
-    private readonly adminService: AdminService,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal,
-    private readonly dialog: MatDialog
-  ) {
+  constructor() {
     super();
     this.onResize();
   }
@@ -390,10 +390,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   standalone: false
 })
 export class ChangeLogDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<ChangeLogDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+  dialogRef = inject<MatDialogRef<ChangeLogDialogComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
 
   onClose() {
     this.dialogRef.close();

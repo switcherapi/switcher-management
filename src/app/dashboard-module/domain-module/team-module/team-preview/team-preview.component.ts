@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -24,6 +24,11 @@ import { BasicComponent } from '../../common/basic-component';
   standalone: false
 })
 export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly _modalService = inject(NgbModal);
+  private readonly teamService = inject(TeamService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() team: Team;
@@ -40,12 +45,7 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
 
   toggleSectionStyle = 'toggle-style deactivated';
 
-  constructor(
-    private readonly router: Router,
-    private readonly _modalService: NgbModal,
-    private readonly teamService: TeamService,
-    private readonly toastService: ToastService
-  ) { 
+  constructor() { 
     super();
   }
 

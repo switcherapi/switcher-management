@@ -1,17 +1,16 @@
-import { Directive, Input, ElementRef, HostListener } from '@angular/core';
+import { Directive, Input, ElementRef, HostListener, inject } from '@angular/core';
 
 @Directive({
     selector: '[special-chars]',
     standalone: false
 })
 export class SpecialCharacterDirective {
+    private readonly el = inject(ElementRef);
 
     @Input() allowRegexStr = '^[a-zA-Z0-9_-]*$';
     @Input() autoUpper = false;
     @Input() autoLower = false;
     @Input() autoUnderscore = false;
-
-    constructor(private readonly el: ElementRef) { }
 
     @HostListener('input', ['$event']) onInput(event) {
         if (this.autoUpper)

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -23,6 +23,12 @@ import { DataUtils } from 'src/app/_helpers/data-utils';
   standalone: false
 })
 export class StrategyCreateComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<ConfigCreateComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly strategyService = inject(StrategyService);
+  private readonly toastService = inject(ToastService);
+
   private readonly unsubscribe = new Subject<void>();
 
   operations: string[] = [];
@@ -52,14 +58,6 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSelectionList, { static: true })
   private readonly strategyValueSelection: MatSelectionList;
-
-  constructor(
-    public dialogRef: MatDialogRef<ConfigCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private readonly formBuilder: FormBuilder,
-    private readonly strategyService: StrategyService,
-    private readonly toastService: ToastService
-  ) { }
 
   ngOnInit(): void {
     this.loadStrategies();

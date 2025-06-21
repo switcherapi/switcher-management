@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpBackend } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -12,9 +12,11 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class SearchDocsService extends ApiService {
 
-  private http: HttpClient;
+  private readonly http: HttpClient;
 
-  constructor(handler: HttpBackend) {
+  constructor() {
+    const handler = inject(HttpBackend);
+
     super();
     this.http = new HttpClient(handler);
   }

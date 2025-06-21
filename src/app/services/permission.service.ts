@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -12,10 +12,10 @@ import { permissionQuery } from '../model/graphql-schemas';
   providedIn: 'root'
 })
 export class PermissionService extends ApiService {
+  private readonly http = inject(HttpClient);
+  private readonly apollo = inject(Apollo);
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly apollo: Apollo) {
+  constructor() {
     super();
   }
 

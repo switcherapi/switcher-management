@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,6 +15,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false
 })
 export class GroupCreateComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<GroupCreateComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  private readonly formBuilder = inject(FormBuilder);
+
   private readonly unsubscribe = new Subject<void>();
 
   elementCreationFormGroup: FormGroup;
@@ -28,11 +32,6 @@ export class GroupCreateComponent implements OnInit, OnDestroy {
   descFormControl = new FormControl('', [
     Validators.maxLength(256)
   ]);
-
-  constructor(
-    public dialogRef: MatDialogRef<GroupCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private readonly formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.elementCreationFormGroup = this.formBuilder.group({

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MarkdownService } from 'ngx-markdown';
 import { MarkdownInjector } from './markdown-injector.component';
 
 @Component({
@@ -16,8 +15,9 @@ import { MarkdownInjector } from './markdown-injector.component';
 })
 export class ComponentsComponent extends MarkdownInjector {
 
-  constructor(private readonly markdownComponentService: MarkdownService) {
-    super(markdownComponentService, 'documentation/components.md');
+  constructor() {
+    super();
+    this.init('documentation/components.md');
   }
 
 }

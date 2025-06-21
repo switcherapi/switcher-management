@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { ApiService } from "./api.service";
 import { HttpBackend, HttpClient } from "@angular/common/http";
 import { FeatureRequest, FeatureResponse } from "../model/feature";
@@ -13,7 +13,9 @@ export class FeatureService extends ApiService {
 
     private readonly http: HttpClient;
 
-    constructor(handler: HttpBackend) {
+    constructor() {
+      const handler = inject(HttpBackend);
+
       super();
       this.http = new HttpClient(handler);
     }

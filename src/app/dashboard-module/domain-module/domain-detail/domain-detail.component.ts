@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -26,6 +26,15 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   standalone: false
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly domainService = inject(DomainService);
+  private readonly adminService = inject(AdminService);
+  private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+
   private readonly unsubscribe = new Subject<void>();
 
   @ViewChild('descElement', { static: true }) 
@@ -39,16 +48,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   collabUser = false;
 
-  constructor(
-    private readonly domainRouteService: DomainRouteService,
-    private readonly domainService: DomainService,
-    private readonly adminService: AdminService,
-    private readonly authService: AuthService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal
-  ) {
+  constructor() {
     super();
     this.route.params.subscribe(params => this.domainId = params.domainid);
   }

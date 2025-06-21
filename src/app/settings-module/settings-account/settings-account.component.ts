@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { takeUntil } from 'rxjs/operators';
@@ -22,6 +22,14 @@ import { ToastService } from 'src/app/_helpers/toast.service';
   standalone: false
 })
 export class SettingsAccountComponent extends BasicComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly adminService = inject(AdminService);
+  private readonly authService = inject(AuthService);
+  private readonly domainService = inject(DomainService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+
   private readonly unsubscribe = new Subject<void>();
 
   accountForm: FormGroup;
@@ -31,14 +39,7 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
   userPlatform: string;
   profileAvatar: string;
 
-  constructor(
-    private readonly router: Router,
-    private readonly adminService: AdminService,
-    private readonly authService: AuthService,
-    private readonly domainService: DomainService,
-    private readonly formBuilder: FormBuilder,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal) {
+  constructor() {
     super();
   }
 

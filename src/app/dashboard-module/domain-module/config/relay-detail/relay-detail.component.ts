@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
@@ -26,6 +26,14 @@ import { DomainService } from 'src/app/services/domain.service';
   standalone: false
 })
 export class RelayDetailComponent extends DetailComponent implements OnInit, OnDestroy {
+  private readonly adminService = inject(AdminService);
+  private readonly domainService = inject(DomainService);
+  private readonly configService = inject(ConfigService);
+  private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+  dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
 
   @Input() config: Config;
@@ -55,15 +63,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   relayVerificationEnabled = false;
   relayVerificationCode: string;
 
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly domainService: DomainService,
-    private readonly configService: ConfigService,
-    private readonly authService: AuthService,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal,
-    public dialog: MatDialog
-  ) {
+  constructor() {
     super();
   }
 
@@ -371,10 +371,8 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   standalone: false
 })
 export class RelayVerificationDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<RelayVerificationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+  dialogRef = inject<MatDialogRef<RelayVerificationDialogComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
 
   onVerify(data: any): void {
     this.dialogRef.close(data);

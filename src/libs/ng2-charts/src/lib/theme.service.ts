@@ -6,16 +6,14 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
   providedIn: 'root',
 })
 export class ThemeService {
-  private pColorschemesOptions?: ChartOptions;
   public colorschemesOptions: BehaviorSubject<ChartOptions | undefined> =
     new BehaviorSubject<ChartOptions | undefined>(undefined);
 
   setColorschemesOptions(options: ChartConfiguration['options']): void {
-    this.pColorschemesOptions = options;
     this.colorschemesOptions.next(options);
   }
 
-  getColorschemesOptions(): ChartConfiguration['options'] {
-    return this.pColorschemesOptions;
+  getColorschemesOptions(): ChartConfiguration['options'] | undefined {
+    return this.colorschemesOptions.value;
   }
 }

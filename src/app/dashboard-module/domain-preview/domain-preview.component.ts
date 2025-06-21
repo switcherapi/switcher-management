@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Domain } from 'src/app/model/domain';
 
@@ -12,14 +12,12 @@ import { Domain } from 'src/app/model/domain';
   standalone: false
 })
 export class DomainPreviewComponent implements OnInit {
+  private readonly router = inject(Router);
+
   @Input() domain: Domain;
 
   classStatus: string;
   classBtnStatus: string;
-
-  constructor(
-    private readonly router: Router
-  ) { }
 
   ngOnInit() {
     this.updateStatus();

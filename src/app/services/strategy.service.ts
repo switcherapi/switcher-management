@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -12,8 +12,9 @@ import { History } from '../model/history';
   providedIn: 'root'
 })
 export class StrategyService extends ApiService {
-
-  constructor(private readonly http: HttpClient) {
+  private readonly http = inject(HttpClient);
+  
+  constructor() {
     super();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -20,6 +20,10 @@ import { TeamService } from 'src/app/services/team.service';
   standalone: false
 })
 export class TeamPendingMembersComponent implements OnInit, OnDestroy {
+  private readonly teamService = inject(TeamService);
+  private readonly toastService = inject(ToastService);
+  dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
   @Input() team: Team;
   @Input() updatable = false;
@@ -32,12 +36,6 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   dataColumns = ['remove', 'email', 'createdAt', 'request'];
 
   loading = false;
-
-  constructor(
-    private readonly teamService: TeamService,
-    private readonly toastService: ToastService,
-    public dialog: MatDialog
-  ) { }
 
   ngOnInit() {
     this.loadPendingInvitations();

@@ -1,18 +1,6 @@
 /// <reference types="grecaptcha" />
 
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Inject,
-  Input,
-  NgZone,
-  OnDestroy,
-  Optional,
-  Output,
-} from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, NgZone, OnDestroy, Output, inject } from "@angular/core";
 import { Subscription } from "rxjs";
 
 import { RecaptchaLoaderService } from "./recaptcha-loader.service";
@@ -32,6 +20,10 @@ export type RecaptchaErrorParameters = Parameters<NeverUndefined<ReCaptchaV2.Par
   standalone: false
 })
 export class RecaptchaComponent implements AfterViewInit, OnDestroy {
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly loader = inject(RecaptchaLoaderService);
+  private readonly zone = inject(NgZone);
+
   @Input()
   @HostBinding("attr.id")
   public id = `ngrecaptcha-${nextId++}`;
@@ -61,12 +53,9 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   /** @internal */
   private executeRequested: boolean;
 
-  constructor(
-    private readonly elementRef: ElementRef<HTMLElement>,
-    private readonly loader: RecaptchaLoaderService,
-    private readonly zone: NgZone,
-    @Optional() @Inject(RECAPTCHA_SETTINGS) settings?: RecaptchaSettings,
-  ) {
+  constructor() {
+    const settings = inject<RecaptchaSettings>(RECAPTCHA_SETTINGS, { optional: true });
+
     if (settings) {
       this.siteKey = settings.siteKey;
       this.theme = settings.theme;

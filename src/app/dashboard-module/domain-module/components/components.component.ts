@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -27,6 +27,15 @@ import { BasicComponent } from '../common/basic-component';
   standalone: false
 })
 export class ComponentsComponent extends BasicComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly domainRouteService = inject(DomainRouteService);
+  private readonly adminService = inject(AdminService);
+  private readonly compService = inject(ComponentService);
+  private readonly errorHandler = inject(RouterErrorHandler);
+  private readonly toastService = inject(ToastService);
+  private readonly _modalService = inject(NgbModal);
+  dialog = inject(MatDialog);
+
   private readonly unsubscribe = new Subject<void>();
 
   components: SwitcherComponent[];
@@ -48,16 +57,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
   error = '';
   fetch = true;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly domainRouteService: DomainRouteService,
-    private readonly adminService: AdminService,
-    private readonly compService: ComponentService,
-    private readonly errorHandler: RouterErrorHandler,
-    private readonly toastService: ToastService,
-    private readonly _modalService: NgbModal,
-    public dialog: MatDialog
-  ) {
+  constructor() {
     super();
     this.activatedRoute.parent.params.subscribe(params => {
       this.domainId = params.domainid;
@@ -264,11 +264,9 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
   standalone: false
 })
 export class ComponentEditDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<ComponentEditDialogComponent>,
-    private readonly toastService: ToastService,
-    @Inject(MAT_DIALOG_DATA) public data: SwitcherComponent) { }
+  dialogRef = inject<MatDialogRef<ComponentEditDialogComponent>>(MatDialogRef);
+  private readonly toastService = inject(ToastService);
+  data = inject<SwitcherComponent>(MAT_DIALOG_DATA);
 
   onSave(data: SwitcherComponent): void {
     this.dialogRef.close(data);

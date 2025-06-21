@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
@@ -8,13 +8,14 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor, OnDestroy {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
 
   private isRefreshing = false;
   private readonly refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router) { 
+  constructor() { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
     })

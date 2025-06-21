@@ -1,16 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  Optional,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, Output, SimpleChanges, inject } from '@angular/core';
 import {
   Chart,
   ChartConfiguration,
@@ -42,6 +30,9 @@ export class BaseChartDirective<
   >
   implements OnDestroy, OnChanges
 {
+  private readonly zone = inject(NgZone);
+  private readonly themeService = inject(ThemeService);
+
   @Input() public type: ChartConfiguration<TType, TData, TLabel>['type'] =
     'bar' as TType;
   @Input() public legend?: boolean;
@@ -75,12 +66,10 @@ export class BaseChartDirective<
   private readonly subs: Subscription[] = [];
   private themeOverrides: ChartConfiguration['options'] = {};
 
-  public constructor(
-    element: ElementRef,
-    private readonly zone: NgZone,
-    private readonly themeService: ThemeService,
-    @Optional() @Inject(NG_CHARTS_CONFIGURATION) config?: NgChartsConfiguration,
-  ) {
+  public constructor() {
+    const element = inject(ElementRef);
+    const config = inject<NgChartsConfiguration>(NG_CHARTS_CONFIGURATION, { optional: true });
+
     if (config?.registerables) {
       Chart.register(...config.registerables);
     }
@@ -182,14 +171,14 @@ export class BaseChartDirective<
     return merge(
       {
         onHover: (event: ChartEvent, active: object[]) => {
-          if (!this.chartHover.observed && !this.chartHover.observers?.length) {
+          if (!this.chartHover.observed) {
             return;
           }
 
           this.zone.run(() => this.chartHover.emit({ event, active }));
         },
         onClick: (event?: ChartEvent, active?: object[]) => {
-          if (!this.chartClick.observed && !this.chartClick.observers?.length) {
+          if (!this.chartClick.observed) {
             return;
           }
 
