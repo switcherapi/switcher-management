@@ -10,7 +10,6 @@ jobs:
   build-lint:
     name: Build & Lint
     runs-on: ubuntu-latest
-    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     concurrency: ci-${{ github.ref }}
 
     steps:
