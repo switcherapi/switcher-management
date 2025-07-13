@@ -12,7 +12,7 @@ A Java SDK for Switcher API
 - Able to work local using a snapshot file pulled from your remote Switcher-API Domain.
 - Silent mode is a hybrid configuration that automatically enables contingent sub-processes in case of any connectivity issue.
 - Built-in test annotation for clear and easy implementation of automated testing.
-- Easy to setup. Switcher Context is responsible to manage all the configuration complexity between your application and API.
+- Easy to set up. Switcher Context is responsible to manage all the configuration complexity between your application and API.
 
 * * *
 
@@ -79,11 +79,17 @@ switcher.environment
 # true/false When local, it will only use a local snapshot
 switcher.local
 
+# true/false When true, it will check Switcher Keys
+switcher.check
+
 # Folder from where snapshots will be saved/read
 switcher.snapshot.location
 
 # true/false Automated lookup for snapshot when initializing the client
 switcher.snapshot.auto
+
+# true/false Enable the watcher to monitor the snapshot file for changes during runtime
+switcher.snapshot.watcher
 
 # true/false Skip snapshotValidation() that can be used for UT executions
 switcher.snapshot.skipvalidation
@@ -213,12 +219,12 @@ getSwitcher(FEATURE01)
 	.isItOn();
 ```
 
-4. **Accessing the response history**
+4. **Accessing the last SwitcherResult**
 
-Switchers stores the last execution result from a given switcher key/entry.
+Switchers stores the last execution result, which can be retrieved using the following operation.
 
 ```java
-switcher.getHistoryExecution();
+switcher.getLastExecutionResult();
 ```
 
 5. **Throttling**
@@ -282,14 +288,23 @@ MyAppFeatures.scheduleSnapshotAutoUpdate("5s", new SnapshotCallback() {
 ```
 </br>
 
-##### - Real-time snapshot updater
+##### Real-time snapshot reload (Hot-swapping)
 Let the Switcher Client manage your application local snapshot.<br>
-These features allow you to configure the SDK to automatically update the snapshot in the background.
+These features allow you to configure the SDK to automatically update the snapshot during runtime.
 
 1. This feature will update the in-memory Snapshot every time the file is modified.
 ```java
 MyAppFeatures.watchSnapshot();
 MyAppFeatures.stopWatchingSnapshot();
+```
+
+Alternatively, you can also set the Switcher Context configuration to start watching the snapshot file during the client initialization.
+
+```java
+MyAppFeatures.configure(ContextBuilder.builder()
+    .snapshotWatcher(true));
+
+MyAppFeatures.initializeClient();
 ```
 
 2. You can also perform snapshot update validation to verify if there are changes to be pulled.
@@ -325,7 +340,7 @@ switcher.isItOn(); // Now, it's going to return the result retrieved from the AP
 For more complex scenarios where you need to test features based on specific inputs, you can use test conditions.
 
 ```java
-Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01).checkValue("My value").build();
+Switcher switcher = MyAppFeatures.getSwitcher(FEATURE01).checkValue("My value");
 
 SwitcherBypass.assume(FEATURE01, true).when(StrategyValidator.VALUE, "My value");
 switcher.isItOn(); // 'true'
@@ -346,6 +361,15 @@ In case something is missing, this operation will throw an exception pointing ou
 void testSwitchers() {
 	assertDoesNotThrow(() -> MyAppFeatures.checkSwitchers());
 }
+```
+
+Alternatively, you can also set the Switcher Context configuration to check during the client initialization.
+
+```java
+MyAppFeatures.configure(ContextBuilder.builder()
+    .checkSwitchers(true));
+
+MyAppFeatures.initializeClient();
 ```
 
 #### SwitcherTest annotation - Requires JUnit 5 Jupiter
