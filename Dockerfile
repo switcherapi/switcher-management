@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 # Required for @parcel/watcher
 RUN apk add --update g++ make python3 && rm -rf /var/cache/apk/*

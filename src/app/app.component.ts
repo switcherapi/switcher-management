@@ -15,7 +15,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly pwaService = inject(PwaService);
 
-
   currentToken: string;
   loggedUserName: string;
   profileAvatar: string;
