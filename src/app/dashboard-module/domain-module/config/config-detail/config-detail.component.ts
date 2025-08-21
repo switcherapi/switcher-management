@@ -280,6 +280,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if (index >= 0) {
       this.components.splice(index, 1);
       this.listComponents.push(component);
+      this.componentForm.setValue(null);
     }
   }
 
