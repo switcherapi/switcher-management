@@ -25,6 +25,14 @@ tr.element-row:not(.expanded-row):active {
 .element-detail-panel {
   overflow: hidden;
   display: flex;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.element-detail-panel.expanded {
+  max-height: 500px;
+  opacity: 1;
 }
 
 .element-detail {

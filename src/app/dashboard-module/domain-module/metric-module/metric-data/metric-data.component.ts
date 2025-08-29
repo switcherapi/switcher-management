@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
@@ -20,15 +19,6 @@ import { MetricService } from 'src/app/services/metric.service';
   styleUrls: [
     '../../common/css/detail.component.css',
     './metric-data.component.css'
-  ],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', [
-        animate('.1s')
-      ]),
-    ]),
   ],
   standalone: false
 })
@@ -50,7 +40,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<MetricData>;
   dataColumns = ['switcher', 'component', 'result', 'date'];
 
-  expandedElement: MetricData | null;
+  expandedElement = signal<MetricData | null>(null);
 
   removable = false;
 
@@ -78,6 +68,19 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  toggleExpanded(element: MetricData) {
+    const currentExpanded = this.expandedElement();
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: MetricData): boolean {
+    return this.expandedElement() === element;
   }
 
   applyFilter(filterValue: string) {

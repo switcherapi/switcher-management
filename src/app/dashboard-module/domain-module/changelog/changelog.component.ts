@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DatePipe } from '@angular/common';
@@ -28,15 +27,6 @@ import { Types } from 'src/app/model/path-route';
   styleUrls: [
     '../common/css/detail.component.css',
     './changelog.component.css'
-  ],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', [
-        animate('.1s')
-      ]),
-    ]),
   ],
   standalone: false
 })
@@ -83,7 +73,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       display: 'Updated By'
     }
   ];
-  expandedElement: History | null;
+  expandedElement = signal<History | null>(null);
 
   configId: string;
   groupId: string;
@@ -116,6 +106,19 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  toggleExpanded(element: History) {
+    const currentExpanded = this.expandedElement();
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: History): boolean {
+    return this.expandedElement() === element;
   }
 
   onPage(event: PageEvent) {

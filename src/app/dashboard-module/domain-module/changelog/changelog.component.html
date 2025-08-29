@@ -28,27 +28,26 @@
 
         <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let element" [attr.colspan]="dataColumns.length">
-                <div class="element-detail-panel"
-                    [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'">
+                <div class="element-detail-panel" [class.expanded]="isExpanded(element)">
                     <div class="element-detail">
                         <h1>Before</h1>
-                        <mat-list role="list" *ngFor="let key of getElementKeys(element.oldValue)">
+                        <div *ngFor="let key of getElementKeys(element.oldValue)">
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{key}}</mat-label>
                                 <input matInput [value]="getElementValue(key, element.oldValue)"
                                     readonly autocomplete="off">
                             </mat-form-field>
-                        </mat-list>
+                        </div>
                     </div>
                     <div class="element-detail">
                         <h1>After</h1>
-                        <mat-list role="list" *ngFor="let key of getElementKeys(element.newValue)">
+                        <div *ngFor="let key of getElementKeys(element.newValue)">
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{key}}</mat-label>
                                 <input matInput [value]="getElementValue(key, element.newValue)"
                                     readonly autocomplete="off">
                             </mat-form-field>
-                        </mat-list>
+                        </div>
                     </div>
                 </div>
             </td>
@@ -56,8 +55,8 @@
 
         <tr mat-header-row *matHeaderRowDef="dataColumns"></tr>
         <tr mat-row *matRowDef="let element; columns: dataColumns;" class="element-row"
-            [class.expanded-row]="expandedElement === element"
-            (click)="expandedElement = expandedElement === element ? null : element">
+            [class.expanded-row]="isExpanded(element)"
+            (click)="toggleExpanded(element)">
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>

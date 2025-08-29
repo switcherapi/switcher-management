@@ -18,7 +18,6 @@ import { GraphQLModule } from './graphql.module';
 import { AppMaterialModule } from './shared/app-material.module';
 import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './signup/signup.component';
 
 import { RecaptchaModule, RecaptchaFormsModule } from '../libs/ng-recaptcha-module';
@@ -39,7 +38,6 @@ import { provideCharts, withDefaultRegisterables } from '../libs/ng2-charts/src/
     imports: [
       BrowserModule,
       CommonModule,
-      BrowserAnimationsModule,
       ReactiveFormsModule,
       appRoutingModule,
       GraphQLModule,
