@@ -1,18 +1,27 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, Validators, FormGroup, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput, MatError, MatHint } from '@angular/material/input';
+import { SpecialCharacterDirective } from '../../common/special.char.directive';
 
 @Component({
-  selector: 'app-config-create',
-  templateUrl: './config-create.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    '../../common/css/create.component.css',
-    './config-create.component.css'
-  ],
-  standalone: false
+    selector: 'app-config-create',
+    templateUrl: './config-create.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        '../../common/css/create.component.css',
+        './config-create.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, FormsModule, 
+      ReactiveFormsModule, MatFormField, MatLabel, MatInput, SpecialCharacterDirective, MatError, 
+      MatHint, MatDialogActions, MatButton
+    ]
 })
 export class ConfigCreateComponent implements OnInit, OnDestroy {
   dialogRef = inject<MatDialogRef<ConfigCreateComponent>>(MatDialogRef);

@@ -5,8 +5,7 @@ import { RecaptchaCommonModule } from "./recaptcha-common.module";
 import { RecaptchaValueAccessorDirective } from "./recaptcha-value-accessor.directive";
 
 @NgModule({
-  declarations: [RecaptchaValueAccessorDirective],
-  exports: [RecaptchaValueAccessorDirective],
-  imports: [FormsModule, RecaptchaCommonModule],
+    exports: [RecaptchaValueAccessorDirective],
+    imports: [FormsModule, RecaptchaCommonModule, RecaptchaValueAccessorDirective],
 })
 export class RecaptchaFormsModule {}

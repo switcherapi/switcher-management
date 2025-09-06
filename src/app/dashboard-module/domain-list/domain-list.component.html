@@ -11,16 +11,20 @@
             </div>
         </h4>
         <div class="card-body">
-            <div *ngIf="loading" class="card-body loader-div">
+            @if (loading) {
+            <div class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
-            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
-            <div *ngIf="!loading">
-                <div *ngFor="let domain of domains">
+            }
+            @if (error) {
+            <div class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+            }
+            @if (!loading) {
+                @for (domain of domains; track domain) {
                     <app-domain-preview [domain]="domain"></app-domain-preview>
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
     <div [ngClass]="cardCollabListContainerStyle">
@@ -31,16 +35,20 @@
             </div>
         </h4>
         <div class="card-body">
-            <div *ngIf="loadingCollab" class="card-body loader-div">
+            @if (loadingCollab) {
+            <div class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
-            <div *ngIf="errorCollab" class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
-            <div *ngIf="!loadingCollab">
-                <div *ngFor="let domain of collabDomains">
+            }
+            @if (errorCollab) {
+            <div class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
+            }
+            @if (!loadingCollab) {
+                @for (domain of collabDomains; track domain) {
                     <app-domain-preview [domain]="domain"></app-domain-preview>
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
 </div>

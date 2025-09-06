@@ -3,17 +3,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
-import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
+import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { FormControl, Validators } from '@angular/forms';
-import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModal, NgbNavChangeEvent, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { StrategyCreateComponent } from '../strategy-create/strategy-create.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger, MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { Strategy } from 'src/app/model/strategy';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
@@ -23,15 +23,31 @@ import { AdminService } from 'src/app/services/admin.service';
 import { StrategyService } from 'src/app/services/strategy.service';
 import { ComponentService } from 'src/app/services/component.service';
 import { Config, ConfigRelay } from 'src/app/model/config';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { NgClass, NgStyle, AsyncPipe, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel, MatInput, MatError, MatHint } from '@angular/material/input';
+import { SpecialCharacterDirective } from '../../common/special.char.directive';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { StrategyListComponent } from '../strategy-list/strategy-list.component';
+import { RelayDetailComponent } from '../relay-detail/relay-detail.component';
+import { MetricComponent } from '../../metric-module/metric/metric.component';
 
 @Component({
-  selector: 'app-config-detail',
-  templateUrl: './config-detail.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './config-detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-config-detail',
+    templateUrl: './config-detail.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './config-detail.component.css'
+    ],
+    imports: [
+      BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, FormsModule, SpecialCharacterDirective, NgStyle, 
+      ReactiveFormsModule, MatError, MatHint, EnvironmentConfigComponent, MatCheckbox, MatChipGrid, MatChipRow, 
+      MatChipRemove, MatIcon, MatAutocompleteTrigger, MatChipInput, MatAutocomplete, MatOption, 
+      MatButton, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, StrategyListComponent, 
+      RelayDetailComponent, MetricComponent, NgbNavOutlet, AsyncPipe, DatePipe
+    ]
 })
 export class ConfigDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly domainRouteService = inject(DomainRouteService);
@@ -114,7 +130,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.groupId = params.groupid;
       this.configId = params.configid;
 
-      const configFromState = this.router.getCurrentNavigation()?.extras.state?.element;
+      const configFromState = this.router.currentNavigation()?.extras.state?.element;
       if (configFromState) {
         this.config = JSON.parse(configFromState);
         this.updateData(this.config);

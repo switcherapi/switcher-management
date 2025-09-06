@@ -1,7 +1,9 @@
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
+}
 <div [ngClass]="detailBodyStyle">
     <div class="panel-slack-detail">
         <img src="assets\slack.svg" class="slack-img" style="width: 30px;" alt="slack" />
@@ -11,7 +13,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="card h-100">
-                    <div *ngIf="slack" class="card-body">
+                    @if (slack) {
+                    <div class="card-body">
                         <h5 class="card-title">Details</h5>
                         <div class="description">
                             <mat-form-field>
@@ -26,11 +29,14 @@
                                 <mat-label>Installed At</mat-label>
                                 <input matInput [value]="slack.installed_at * 1000 | date:'medium'" readonly>
                             </mat-form-field>
-                            <a *ngIf="allowUpdate" class="ticket_stats" style="text-align: center;" title="Clean opened tickets" (click)="onResetTicketsHistory()">
+                            @if (allowUpdate) {
+                            <a class="ticket_stats" style="text-align: center;" title="Clean opened tickets" (click)="onResetTicketsHistory()">
                                 <mat-icon>fiber_new</mat-icon> {{slack.tickets_opened}}
                             </a>
+                            }
                         </div>
                     </div>
+                    }
                 </div>
             </div>
             <div class="col-sm-6">
@@ -39,16 +45,20 @@
                         <h5 class="card-title">Settings</h5>
                         <app-slack-settings></app-slack-settings>
 
-                        <div *ngIf="allowUpdate" class="options-section">
-                            <button *ngIf="slackUpdate" mat-button class="btn-element" (click)="onUpdate()">
+                        @if (allowUpdate) {
+                        <div class="options-section">
+                            @if (slackUpdate) {
+                            <button mat-button class="btn-element" (click)="onUpdate()">
                                 <mat-icon style="font-size: large;">build</mat-icon>
                                 <div class="options-section-label">Update</div>
                             </button>
+                            }
                             <button mat-button class="btn-element btn-red" (click)="onUninstall()">
                                 <mat-icon>cloud_off</mat-icon>
                                 <div class="options-section-label">Uninstall</div>
                             </button>
                         </div>
+                        }
                     </div>
                 </div>
             </div>

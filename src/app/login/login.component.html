@@ -4,44 +4,63 @@
             <h4 class="card-header">
                 <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher API"/>
             </h4>
-            <div *ngIf="!loading" class="card-body">
+            @if (!loading) {
+            <div class="card-body">
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    <div *ngIf="!success" class="form-group">
-                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
+                    @if (!success) {
+                    <div class="form-group">
+                        @if (hasInternalAuthEnabled()) {
+                        <mat-form-field>
                             <mat-label>E-mail</mat-label>
                             <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50"
                                 autocomplete="off" formControlName="email" required>
                         </mat-form-field>
+                        }
                     </div>
+                    }
                     <div class="form-group">
-                        <mat-form-field *ngIf="hasInternalAuthEnabled()">
+                        @if (hasInternalAuthEnabled()) {
+                        <mat-form-field>
                             <mat-label>Password</mat-label>
                             <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
                                 formControlName="password" required>
                         </mat-form-field>
+                        }
                     </div>
                     <div class="btn-container">
-                        <button *ngIf="hasInternalAuthEnabled()" mat-button class="btn-element" [disabled]="loading">
+                        @if (hasInternalAuthEnabled()) {
+                        <button mat-button class="btn-element" [disabled]="loading">
                             <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
                             <span class="label-color" style="color: white; padding-left: 5px;">Login</span>
                         </button>
-                        <button *ngIf="hasGithubIntegration()" mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
+                        }
+                        @if (hasGithubIntegration()) {
+                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
                             <img src="assets\github.svg" style="width: 20px;" alt="GitHub" />
                             <span style="color: black; padding-left: 5px;">GitHub</span>
                         </button>
-                        <button *ngIf="hasBitbucketIntegration()" mat-button class="btn-element white" [disabled]="loading" (click)="onBitBucketLogin()">
+                        }
+                        @if (hasBitbucketIntegration()) {
+                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onBitBucketLogin()">
                             <img src="assets\bitbucket.svg" style="width: 20px;" alt="Bitbucket" />
                             <span style="color: black; padding-left: 5px;">Bitbucket</span>
                         </button>
+                        }
                     </div>
-                    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-                    <div *ngIf="status" class="alert alert-danger mt-3 mb-0">{{status}}</div>
+                    @if (error) {
+                    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                    }
+                    @if (status) {
+                    <div class="alert alert-danger mt-3 mb-0">{{status}}</div>
+                    }
                 </form>
             </div>
-            <div *ngIf="loading" class="card-body loader-div">
+            } @else {
+            <div class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API" />
             </div>
+            }
             <app-version [apiVersion]="apiVersion"></app-version>
         </div>
     </div>

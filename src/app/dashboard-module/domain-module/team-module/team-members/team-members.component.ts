@@ -4,22 +4,27 @@ import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamInviteDialogComponent } from '../team-invite-dialog/team-invite-dialog.component';
 import { Team } from 'src/app/model/team';
 import { Admin } from 'src/app/model/admin';
 import { TeamService } from 'src/app/services/team.service';
 import { TeamInvite } from 'src/app/model/team-invite';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'app-team-members',
-  templateUrl: './team-members.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './team-members.component.css'
-  ],
-  standalone: false
+    selector: 'app-team-members',
+    templateUrl: './team-members.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './team-members.component.css'
+    ],
+    imports: [MatButton, MatIcon, MatFormField, MatLabel, MatInput, MatTable, MatSort, MatColumnDef, 
+      MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow
+    ]
 })
 export class TeamMembersComponent implements OnInit, OnDestroy {
   private readonly teamService = inject(TeamService);

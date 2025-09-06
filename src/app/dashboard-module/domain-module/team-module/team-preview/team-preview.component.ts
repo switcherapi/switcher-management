@@ -5,23 +5,28 @@ import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { TeamComponent } from '../team/team.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { FormControl, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { BasicComponent } from '../../common/basic-component';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { NgStyle, NgClass } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-team-preview',
-  templateUrl: './team-preview.component.html',
-  styleUrls: [
-    '../../common/css/preview.component.css',
-    '../../common/css/detail.component.css',
-    './team-preview.component.css'
-  ],
-  standalone: false
+    selector: 'app-team-preview',
+    templateUrl: './team-preview.component.html',
+    styleUrls: [
+        '../../common/css/preview.component.css',
+        '../../common/css/detail.component.css',
+        './team-preview.component.css'
+    ],
+    imports: [BlockUIComponent, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, ReactiveFormsModule, MatError, MatSlideToggle, NgClass, MatButton, MatIcon]
 })
 export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

@@ -8,11 +8,13 @@
         <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
     </mat-form-field>
 </div>
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
-<div *ngIf="!loading" class="mat-elevation-z8">
+} @else {
+<div class="mat-elevation-z8">
     <table mat-table matSort multiTemplateDataRows
         class="mat-elevation-z8" 
         style="width: 100%;" 
@@ -65,3 +67,4 @@
         <tr mat-row *matRowDef="let element; columns: dataColumns;" class="element-row"></tr>
     </table>
 </div>
+}

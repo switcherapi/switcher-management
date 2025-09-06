@@ -1,15 +1,26 @@
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
-<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!error" [ngClass]="classStatus" style="border: 0;">
-    <div *ngIf="!loading">
-        <div *ngIf="teams" class="header-style">
+}
+@if (error) {
+<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}
+@if (!error) {
+<div [ngClass]="classStatus" style="border: 0;">
+    @if (!loading) {
+    <div>
+        @if (teams) {
+        <div class="header-style">
             <div style="display: flex;">
                 <button mat-button class="btn-element create" (click)="createTeam()" [disabled]="inputTeamName.value.length < 2 || !creatable">
-                    <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
-                    <mat-icon *ngIf="!creating"style="font-size: large;">create</mat-icon>
+                    @if (creating) {
+                    <mat-icon><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
+                    }
+                    @if (!creating) {
+                    <mat-icon style="font-size: large;">create</mat-icon>
+                    }
                     Create
                 </button>
                 <mat-form-field style="padding-left: 14px;">
@@ -18,13 +29,16 @@
                 </mat-form-field>
             </div>
         </div>
-        <div *ngFor="let team of teams">
-            <app-team-preview 
-                [team]="team" 
-                [teamListComponent]="this" 
-                [removable]="removable" 
-                [updatable]="updatable">
-            </app-team-preview>
-        </div>
+        }
+        @for (team of teams; track team) {
+        <app-team-preview 
+            [team]="team" 
+            [teamListComponent]="this" 
+            [removable]="removable" 
+            [updatable]="updatable">
+        </app-team-preview>
+        }
     </div>
+    }
 </div>
+}

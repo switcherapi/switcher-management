@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
 import { GroupCreateComponent } from '../group-create/group-create.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -17,15 +17,22 @@ import { Types } from 'src/app/model/path-route';
 import { PermissionService } from 'src/app/services/permission.service';
 import { Permissions } from 'src/app/model/permission';
 import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
+import { NgClass } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { GroupPreviewComponent } from '../group-preview/group-preview.component';
 
 @Component({
-  selector: 'app-group-list',
-  templateUrl: './group-list.component.html',
-  styleUrls: [
-    '../../common/css/list.component.css', 
-    './group-list.component.css'
-  ],
-  standalone: false
+    selector: 'app-group-list',
+    templateUrl: './group-list.component.html',
+    styleUrls: [
+        '../../common/css/list.component.css',
+        './group-list.component.css'
+    ],
+    imports: [NgClass, MatButton, MatIcon, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, GroupPreviewComponent]
 })
 export class GroupListComponent extends ListComponent implements OnInit, OnDestroy {
   protected fb: FormBuilder;

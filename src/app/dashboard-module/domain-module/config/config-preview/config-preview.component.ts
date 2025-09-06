@@ -1,24 +1,26 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { ConfigService } from 'src/app/services/config.service';
 import { Permissions } from 'src/app/model/permission';
 import { Config } from 'src/app/model/config';
 import { BasicComponent } from '../../common/basic-component';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-config-preview',
-  templateUrl: './config-preview.component.html',
-  styleUrls: [
-    '../../common/css/preview.component.css', 
-    './config-preview.component.css'
-  ],
-  standalone: false
+    selector: 'app-config-preview',
+    templateUrl: './config-preview.component.html',
+    styleUrls: [
+        '../../common/css/preview.component.css',
+        './config-preview.component.css'
+    ],
+    imports: [BlockUIComponent, NgClass, FormsModule, ReactiveFormsModule, MatSlideToggle]
 })
 export class ConfigPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

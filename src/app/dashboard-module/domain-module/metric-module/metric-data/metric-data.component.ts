@@ -6,21 +6,27 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MetricComponent } from '../metric/metric.component';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort, Sort, MatSortHeader } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MetricData } from 'src/app/model/metric';
 import { AdminService } from 'src/app/services/admin.service';
 import { MetricService } from 'src/app/services/metric.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-metric-data',
-  templateUrl: './metric-data.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './metric-data.component.css'
-  ],
-  standalone: false
+    selector: 'app-metric-data',
+    templateUrl: './metric-data.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './metric-data.component.css'
+    ],
+    imports: [MatFormField, MatLabel, MatInput, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, 
+      MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator, 
+      MatButton, MatMiniFabButton, MatIcon
+    ]
 })
 export class MetricDataComponent implements OnInit, OnDestroy {
   private readonly adminService = inject(AdminService);

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
-import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
+import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -13,17 +13,29 @@ import { Config, ConfigRelayStatus } from 'src/app/model/config';
 import { ConfigService } from 'src/app/services/config.service';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { DomainService } from 'src/app/services/domain.service';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { NgClass, NgStyle } from '@angular/common';
+import { MatFormField, MatLabel, MatInput, MatHint, MatError } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatToolbar } from '@angular/material/toolbar';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 @Component({
-  selector: 'app-relay-detail',
-  templateUrl: './relay-detail.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './relay-detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-relay-detail',
+    templateUrl: './relay-detail.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './relay-detail.component.css'
+    ],
+    imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, MatSelect, FormsModule, 
+      ReactiveFormsModule, MatOption, NgStyle, MatHint, MatError, EnvironmentConfigComponent, 
+      MatButton, MatIcon
+    ]
 })
 export class RelayDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly adminService = inject(AdminService);
@@ -362,13 +374,13 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 }
 
 @Component({
-  selector: 'relay-detail.verify-dialog',
-  templateUrl: './relay-detail.verify-dialog.html',
-  styleUrls: [
-    '../../common/css/create.component.css',
-    './relay-detail.component.css'
-  ],
-  standalone: false
+    selector: 'relay-detail.verify-dialog',
+    templateUrl: './relay-detail.verify-dialog.html',
+    styleUrls: [
+        '../../common/css/create.component.css',
+        './relay-detail.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatInput, FormsModule, MatDialogActions, MatButton]
 })
 export class RelayVerificationDialogComponent {
   dialogRef = inject<MatDialogRef<RelayVerificationDialogComponent>>(MatDialogRef);

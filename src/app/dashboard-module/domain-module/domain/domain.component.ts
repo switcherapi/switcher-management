@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { DomainSnapshotComponent } from './domain-snapshot/domain-snapshot.component';
@@ -10,7 +10,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { DomainTransferDialogComponent } from './domain-transfer/domain-transfer-dialog.component';
 import { DomainService } from 'src/app/services/domain.service';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { OnElementAutocomplete } from '../common/element-autocomplete/element-autocomplete.component';
+import { OnElementAutocomplete, ElementAutocompleteComponent } from '../common/element-autocomplete/element-autocomplete.component';
 import { environment } from 'src/environments/environment';
 import { Domain } from 'src/app/model/domain';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
@@ -22,12 +22,21 @@ import { ApolloQueryResult } from '@apollo/client/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FeatureService } from 'src/app/services/feature.service';
 import { BasicComponent } from '../common/basic-component';
+import { BlockUIComponent } from '../../../shared/block-ui/block-ui.component';
+import { ToastsContainerComponent } from '../../../_helpers/toasts-container.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-domain',
-  templateUrl: './domain.component.html',
-  styleUrls: ['./domain.component.css'],
-  standalone: false
+    selector: 'app-domain',
+    templateUrl: './domain.component.html',
+    styleUrls: ['./domain.component.css'],
+    imports: [BlockUIComponent, ToastsContainerComponent, MatIcon, MatButton, MatMenuTrigger, 
+      MatMenu, MatMenuItem, MatTooltip, ElementAutocompleteComponent, MatProgressSpinner, RouterOutlet
+    ]
 })
 export class DomainComponent extends BasicComponent implements OnInit, OnDestroy, OnElementAutocomplete {
   private readonly dialog = inject(MatDialog);

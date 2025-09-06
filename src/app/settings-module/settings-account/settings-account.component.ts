@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DomainService } from 'src/app/services/domain.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,15 +11,19 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { Router } from '@angular/router';
 import { BasicComponent } from 'src/app/dashboard-module/domain-module/common/basic-component';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { BlockUIComponent } from '../../shared/block-ui/block-ui.component';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-settings-account',
-  templateUrl: './settings-account.component.html',
-  styleUrls: [
-    '../../dashboard-module/domain-module/common/css/detail.component.css',
-    './settings-account.component.css'
-  ],
-  standalone: false
+    selector: 'app-settings-account',
+    templateUrl: './settings-account.component.html',
+    styleUrls: [
+        '../../dashboard-module/domain-module/common/css/detail.component.css',
+        './settings-account.component.css'
+    ],
+    imports: [BlockUIComponent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton, MatIcon]
 })
 export class SettingsAccountComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

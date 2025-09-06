@@ -4,12 +4,24 @@
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
-                <mat-icon *ngIf="icon === 0">receipt</mat-icon>
-                <mat-icon *ngIf="icon === 1"> bar_chart</mat-icon>
-                <mat-icon *ngIf="icon === 2">receipt</mat-icon>
-                <mat-icon *ngIf="icon === 3">devices_other</mat-icon>
-                <mat-icon *ngIf="icon === 4"> apps</mat-icon>
-                <mat-icon *ngIf="icon === 6"> people</mat-icon>
+                @if (icon === 0) {
+                <mat-icon>receipt</mat-icon>
+                }
+                @if (icon === 1) {
+                <mat-icon> bar_chart</mat-icon>
+                }
+                @if (icon === 2) {
+                <mat-icon>receipt</mat-icon>
+                }
+                @if (icon === 3) {
+                <mat-icon>devices_other</mat-icon>
+                }
+                @if (icon === 4) {
+                <mat-icon> apps</mat-icon>
+                }
+                @if (icon === 6) {
+                <mat-icon> people</mat-icon>
+                }
                 {{ title }}
 
                 <button id="domainOptions" mat-button [matMenuTriggerFor]="belowMenu" style="float:right">
@@ -24,10 +36,12 @@
                         <mat-icon>cloud_download</mat-icon>
                         Download Snapshot
                     </button>
-                    <button *ngIf="transferLabel" mat-menu-item (click)="onDomainTransfer()">
+                    @if (transferLabel) {
+                    <button mat-menu-item (click)="onDomainTransfer()">
                         <mat-icon>next_week</mat-icon>
                         {{ transferLabel }}
                     </button>
+                    }
                     <div style="margin-bottom: .5rem; border-bottom: 1px solid rgba(179,179,179,.1); width: 100%;">
                         <span style="margin-left: 1rem; color: #6c757d;">Integrations</span>
                     </div>
@@ -37,17 +51,23 @@
                             Switcher GitOps
                         </button>
                     </div>
-                    <div *ngIf="hasSlackIntegration()">
-                        <button *ngIf="hasSlackInstalled()" mat-menu-item (click)="gotoSlackIntegration()">
+                    @if (hasSlackIntegration()) {
+                    <div>
+                        @if (hasSlackInstalled()) {
+                        <button mat-menu-item (click)="gotoSlackIntegration()">
                             <img src="assets\slack.svg" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Slack App
                         </button>
-                        <a *ngIf="!hasSlackInstalled() && canInstallSlack()" mat-menu-item style="text-decoration: none;"
+                        }
+                        @if (!hasSlackInstalled() && canInstallSlack()) {
+                        <a mat-menu-item style="text-decoration: none;"
                             href="{{ getSlackUrl() }}" target="_parent">
                             <img src="assets\slack.svg" style="width: 25px; margin-right: .5rem;" alt="Slack" />
                             Install Slack App
                         </a>
+                        }
                     </div>
+                    }
                 </mat-menu>
             </div>
         </h4>
@@ -92,20 +112,30 @@
             </div>
         </nav>
 
-        <div *ngIf="loading" class="div-router-history loading-spinner">
+        @if (loading) {
+        <div class="div-router-history loading-spinner">
             <mat-spinner [diameter]="25"></mat-spinner>
         </div>
-        <div *ngIf="!loading" class="div-router-history">
-            <a *ngIf="domain" class="router-history" (click)="gotoDetails(selectedDomainPath)">
+        }
+        @if (!loading) {
+        <div class="div-router-history">
+            @if (domain) {
+            <a class="router-history" (click)="gotoDetails(selectedDomainPath)">
                 <span class="badge"></span>{{ domain.name }}
             </a>
-            <a *ngIf="group" class="router-history" (click)="gotoDetails(selectedGroupPath)">
+            }
+            @if (group) {
+            <a class="router-history" (click)="gotoDetails(selectedGroupPath)">
                 / <span class="badge"></span>{{ group.name }}
             </a>
-            <a *ngIf="config"  class="router-history" (click)="gotoDetails(selectedConfigPath)">
+            }
+            @if (config) {
+            <a class="router-history" (click)="gotoDetails(selectedConfigPath)">
                 / <span class="badge"></span>{{ config.key }}
             </a>
+            }
         </div>
+        }
 
         <div class="card-body" style="padding-top: 0px;">
             <hr/>

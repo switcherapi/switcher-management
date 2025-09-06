@@ -1,18 +1,25 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput, MatError, MatHint } from '@angular/material/input';
 
 @Component({
-  selector: 'app-domain-create',
-  templateUrl: './domain-create.component.html',
-  styleUrls: [
-    '../domain-module/common/css/detail.component.css',
-    '../domain-module/common/css/create.component.css',
-    './domain-create.component.css'
-  ],
-  standalone: false
+    selector: 'app-domain-create',
+    templateUrl: './domain-create.component.html',
+    styleUrls: [
+        '../domain-module/common/css/detail.component.css',
+        '../domain-module/common/css/create.component.css',
+        './domain-create.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, MatFormField, 
+      MatLabel, MatInput, FormsModule, ReactiveFormsModule, MatError, MatHint, MatDialogActions, MatButton
+    ]
 })
 export class DomainCreateComponent implements OnInit, OnDestroy {
   dialogRef = inject<MatDialogRef<DomainCreateComponent>>(MatDialogRef);

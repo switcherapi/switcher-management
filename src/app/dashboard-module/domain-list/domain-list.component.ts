@@ -6,22 +6,25 @@ import { DomainCreateComponent } from '../domain-create/domain-create.component'
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
 import { MatDialog } from '@angular/material/dialog';
-import { AdminService } from 'src/app/services/admin.service';
 import { DomainService } from 'src/app/services/domain.service';
 import { Domain } from 'src/app/model/domain';
+import { NgClass } from '@angular/common';
+import { ToastsContainerComponent } from '../../_helpers/toasts-container.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { DomainPreviewComponent } from '../domain-preview/domain-preview.component';
 
 @Component({
-  selector: 'app-domain-list',
-  templateUrl: './domain-list.component.html',
-  styleUrls: [
-    './domain-list.component.css',
-    '../domain-module/common/css/list.component.css'
-  ],
-  standalone: false
+    selector: 'app-domain-list',
+    templateUrl: './domain-list.component.html',
+    styleUrls: [
+        './domain-list.component.css',
+        '../domain-module/common/css/list.component.css'
+    ],
+    imports: [NgClass, ToastsContainerComponent, MatButton, MatIcon, DomainPreviewComponent]
 })
 export class DomainListComponent implements OnInit, OnDestroy {
   private readonly dialog = inject(MatDialog);
-  private readonly adminService = inject(AdminService);
   private readonly domainService = inject(DomainService);
   private readonly toastService = inject(ToastService);
   private readonly errorHandler = inject(RouterErrorHandler);

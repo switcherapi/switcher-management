@@ -6,7 +6,8 @@
         [formControl]="smartSearchFormControl"
         [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let item of searchedValues | async" [value]="item" matTooltip="{{ showTooltip(item) }}" allowScroll>
+        @for (item of searchedValues | async; track item) {
+        <mat-option [value]="item" matTooltip="{{ showTooltip(item) }}" allowScroll>
             <div style="display: flex;">
                 <p class="smart-filter-type">{{ item.type }}</p>
                 <div style="display: flex;">
@@ -15,5 +16,6 @@
                 </div>
             </div>
         </mat-option>
+        }
     </mat-autocomplete>
 </mat-form-field>

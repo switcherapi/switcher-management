@@ -1,15 +1,17 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { Settings, Slack } from 'src/app/model/slack';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-slack-settings',
-  templateUrl: './slack-settings.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-slack-settings',
+    templateUrl: './slack-settings.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css'
+    ],
+    imports: [MatFormField, MatLabel, MatChipGrid, MatChipRow, MatChipRemove, MatIcon, MatChipInput]
 })
 export class SlackSettingsComponent {
 

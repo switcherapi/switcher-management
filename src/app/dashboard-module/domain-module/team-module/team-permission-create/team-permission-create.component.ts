@@ -1,23 +1,35 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { PermissionService } from 'src/app/services/permission.service';
 import { Permission } from 'src/app/model/permission';
 import { EnvironmentService } from 'src/app/services/environment.service';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatSelect, MatSelectTrigger } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatCard, MatCardHeader, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatSelectionList, MatListOption } from '@angular/material/list';
 
 @Component({
-  selector: 'app-team-permission-create',
-  templateUrl: './team-permission-create.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    '../../common/css/create.component.css',
-    './team-permission-create.component.css'
-  ],
-  standalone: false
+    selector: 'app-team-permission-create',
+    templateUrl: './team-permission-create.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        '../../common/css/create.component.css',
+        './team-permission-create.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, 
+      MatLabel, MatSelect, MatOption, MatSelectTrigger, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatSelectionList, 
+      MatListOption, MatInput, MatButton, MatDialogActions
+    ]
 })
 export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
   dialogRef = inject<MatDialogRef<TeamPermissionCreateComponent>>(MatDialogRef);

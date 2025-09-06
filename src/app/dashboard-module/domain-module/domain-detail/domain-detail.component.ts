@@ -13,17 +13,25 @@ import { AdminService } from 'src/app/services/admin.service';
 import { Domain } from 'src/app/model/domain';
 import { Types } from 'src/app/model/path-route';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
-import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
+import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../environment-config/environment-config.component';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { BlockUIComponent } from '../../../shared/block-ui/block-ui.component';
+import { NgClass, NgStyle, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel, MatInput, MatHint } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { GroupListComponent } from '../group/group-list/group-list.component';
 
 @Component({
-  selector: 'app-domain-detail',
-  templateUrl: './domain-detail.component.html',
-  styleUrls: [
-    '../common/css/detail.component.css', 
-    './domain-detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-domain-detail',
+    templateUrl: './domain-detail.component.html',
+    styleUrls: [
+        '../common/css/detail.component.css',
+        './domain-detail.component.css'
+    ],
+    imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, NgStyle, 
+      MatHint, EnvironmentConfigComponent, MatButton, MatIcon, GroupListComponent, DatePipe
+    ]
 })
 export class DomainDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly domainRouteService = inject(DomainRouteService);

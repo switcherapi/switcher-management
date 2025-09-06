@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DetailComponent } from '../../common/detail-component';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -13,16 +13,24 @@ import { AdminService } from 'src/app/services/admin.service';
 import { Group } from 'src/app/model/group';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
-import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
+import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { NgClass, NgStyle, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel, MatInput, MatError, MatHint } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { ConfigListComponent } from '../../config/config-list/config-list.component';
 
 @Component({
-  selector: 'app-group-detail',
-  templateUrl: './group-detail.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css', 
-    './group-detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-group-detail',
+    templateUrl: './group-detail.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './group-detail.component.css'
+    ],
+    imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, 
+      ReactiveFormsModule, MatError, MatHint, EnvironmentConfigComponent, MatButton, MatIcon, ConfigListComponent, DatePipe
+    ]
 })
 export class GroupDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly domainRouteService = inject(DomainRouteService);
@@ -70,7 +78,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       this.loading = true;
       this.groupId = params.groupid;
       
-      const groupFromState = this.router.getCurrentNavigation()?.extras.state?.element;
+      const groupFromState = this.router.currentNavigation()?.extras.state?.element;
       if (groupFromState) {
         this.updateData(JSON.parse(groupFromState));
       } else {

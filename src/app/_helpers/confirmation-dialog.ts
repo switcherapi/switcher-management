@@ -16,9 +16,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
         <button type="button" class="btn btn-outline-secondary" (click)="nok()">Cancel</button>
         <button type="button" class="btn btn-danger" (click)="ok()">Ok</button>
       </div>
-      `,
-    standalone: false
-  })
+      `
+})
   export class NgbdModalConfirmComponent {
     modal = inject(NgbActiveModal);
 

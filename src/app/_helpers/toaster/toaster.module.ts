@@ -4,16 +4,14 @@ import { ToastsContainerComponent } from '../toasts-container.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [
-    ToastsContainerComponent
-  ],
-  imports: [
-    CommonModule,
-    NgbModule
-  ],
-  exports: [
-    ToastsContainerComponent
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [
+        CommonModule,
+        NgbModule,
+        ToastsContainerComponent
+    ],
+    exports: [
+        ToastsContainerComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ToasterModule { }

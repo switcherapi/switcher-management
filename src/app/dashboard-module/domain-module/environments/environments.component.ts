@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
@@ -13,16 +13,22 @@ import { EnvironmentService } from 'src/app/services/environment.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { NgClass } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { SpecialCharacterDirective } from '../common/special.char.directive';
 
 @Component({
-  selector: 'app-environments',
-  templateUrl: './environments.component.html',
-  styleUrls: [
-    '../common/css/list.component.css',
-    '../common/css/preview.component.css',
-    './environments.component.css'
-  ],
-  standalone: false
+    selector: 'app-environments',
+    templateUrl: './environments.component.html',
+    styleUrls: [
+        '../common/css/list.component.css',
+        '../common/css/preview.component.css',
+        './environments.component.css'
+    ],
+    imports: [NgClass, MatButton, MatIcon, MatProgressSpinner, MatFormField, MatLabel, MatInput, FormsModule, SpecialCharacterDirective, ReactiveFormsModule]
 })
 export class EnvironmentsComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

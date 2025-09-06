@@ -14,9 +14,11 @@
                 <mat-form-field>
                     <mat-label>Environment selection</mat-label>
                     <mat-select cdkFocusInitial multiple [formControl]="formGroup.get('environment')">
-                        <mat-option *ngFor="let environment of environments" [value]="environment">
+                        @for (environment of environments; track environment) {
+                        <mat-option [value]="environment">
                             {{environment}}
                         </mat-option>
+                        }
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field>

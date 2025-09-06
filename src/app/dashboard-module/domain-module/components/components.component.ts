@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { map, takeUntil } from 'rxjs/operators';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
 import { AdminService } from 'src/app/services/admin.service';
 import { ComponentService } from 'src/app/services/component.service';
@@ -15,16 +15,27 @@ import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
 import { BasicComponent } from '../common/basic-component';
+import { NgClass } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormField, MatLabel, MatInput, MatHint } from '@angular/material/input';
+import { SpecialCharacterDirective } from '../common/special.char.directive';
+import { MatToolbar } from '@angular/material/toolbar';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 
 @Component({
-  selector: 'app-components',
-  templateUrl: './components.component.html',
-  styleUrls: [
-    '../common/css/list.component.css',
-    '../common/css/preview.component.css',
-    './components.component.css'
-  ],
-  standalone: false
+    selector: 'app-components',
+    templateUrl: './components.component.html',
+    styleUrls: [
+        '../common/css/list.component.css',
+        '../common/css/preview.component.css',
+        './components.component.css'
+    ],
+    imports: [NgClass, MatButton, MatIcon, MatProgressSpinner, MatFormField, MatLabel, 
+      MatInput, FormsModule, SpecialCharacterDirective, ReactiveFormsModule
+    ]
 })
 export class ComponentsComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -255,13 +266,15 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
 }
 
 @Component({
-  selector: 'component.edit-dialog',
-  templateUrl: 'component.edit-dialog.html',
-  styleUrls: [
-    '../common/css/create.component.css',
-    './components.component.css'
-  ],
-  standalone: false
+    selector: 'component.edit-dialog',
+    templateUrl: 'component.edit-dialog.html',
+    styleUrls: [
+        '../common/css/create.component.css',
+        './components.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, MatFormField, MatInput, 
+      FormsModule, SpecialCharacterDirective, MatLabel, MatHint, MatDialogActions, MatButton, CdkCopyToClipboard
+    ]
 })
 export class ComponentEditDialogComponent {
   dialogRef = inject<MatDialogRef<ComponentEditDialogComponent>>(MatDialogRef);

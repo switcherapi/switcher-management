@@ -1,5 +1,5 @@
 <h4 mat-dialog-title>
-    <mat-toolbar role="toolbar" class="dialog-header">
+    <mat-toolbar class="dialog-header">
         <span>New Group</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
@@ -16,12 +16,16 @@
                         <mat-label>Name</mat-label>
                         <input #nameElement matInput cdkFocusInitial maxlength="30" style="color: black" 
                             [formControl]="nameFormControl" autocomplete="off">
-                        <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                        @if (nameFormControl.hasError('minlength')) {
+                        <mat-error>
                             Name must contains at least 5 characters
                         </mat-error>
-                        <mat-error *ngIf="nameFormControl.hasError('required')">
+                        }
+                        @if (nameFormControl.hasError('required')) {
+                        <mat-error>
                             Name is <strong>required</strong>
                         </mat-error>
+                        }
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>

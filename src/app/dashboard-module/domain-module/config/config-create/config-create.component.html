@@ -1,5 +1,5 @@
 <h4 mat-dialog-title>
-    <mat-toolbar role="toolbar" class="dialog-header">
+    <mat-toolbar class="dialog-header">
         <span>New Switcher</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
@@ -17,12 +17,16 @@
                         <input #nameElement matInput cdkFocusInitial special-chars [autoUpper]="true" [autoUnderscore]="true"
                             maxlength="30" style="color: black" 
                             [formControl]="keyFormControl" autocomplete="off">
-                        <mat-error *ngIf="keyFormControl.hasError('minlength')">
+                        @if (keyFormControl.hasError('minlength')) {
+                        <mat-error>
                             Key must contains at least 3 characters
                         </mat-error>
-                        <mat-error *ngIf="keyFormControl.hasError('required')">
+                        }
+                        @if (keyFormControl.hasError('required')) {
+                        <mat-error>
                             Key is <strong>required</strong>
                         </mat-error>
+                        }
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>

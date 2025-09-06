@@ -3,8 +3,12 @@
         - <a (click)="gotoDocument(searchDocsResult.file)">{{ searchDocsResult.file }}</a> -
         <strong>Found: </strong>{{ searchDocsResult.found }}</h3>
     <div class="spacer"></div>
-    <div class="segment-list" *ngFor="let segment of searchDocsResult?.segment; let i = index">
+    @for (segment of searchDocsResult?.segment; track $index) {
+    <div class="segment-list">
         <markdown>{{renderSegment(segment, searchDocsResult.file)}}</markdown>
-        <div *ngIf="i < searchDocsResult?.segment.length - 1" class="spacer-segment"></div>
+        @if ($index < searchDocsResult?.segment.length - 1) {
+        <div class="spacer-segment"></div>
+        }
     </div>
+    }
 </div>

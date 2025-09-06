@@ -5,12 +5,14 @@ import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DomainService } from 'src/app/services/domain.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'signup-domain',
-  templateUrl: './signup-domain.component.html',
-  styleUrls: ['./signup-domain.component.css'],
-  standalone: false
+    selector: 'signup-domain',
+    templateUrl: './signup-domain.component.html',
+    styleUrls: ['./signup-domain.component.css'],
+    imports: [MatFormField, MatLabel, MatInput, MatButton]
 })
 export class SignupDomainComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);

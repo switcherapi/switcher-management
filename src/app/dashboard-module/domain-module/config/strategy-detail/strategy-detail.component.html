@@ -5,12 +5,18 @@
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
                         <mat-label>Operation Name</mat-label>
-                        <input *ngIf="!editing" matInput class="readonly-fields" [value]="strategy.operation" readonly>
-                        <mat-select *ngIf="editing" [formControl]="operationCategoryFormControl">
-                            <mat-option *ngFor="let operation of strategyOperations" [value]="operation">
-                                {{operation}}
-                            </mat-option>
+                        @if (!editing) {
+                        <input matInput class="readonly-fields" [value]="strategy.operation" readonly>
+                        }
+                        @if (editing) {
+                        <mat-select [formControl]="operationCategoryFormControl">
+                            @for (operation of strategyOperations; track operation) {
+                                <mat-option [value]="operation">
+                                    {{operation}}
+                                </mat-option>
+                            }
                         </mat-select>
+                        }
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>
@@ -39,18 +45,22 @@
                         </mat-card-header>
                         <mat-card-content style="overflow-y: scroll; height: 180px;">
                             <mat-selection-list #strategyValueSelection>
-                                <mat-list-option *ngFor="let value of strategy.values" [value]="value" matTooltip="{{ value }}" allowScroll>
+                                @for (value of strategy.values; track value) {
+                                <mat-list-option [value]="value" matTooltip="{{ value }}" allowScroll>
                                     {{ showResumed(value, strategyValuesLength) }}
                                 </mat-list-option>
+                                }
                             </mat-selection-list>
                         </mat-card-content>
                         <mat-form-field style="width: 100%;">
                             <mat-label>Value</mat-label>
                             <input #inputValue matInput [formControl]="valueSelectionFormControl" 
                                 matTooltip="{{ strategyFormatSelected }}" maxlength="500" autocomplete="off">
-                            <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
+                            @if (valueSelectionFormControl.dirty && valueSelectionFormControl.errors) {
+                            <mat-error>
                                 Please, check the value format
                             </mat-error>
+                            }
                         </mat-form-field>
                         <div class="strategy-values-control">
                             <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
@@ -72,7 +82,8 @@
                     </mat-card>
                 </div>
                 <div class="description">
-                    <app-environment-config *ngIf="strategy"
+                    @if (strategy) {
+                    <app-environment-config 
                         [enable]="envEnable"
                         [domainId]="strategyList.parent.domainId" 
                         [configuredEnvironments]="strategy.activated"
@@ -80,6 +91,7 @@
                         (outputEnvChanged)="onEnvChange($event)"
                         (outputStatusChanged)="onEnvStatusChanged($event)">
                     </app-environment-config>
+                    }
                 </div>
             </div>
         </section>

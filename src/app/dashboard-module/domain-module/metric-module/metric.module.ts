@@ -13,29 +13,27 @@ import { ElementAutocompleteComponent } from '../common/element-autocomplete/ele
 import { AppMaterialModule } from 'src/app/shared/app-material.module';
 
 @NgModule({
-  declarations: [
-    MetricComponent, 
-    MetricStatisticsComponent, 
-    MetricDataComponent,
-    SwitcherDataStatsDialogComponent,
-    MetricFilterComponent,
-    ElementAutocompleteComponent
-  ],
-  exports: [
-    MetricComponent, 
-    MetricStatisticsComponent, 
-    MetricDataComponent,
-    ElementAutocompleteComponent
-  ],
-  imports: [
-    MetricRoutingModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgbModule,
-    AppMaterialModule,
-    BaseChartDirective
-  ],
-  providers: [Metric],
+    exports: [
+        MetricComponent,
+        MetricStatisticsComponent,
+        MetricDataComponent,
+        ElementAutocompleteComponent
+    ],
+    imports: [
+        MetricRoutingModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgbModule,
+        AppMaterialModule,
+        BaseChartDirective,
+        MetricComponent,
+        MetricStatisticsComponent,
+        MetricDataComponent,
+        SwitcherDataStatsDialogComponent,
+        MetricFilterComponent,
+        ElementAutocompleteComponent
+    ],
+    providers: [Metric],
 })
 export class MetricModule { }

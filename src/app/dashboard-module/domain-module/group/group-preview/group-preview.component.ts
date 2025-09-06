@@ -2,23 +2,25 @@ import { Component, OnInit, Input, OnDestroy, EventEmitter, inject } from '@angu
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { Group } from 'src/app/model/group';
 import { GroupService } from 'src/app/services/group.service';
 import { Permissions } from 'src/app/model/permission';
 import { BasicComponent } from '../../common/basic-component';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-group-preview',
-  templateUrl: './group-preview.component.html',
-  styleUrls: [
-    '../../common/css/preview.component.css', 
-    './group-preview.component.css'
-  ],
-  standalone: false
+    selector: 'app-group-preview',
+    templateUrl: './group-preview.component.html',
+    styleUrls: [
+        '../../common/css/preview.component.css',
+        './group-preview.component.css'
+    ],
+    imports: [BlockUIComponent, NgClass, FormsModule, ReactiveFormsModule, MatSlideToggle]
 })
 export class GroupPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

@@ -3,13 +3,13 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort, Sort, MatSortHeader } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { Strategy } from 'src/app/model/strategy';
 import { History } from 'src/app/model/history';
 import { AdminService } from 'src/app/services/admin.service';
@@ -20,15 +20,20 @@ import { StrategyService } from 'src/app/services/strategy.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-changelog',
-  templateUrl: './changelog.component.html',
-  styleUrls: [
-    '../common/css/detail.component.css',
-    './changelog.component.css'
-  ],
-  standalone: false
+    selector: 'app-changelog',
+    templateUrl: './changelog.component.html',
+    styleUrls: [
+        '../common/css/detail.component.css',
+        './changelog.component.css'
+    ],
+    imports: [MatFormField, MatLabel, MatInput, NgClass, MatTable, MatSort, MatColumnDef, 
+      MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef,
+      MatHeaderRow, MatRowDef, MatRow, MatButton, MatPaginator
+    ]
 })
 export class ChangelogComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

@@ -1,5 +1,5 @@
 <h4 mat-dialog-title>
-    <mat-toolbar role="toolbar" class="dialog-header">
+    <mat-toolbar class="dialog-header">
         <span>Filter</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
@@ -14,9 +14,11 @@
                 <mat-form-field class="filter-env-selector">
                     <mat-label>Environment</mat-label>
                     <mat-select [formControl]="environmentSelection">
-                        <mat-option *ngFor="let environment of environments" [value]="environment.name">
+                        @for (environment of environments; track environment.name) {
+                        <mat-option [value]="environment.name">
                             {{environment.name}}
                         </mat-option>
+                        }
                     </mat-select>
                 </mat-form-field>
                 <element-autocomplete
@@ -24,7 +26,8 @@
                     [value]="selectedFilter" 
                     [lockFilter]="lockFilter">
                 </element-autocomplete>
-                <mat-form-field *ngIf="selectedFilter" class="filter-env-selector">
+                @if (selectedFilter) {
+                <mat-form-field class="filter-env-selector">
                     <mat-label>Group By</mat-label>
                     <mat-select [(ngModel)]="dateGroupPattern">
                         <mat-option value="YYYY-MM">Month</mat-option>
@@ -33,6 +36,7 @@
                         <mat-option value="YYYY-MM-DD HH:mm">Minute</mat-option>
                     </mat-select>
                 </mat-form-field>
+                }
                 <mat-form-field class="filter-date-selector">
                     <mat-label>From</mat-label>
                     <input matInput [matDatepicker]="fromPicker" [formControl]="dateAfterFormControl">

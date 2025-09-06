@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-documentation',
-  templateUrl: './documentation.component.html',
-  styleUrls: ['./documentation.component.css'],
-  standalone: false
+    selector: 'app-documentation',
+    templateUrl: './documentation.component.html',
+    styleUrls: ['./documentation.component.css'],
+    imports: [RouterLink, MatIcon, RouterOutlet]
 })
 export class DocumentationComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

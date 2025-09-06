@@ -20,8 +20,7 @@ import {
 
 @Directive({
   selector: 'canvas[baseChart]',
-  exportAs: 'base-chart',
-  standalone: true,
+  exportAs: 'base-chart'
 })
 export class BaseChartDirective<
     TType extends ChartType = ChartType,

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, HostListener, inject } from '@angular/core';
-import { Validators, FormControl } from '@angular/forms';
+import { Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
-import { EnvironmentChangeEvent } from '../../environment-config/environment-config.component';
+import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -10,22 +10,37 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { StrategyListComponent } from '../strategy-list/strategy-list.component';
 import { StrategyCloneComponent } from '../strategy-clone/strategy-clone.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSelectionList, MatSelectionListChange, MatListOption } from '@angular/material/list';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { Strategy } from 'src/app/model/strategy';
 import { StrategyReq } from 'src/app/model/strategy_req';
 import { StrategyService } from 'src/app/services/strategy.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { DataUtils } from 'src/app/_helpers/data-utils';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { NgClass, NgStyle, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel, MatInput, MatHint, MatError } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatCard, MatCardHeader, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatToolbar } from '@angular/material/toolbar';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { ChangelogComponent } from '../../changelog/changelog.component';
 
 @Component({
-  selector: 'app-strategy-detail',
-  templateUrl: './strategy-detail.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './strategy-detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-strategy-detail',
+    templateUrl: './strategy-detail.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './strategy-detail.component.css'
+    ],
+    imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, MatSelect, FormsModule, ReactiveFormsModule, 
+      MatOption, NgStyle, MatHint, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatSelectionList, 
+      MatListOption, MatTooltip, MatError, MatButton, MatIcon, EnvironmentConfigComponent, DatePipe
+    ]
 })
 export class StrategyDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly strategyService = inject(StrategyService);
@@ -362,12 +377,12 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 }
 
 @Component({
-  selector: 'strategy-changelog-dialog',
-  templateUrl: 'strategy-changelog-dialog.html',
-  styleUrls: [
-    '../../common/css/create.component.css'
-  ],
-  styles: [`
+    selector: 'strategy-changelog-dialog',
+    templateUrl: 'strategy-changelog-dialog.html',
+    styleUrls: [
+        '../../common/css/create.component.css'
+    ],
+    styles: [`
     .btn-cancel {
       float: right;
       margin-right: 10px;
@@ -387,7 +402,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       border-radius: 20px;
     }
   `],
-  standalone: false
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, ChangelogComponent, MatDialogActions, MatButton]
 })
 export class ChangeLogDialogComponent {
   dialogRef = inject<MatDialogRef<ChangeLogDialogComponent>>(MatDialogRef);

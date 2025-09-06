@@ -4,14 +4,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { AuthService } from '../auth/services/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { RecaptchaComponent } from '../../libs/ng-recaptcha-module/lib/recaptcha.component';
+import { RecaptchaValueAccessorDirective } from '../../libs/ng-recaptcha-module/lib/recaptcha-value-accessor.directive';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-login-reset',
-  templateUrl: './login-reset.component.html',
-  styleUrls: ['./login-reset.component.css'],
-  standalone: false
+    selector: 'app-login-reset',
+    templateUrl: './login-reset.component.html',
+    styleUrls: ['./login-reset.component.css'],
+    imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, RecaptchaComponent, RecaptchaValueAccessorDirective, MatButton]
 })
 export class LoginResetComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);
