@@ -35,20 +35,24 @@
             <td mat-cell *matCellDef="let element" [attr.colspan]="dataColumns.length">
                 <div class="element-detail-panel" [class.expanded]="isExpanded(element)">
                     <div class="element-detail">
-                        <div *ngFor="let entry of element.entry">
+                        @for (entry of element.entry; track entry) {
+                        <div>
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{entry.strategy}}</mat-label>
                                 <input matInput [value]="entry.input" readonly autocomplete="off">
                             </mat-form-field>
                         </div>
+                        }
                         <mat-form-field style="width: 100%;">
                             <mat-label>Reason</mat-label>
                             <input matInput [value]="element.reason" readonly autocomplete="off">
                         </mat-form-field>
-                        <mat-form-field *ngIf="element.message" style="width: 100%;">
+                        @if (element.message) {
+                        <mat-form-field style="width: 100%;">
                             <mat-label>Message</mat-label>
                             <input matInput [value]="element.message" readonly autocomplete="off">
                         </mat-form-field>
+                        }
                     </div>
                 </div>
             </td>

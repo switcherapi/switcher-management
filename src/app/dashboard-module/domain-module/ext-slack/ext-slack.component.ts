@@ -14,15 +14,19 @@ import { SlackSettingsComponent } from './slack-settings/slack-settings.componen
 import { FeatureService } from 'src/app/services/feature.service';
 import { Types } from 'src/app/model/path-route';
 import { AdminService } from 'src/app/services/admin.service';
+import { NgClass, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-ext-slack',
-  templateUrl: './ext-slack.component.html',
-  styleUrls: [
-    '../common/css/detail.component.css', 
-    './ext-slack.component.css'
-  ],
-  standalone: false
+    selector: 'app-ext-slack',
+    templateUrl: './ext-slack.component.html',
+    styleUrls: [
+        '../common/css/detail.component.css',
+        './ext-slack.component.css'
+    ],
+    imports: [NgClass, MatFormField, MatLabel, MatInput, MatIcon, SlackSettingsComponent, MatButton, DatePipe]
 })
 export class ExtSlackComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

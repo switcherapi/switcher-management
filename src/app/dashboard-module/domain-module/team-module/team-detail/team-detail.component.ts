@@ -4,24 +4,35 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { ToastService } from 'src/app/_helpers/toast.service';
-import { FormControl, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { DetailComponent } from '../../common/detail-component';
 import { AdminService } from 'src/app/services/admin.service';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { NgClass, NgStyle } from '@angular/common';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap';
+import { TeamMembersComponent } from '../team-members/team-members.component';
+import { TeamPermissionsComponent } from '../team-permissions/team-permissions.component';
+import { TeamPendingMembersComponent } from '../team-pending-members/team-pending-members.component';
 
 @Component({
-  selector: 'app-team-detail',
-  templateUrl: './team-detail.component.html',
-  styleUrls: [
-    '../../common/css/preview.component.css',
-    '../../common/css/detail.component.css',
-    './team-detail.component.css'
-  ],
-  standalone: false
+    selector: 'app-team-detail',
+    templateUrl: './team-detail.component.html',
+    styleUrls: [
+        '../../common/css/preview.component.css',
+        '../../common/css/detail.component.css',
+        './team-detail.component.css'
+    ],
+    imports: [NgClass, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, ReactiveFormsModule, MatError, MatSlideToggle, 
+      MatButton, MatIcon, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, TeamMembersComponent, 
+      TeamPermissionsComponent, TeamPendingMembersComponent, NgbNavOutlet
+    ]
 })
 export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   private readonly adminService = inject(AdminService);

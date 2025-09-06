@@ -1,5 +1,5 @@
 <h4 mat-dialog-title>
-    <mat-toolbar role="toolbar" class="dialog-header">
+    <mat-toolbar class="dialog-header">
         <span>New strategy</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
@@ -16,17 +16,21 @@
                         <mat-form-field class="strategy-style">
                             <mat-label>Strategy</mat-label>
                             <mat-select [formControl]="strategyFormControl">
-                                <mat-option *ngFor="let strategy of strategies" [value]="strategy">
+                                @for (strategy of strategies; track strategy) {
+                                <mat-option [value]="strategy">
                                     {{strategy}}
                                 </mat-option>
+                                }
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field class="strategy-style">
                             <mat-label>Operation</mat-label>
                             <mat-select [formControl]="operationFormControl">
-                                <mat-option *ngFor="let operation of operations" [value]="operation">
+                                @for (operation of operations; track operation) {
+                                <mat-option [value]="operation">
                                     {{operation}}
                                 </mat-option>
+                                }
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field>
@@ -46,18 +50,22 @@
                                     </mat-card-header>
                                     <mat-card-content style="overflow-y: scroll; height: 100px;">
                                         <mat-selection-list #strategyValueSelection>
-                                            <mat-list-option *ngFor="let value of data.values" [value]="value" matTooltip="{{ value }}" allowScroll>
+                                            @for (value of data.values; track value) {
+                                            <mat-list-option [value]="value" matTooltip="{{ value }}" allowScroll>
                                                 {{ showResumed(value, 25) }}
                                             </mat-list-option>
+                                            }
                                         </mat-selection-list>
                                     </mat-card-content>
                                     <mat-form-field>
                                         <mat-label>Value</mat-label>
                                         <input #inputValue matInput
                                             [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected }}" autocomplete="off">
-                                        <mat-error *ngIf="valueSelectionFormControl.dirty && valueSelectionFormControl.errors">
+                                        @if (valueSelectionFormControl.dirty && valueSelectionFormControl.errors) {
+                                        <mat-error>
                                             Please, check the value format
                                         </mat-error>
+                                        }
                                     </mat-form-field>
                                     <div class="strategy-values-control">
                                         <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 

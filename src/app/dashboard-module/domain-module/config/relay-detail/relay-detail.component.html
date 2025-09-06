@@ -5,11 +5,15 @@
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
                         <mat-label>Relay Type</mat-label>
-                        <input *ngIf="!editing" matInput class="readonly-fields" [value]="config.relay.type" required readonly>
-                        <mat-select *ngIf="editing" [formControl]="relayTypeFormControl" required>
+                        @if (!editing) {
+                        <input matInput class="readonly-fields" [value]="config.relay.type" required readonly>
+                        }
+                        @if (editing) {
+                        <mat-select [formControl]="relayTypeFormControl" required>
                             <mat-option value="VALIDATION">VALIDATION</mat-option>
                             <mat-option value="NOTIFICATION">NOTIFICATION</mat-option>
                         </mat-select>
+                        }
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>
@@ -25,17 +29,23 @@
                         <mat-label>Endpoint</mat-label>
                         <input #endpointElement matInput maxlength="200" required
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}"  autocomplete="off" [formControl]="endpointFormControl">
-                        <mat-error *ngIf="endpointFormControl.hasError('required')">
+                        @if (endpointFormControl.hasError('required')) {
+                        <mat-error>
                             Endpoint must be valid
                         </mat-error>
+                        }
                     </mat-form-field>
                     <mat-form-field class="operations-style">
                         <mat-label>Relay Method</mat-label>
-                        <input *ngIf="!editing" matInput class="readonly-fields" [value]="config.relay.method" required readonly>
-                        <mat-select *ngIf="editing" [formControl]="relayMethodFormControl" required>
+                        @if (!editing) {
+                        <input matInput class="readonly-fields" [value]="config.relay.method" required readonly>
+                        }
+                        @if (editing) {
+                        <mat-select [formControl]="relayMethodFormControl" required>
                             <mat-option value="GET">GET</mat-option>
                             <mat-option value="POST">POST</mat-option>
                         </mat-select>
+                        }
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Authorization Prefix</mat-label>
@@ -50,7 +60,8 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config *ngIf="config.relay"
+                    @if (config.relay) {
+                    <app-environment-config
                         [selectedEnvName]="currentEnvironment"
                         [enable]="envEnable"
                         [domainId]="parent.domainId" 
@@ -59,17 +70,20 @@
                         (outputEnvChanged)="onEnvChange($event)"
                         (outputStatusChanged)="onEnvStatusChanged($event)">
                     </app-environment-config>
+                    }
                 </div>
             </div>
         </section>
         <section class="strategy-control-style">
             <div class="options-section">
-                <div *ngIf="relayVerificationEnabled && !isVerified() && !editing">
+                @if (relayVerificationEnabled && !isVerified() && !editing) {
+                <div>
                     <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable">
                         <mat-icon>verified_user</mat-icon>
                         <div class="options-section-label">Verify</div>
                     </button>
                 </div>
+                }
                 <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
                     <mat-icon style="font-size: large;">build</mat-icon>
                     <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>

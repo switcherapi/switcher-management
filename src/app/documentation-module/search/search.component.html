@@ -3,11 +3,15 @@
     <img src="assets/switcherapi_mark_white.png" class="doc-icon" alt="Switcher API logo" />
 </div>
 
-<div *ngIf="loading" class="loader-wrapper">
+@if (loading) {
+<div class="loader-wrapper">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API logo"/>
 </div>
-<label *ngIf="!loading && searchDocsResponse?.results.length === 0" for="search" class="no-results">No results found</label>
-<div *ngFor="let searchDocsResult of searchDocsResponse?.results">
-    <app-search-item [searchDocsResult]="searchDocsResult"></app-search-item>
-</div>
+}
+@if (!loading && searchDocsResponse?.results.length === 0) {
+<label for="search" class="no-results">No results found</label>
+}
+@for (searchDocsResult of searchDocsResponse?.results; track searchDocsResult) {
+<app-search-item [searchDocsResult]="searchDocsResult"></app-search-item>
+}

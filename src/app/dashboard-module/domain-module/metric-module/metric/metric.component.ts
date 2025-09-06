@@ -7,19 +7,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { MetricFilterComponent } from '../metric-filter/metric-filter.component';
 import { Metric } from 'src/app/model/metric';
 import { MetricService } from 'src/app/services/metric.service';
-import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavChangeEvent, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { NgClass } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MetricStatisticsComponent } from '../metric-statistics/metric-statistics.component';
+import { MetricDataComponent } from '../metric-data/metric-data.component';
 
 @Component({
-  selector: 'app-metric',
-  templateUrl: './metric.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './metric.component.css'
-  ],
-  standalone: false
+    selector: 'app-metric',
+    templateUrl: './metric.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './metric.component.css'
+    ],
+    imports: [NgClass, MatButton, MatIcon, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, MetricStatisticsComponent, MetricDataComponent, NgbNavOutlet]
 })
 export class MetricComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

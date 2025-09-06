@@ -1,18 +1,25 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthService } from '../auth/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ConsoleLogger } from '../_helpers/console-logger';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { RecaptchaComponent } from '../../libs/ng-recaptcha-module/lib/recaptcha.component';
+import { RecaptchaValueAccessorDirective } from '../../libs/ng-recaptcha-module/lib/recaptcha-value-accessor.directive';
+import { MatButton } from '@angular/material/button';
+import { AppVersionComponent } from '../app-version/app-version.component';
 
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.css'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, RecaptchaComponent, 
+        RecaptchaValueAccessorDirective, MatButton, AppVersionComponent
+    ]
 })
 export class SignupComponent implements OnInit, OnDestroy {
     private readonly formBuilder = inject(FormBuilder);

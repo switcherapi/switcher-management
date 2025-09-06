@@ -1,9 +1,14 @@
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
-<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-<div *ngIf="!loading && !error" [ngClass]="cardListContainerStyle" style="border: 0px; margin: 0px !important;">
+}
+@if (error) {
+<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}
+@if (!loading && !error) {
+<div [ngClass]="cardListContainerStyle" style="border: 0px; margin: 0px !important;">
     <div class="header-style">
         <div class="div-btn-new">
             <button mat-button class="btn-element create" (click)="createGroup()" [disabled]="!creatable">
@@ -11,20 +16,25 @@
                 <div class="options-section-label">New Group</div>
             </button>
         </div>
-        <div *ngIf="!childEnvironmentEmitter" class="environment-style">
+        @if (!childEnvironmentEmitter) {
+        <div class="environment-style">
             <form [formGroup]="environmentSelection">
                 <mat-form-field>
                     <mat-label>Environment</mat-label>
                     <mat-select #envSelectionChange formControlName="environmentSelection">
-                        <mat-option *ngFor="let environment of environments" [value]="environment.name">
+                        @for (environment of environments; track environment.name) {
+                        <mat-option [value]="environment.name">
                             {{environment.name}}
                         </mat-option>
+                        }
                     </mat-select>
                 </mat-form-field>
             </form>
         </div>
+        }
     </div>
-    <div *ngFor="let group of groups">
+    @for (group of groups; track group) {
+    <div>
         <app-group-preview 
             [domainId]="domainId"
             [domainName]="domainName"
@@ -33,7 +43,9 @@
             [permissions]="permissions">
         </app-group-preview>
     </div>
-    <div *ngIf="groups.length === 10 || skip > 0" class="pagination">
+    }
+    @if (groups.length === 10 || skip > 0) {
+    <div class="pagination">
         <button mat-button class="btn-element create nav" (click)="onPrevious()" disabled="{{skip === 0}}">
             <mat-icon style="font-size: larger;">arrow_back</mat-icon>
         </button>
@@ -41,4 +53,6 @@
             <mat-icon style="font-size: larger;">arrow_forward</mat-icon>
         </button>
     </div>
+    }
 </div>
+}

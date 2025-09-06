@@ -4,12 +4,13 @@ import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/services/auth.service';
 import { ConsoleLogger } from '../_helpers/console-logger';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-version',
-  templateUrl: './app-version.component.html',
-  styleUrls: ['./app-version.component.css'],
-  standalone: false
+    selector: 'app-version',
+    templateUrl: './app-version.component.html',
+    styleUrls: ['./app-version.component.css'],
+    imports: [MatTooltip]
 })
 export class AppVersionComponent implements OnInit {
   private readonly authService = inject(AuthService);

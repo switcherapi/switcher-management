@@ -2,12 +2,14 @@ import { Component, Input } from '@angular/core';
 import { ConfigDetailComponent } from '../config-detail/config-detail.component';
 import { Strategy } from 'src/app/model/strategy';
 import { BehaviorSubject } from 'rxjs';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { StrategyDetailComponent } from '../strategy-detail/strategy-detail.component';
 
 @Component({
-  selector: 'app-strategy-list',
-  templateUrl: './strategy-list.component.html',
-  styleUrls: ['./strategy-list.component.css'],
-  standalone: false
+    selector: 'app-strategy-list',
+    templateUrl: './strategy-list.component.html',
+    styleUrls: ['./strategy-list.component.css'],
+    imports: [MatTabGroup, MatTab, StrategyDetailComponent]
 })
 export class StrategyListComponent {
   @Input() strategies: BehaviorSubject<Strategy[]>;

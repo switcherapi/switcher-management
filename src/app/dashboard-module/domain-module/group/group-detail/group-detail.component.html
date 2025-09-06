@@ -1,8 +1,10 @@
 <app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
-    <div *ngIf="loading" class="card-body loader-div">
+    @if (loading) {
+    <div class="card-body loader-div">
         <div class="loader"></div>
         <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
     </div>
+    }
     <div [ngClass]="detailBodyStyle">
         <section [ngClass]="classStatus">
             <div class="header-container">
@@ -11,12 +13,17 @@
                         <mat-label>Name</mat-label>
                         <input #nameElement matInput [value]="group?.name" maxlength="30"
                             [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="nameFormControl" autocomplete="off">
-                        <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                        
+                        @if (nameFormControl.hasError('minlength')) {
+                        <mat-error>
                             Name must contains at least 5 characters
                         </mat-error>
-                        <mat-error *ngIf="nameFormControl.hasError('required')">
+                        }
+                        @if (nameFormControl.hasError('required')) {
+                        <mat-error>
                             Name is <strong>required</strong>
                         </mat-error>
+                        }
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Description</mat-label>
@@ -41,7 +48,8 @@
                     </mat-form-field>
                 </div>
                 <div class="description">
-                    <app-environment-config *ngIf="group"
+                    @if (group) {
+                    <app-environment-config
                         [enable]="envEnable"
                         [domainId]="domainId" 
                         [configuredEnvironments]="group.activated"
@@ -50,6 +58,7 @@
                         (outputEnvRemoved)="onEnvRemoved($event)"
                         (outputEnvLoaded)="onEnvLoaded($event)">
                     </app-environment-config>
+                    }
                 </div>
             </div>
         </section>
@@ -66,8 +75,10 @@
             </div>
         </section>
     </div>
-    <div *ngIf="!loading && environments" class="config-list">
+    @if (!loading && environments) {
+    <div class="config-list">
         <hr>
         <app-config-list [childEnvironmentEmitter]="childEnvironmentEmitter" [environments]="environments"></app-config-list>
     </div>
+    }
 </app-block-ui>

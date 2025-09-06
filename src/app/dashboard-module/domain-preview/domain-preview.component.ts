@@ -1,15 +1,16 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Domain } from 'src/app/model/domain';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-domain-preview',
-  templateUrl: './domain-preview.component.html',
-  styleUrls: [
-    '../domain-module/common/css/preview.component.css', 
-    './domain-preview.component.css'
-  ],
-  standalone: false
+    selector: 'app-domain-preview',
+    templateUrl: './domain-preview.component.html',
+    styleUrls: [
+        '../domain-module/common/css/preview.component.css',
+        './domain-preview.component.css'
+    ],
+    imports: [NgClass]
 })
 export class DomainPreviewComponent implements OnInit {
   private readonly router = inject(Router);

@@ -1,14 +1,22 @@
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
-<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}
+@if (error) {
+<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}
 <div [ngClass]="classStatus">
     <div class="header-style">
         <div style="display: contents;">
             <button mat-button class="btn-element create" (click)="createEnvironment()" [disabled]="inputEnvironmentName.value.length < 2 || !creatable">
-                <mat-icon *ngIf="creating"><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
-                <mat-icon *ngIf="!creating"style="font-size: large;">create</mat-icon>
+                @if (creating) {
+                <mat-icon><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
+                }
+                @if (!creating) {
+                <mat-icon style="font-size: large;">create</mat-icon>
+                }
                 Create
             </button>
             <mat-form-field class="input-name">
@@ -18,24 +26,26 @@
             </mat-form-field>
         </div>
     </div>
-    <div *ngIf="!loading">
-        <div *ngFor="let environment of environments">
-            <div class="grid-container">
-                <label class="label-env-name" for="inputEnvironmentName">
-                    <mat-icon>apps</mat-icon>
-                    {{ environment.name }}
-                </label>
-                <div class="toggle-section">
-                    <button mat-button class="btn-element btn-red remove" style="order: 1;" (click)="removeEnvironment(environment)" [disabled]="!removable">
-                        <mat-icon>delete</mat-icon>
-                        Remove
-                    </button>
-                    <button mat-button class="btn-element reset" (click)="resetEnvironment(environment)" [disabled]="!updatable">
-                        <mat-icon>restore</mat-icon>
-                        Reset
-                    </button>
-                </div>
-            </div>  
-        </div>
+    @if (!loading) {
+    <div>
+        @for (environment of environments; track environment) {
+        <div class="grid-container">
+            <label class="label-env-name" for="inputEnvironmentName">
+                <mat-icon>apps</mat-icon>
+                {{ environment.name }}
+            </label>
+            <div class="toggle-section">
+                <button mat-button class="btn-element btn-red remove" style="order: 1;" (click)="removeEnvironment(environment)" [disabled]="!removable">
+                    <mat-icon>delete</mat-icon>
+                    Remove
+                </button>
+                <button mat-button class="btn-element reset" (click)="resetEnvironment(environment)" [disabled]="!updatable">
+                    <mat-icon>restore</mat-icon>
+                    Reset
+                </button>
+            </div>
+        </div>  
+        }
     </div>
+    }
 </div>

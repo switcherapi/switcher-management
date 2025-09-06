@@ -4,15 +4,14 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { RecaptchaComponent } from "./recaptcha.component";
 
 @Directive({
-  providers: [
-    {
-      multi: true,
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RecaptchaValueAccessorDirective),
-    },
-  ],
-  selector: "re-captcha[formControlName],re-captcha[formControl],re-captcha[ngModel]",
-  standalone: false
+    providers: [
+        {
+            multi: true,
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => RecaptchaValueAccessorDirective),
+        },
+    ],
+    selector: "re-captcha[formControlName],re-captcha[formControl],re-captcha[ngModel]"
 })
 export class RecaptchaValueAccessorDirective implements ControlValueAccessor {
   private readonly host = inject(RecaptchaComponent);

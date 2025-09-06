@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -9,12 +9,17 @@ import { DomainService } from '../services/domain.service';
 import { SlackService } from '../services/slack.service';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { ToastService } from '../_helpers/toast.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-slack-auth',
-  templateUrl: './slack-auth.component.html',
-  styleUrls: ['./slack-auth.component.css'],
-  standalone: false
+    selector: 'app-slack-auth',
+    templateUrl: './slack-auth.component.html',
+    styleUrls: ['./slack-auth.component.css'],
+    imports: [MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatInput, MatButton, MatIcon]
 })
 export class SlackAuthComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);

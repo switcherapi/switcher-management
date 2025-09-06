@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { MarkdownInjector } from './markdown-injector.component';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-shortcut',
-  template: `
+    selector: 'app-shortcut',
+    template: `
     <div class="doc-header">
       <h3 class="doc-title">Shortcuts</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" alt="Switcher API">
     </div>
     <markdown [data]="markdown"></markdown>
   `,
-  styleUrls: ['../documentation/documentation.component.css'],
-  standalone: false
+    styleUrls: ['../documentation/documentation.component.css'],
+    imports: [MarkdownComponent]
 })
 export class ShortcutsComponent extends MarkdownInjector {
 

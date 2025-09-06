@@ -2,21 +2,29 @@ import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ChartOptions, ChartType, ChartDataset, ChartData } from 'chart.js';
 import { MetricComponent } from '../metric/metric.component';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { Metric, MetricData, MetricStatistics } from 'src/app/model/metric';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { BaseChartDirective } from '../../../../../libs/ng2-charts/src/lib/base-chart.directive';
+import { MatMiniFabButton, MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatToolbar } from '@angular/material/toolbar';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MetricDataComponent } from '../metric-data/metric-data.component';
 
 const negativeTemplate = { label: 'False', backgroundColor: '#ffa1b595', borderColor: '#ffa1b5', fill: 'origin' };
 const positiveTemplate = { label: 'True', backgroundColor: '#86c7f395', borderColor: '#3c7aa3', fill: 'origin' };
 
 @Component({
-  selector: 'app-metric-statistics',
-  templateUrl: './metric-statistics.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './metric-statistics.component.css'
-  ],
-  standalone: false
+    selector: 'app-metric-statistics',
+    templateUrl: './metric-statistics.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './metric-statistics.component.css'
+    ],
+    imports: [MatTabGroup, MatTab, BaseChartDirective, MatMiniFabButton, MatIcon]
 })
 export class MetricStatisticsComponent implements OnInit, OnDestroy {
   dialog = inject(MatDialog);
@@ -332,12 +340,12 @@ export class SwitcherDateTimeGroupedTab {
 }
 
 @Component({
-  selector: 'metric-statistics-data-dialog',
-  templateUrl: 'metric-statistics-data-dialog.html',
-  styleUrls: [
-    '../../common/css/create.component.css'
-  ],
-  styles: [`
+    selector: 'metric-statistics-data-dialog',
+    templateUrl: 'metric-statistics-data-dialog.html',
+    styleUrls: [
+        '../../common/css/create.component.css'
+    ],
+    styles: [`
     .btn-cancel {
       float: right;
       margin-right: 10px;
@@ -358,7 +366,7 @@ export class SwitcherDateTimeGroupedTab {
       }
     }
   `],
-  standalone: false
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatInput, MetricDataComponent, MatDialogActions, MatButton]
 })
 export class SwitcherDataStatsDialogComponent {
   dialogRef = inject<MatDialogRef<SwitcherDataStatsDialogComponent>>(MatDialogRef);

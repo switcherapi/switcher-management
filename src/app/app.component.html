@@ -12,17 +12,21 @@
             <div>Menu</div>
         </li>
         <li>
-            <a *ngIf="showHome()" class="topbar-menu-item" routerLink="/" title="Home" (click)="onMenuClick('mainMenu')">
+            @if (showHome()) {
+            <a class="topbar-menu-item" routerLink="/" title="Home" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">home</mat-icon>
                 Home
             </a>
+            }
         </li>
         <hr style="margin: 0;">
         <li>
-            <a *ngIf="currentToken" class="topbar-menu-item" routerLink="/dashboard" title="Dashboard" (click)="onMenuClick('mainMenu')">
+            @if (currentToken) {
+            <a class="topbar-menu-item" routerLink="/dashboard" title="Dashboard" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">dashboard</mat-icon>
                 Dashboard
             </a>
+            }
         </li>
         <li>
             <a class="topbar-menu-item" routerLink="/documentation" title="Documentation" (click)="onMenuClick('mainMenu')">
@@ -31,37 +35,50 @@
             </a>
         </li>
         <li>
-            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/login" title="Sign in" (click)="onMenuClick('mainMenu')">
+            @if (!currentToken) {
+            <a class="topbar-menu-item" routerLink="/login" title="Sign in" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">login</mat-icon>
                 Sign in
             </a>
+            }
         </li>
         <hr style="margin: 0;">
         <li>
-            <a *ngIf="!currentToken" class="topbar-menu-item" routerLink="/signup" title="Sign up" (click)="onMenuClick('mainMenu')">
+            @if (!currentToken) {
+            <a class="topbar-menu-item" routerLink="/signup" title="Sign up" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">person_add</mat-icon>
                 Sign up
             </a>
+            }
         </li>
     </ul>
 
     <mat-divider class="divider-style"></mat-divider>
 
     <div class="navbar-nav" style="width: 100%;">
-        <a class="nav-item nav-link hide-main-menu" routerLink="/dashboard" *ngIf="currentToken">Dashboard</a>
+        @if (currentToken) {
+        <a class="nav-item nav-link hide-main-menu" routerLink="/dashboard">Dashboard</a>
+        }
         <a class="nav-item nav-link hide-main-menu" routerLink="/documentation">Documentation</a>
-        <a class="nav-item nav-link hide-main-menu" routerLink="/login" *ngIf="!currentToken">Sign in</a>
+        @if (!currentToken) {
+        <a class="nav-item nav-link hide-main-menu" routerLink="/login">Sign in</a>
+        }
         <a id="appTitle" class="nav-item nav-link hide-non-mobile" routerLink="/">Switcher Management</a>
-        <div class="menu-border-left" *ngIf="!currentToken">
+        @if (!currentToken) {
+        <div class="menu-border-left">
             <a id="toggleTheme" class="nav-item nav-link transition" (click)="toggleDarkMode()">
                 <mat-icon>{{ darkMode ? 'brightness_7' : 'brightness_4' }}</mat-icon>
             </a>
             <a id="signUp" class="nav-item nav-link hide-main-menu" routerLink="/signup">Sign up</a>
         </div>
-        <div id="menuProfile" *ngIf="currentToken" class="profile-btn menu-border-left">
+        }
+        @if (currentToken) {
+        <div id="menuProfile" class="profile-btn menu-border-left">
             <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="User avatar">
         </div>
-        <ul id="profileMenu" *ngIf="currentToken" class="navigation-nested nav-user">
+        }
+        @if (currentToken) {
+        <ul id="profileMenu" class="navigation-nested nav-user">
             <li class="menu-header navigation-nested__header">
                 <div>{{ loggedUserName }}</div>
             </li>
@@ -85,6 +102,7 @@
                 </a>
             </li>
         </ul>
+        }
     </div>
 </nav>
 

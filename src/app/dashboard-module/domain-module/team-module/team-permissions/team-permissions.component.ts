@@ -4,24 +4,30 @@ import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
 import { TeamPermissionCreateComponent } from '../team-permission-create/team-permission-create.component';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort, MatSortHeader } from '@angular/material/sort';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { Team } from 'src/app/model/team';
 import { Permission } from 'src/app/model/permission';
 import { PermissionService } from 'src/app/services/permission.service';
 import { BasicComponent } from '../../common/basic-component';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-team-permissions',
-  templateUrl: './team-permissions.component.html',
-  styleUrls: [
-    '../../common/css/preview.component.css',
-    '../../common/css/detail.component.css',
-    './team-permissions.component.css'
-  ],
-  standalone: false
+    selector: 'app-team-permissions',
+    templateUrl: './team-permissions.component.html',
+    styleUrls: [
+        '../../common/css/preview.component.css',
+        '../../common/css/detail.component.css',
+        './team-permissions.component.css'
+    ],
+    imports: [MatButton, MatIcon, MatFormField, MatLabel, MatInput, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, 
+      MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatSortHeader, MatTooltip, MatSlideToggle, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow
+    ]
 })
 export class TeamPermissionsComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly permissionService = inject(PermissionService);

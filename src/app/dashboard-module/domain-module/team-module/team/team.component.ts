@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { Team } from 'src/app/model/team';
@@ -10,15 +10,21 @@ import { TeamService } from 'src/app/services/team.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
+import { NgClass } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { TeamPreviewComponent } from '../team-preview/team-preview.component';
 
 @Component({
-  selector: 'app-team',
-  templateUrl: './team.component.html',
-  styleUrls: [
-    '../../common/css/list.component.css',
-    './team.component.css'
-  ],
-  standalone: false
+    selector: 'app-team',
+    templateUrl: './team.component.html',
+    styleUrls: [
+        '../../common/css/list.component.css',
+        './team.component.css'
+    ],
+    imports: [NgClass, MatButton, MatIcon, MatProgressSpinner, MatFormField, MatLabel, MatInput, FormsModule, ReactiveFormsModule, TeamPreviewComponent]
 })
 export class TeamComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

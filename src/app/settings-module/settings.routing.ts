@@ -5,8 +5,8 @@ import { Routes, RouterModule, mapToCanActivate } from '@angular/router';
 import { SettingsAccountComponent } from './settings-account/settings-account.component';
 
 const routes: Routes = [
-  { path: 'settings', pathMatch: 'full', redirectTo: '/settings/account' },
-  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], children: [
+  { path: '', pathMatch: 'full', redirectTo: '/settings/account' },
+  { path: '', component: SettingsComponent, canActivate: [AuthGuard], children: [
     {
       path: 'account',
       component: SettingsAccountComponent, canActivate: mapToCanActivate([AuthGuard])

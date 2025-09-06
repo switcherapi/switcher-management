@@ -10,12 +10,16 @@
                             [formControl]="nameFormControl"
                             autocomplete="off">
                     </mat-form-field>
-                    <mat-error *ngIf="nameFormControl.hasError('minlength')">
+                    @if (nameFormControl.hasError('minlength')) {
+                    <mat-error>
                         Name must contains at least 2 characters
                     </mat-error>
-                    <mat-error *ngIf="nameFormControl.hasError('required')">
+                    }
+                    @if (nameFormControl.hasError('required')) {
+                    <mat-error>
                         Name is <strong>required</strong>
                     </mat-error>
+                    }
                 </div>
                 <div class="options-section">
                     <div class="toggle-section">

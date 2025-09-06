@@ -16,24 +16,22 @@ import { BlockUIComponent } from 'src/app/shared/block-ui/block-ui.component';
 
 
 @NgModule({
-  declarations: [
-    TeamComponent,
-    TeamPreviewComponent,
-    TeamDetailComponent,
-    TeamMembersComponent,
-    TeamPermissionsComponent,
-    TeamPermissionCreateComponent,
-    TeamPendingMembersComponent
-  ],
-  imports: [
-    BlockUIComponent,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgbModule,
-    TeamRoutingModule,
-    AppMaterialModule
-  ],
-  providers: [Team]
+    imports: [
+        BlockUIComponent,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgbModule,
+        TeamRoutingModule,
+        AppMaterialModule,
+        TeamComponent,
+        TeamPreviewComponent,
+        TeamDetailComponent,
+        TeamMembersComponent,
+        TeamPermissionsComponent,
+        TeamPermissionCreateComponent,
+        TeamPendingMembersComponent
+    ],
+    providers: [Team]
 })
 export class TeamModule { }

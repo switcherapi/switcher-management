@@ -3,21 +3,27 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamInviteDialogComponent } from '../team-invite-dialog/team-invite-dialog.component';
 import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { DatePipe } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-team-pending-members',
-  templateUrl: './team-pending-members.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    './team-pending-members.component.css'
-  ],
-  standalone: false
+    selector: 'app-team-pending-members',
+    templateUrl: './team-pending-members.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        './team-pending-members.component.css'
+    ],
+    imports: [MatFormField, MatLabel, MatInput, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, 
+      MatCellDef, MatCell, MatIconButton, MatIcon, MatSortHeader, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, DatePipe
+    ]
 })
 export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   private readonly teamService = inject(TeamService);

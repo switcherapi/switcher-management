@@ -4,7 +4,8 @@
             <h4 class="card-header">
                 <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher API" />
             </h4>
-            <div *ngIf="!loading" class="card-body">
+            @if (!loading) {
+            <div class="card-body">
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <mat-form-field>
@@ -16,17 +17,23 @@
                         formControlName="captcha"
                         siteKey="{{getRecaptchaPublicKey()}}">  
                     </re-captcha>
-                    <button *ngIf="!error" mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
+                    @if (!error) {
+                    <button mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
                         <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
                         <span class="label-color" style="color: white; padding-left: 5px;">Reset</span>
                     </button>
-                    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+                    }
+                    @if (error) {
+                    <div class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+                    }
                 </form>
             </div>
-            <div *ngIf="loading" class="card-body loader-div">
+            } @else {
+            <div class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API" />
             </div>
+            }
         </div>
     </div>
 </div>

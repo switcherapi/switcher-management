@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from './auth/services/auth.service';
 import { PwaService } from './services/pwa.service';
 import { environment } from 'src/environments/environment';
@@ -8,7 +10,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: false
+  imports: [RouterOutlet, RouterLink, MatIconModule, MatDividerModule]
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

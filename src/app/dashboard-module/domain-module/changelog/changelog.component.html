@@ -1,14 +1,19 @@
-<mat-form-field *ngIf="dataSource">
+@if (dataSource) {
+<mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off">
 </mat-form-field>
+}
 
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
+}
 <div [ngClass]="classStatus">
-    <table *ngIf="!loading && dataSource" mat-table [dataSource]="dataSource" aria-describedby="changelog-table"
+    @if (!loading && dataSource) {
+    <table mat-table [dataSource]="dataSource" aria-describedby="changelog-table"
         multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="newValue">
@@ -31,23 +36,27 @@
                 <div class="element-detail-panel" [class.expanded]="isExpanded(element)">
                     <div class="element-detail">
                         <h1>Before</h1>
-                        <div *ngFor="let key of getElementKeys(element.oldValue)">
+                        @for (key of getElementKeys(element.oldValue); track key) {
+                        <div>
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{key}}</mat-label>
                                 <input matInput [value]="getElementValue(key, element.oldValue)"
                                     readonly autocomplete="off">
                             </mat-form-field>
                         </div>
+                        }
                     </div>
                     <div class="element-detail">
                         <h1>After</h1>
-                        <div *ngFor="let key of getElementKeys(element.newValue)">
+                        @for (key of getElementKeys(element.newValue); track key) {
+                        <div>
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{key}}</mat-label>
                                 <input matInput [value]="getElementValue(key, element.newValue)"
                                     readonly autocomplete="off">
                             </mat-form-field>
                         </div>
+                        }
                     </div>
                 </div>
             </td>
@@ -60,6 +69,7 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>
+    }
     <div class="tablelog-footer">
         <button mat-button class="btn-element" style="background:#fb5454;" 
             (click)="resetHistory()" 

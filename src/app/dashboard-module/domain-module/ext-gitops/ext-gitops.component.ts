@@ -9,22 +9,35 @@ import { GitOpsService } from 'src/app/services/gitops.service';
 import { buildNewGitOpsAccount, GitOpsAccount, TOKEN_VALUE } from 'src/app/model/gitops';
 import { MatDialog } from '@angular/material/dialog';
 import { GitOpsEnvSelectionComponent } from './gitops-env-selection/gitops-env-selection.component';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 import { GitOpsUpdateTokensComponent } from './gitops-update-tokens/gitops-update-tokens.component';
 import { pathValidator, windowValidator } from './gitops-validator';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog';
+import { NgClass } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-ext-gitops',
-  templateUrl: './ext-gitops.component.html',
-  styleUrls: [
-    '../common/css/detail.component.css',
-    './ext-gitops.component.css'
-  ],
-  standalone: false
+    selector: 'app-ext-gitops',
+    templateUrl: './ext-gitops.component.html',
+    styleUrls: [
+        '../common/css/detail.component.css',
+        './ext-gitops.component.css'
+    ],
+    imports: [NgClass, MatButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatFormField, 
+      MatLabel, MatInput, MatTooltip, MatProgressSpinner, MatSelect, FormsModule, ReactiveFormsModule, 
+      MatOption, MatSlideToggle
+    ]
 })
 export class ExtGitOpsComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

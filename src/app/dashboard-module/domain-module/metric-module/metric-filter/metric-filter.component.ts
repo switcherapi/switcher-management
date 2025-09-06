@@ -1,22 +1,33 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
-import { OnElementAutocomplete } from '../../common/element-autocomplete/element-autocomplete.component';
+import { OnElementAutocomplete, ElementAutocompleteComponent } from '../../common/element-autocomplete/element-autocomplete.component';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput, MatSuffix } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
-  selector: 'app-metric-filter',
-  templateUrl: './metric-filter.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    '../../common/css/create.component.css',
-    './metric-filter.component.css'
-  ],
-  standalone: false
+    selector: 'app-metric-filter',
+    templateUrl: './metric-filter.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        '../../common/css/create.component.css',
+        './metric-filter.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatSelect, 
+      FormsModule, ReactiveFormsModule, MatOption, ElementAutocompleteComponent, MatInput, MatDatepickerInput, 
+      MatDatepickerToggle, MatSuffix, MatDatepicker, MatDialogActions, MatButton
+    ]
 })
 export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutocomplete {
   private readonly environmentService = inject(EnvironmentService);

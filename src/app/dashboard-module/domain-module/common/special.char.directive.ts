@@ -1,9 +1,6 @@
 import { Directive, Input, ElementRef, HostListener, inject } from '@angular/core';
 
-@Directive({
-    selector: '[special-chars]',
-    standalone: false
-})
+@Directive({ selector: '[special-chars]' })
 export class SpecialCharacterDirective {
     private readonly el = inject(ElementRef);
 

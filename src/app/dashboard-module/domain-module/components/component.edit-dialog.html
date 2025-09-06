@@ -1,7 +1,11 @@
 <h4 mat-dialog-title>
-    <mat-toolbar role="toolbar" class="dialog-header">
-        <span *ngIf="!data.apiKey">Edit Component</span>
-        <span *ngIf="data.apiKey">Component API Access</span>
+    <mat-toolbar class="dialog-header">
+        @if (!data.apiKey) {
+        <span>Edit Component</span>
+        }
+        @if (data.apiKey) {
+        <span>Component API Access</span>
+        }
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
             <mat-icon mat-list-icon>close</mat-icon>
@@ -9,13 +13,16 @@
     </mat-toolbar>
 </h4>
 <div mat-dialog-content>
-    <div *ngIf="!data.apiKey">
+    @if (!data.apiKey) {
+    <div>
         <mat-form-field>
             <input matInput special-chars #inputName [(ngModel)]="data.name" 
                 minlength="2" maxlength="20" cdkFocusInitial autocomplete="off">
         </mat-form-field>
     </div>
-    <div *ngIf="data.apiKey">
+    }
+    @if (data.apiKey) {
+    <div>
         <mat-form-field>
             <mat-label>API Key</mat-label>
             <textarea matInput [(ngModel)]="data.apiKey" style="color: black" readonly>
@@ -23,8 +30,10 @@
             <mat-hint align="end"><strong style="color: red;">Keep this key in a safe place</strong></mat-hint>
         </mat-form-field>
     </div>
+    }
 </div>
-<div *ngIf="!data.apiKey" mat-dialog-actions style="float: right;">
+@if (!data.apiKey) {
+<div mat-dialog-actions style="float: right;">
     <button class="btn-save" mat-button (click)="onSave(data)" [disabled]="data.name.length < 2">
         <mat-icon>save</mat-icon>
         <div class="options-section-label"> Save</div>
@@ -34,7 +43,9 @@
         <div class="options-section-label"> Close</div>
     </button>
 </div>
-<div *ngIf="data.apiKey" mat-dialog-actions style="float: right;">
+}
+@if (data.apiKey) {
+<div mat-dialog-actions style="float: right;">
     <button class="btn-save" mat-button (click)="copyKey()" [cdkCopyToClipboard]="data.apiKey" cdkFocusInitial>
         <mat-icon>file_copy</mat-icon>
         <div class="options-section-label"> Copy to clipboard</div>
@@ -44,3 +55,4 @@
         <div class="options-section-label"> Close</div>
     </button>
 </div>
+}

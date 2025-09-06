@@ -2,14 +2,15 @@
     <mat-form-field>
         <mat-label>Ignored Environments</mat-label>
         <mat-chip-grid #ignoredList>
-          <mat-chip-row *ngFor="let env of ignoredEnvironments" 
-                (removed)="remove(env, 'ignored')"
+          @for (env of ignoredEnvironments; track env) {
+          <mat-chip-row (removed)="remove(env, 'ignored')"
                 [removable]="true">
             {{env}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>
+          }
           <input [readonly]="!updatable"
                 [matChipInputFor]="ignoredList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -21,14 +22,15 @@
       <mat-form-field>
         <mat-label>Frozen Environments</mat-label>
         <mat-chip-grid #frozenList>
-          <mat-chip-row *ngFor="let env of frozenEnvironments" 
-                (removed)="remove(env, 'frozen')"
+          @for (env of frozenEnvironments; track env) {
+          <mat-chip-row (removed)="remove(env, 'frozen')"
                 [removable]="true">
             {{env}}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>
+          }
           <input [readonly]="!updatable"
                 [matChipInputFor]="frozenList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

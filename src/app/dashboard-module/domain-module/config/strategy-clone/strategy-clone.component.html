@@ -1,5 +1,5 @@
 <h4 mat-dialog-title>
-    <mat-toolbar role="toolbar" class="dialog-header">
+    <mat-toolbar class="dialog-header">
         <span>Clone strategy</span>
         <span class="fx-spacer"></span>
         <button mat-icon-button (click)="onCancel()">
@@ -18,9 +18,11 @@
                 <mat-form-field>
                     <mat-label>To environment</mat-label>
                     <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
-                        <mat-option *ngFor="let environment of environments" [value]="environment.name">
+                        @for (environment of environments; track environment) {
+                        <mat-option [value]="environment.name">
                             {{environment.name}}
                         </mat-option>
+                        }
                     </mat-select>
                 </mat-form-field>
             </div>

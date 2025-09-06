@@ -1,8 +1,11 @@
-<div *ngIf="loading" class="card-body loader-div">
+@if (loading) {
+<div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
-<div *ngIf="!featureFlag" [ngClass]="detailBodyStyle">
+}
+@if (!featureFlag) {
+<div [ngClass]="detailBodyStyle">
     <div class="panel-gitops-detail">
         <img src="assets\gitops.png" style="width: 40px;" alt="gitops" />
         <h3>GitOps Integration</h3>
@@ -11,14 +14,18 @@
         <p>Oops! Switcher GitOps is unavailable at this time.</p>
     </div>
 </div>
-<div *ngIf="featureFlag" [ngClass]="detailBodyStyle">
+}
+@if (featureFlag) {
+<div [ngClass]="detailBodyStyle">
     <div class="panel-gitops-detail">
         <img src="assets\gitops.png" style="width: 40px; height: 40px;" alt="gitops" />
         <h3>GitOps Integration</h3>
-        <button *ngIf="allowUpdate && gitOpsAccounts.length > 0" id="gitopsMenu" mat-button [matMenuTriggerFor]="belowMenu">
+        @if (allowUpdate && gitOpsAccounts.length > 0) {
+        <button id="gitopsMenu" mat-button [matMenuTriggerFor]="belowMenu">
             <mat-icon class="menu-icon">arrow_drop_down</mat-icon>
             Options
         </button>
+        }
         <mat-menu #belowMenu="matMenu" yPosition="below">
             <button mat-menu-item class="gitops-menu-item" (click)="onStartNewAccount()">
                 <mat-icon>open_in_new</mat-icon>
@@ -30,19 +37,26 @@
             </button>
         </mat-menu>
     </div>
-    <div *ngIf="!loading && gitOpsAccounts.length === 0" class="header">
-        <div *ngIf="allowUpdate" class="card-body">
+    @if (!loading && gitOpsAccounts.length === 0) {
+    <div class="header">
+        @if (allowUpdate) {
+        <div class="card-body">
             <p>No GitOps accounts found. Please add a GitOps account to get started.</p>
             <button mat-button class="btn-element" (click)="onStartNewAccount()">
                 <mat-icon style="font-size: large;">open_in_new</mat-icon>
                 <div class="options-section-label">New Account</div>
             </button>
         </div>
-        <div *ngIf="!allowUpdate" class="card-body">
+        }
+        @if (!allowUpdate) {
+        <div class="card-body">
             <p>No GitOps accounts found. Please contact your administrator to add a GitOps account.</p>
         </div>
+        }
     </div>
-    <div *ngIf="!loading && gitOpsAccounts.length > 0" class="container-fluid content-row">
+    }
+    @if (!loading && gitOpsAccounts.length > 0) {
+    <div class="container-fluid content-row">
         <div class="row">
             <div class="col-sm-6">
                 <div [ngClass]="accountDetailsStyle">
@@ -72,20 +86,26 @@
                         </div>
 
                         <div class="options-section">
-                            <div *ngIf="allowUpdate && canRefresh()">
+                            @if (allowUpdate && canRefresh()) {
+                            <div>
                                 <button mat-button class="btn-element" (click)="onForceRefresh()" matTooltip="Force refresh current environment account">
                                     <mat-icon style="font-size: large;">cloud_download</mat-icon>
                                     <div class="options-section-label">Force Refresh</div>
                                 </button>
                             </div>
+                            }
                             <div style="width: 6.5rem; display: flex;">
-                                <div *ngIf="reloading" class="options-spinner">
+                                @if (reloading) {
+                                <div class="options-spinner">
                                     <mat-spinner [diameter]="25"></mat-spinner>
                                 </div>
-                                <button *ngIf="canReload()" mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
+                                }
+                                @if (canReload()) {
+                                <button mat-button class="btn-element" (click)="onReload()" matTooltip="Reload current environment account">
                                     <mat-icon style="font-size: large;">refresh</mat-icon>
                                     <div class="options-section-label">Reload</div>
                                 </button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -100,9 +120,11 @@
                             <mat-form-field>
                                 <mat-label>Environment</mat-label>
                                 <mat-select [formControl]="formGroup.get('environment')">
-                                    <mat-option *ngFor="let environment of getDomainEnvironments()" [value]="environment">
+                                    @for (environment of getDomainEnvironments(); track environment) {
+                                    <mat-option [value]="environment">
                                         {{environment}}
                                     </mat-option>
+                                    }
                                 </mat-select>
                             </mat-form-field>
                             <mat-form-field>
@@ -142,27 +164,39 @@
                             </div>
                         </div>
 
-                        <div *ngIf="allowUpdate" class="options-section">
-                            <button *ngIf="gitOpsSelected.ID && hasChanges()" mat-button class="btn-element" (click)="onUpdate()">
+                        @if (allowUpdate) {
+                        <div class="options-section">
+                            @if (gitOpsSelected.ID && hasChanges()) {
+                            <button mat-button class="btn-element" (click)="onUpdate()">
                                 <div class="options-section-label">Update</div>
                                 <mat-icon style="font-size: large;">build</mat-icon>
                             </button>
-                            <button *ngIf="!gitOpsSelected.ID" mat-button class="btn-element" (click)="onCreate()">
+                            }
+                            @if (!gitOpsSelected.ID) {
+                            <button mat-button class="btn-element" (click)="onCreate()">
                                 <div class="options-section-label">Create</div>
                                 <mat-icon style="font-size: large;">save</mat-icon>
                             </button>
-                            <button *ngIf="!gitOpsSelected.ID" mat-button class="btn-element" (click)="onDiscard()">
+                            }
+                            @if (!gitOpsSelected.ID) {
+                            <button mat-button class="btn-element" (click)="onDiscard()">
                                 <div class="options-section-label">Discard</div>
                                 <mat-icon style="font-size: large;">close</mat-icon>
                             </button>
-                            <button *ngIf="gitOpsSelected.ID" mat-button class="btn-element btn-red" (click)="onUnsubscribe()">
+                            }
+                            @if (gitOpsSelected.ID) {
+                            <button mat-button class="btn-element btn-red" (click)="onUnsubscribe()">
                                 <mat-icon style="font-size: large;">cloud_off</mat-icon>
                                 <div class="options-section-label">Unsubscribe</div>
                             </button>
+                            }
                         </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    }
 </div>
+}

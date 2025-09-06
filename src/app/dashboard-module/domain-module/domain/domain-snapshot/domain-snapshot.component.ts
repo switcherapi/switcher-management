@@ -1,26 +1,39 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
 import { DomainService } from 'src/app/services/domain.service';
 import { ComponentService } from 'src/app/services/component.service';
 import { SwitcherComponent } from 'src/app/model/switcher-component';
 import { BasicComponent } from '../../common/basic-component';
+import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 
 @Component({
-  selector: 'app-domain-snapshot',
-  templateUrl: './domain-snapshot.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    '../../common/css/create.component.css',
-    './domain-snapshot.component.css'
-  ],
-  standalone: false
+    selector: 'app-domain-snapshot',
+    templateUrl: './domain-snapshot.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        '../../common/css/create.component.css',
+        './domain-snapshot.component.css'
+    ],
+    imports: [BlockUIComponent, MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, 
+      MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatCheckbox, 
+      MatDialogActions, MatButton, CdkCopyToClipboard
+    ]
 })
 export class DomainSnapshotComponent extends BasicComponent implements OnInit, OnDestroy {
   dialogRef = inject<MatDialogRef<DomainSnapshotComponent>>(MatDialogRef);

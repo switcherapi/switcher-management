@@ -1,21 +1,29 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter, inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSelectionListChange } from '@angular/material/list';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { NgClass } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-environment-config',
-  templateUrl: './environment-config.component.html',
-  styleUrls: [
-    '../common/css/detail.component.css',
-    './environment-config.component.css'
-  ],
-  standalone: false
+    selector: 'app-environment-config',
+    templateUrl: './environment-config.component.html',
+    styleUrls: [
+        '../common/css/detail.component.css',
+        './environment-config.component.css'
+    ],
+    imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption,
+       MatSlideToggle, NgClass, MatMiniFabButton, MatTooltip, MatIcon
+    ]
 })
 export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
@@ -148,9 +156,8 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     const keys = Object.keys(env);
     let defaultEnv: Environment;
     
-    for (const key of keys) {
-      defaultEnv = this.environments.find(e => e.name === 'default' || env.name === key);
-      break;
+    if (keys) {
+      defaultEnv = this.environments.find(e => e.name === 'default' || e.name === keys[0]);
     }
 
     if (defaultEnv) {

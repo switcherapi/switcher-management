@@ -1,26 +1,39 @@
 import { Component, OnInit, ViewChild, OnDestroy, inject } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSelectionList, MatSelectionListChange, MatListOption } from '@angular/material/list';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { MAX_VALUE_LENGTH, StrategyReq } from 'src/app/model/strategy_req';
 import { StrategyService } from 'src/app/services/strategy.service';
 import { Strategy } from 'src/app/model/strategy';
 import { JsonReader } from 'src/app/_helpers/json-reader';
 import { DataUtils } from 'src/app/_helpers/data-utils';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput, MatHint, MatError } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatCard, MatCardHeader, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-strategy-create',
-  templateUrl: './strategy-create.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    '../../common/css/create.component.css',
-    './strategy-create.component.css'
-  ],
-  standalone: false
+    selector: 'app-strategy-create',
+    templateUrl: './strategy-create.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        '../../common/css/create.component.css',
+        './strategy-create.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, FormsModule, 
+      ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatInput, MatHint, MatCard, 
+      MatCardHeader, MatCardSubtitle, MatCardContent, MatSelectionList, MatListOption, MatTooltip, 
+      MatError, MatButton, MatDialogActions
+    ]
 })
 export class StrategyCreateComponent implements OnInit, OnDestroy {
   dialogRef = inject<MatDialogRef<ConfigCreateComponent>>(MatDialogRef);

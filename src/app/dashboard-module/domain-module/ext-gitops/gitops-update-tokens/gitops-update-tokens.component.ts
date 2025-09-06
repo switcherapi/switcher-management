@@ -1,18 +1,27 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
-  selector: 'app-gitops-update-tokens',
-  templateUrl: './gitops-update-tokens.component.html',
-  styleUrls: [
-    '../../common/css/detail.component.css',
-    '../../common/css/create.component.css',
-    './gitops-update-tokens.component.css'
-  ],
-  standalone: false
+    selector: 'app-gitops-update-tokens',
+    templateUrl: './gitops-update-tokens.component.html',
+    styleUrls: [
+        '../../common/css/detail.component.css',
+        '../../common/css/create.component.css',
+        './gitops-update-tokens.component.css'
+    ],
+    imports: [MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, MatFormField, 
+      MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatInput, MatDialogActions, MatButton
+    ]
 })
 export class GitOpsUpdateTokensComponent implements OnInit, OnDestroy {
   data = inject(MAT_DIALOG_DATA);

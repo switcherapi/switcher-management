@@ -2,16 +2,20 @@ import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { takeUntil, startWith, map, debounceTime } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomainService } from 'src/app/services/domain.service';
 import { Group } from 'src/app/model/group';
 import { ApolloQueryResult } from '@apollo/client';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'element-autocomplete',
-  templateUrl: './element-autocomplete.component.html',
-  styleUrls: ['./element-autocomplete.component.css'],
-  standalone: false
+    selector: 'element-autocomplete',
+    templateUrl: './element-autocomplete.component.html',
+    styleUrls: ['./element-autocomplete.component.css'],
+    imports: [MatFormField, MatLabel, MatInput, FormsModule, MatAutocompleteTrigger, MatTooltip, ReactiveFormsModule, MatAutocomplete, MatOption, AsyncPipe]
 })
 export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   private readonly domainService = inject(DomainService);
@@ -28,7 +32,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   
   smartSearchFormControl = new FormControl('');
   searchListItems: any[] = [];
-  searchedValues: Observable<string[]>;
+  searchedValues: Observable<any[]>;
   private query: Observable<ApolloQueryResult<any>>;
 
   ngOnInit() {
@@ -150,7 +154,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
       filterValue.push(value.name);
       this.smartSearchFormControl.setValue(value.name);
       this.parentComponent.onSelectElementFilter(value);
-      return;
+      return [];
     }
 
     filterValue = value.toLowerCase();
