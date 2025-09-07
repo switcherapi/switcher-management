@@ -1,3 +1,4 @@
+<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
 <div class="filter-permission-style">
     <button mat-button class="btn-element" (click)="createPermission()" [disabled]="!creatable">
         <mat-icon style="font-size: large;">create</mat-icon>
@@ -68,3 +69,4 @@
     </table>
 </div>
 }
+</app-block-ui>

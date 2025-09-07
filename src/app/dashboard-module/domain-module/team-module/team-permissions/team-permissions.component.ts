@@ -16,6 +16,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 import { MatTooltip } from '@angular/material/tooltip';
+import { BlockUIComponent } from 'src/app/shared/block-ui/block-ui.component';
 
 @Component({
     selector: 'app-team-permissions',
@@ -26,7 +27,8 @@ import { MatTooltip } from '@angular/material/tooltip';
         './team-permissions.component.css'
     ],
     imports: [MatButton, MatIcon, MatFormField, MatLabel, MatInput, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, 
-      MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatSortHeader, MatTooltip, MatSlideToggle, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow
+      MatHeaderCell, MatCellDef, MatCell, MatIconButton, MatSortHeader, MatTooltip, MatSlideToggle, MatHeaderRowDef, 
+      MatHeaderRow, MatRowDef, MatRow, BlockUIComponent
     ]
 })
 export class TeamPermissionsComponent extends BasicComponent implements OnInit, OnDestroy {

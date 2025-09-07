@@ -3,7 +3,7 @@ import { Subject, Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { RouterErrorHandler } from 'src/app/_helpers/router-error-handler';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MetricFilterComponent } from '../metric-filter/metric-filter.component';
 import { Metric } from 'src/app/model/metric';
 import { MetricService } from 'src/app/services/metric.service';
@@ -16,6 +16,8 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MetricStatisticsComponent } from '../metric-statistics/metric-statistics.component';
 import { MetricDataComponent } from '../metric-data/metric-data.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-metric',
@@ -24,7 +26,12 @@ import { MetricDataComponent } from '../metric-data/metric-data.component';
         '../../common/css/detail.component.css',
         './metric.component.css'
     ],
-    imports: [NgClass, MatButton, MatIcon, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, MetricStatisticsComponent, MetricDataComponent, NgbNavOutlet]
+    imports: [NgClass, MatButton, MatIcon, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, 
+      NgbNavContent, MetricStatisticsComponent, MetricDataComponent, NgbNavOutlet, MatDialogModule, MatNativeDateModule
+    ],
+    providers: [
+      { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { showDelay: 250, hideDelay: 5, touchendHideDelay: 5, touchGestures: 'auto' } }
+    ]
 })
 export class MetricComponent implements OnInit, OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

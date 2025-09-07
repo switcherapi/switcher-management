@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode, importProvidersFrom, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import '@angular/compiler'; // Required for JIT compilation
 import '@angular/localize/init';
@@ -8,36 +8,40 @@ import { environment } from './environments/environment';
 import { provideHttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter, Routes, mapToCanActivate } from '@angular/router';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 
 // Import modules and services
 import { AuthGuard } from './app/auth/guards/auth.guard';
 import { AuthService } from './app/auth/services/auth.service';
 import { TokenInterceptor } from './app/auth/token.interceptor';
 import { PwaService } from './app/services/pwa.service';
-import { GraphQLModule } from './app/graphql.module';
-import { DashboardModule } from './app/dashboard-module/dashboard.module';
-import { AppMaterialModule } from './app/shared/app-material.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RecaptchaModule, RecaptchaFormsModule } from './libs/ng-recaptcha-module';
-import { SettingsModule } from './app/settings-module/settings.module';
+import { RecaptchaModule } from './libs/ng-recaptcha-module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { provideCharts, withDefaultRegisterables } from './libs/ng2-charts/src/lib/ng-charts.provider';
 
-// Import route components
-import { LoginComponent } from './app/login';
-import { HomeComponent } from './app/home/home.component';
-import { SignupComponent } from './app/signup/signup.component';
-import { SignupTeamComponent } from './app/signup-team/signup-team.component';
-import { LoginResetComponent } from './app/login-reset/login-reset.component';
-import { SignupDomainComponent } from './app/signup-domain/signup-domain.component';
-import { SlackAuthComponent } from './app/slack-auth/slack-auth.component';
+// Apollo GraphQL
+import { provideApollo } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { InMemoryCache } from '@apollo/client/core';
 
 const routes: Routes = [
-    { path: '', component: environment.allowHomeView ? HomeComponent : LoginComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'login/reset', component: LoginResetComponent },
-    { path: 'signup', component: SignupComponent },
+    { 
+        path: '', 
+        loadComponent: () => environment.allowHomeView 
+            ? import('./app/home/home.component').then(m => m.HomeComponent)
+            : import('./app/login').then(m => m.LoginComponent)
+    },
+    { 
+        path: 'login', 
+        loadComponent: () => import('./app/login').then(m => m.LoginComponent)
+    },
+    { 
+        path: 'login/reset', 
+        loadComponent: () => import('./app/login-reset/login-reset.component').then(m => m.LoginResetComponent)
+    },
+    { 
+        path: 'signup', 
+        loadComponent: () => import('./app/signup/signup.component').then(m => m.SignupComponent)
+    },
     {
         path: 'settings',
         loadChildren: () => import('./app/settings-module/settings.module').then(mod => mod.SettingsModule),
@@ -53,9 +57,21 @@ const routes: Routes = [
         loadChildren: () => import('./app/documentation-module/documentation.module').then(mod => mod.DocumentationModuleModule),
         data: { preload: true }
     },
-    { path: 'collab/join', component: SignupTeamComponent, canActivate: mapToCanActivate([AuthGuard]) },
-    { path: 'domain/transfer', component: SignupDomainComponent, canActivate: mapToCanActivate([AuthGuard]) },
-    { path: 'slack/authorization', component: SlackAuthComponent, canActivate: mapToCanActivate([AuthGuard]) },
+    { 
+        path: 'collab/join', 
+        loadComponent: () => import('./app/signup-team/signup-team.component').then(m => m.SignupTeamComponent), 
+        canActivate: mapToCanActivate([AuthGuard]) 
+    },
+    { 
+        path: 'domain/transfer', 
+        loadComponent: () => import('./app/signup-domain/signup-domain.component').then(m => m.SignupDomainComponent), 
+        canActivate: mapToCanActivate([AuthGuard]) 
+    },
+    { 
+        path: 'slack/authorization', 
+        loadComponent: () => import('./app/slack-auth/slack-auth.component').then(m => m.SlackAuthComponent), 
+        canActivate: mapToCanActivate([AuthGuard]) 
+    },
     { path: '**', redirectTo: '/dashboard' }
 ];
 
@@ -73,15 +89,15 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     provideCharts(withDefaultRegisterables()),
     provideRouter(routes),
+    provideApollo(() => {
+      const httpLink = inject(HttpLink);
+      return {
+        link: httpLink.create({ uri: `${environment.apiUrl}/adm-graphql` }),
+        cache: new InMemoryCache(),
+      };
+    }),
     importProvidersFrom(
-      ReactiveFormsModule,
-      GraphQLModule,
-      DashboardModule,
-      AppMaterialModule,
-      NgbModule,
       RecaptchaModule,
-      RecaptchaFormsModule,
-      SettingsModule,
       ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production })
     )
   ]
