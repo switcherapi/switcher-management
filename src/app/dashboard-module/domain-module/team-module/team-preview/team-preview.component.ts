@@ -26,7 +26,9 @@ import { MatIcon } from '@angular/material/icon';
         '../../common/css/detail.component.css',
         './team-preview.component.css'
     ],
-    imports: [BlockUIComponent, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, ReactiveFormsModule, MatError, MatSlideToggle, NgClass, MatButton, MatIcon]
+    imports: [BlockUIComponent, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, 
+      ReactiveFormsModule, MatError, MatSlideToggle, NgClass, MatButton, MatIcon, BlockUIComponent
+    ]
 })
 export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

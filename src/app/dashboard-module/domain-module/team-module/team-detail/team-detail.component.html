@@ -1,3 +1,4 @@
+<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
 @if (!loading) {
 <div style="padding-top: 20px;">
     <section [ngClass]="classStatus">
@@ -79,3 +80,4 @@
     </section>
 </div>
 }
+<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true"></app-block-ui>

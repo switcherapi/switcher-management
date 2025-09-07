@@ -20,6 +20,7 @@ import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOu
 import { TeamMembersComponent } from '../team-members/team-members.component';
 import { TeamPermissionsComponent } from '../team-permissions/team-permissions.component';
 import { TeamPendingMembersComponent } from '../team-pending-members/team-pending-members.component';
+import { BlockUIComponent } from 'src/app/shared/block-ui/block-ui.component';
 
 @Component({
     selector: 'app-team-detail',
@@ -31,7 +32,7 @@ import { TeamPendingMembersComponent } from '../team-pending-members/team-pendin
     ],
     imports: [NgClass, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, ReactiveFormsModule, MatError, MatSlideToggle, 
       MatButton, MatIcon, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, TeamMembersComponent, 
-      TeamPermissionsComponent, TeamPendingMembersComponent, NgbNavOutlet
+      TeamPermissionsComponent, TeamPendingMembersComponent, NgbNavOutlet, BlockUIComponent
     ]
 })
 export class TeamDetailComponent extends DetailComponent implements OnInit, OnDestroy {
