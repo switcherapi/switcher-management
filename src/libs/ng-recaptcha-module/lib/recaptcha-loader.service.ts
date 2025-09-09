@@ -6,6 +6,7 @@ import { filter } from "rxjs/operators";
 import { loader } from "./load-script";
 import {
   RECAPTCHA_LOADER_OPTIONS,
+  RECAPTCHA_V3_SITE_KEY,
   RecaptchaLoaderOptions,
 } from "./tokens";
 
@@ -38,8 +39,11 @@ export class RecaptchaLoaderService {
 
   constructor() {
     const options = inject<RecaptchaLoaderOptions>(RECAPTCHA_LOADER_OPTIONS, { optional: true });
+    const v3SiteKey = inject<string>(RECAPTCHA_V3_SITE_KEY, { optional: true });
 
     this.options = options;
+    this.v3SiteKey = v3SiteKey;
+    
     const subject = this.init();
     this.ready = subject ? toNonNullObservable(subject) : of();
   }

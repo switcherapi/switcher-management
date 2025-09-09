@@ -47,10 +47,14 @@ export class AppVersionComponent implements OnInit {
   }
 
   private toLocaleString(utcDateString: string): string {
-    const utcDate = new Date(utcDateString);
-    const localDateString = utcDate.toLocaleString();
-    
-    return localDateString;
+    try {
+      const utcDate = new Date(utcDateString);
+      const localDateString = utcDate.toLocaleString();
+      
+      return localDateString;
+    } catch (error) {
+      ConsoleLogger.printError(error);
+      return utcDateString;
+    }
   }
-
 }

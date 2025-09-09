@@ -71,49 +71,27 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             },
-            "local": {
-              "crossOrigin": "anonymous",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.local.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
               "vendorChunk": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ],
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "buildOptimizer": false
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "switcher-management:build"
+            "buildTarget": "switcher-management:build:development"
           },
           "configurations": {
             "production": {
               "buildTarget": "switcher-management:build:production"
             },
-            "local": {
-              "buildTarget": "switcher-management:build:local"
+            "development": {
+              "buildTarget": "switcher-management:build:development"
             }
           }
         },
@@ -130,18 +108,6 @@
               "src/**/*.ts",
               "src/**/*.html"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "switcher-management:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "switcher-management:serve:production"
-            }
           }
         }
       }

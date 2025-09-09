@@ -14,7 +14,8 @@ import { AuthGuard } from './app/auth/guards/auth.guard';
 import { AuthService } from './app/auth/services/auth.service';
 import { TokenInterceptor } from './app/auth/token.interceptor';
 import { PwaService } from './app/services/pwa.service';
-import { RecaptchaModule } from './libs/ng-recaptcha-module';
+import { RecaptchaV3Module } from './libs/ng-recaptcha-module/lib/recaptcha-v3.module';
+import { RECAPTCHA_V3_SITE_KEY } from './libs/ng-recaptcha-module/lib/tokens';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { provideCharts, withDefaultRegisterables } from './libs/ng2-charts/src/lib/ng-charts.provider';
 
@@ -97,8 +98,9 @@ bootstrapApplication(AppComponent, {
       };
     }),
     importProvidersFrom(
-      RecaptchaModule,
+      RecaptchaV3Module,
       ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production })
-    )
+    ),
+    { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaPublicKey }
   ]
 }).catch(err => console.error(err));

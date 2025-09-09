@@ -23,7 +23,7 @@ A Java SDK for Switcher API
 - Adding as a dependency - Maven
 ```xml
 <dependency>
-  <groupId>com.github.switcherapi</groupId>
+  <groupId>com.switcherapi</groupId>
   <artifactId>switcher-client</artifactId>
   <version>${switcher-client.version}</version>
 </dependency>
@@ -32,7 +32,7 @@ A Java SDK for Switcher API
 - Gradle
 
 ```
-implementation 'com.github.switcherapi:switcher-client:[VERSION]'
+implementation 'com.switcherapi:switcher-client:[VERSION]'
 ```
 
 ###### Compatibility with Jakarta EE 9
@@ -119,7 +119,7 @@ Instead of using SwitcherContext, which is used to automatically load from the s
 
 ```java
 MyAppFeatures.configure(ContextBuilder.builder()
-		.contextLocation("com.github.switcherapi.playground.Features")
+		.contextLocation("com.switcherapi.playground.Features")
 		.apiKey("API_KEY")
 		.url("https://api.switcherapi.com")
 		.domain("Playground")

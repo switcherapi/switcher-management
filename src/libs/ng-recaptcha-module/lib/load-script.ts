@@ -1,8 +1,11 @@
+/// <reference types="grecaptcha" />
+
 import { RecaptchaLoaderOptions } from "./tokens";
 
 declare global {
   interface Window {
     ng2recaptchaloaded?(): void;
+    grecaptcha: ReCaptchaV2.ReCaptcha;
   }
 }
 
@@ -15,7 +18,7 @@ function loadScript(
   { url, lang, nonce }: { url?: string; lang?: string; nonce?: string } = {},
 ): void {
   window.ng2recaptchaloaded = () => {
-    onLoaded(grecaptcha);
+    onLoaded(window.grecaptcha);
   };
   const script = document.createElement("script");
   script.innerHTML = "";

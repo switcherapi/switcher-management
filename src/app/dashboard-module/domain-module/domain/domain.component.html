@@ -116,8 +116,7 @@
         <div class="div-router-history loading-spinner">
             <mat-spinner [diameter]="25"></mat-spinner>
         </div>
-        }
-        @if (!loading) {
+        } @else {
         <div class="div-router-history">
             @if (domain) {
             <a class="router-history" (click)="gotoDetails(selectedDomainPath)">

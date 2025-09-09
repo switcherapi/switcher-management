@@ -13,12 +13,8 @@
                             <input matInput type="password" formControlName="password" minlength="5" required>
                         </mat-form-field>
                     </div>
-                    <re-captcha class="g-recaptcha" (resolved)="resolved($event)" 
-                        formControlName="captcha"
-                        siteKey="{{getRecaptchaPublicKey()}}">  
-                    </re-captcha>
                     @if (!error) {
-                    <button mat-button class="btn-element" [disabled]="loading || !recaptcha_token">
+                    <button mat-button class="btn-element" [disabled]="loading">
                         <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
                         <span class="label-color" style="color: white; padding-left: 5px;">Reset</span>
                     </button>

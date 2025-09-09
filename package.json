@@ -10,11 +10,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --prod",
-    "build:local": "ng build --configuration local",
+    "build:prod": "ng build --configuration production",
+    "build:dev": "ng build --configuration development",
     "lint": "ng lint",
-    "lint:fix": "ng lint --fix",
-    "e2e": "ng e2e"
+    "lint:fix": "ng lint --fix"
   },
   "keywords": [
     "feature",
@@ -31,7 +30,6 @@
     "@angular/compiler": "~20.2.4",
     "@angular/core": "~20.2.4",
     "@angular/forms": "~20.2.4",
-    "@angular/localize": "~20.2.4",
     "@angular/material": "~20.2.2",
     "@angular/platform-browser": "~20.2.4",
     "@angular/platform-browser-dynamic": "~20.2.4",
@@ -39,7 +37,6 @@
     "@angular/service-worker": "~20.2.4",
     "@apollo/client": "^3.14.0",
     "@ng-bootstrap/ng-bootstrap": "~19.0.1",
-    "@popperjs/core": "^2.11.8",
     "@types/grecaptcha": "^3.0.9",
     "apollo-angular": "^11.0.0",
     "chart.js": "^4.5.0",
@@ -61,7 +58,7 @@
     "eslint": "^9.35.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
-    "typescript-eslint": "8.42.0"
+    "typescript-eslint": "8.43.0"
   },
   "repository": {
     "type": "git",
