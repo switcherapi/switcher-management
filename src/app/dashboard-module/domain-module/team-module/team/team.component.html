@@ -6,8 +6,7 @@
 }
 @if (error) {
 <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
-}
-@if (!error) {
+} @else {
 <div [ngClass]="classStatus" style="border: 0;">
     @if (!loading) {
     <div>

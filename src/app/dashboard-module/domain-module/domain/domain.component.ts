@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
@@ -49,6 +49,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   private readonly groupService = inject(GroupService);
   private readonly featureService = inject(FeatureService);
   private readonly toastService = inject(ToastService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly unsubscribe = new Subject<void>();
 
@@ -107,6 +108,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       .subscribe(data => {
         this.title = data.title;
         this.icon = data.icon;
+        this.cdr.detectChanges();
     });
   }
 
@@ -248,7 +250,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   }
 
   private loadConfiguration(forceFetch = false) {
-    this.loading = true;
+    this.setLoading(true);
 
     const path = this.domainRouteService.getStoredPath();
     if (path) {
@@ -273,7 +275,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       },
       error: error => {
         ConsoleLogger.printError(error);
-        this.loading = false;
+        this.setLoading(false);
       }
     });
   }
@@ -287,7 +289,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
     this.selectedGroupPath = `${this.selectedDomainPath}/groups/${this.group?.id}`;
     this.selectedConfigPath = `${this.selectedGroupPath}/switchers/${this.config?.id}`;
 
-    this.loading = false;
+    this.setLoading(false);
   }
 
   private checkDomainOwner() {
@@ -354,6 +356,11 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
           ConsoleLogger.printError(error);
         }
       });
+  }
+
+  private setLoading(value: boolean) {
+    this.loading = value;
+    this.cdr.detectChanges();
   }
 
 }

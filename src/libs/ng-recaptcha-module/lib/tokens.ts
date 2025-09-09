@@ -3,6 +3,7 @@ import { InjectionToken } from "@angular/core";
 import { RecaptchaSettings } from "./recaptcha-settings";
 
 export const RECAPTCHA_SETTINGS = new InjectionToken<RecaptchaSettings>("recaptcha-settings");
+export const RECAPTCHA_V3_SITE_KEY = new InjectionToken<string>("recaptcha-v3-site-key");
 
 /**
  * Specifies the options for loading the reCAPTCHA script tag.

@@ -11,8 +11,8 @@ COPY ./ /usr/local/app/
 
 # Install all dependencies, both production and development, build, and remove dev dependencies
 RUN npm ci && \
-	npm run build:local && \
-	npm prune --force --production
+	npm run build:prod && \
+	npm prune --omit=dev
 
 # ---------- Release ----------
 FROM nginx:1.29.1-alpine-slim
