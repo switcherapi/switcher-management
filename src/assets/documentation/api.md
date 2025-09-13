@@ -12,6 +12,43 @@ Switching fast. Adapt everywhere.
 2. Add .env-cmdrc file into the project directory (use '.env-cmdrc-template')
 3. Replace values such as secret keys and URLs
 
+### Auth Providers
+
+Switcher API supports multiple auth providers to sign up and sign in such as email/password, GitHub, and Bitbucket.
+
+Follow the steps below to set up your OAuth App in GitHub and Bitbucket.
+
+#### GitHub OAuth App setup
+
+1. Open your GitHub account or organization settings
+2. Go to Developer settings > OAuth Apps
+3. Click on "New OAuth App"
+4. Fill in the application details:
+   - Application name: Switcher API
+   - Homepage URL: https://switcher-management-url (or your deployed URL)
+   - Authorization callback URL: https://switcher-management-url/login?platform=github
+5. Click on "Register application"
+6. Copy the Client ID and Client Secret
+7. Update your .env-cmdrc file or ConfigMap/Secret in Kubernetes with the following variables:
+   - GIT_OAUTH_CLIENT_ID=your_client_id
+   - GIT_OAUTH_CLIENT_SECRET=your_client_secret
+8. Update Switcher Management GITHUB_CLIENTID environment variable with your_client_id
+
+#### Bitbucket OAuth App setup
+
+1. Open your Bitbucket account or workspace settings
+2. Go to Apps and features > OAuth consumers
+3. Fill in the application details:
+   - Name: Switcher API
+   - Callback URL: https://switcher-management-url/login?platform=bitbucket
+4. Add permissions -> Account: Read
+5. Click on "Save"
+6. Copy the Key and Secret
+7. Update your .env-cmdrc file or ConfigMap/Secret in Kubernetes with the following variables:
+   - BIT_OAUTH_CLIENT_ID=your_client_id
+   - BIT_OAUTH_CLIENT_SECRET=your_client_secret
+8. Update Switcher Management BITBUCKET_CLIENTID environment variable with your_client_id
+
 ### Running Switcher API from Docker Composer manifest file
 
 This option leverages Switcher API and Switcher Management with minimum settings required.
@@ -56,8 +93,8 @@ It is equivalent to an organization that can manage multiple projects, users, an
 - **New domain** - Domain: /domain/create [POST]
 
 ##### Component
-Components are applications that are using Switcher API.<br>
-Each component has its own access token and needs to be linked to Switchers.
+Components are applications that will use Switcher API.<br>
+Each component has its own access API key to interact with Switcher API.
 
 - **Create a component** - Component: /component/create [POST]
 - **Generating a new API Key** - Component: /component/generateApiKey [GET]
@@ -68,12 +105,12 @@ Groups are used to organize Switchers that share the same feature scope.
 - **New Group** - GroupConfig: /groupconfig/create [POST]
 
 ##### Switcher
-Switchers are the main entities to control features.
+Switchers are the entry point to control features in your application.<br>
 
 - **New Switcher** - Config: /config/create [POST]
 
 ##### Strategy
-Customize the behavior of the Switcher by including strategy rules to your Switchers.
+Customize the Switcher behavior by including strategy rules to your Switchers.
 
 - **New Strategy** - ConfigStrategy: /configstrategy/create [POST]
 

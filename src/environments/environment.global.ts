@@ -5,7 +5,7 @@ export const environment_global = {
     allowInternalAuth: true,
     allowHomeView: false,
     githubApiClientId: '5745650fe81a1f1f3486',
-    bitbucketApiClientId: 'JNfFteJqcjcDytFAh5',
+    bitbucketApiClientId: 'My5KxNyU3vNxYdP68G',
     timeout: 5000,
     teamInviteLink: 'http://localhost:4200/collab/join',
     domainTransferLink: 'http://localhost:4200/domain/transfer',

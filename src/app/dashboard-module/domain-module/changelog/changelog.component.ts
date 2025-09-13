@@ -193,6 +193,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
           this.domainRouteService.updatePath(this.groupId, data.name, Types.GROUP_TYPE, 
             `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}`);
       });
+    } else {
+      this.domainRouteService.refreshPath();
     }
   }
 

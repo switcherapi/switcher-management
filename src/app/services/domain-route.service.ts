@@ -6,16 +6,22 @@ export class DomainRouteService {
   @Output() pathChange = new EventEmitter<PathRoute>();
   @Output() viewHeaderEvent = new EventEmitter<ViewHeader>();
 
-  updatePath(id: string, name: string, type: string, path: string, forceFetch = false): void {
-    const pathRoute = new PathRoute();
-    pathRoute.id = id;
-    pathRoute.name = name;
-    pathRoute.type = type;
-    pathRoute.path = path;
-    pathRoute.forceFetch = forceFetch;
+  private pathRoute: PathRoute;
 
-    localStorage.setItem(Types.CURRENT_ROUTE, JSON.stringify(pathRoute));
-    this.pathChange.next(pathRoute);
+  updatePath(id: string, name: string, type: string, path: string, forceFetch = false): void {
+    this.pathRoute = new PathRoute();
+    this.pathRoute.id = id;
+    this.pathRoute.name = name;
+    this.pathRoute.type = type;
+    this.pathRoute.path = path;
+    this.pathRoute.forceFetch = forceFetch;
+
+    localStorage.setItem(Types.CURRENT_ROUTE, JSON.stringify(this.pathRoute));
+    this.pathChange.next(this.pathRoute);
+  }
+
+  refreshPath(): void {
+    this.pathChange.next(this.pathRoute);
   }
 
   getStoredPath(): PathRoute {

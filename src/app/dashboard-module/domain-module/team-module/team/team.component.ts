@@ -162,6 +162,8 @@ export class TeamComponent implements OnInit, OnDestroy {
     if (this.fetch) {
       this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
         `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    } else {
+      this.domainRouteService.refreshPath();
     }
   }
 

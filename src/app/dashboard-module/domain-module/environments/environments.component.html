@@ -13,8 +13,7 @@
             <button mat-button class="btn-element create" (click)="createEnvironment()" [disabled]="inputEnvironmentName.value.length < 2 || !creatable">
                 @if (creating) {
                 <mat-icon><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
-                }
-                @if (!creating) {
+                } @else {
                 <mat-icon style="font-size: large;">create</mat-icon>
                 }
                 Create
