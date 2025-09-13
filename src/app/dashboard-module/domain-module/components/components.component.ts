@@ -260,6 +260,8 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
     if (this.fetch) {
       this.domainRouteService.updatePath(this.domainId, this.domainName, Types.DOMAIN_TYPE, 
         `/dashboard/domain/${this.domainName}/${this.domainId}`);
+    } else {
+      this.domainRouteService.refreshPath();
     }
   }
 
