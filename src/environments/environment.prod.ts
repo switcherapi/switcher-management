@@ -19,6 +19,7 @@ export const environment = {
   releaseTime: getEnv("RELEASE_TIME"),
   recaptchaPublicKey: getEnv("GOOGLE_RECAPTCHA"),
   allowInternalAuth: getEnv("ALLOW_INTERNAL_AUTH", environment_global.allowInternalAuth),
+  allowSamlAuth: getEnv("ALLOW_SAML_AUTH", environment_global.allowSamlAuth),
   allowHomeView: getEnv("ALLOW_HOME_VIEW", environment_global.allowHomeView),
   githubApiClientId: getEnv("GITHUB_CLIENTID"),
   bitbucketApiClientId: getEnv("BITBUCKET_CLIENTID"),

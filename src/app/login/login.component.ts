@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.router.navigate(['/dashboard']);
         }
 
+        this.loginWithSAMLToken();
+
         this.route.queryParams.subscribe(params => {
             const platform =  params['platform'];
             const code =  params['code'];
@@ -45,7 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (platform === 'github') {
                     this.loginWithGitHub(code);
                 } else if (platform === 'bitbucket') {
-                    this.loginWithBitBucket(code);
+                    this.loginWithBitbucket(code);
                 } else {
                     this.router.navigate(['/']);
                 }
@@ -63,8 +65,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     onSubmit() {
-        if (this.loginForm.invalid)
+        if (this.loginForm.invalid) {
             return;
+        }
 
         this.status = '';
         this.loading = true;
@@ -84,9 +87,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         window.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
     }
 
-    onBitBucketLogin() {
+    onBitbucketLogin() {
         this.loading = true;
         window.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
+    }
+
+    onSamlLogin() {
+        this.loading = true;
+        window.location.href = `${environment.apiUrl}/admin/saml/login`;
     }
 
     ngOnDestroy() {
@@ -108,6 +116,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     hasInternalAuthEnabled(): boolean {
         return environment.allowInternalAuth;
+    }
+
+    hasSamlAuthEnabled(): boolean {
+        return environment.allowSamlAuth;
     }
     
     private isAlive(): void {
@@ -136,7 +148,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             });
     }
 
-    private loginWithBitBucket(code: string) {
+    private loginWithBitbucket(code: string) {
         this.loading = true;
 
         this.authService.loginWithBitBucket(code)
@@ -145,6 +157,24 @@ export class LoginComponent implements OnInit, OnDestroy {
                 next: success => this.onSuccess(success),
                 error: error => this.onError(error)
             });
+    }
+
+    private loginWithSAMLToken() {
+        if (window.location.hash) {
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            const token = hashParams.get('token');
+
+            if (token) {
+                this.loading = true;
+
+                this.authService.loginWithSAMLToken(token)
+                    .pipe(takeUntil(this.unsubscribe))
+                    .subscribe({
+                        next: success => this.onSuccess(success),
+                        error: error => this.onError(error)
+                    });
+            }
+        }
     }
 
     private onError(error: any) {

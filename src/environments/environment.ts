@@ -7,6 +7,7 @@ export const environment = {
   recaptchaPublicKey: environment_global.recaptchaPublicKey,
   githubApiClientId: environment_global.githubApiClientId,
   allowInternalAuth: environment_global.allowInternalAuth,
+  allowSamlAuth: environment_global.allowSamlAuth,
   allowHomeView: environment_global.allowHomeView,
   bitbucketApiClientId: environment_global.bitbucketApiClientId,
   teamInviteLink: environment_global.teamInviteLink,
