@@ -5,6 +5,7 @@
     window["env"]["RELEASE_TIME"] = "${RELEASE_TIME}";
     window["env"]["GOOGLE_RECAPTCHA"] = "${GOOGLE_RECAPTCHA}";
     window["env"]["ALLOW_INTERNAL_AUTH"] = "${ALLOW_INTERNAL_AUTH}";
+    window["env"]["ALLOW_SAML_AUTH"] = "${ALLOW_SAML_AUTH}";
     window["env"]["ALLOW_HOME_VIEW"] = "${ALLOW_HOME_VIEW}";
     window["env"]["GITHUB_CLIENTID"] = "${GITHUB_CLIENTID}";
     window["env"]["BITBUCKET_CLIENTID"] = "${BITBUCKET_CLIENTID}";

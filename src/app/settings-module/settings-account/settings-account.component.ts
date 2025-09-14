@@ -112,15 +112,12 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
   }
 
   getPlatformIcon(): string {
-    if (this.userPlatform === 'Switcher API') {
-      return "assets\\switcherapi_mark_grey.png";
+    switch (this.userPlatform) {
+      case 'Bitbucket': return "assets\\bitbucket.svg";
+      case 'GitHub': return "assets\\github.svg";
+      case 'SAML': return "assets\\saml.svg";
+      default: return "assets\\switcherapi_mark_grey.png";
     }
-
-    if (this.userPlatform === 'GitHub') {
-      return "assets\\github.svg";
-    }
-
-    return "assets\\bitbucket.svg";
   }
 
   private get accountFormControl() { 
@@ -131,8 +128,9 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
     this.accountFormControl.name.setValue(this.authService.getUserInfo('name'));
     this.userEmail = this.authService.getUserInfo('email');
     this.userPlatform = this.authService.getUserInfo('platform');
+    
     const avatar = this.authService.getUserInfo('avatar');
-    this.profileAvatar = avatar || "assets\\switcherapi_mark_grey.png";
+    this.profileAvatar = avatar || "assets\\switcherapi_mark_icon.png";
   }
   
   private loadDomains(): void {

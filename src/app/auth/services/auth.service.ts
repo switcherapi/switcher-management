@@ -12,7 +12,6 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-
   @Output() logoff = new EventEmitter<string>();
   @Output() releaseOldSessions = new EventEmitter<any>();
 
@@ -60,6 +59,19 @@ export class AuthService {
 
   loginWithBitBucket(code: string): Observable<boolean> {
     return this.http.post<any>(`${environment.apiUrl}/admin/bitbucket/auth`, null, { params: { code } })
+      .pipe(
+        tap(auth => {
+          this.doLoginUser(auth.admin, auth.jwt);
+          this.currentTokenSubject.next(auth.jwt.token);
+        }),
+        map(() => true),
+        catchError(this.handleError));
+  }
+
+  loginWithSAMLToken(token: string): Observable<boolean> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    
+    return this.http.post<any>(`${environment.apiUrl}/admin/saml/auth`, null, { headers })
       .pipe(
         tap(auth => {
           this.doLoginUser(auth.admin, auth.jwt);
@@ -163,13 +175,13 @@ export class AuthService {
   }
 
   private doLoginUser(user: any, tokens: Tokens) {
-    const loggegWith = this.getLoggedWith(user);
-    
+    const loggedWith = this.getLoggedWith(user);
+
     this.setUserInfo('name', user.name);
     this.setUserInfo('email', user.email);
     this.setUserInfo('sessionid', user.id);
     this.setUserInfo('avatar', user._avatar);
-    this.setUserInfo('platform', loggegWith, true);
+    this.setUserInfo('platform', loggedWith, true);
     
     this.loggedUser = user.email;
     this.storeTokens(tokens);
@@ -181,9 +193,12 @@ export class AuthService {
   }
 
   private getLoggedWith(user: any): string {
-    if (user._gitid) return 'GitHub';
-    if (user._bitbucketid) return 'Bitbucket';
-    return 'Switcher API';
+    switch (user.auth_provider) {
+      case 'github': return 'GitHub';
+      case 'bitbucket': return 'Bitbucket';
+      case 'saml': return 'SAML';
+      default: return 'Switcher API';
+    }
   }
 
   private getRefreshToken() {

@@ -84,9 +84,14 @@ export class SignupComponent implements OnInit, OnDestroy {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
   }
 
-  onBitBucketLogin() {
+  onBitbucketLogin() {
     this.loading = true;
     window.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
+  }
+
+  onSamlLogin() {
+    this.loading = true;
+    window.location.href = `${environment.apiUrl}/admin/saml/login`;
   }
 
   ngOnDestroy() {
@@ -108,6 +113,10 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   hasInternalAuthEnabled(): boolean {
     return environment.allowInternalAuth;
+  }
+
+  hasSamlAuthEnabled(): boolean {
+    return environment.allowSamlAuth;
   }
 
   private submitForm() {

@@ -3,6 +3,7 @@ export const environment_global = {
     releaseTime: new Date().toUTCString(),
     recaptchaPublicKey: '6Lc4fMErAAAAAJSdF2ZRV6HJI_m-nhiDu8Gue18P',
     allowInternalAuth: true,
+    allowSamlAuth: false,
     allowHomeView: false,
     githubApiClientId: '5745650fe81a1f1f3486',
     bitbucketApiClientId: 'My5KxNyU3vNxYdP68G',

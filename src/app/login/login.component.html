@@ -41,9 +41,16 @@
                         </button>
                         }
                         @if (hasBitbucketIntegration()) {
-                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onBitBucketLogin()">
+                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onBitbucketLogin()">
                             <img src="assets\bitbucket.svg" style="width: 20px;" alt="Bitbucket" />
                             <span style="color: black; padding-left: 5px;">Bitbucket</span>
+                        </button>
+                        }
+                        @if (hasSamlAuthEnabled()) {
+                        <hr />
+                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onSamlLogin()">
+                            <img src="assets\saml.svg" style="width: 20px;" alt="SAML" />
+                            <span style="color: black; padding-left: 5px;">SAML</span>
                         </button>
                         }
                     </div>
