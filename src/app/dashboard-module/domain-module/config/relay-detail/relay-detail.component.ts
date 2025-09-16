@@ -284,7 +284,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   private loadRelaySettings(): void {
     this.authService.isAlive()
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.relayVerificationEnabled = data.attributes.relay_bypass_verification !== 'true');
+      .subscribe(data => this.relayVerificationEnabled = !data.attributes.relay_bypass_verification);
   }
 
   private loadIntegrationSettings(): void {

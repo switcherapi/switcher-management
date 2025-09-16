@@ -44,7 +44,8 @@ h4 {
   color: white;
   transition: all .5s;
   width: 28%;
-  margin-right: 5px;
+  margin-right: .2rem;
+  margin-left: .2rem;
 }
 
 .btn-element:hover {

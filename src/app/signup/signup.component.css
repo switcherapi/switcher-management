@@ -35,6 +35,8 @@ h4 {
   color: white;
   transition: all .5s;
   width: 28%;
+  margin-right: .2rem;
+  margin-left: .2rem;
 }
 
 .btn-element:hover {
@@ -44,7 +46,6 @@ h4 {
 .btn-element.white {
   background: white;
   border: 1px solid black;
-  margin-left: 20px;
 }
 
 .loader {

@@ -58,11 +58,17 @@ export class SignupComponent implements OnInit, OnDestroy {
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-    if (this.loginForm.invalid)
+    if (this.loginForm.invalid) {
       return;
+    }
 
     this.status = '';
     this.loading = true;
+
+    if (!environment.recaptchaPublicKey) {
+      this.submitForm();
+      return;
+    }
 
     this.recaptchaV3Service.execute('signup')
       .pipe(takeUntil(this.unsubscribe))
@@ -142,9 +148,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
-          if (data) {
-            this.apiVersion = data.attributes.version;
-          }
+          this.apiVersion = data?.attributes.version;
         },
         error: error => {
           ConsoleLogger.printError(error);
