@@ -53,6 +53,11 @@ export class LoginResetComponent implements OnInit, OnDestroy {
 
     this.loading = true;
 
+    if (!environment.recaptchaPublicKey) {
+      this.submitPasswordReset();
+      return;
+    }
+
     this.recaptchaV3Service.execute('password_reset')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
