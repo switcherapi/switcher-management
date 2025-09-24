@@ -26,4 +26,4 @@ COPY ./docker/setup.sh /setup.sh
 RUN chmod +x /setup.sh
 
 # Copy the production dependencies
-COPY --from=builder /usr/local/app/dist/switcher-management /usr/share/nginx/html
+COPY --from=builder /usr/local/app/dist/switcher-management/browser /usr/share/nginx/html

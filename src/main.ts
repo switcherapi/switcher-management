@@ -1,7 +1,6 @@
 import { enableProdMode, importProvidersFrom, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import '@angular/compiler'; // Required for JIT compilation
-import '@angular/localize/init';
 
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
