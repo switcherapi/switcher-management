@@ -101,6 +101,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             }
           },
           error: error => {
+            this.creating = false;
             this.toastService.showError(error.error);
             ConsoleLogger.printError(error);
           },
