@@ -98,7 +98,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
   }
@@ -140,11 +140,11 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
+          for (const element of data) {
             if (element.action === 'DELETE') {
               this.removable = element.result === 'ok';
             }
-          });
+          }
         }
     });
   }
@@ -308,17 +308,17 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private customFilterPredicate(data: History, filter: string): boolean {
-    if (data.updatedBy.indexOf(filter) >= 0) {
+    if (data.updatedBy.includes(filter)) {
       return true;
     }
     
-    if (data.date.toString().indexOf(filter) >= 0) {
+    if (data.date.toString().includes(filter)) {
       return true;
     }
 
-    return Object.keys(data.newValue).filter(key => key.indexOf(filter) >= 0).length > 0 ||
-      Object.values(data.newValue).filter(value => value.indexOf(filter) >= 0).length > 0 ||
-      Object.values(data.oldValue).filter(value => value.indexOf(filter) >= 0).length > 0;
+    return Object.keys(data.newValue).some(key => key.includes(filter)) ||
+      Object.values(data.newValue).some(value => String(value).includes(filter)) ||
+      Object.values(data.oldValue).some(value => String(value).includes(filter));
   }
 
   private compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -346,7 +346,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   getColumnLabel(dataColumn: string): string {
-    return this.columnsToDisplay.filter(column => column.data === dataColumn)[0].display;
+    return this.columnsToDisplay.find(column => column.data === dataColumn)?.display ?? '';
   }
 
   getElementKeys(element: any): string[] {
@@ -367,13 +367,13 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   formatExpandedData(element: any): string {
     if (element instanceof Object) {
-      return element != undefined ? JSON.stringify(element) : '';
+      return JSON.stringify(element);
     }
     return element;
   }
 
   formatDateContent(value: string): string {
-    if (window.screen.width < 380) {
+    if (globalThis.screen.width < 380) {
       return this.datepipe.transform(value, 'yy/MM/dd HH:mm');
     }
     return value;

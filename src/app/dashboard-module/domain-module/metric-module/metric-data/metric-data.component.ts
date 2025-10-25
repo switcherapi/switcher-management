@@ -60,11 +60,12 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     this.readPermissionToObject();
 
     this.pageLoaded = this.data.length;
-    this.totalPages = this.date ? this.parent.metrics.statistics.switchers
+    this.totalPages = this.date ? (() => {
       //if filtered by date, get the sum of positive and negative results
-      .filter(switcher => switcher.switcher === this.parent.switcher)[0].dateTimeStatistics
-      .filter(date => date.date == this.date)
-      .map(sumResults => sumResults.negative + sumResults.positive)[0] :
+      const switcherFound = this.parent.metrics.statistics.switchers.find(switcher => switcher.switcher === this.parent.switcher);
+      const dateStats = switcherFound?.dateTimeStatistics?.filter(date => date.date == this.date) || [];
+      return dateStats.map(sumResults => sumResults.negative + sumResults.positive)[0] || 0;
+    })() :
       //otherwise, just get the total from the statistics
       this.getTotalStatistics();
 
@@ -187,9 +188,12 @@ export class MetricDataComponent implements OnInit, OnDestroy {
 
   private getTotalStatistics(): number {
     if (this.parent.metrics.statistics.switchers.length) {
-      return this.parent.metrics.statistics.switchers
-        .filter(switcher => switcher.switcher === this.parent.switcher)[0].total;
+      const found = this.parent.metrics.statistics.switchers
+        .find(switcher => switcher.switcher === this.parent.switcher);
+
+      return found ? found.total : 0;
     }
+
     return 0;
   }
 
@@ -217,16 +221,16 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   private customFilterPredicate(data: MetricData, filter: string): boolean {
-    return data.config.key.toLowerCase().indexOf(filter) >= 0 ||
-      data.component.toLowerCase().indexOf(filter) >= 0 ||
-      data.result && 'true'.indexOf(filter) >= 0 ||
-      !data.result && 'false'.indexOf(filter) >= 0 ||
-      data.date.toString().indexOf(filter) >= 0 ||
-      data.reason.toLowerCase().toString().indexOf(filter) >= 0 ||
-      data.message?.toLowerCase().toString().indexOf(filter) >= 0 ||
+    return data.config.key.toLowerCase().includes(filter) ||
+      data.component.toLowerCase().includes(filter) ||
+      (data.result && 'true'.includes(filter)) ||
+      (!data.result && 'false'.includes(filter)) ||
+      data.date.toString().includes(filter) ||
+      data.reason.toLowerCase().toString().includes(filter) ||
+      data.message?.toLowerCase().includes(filter) ||
       data.entry?.filter(e => {
-        return e.input.toLowerCase().toString().indexOf(filter) >= 0 ||
-          e.strategy.toLowerCase().toString().indexOf(filter) >= 0;
+        return e.input.toLowerCase().toString().includes(filter) ||
+          e.strategy.toLowerCase().toString().includes(filter);
       }).length > 0;
   }
   

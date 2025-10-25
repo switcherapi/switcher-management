@@ -154,38 +154,38 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
-    } else {
-      const { valid } = this.keyFormControl;
+      return;
+    }
 
-      if (valid) {
-        this.setBlockUI(true, 'Saving changes...');
-        this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    const { valid } = this.keyFormControl;
 
-        const body = {
-          key: this.keyElement.nativeElement.value,
-          description: this.descElement.nativeElement.value
-        };
+    if (valid) {
+      this.setBlockUI(true, 'Saving changes...');
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
-        if (super.validateEdition({
-          key: this.config.key,
-          description: this.config.description,
-          components: String(this.config.components.map(component => component.name)),
-          disable_metrics: this.config.disable_metrics != undefined ?
-            this.config.disable_metrics[this.currentEnvironment] : false
-        },
-          {
-            key: body.key,
-            description: body.description,
-            components: String(this.components),
-            disable_metrics: this.disableMetrics
-          })) {
-          this.setBlockUI(false);
-          this.editing = false;
-          return;
-        }
+      const body = {
+        key: this.keyElement.nativeElement.value,
+        description: this.descElement.nativeElement.value
+      };
 
-        this.editConfig(body);
+      if (super.validateEdition({
+        key: this.config.key,
+        description: this.config.description,
+        components: String(this.config.components.map(component => component.name)),
+        disable_metrics: this.config.disable_metrics === undefined ?
+          false : this.config.disable_metrics[this.currentEnvironment]
+      }, {
+        key: body.key,
+        description: body.description,
+        components: String(this.components),
+        disable_metrics: this.disableMetrics
+      })) {
+        this.setBlockUI(false);
+        this.editing = false;
+        return;
       }
+
+      this.editConfig(body);
     }
   }
 
@@ -217,7 +217,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   addStrategy() {
     const dialogRef = this.dialog.open(StrategyCreateComponent, {
       width: '700px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         currentStrategies: this.strategies.getValue()
       }
@@ -486,8 +486,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private editConfig(body: { key: string; description: string; }): void {
     const updateDisableMetrics = this.getDisableMetricsChange();
     this.configService.updateConfig(this.config.id,
-      body.key != this.config.key ? body.key : undefined,
-      body.description != this.config.description ? body.description : undefined, updateDisableMetrics)
+      body.key === this.config.key ? undefined : body.key,
+      body.description === this.config.description ? undefined : body.description, updateDisableMetrics)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {

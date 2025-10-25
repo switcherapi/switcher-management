@@ -154,9 +154,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
   private loadAvailableStrategies(): void {
     const currentStrategies: Strategy[] = this.data.currentStrategies
-    currentStrategies.forEach(strategy => {
-      this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1);
-    })
+    currentStrategies.forEach(strategy => this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1));
   }
 
   private loadOperations(strategySelected: string): void {

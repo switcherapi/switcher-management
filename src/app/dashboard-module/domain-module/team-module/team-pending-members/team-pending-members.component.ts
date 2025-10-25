@@ -74,7 +74,7 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   onGetInviteRequest(invite: any): void {
     this.dialog.open(TeamInviteDialogComponent, {
       width: '450px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         request_id: invite._id,
         email: invite.email,

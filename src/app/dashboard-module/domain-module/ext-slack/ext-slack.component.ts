@@ -59,7 +59,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
   }
@@ -185,11 +185,11 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE'], 'ADMIN')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
-        data.forEach(perm => {
+        for (const perm of data) {
           if (perm.action === 'UPDATE') {
             this.allowUpdate = perm.result === 'ok';
           }
-        });
+        }
       }
     );
   }

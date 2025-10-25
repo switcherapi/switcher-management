@@ -70,5 +70,5 @@ Sometimes covering 100% of tests does not guarantee a successful deployment, nor
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[overview.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
-    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+    <img src="[$ASSETS_LOCATION]github.svg" style="width: 30px;">
 </a> 

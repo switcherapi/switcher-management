@@ -62,7 +62,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
   }
@@ -142,7 +142,7 @@ export class TeamComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
+          for (const element of data) {
             if (element.action === 'UPDATE') {
               this.updatable = element.result === 'ok';
             } else if (element.action === 'DELETE') {
@@ -152,7 +152,7 @@ export class TeamComponent implements OnInit, OnDestroy {
             } else if (element.action === 'READ') {
               this.readable = element.result === 'ok';
             } 
-          });
+          }
         }
     });
   }

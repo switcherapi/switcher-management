@@ -94,9 +94,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   @HostListener('window:resize')
   onResize() {
     this.strategyValuesLength = 30;
-    if (window.innerWidth < 1200 && window.innerWidth > 770) {
+    if (globalThis.innerWidth < 1200 && globalThis.innerWidth > 770) {
       this.strategyValuesLength = 50;
-    } else if (window.innerWidth < 770) {
+    } else if (globalThis.innerWidth < 770) {
       this.strategyValuesLength = 20;
     }
   }
@@ -106,24 +106,25 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.loadStrategyRequirements();
       this.classStatus = 'header editing';
       this.editing = true;
-    } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-
-      const body = {
-        operation: this.operationCategoryFormControl.value,
-        description: this.descElement.nativeElement.value
-      };
-
-      if (super.validateEdition(
-          { operation: this.strategy.operation, description: this.strategy.description }, 
-          { operation: body.operation, description: body.description})) {
-        this.setBlockUI(false);
-        this.editing = false;
-        return;
-      }
-
-      this.editStrategy(body);
+      return;
     }
+
+    this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+
+    const body = {
+      operation: this.operationCategoryFormControl.value,
+      description: this.descElement.nativeElement.value
+    };
+
+    if (super.validateEdition(
+        { operation: this.strategy.operation, description: this.strategy.description }, 
+        { operation: body.operation, description: body.description})) {
+      this.setBlockUI(false);
+      this.editing = false;
+      return;
+    }
+
+    this.editStrategy(body);
   }
 
   delete() {
@@ -157,7 +158,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   cloneStrategy(): void {
     const dialogRef = this.dialog.open(StrategyCloneComponent, {
       width: '400px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: { 
         currentEnvironment: this.currentEnvironment,
         domainId: this.strategyList.parent.domainId
@@ -252,7 +253,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   showChangeLog() {
     this.dialog.open(ChangeLogDialogComponent, {
       width: '1200px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         strategy: this.strategy,
         domainId: this.strategyList.parent.domainId,

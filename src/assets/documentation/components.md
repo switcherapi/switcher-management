@@ -7,7 +7,7 @@ Components are registered applications that will be making use of switchers.
 Regarding security, all registered applications must be linked to a switcher, otherwise, the call will return access denied.
 </br>This gateway has been created to prevent other applications to use not related switchers.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/components/component[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/>
+<img src="[$ASSETS_LOCATION]documentation/images/components/component[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 
@@ -22,7 +22,7 @@ Creating a components is very simple and after doing it, you just have to link i
   Enter in the edition mode and just type the name of your registered component. 
   </br>It will try to match in an auto-complete list for you to choose afterwards.
 
-  <img src="[$ASSETS_LOCATION]/documentation/images/components/component_add[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/>
+  <img src="[$ASSETS_LOCATION]documentation/images/components/component_add[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 
@@ -47,5 +47,5 @@ Creating a components is very simple and after doing it, you just have to link i
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[components.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
-    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+    <img src="[$ASSETS_LOCATION]github.svg" style="width: 30px;">
 </a> 

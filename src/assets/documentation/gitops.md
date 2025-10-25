@@ -8,7 +8,7 @@
 - Flexible settings allow you to define the best workflow for your organization
 - Orchestrates accounts per Domain environments allowing seamless integration with any branching strategy
 
-<img src="[$ASSETS_LOCATION]/documentation/images/gitops/switcherapi_gitops_banner.png" class="image-style center width-70 dark-invert" alt=""/><p>
+<img src="[$ASSETS_LOCATION]documentation/images/gitops/switcherapi_gitops_banner.png" class="image-style center width-70 dark-invert" alt=""/><p>
 
 #### Getting Started
 * * *
@@ -114,5 +114,5 @@ No, the token is encrypted and stored securely.
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[gitops.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
-    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+    <img src="[$ASSETS_LOCATION]github.svg" style="width: 30px;">
 </a> 

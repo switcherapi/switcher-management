@@ -98,39 +98,40 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
-    } else {
-      const { valid } = this.endpointFormControl;
-      if (!valid) {
-        this.toastService.showError(`Unable to save relay`);
-        return;
-      }
-
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-
-      if (super.validateEdition(
-        { 
-          type: this.config.relay.type,
-          method: this.config.relay.method,
-          description: this.config.relay.description,
-          endpoint: this.config.relay.endpoint[this.currentEnvironment],
-          auth_token: this.getRelayAttribute('auth_token') ? this.config.relay.auth_token[this.currentEnvironment] : '',
-          auth_prefix: this.config.relay.auth_prefix || ''
-        }, 
-        { 
-          type: this.relayTypeFormControl.value,
-          method: this.relayMethodFormControl.value,
-          description: this.descElement.nativeElement.value,
-          endpoint: this.endpointFormControl.value,
-          auth_token: this.authTokenElement.nativeElement.value,
-          auth_prefix: this.authPrefixElement.nativeElement.value
-        })) {
-        this.setBlockUI(false);
-        this.editing = false;
-        return;
-      }
-
-      this.editRelay();
+      return;
     }
+    
+    const { valid } = this.endpointFormControl;
+    if (!valid) {
+      this.toastService.showError(`Unable to save relay`);
+      return;
+    }
+
+    this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+
+    if (super.validateEdition(
+      { 
+        type: this.config.relay.type,
+        method: this.config.relay.method,
+        description: this.config.relay.description,
+        endpoint: this.config.relay.endpoint[this.currentEnvironment],
+        auth_token: this.getRelayAttribute('auth_token') ? this.config.relay.auth_token[this.currentEnvironment] : '',
+        auth_prefix: this.config.relay.auth_prefix || ''
+      }, 
+      { 
+        type: this.relayTypeFormControl.value,
+        method: this.relayMethodFormControl.value,
+        description: this.descElement.nativeElement.value,
+        endpoint: this.endpointFormControl.value,
+        auth_token: this.authTokenElement.nativeElement.value,
+        auth_prefix: this.authPrefixElement.nativeElement.value
+      })) {
+      this.setBlockUI(false);
+      this.editing = false;
+      return;
+    }
+
+    this.editRelay();
   }
 
   verifyRelay(): void {

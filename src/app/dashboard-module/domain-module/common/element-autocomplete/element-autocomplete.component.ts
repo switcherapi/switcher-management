@@ -5,7 +5,7 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomainService } from 'src/app/services/domain.service';
 import { Group } from 'src/app/model/group';
-import { ApolloQueryResult } from '@apollo/client';
+import { Apollo } from 'apollo-angular/apollo';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -33,7 +33,7 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
   smartSearchFormControl = new FormControl('');
   searchListItems: any[] = [];
   searchedValues: Observable<any[]>;
-  private query: Observable<ApolloQueryResult<any>>;
+  private query: Observable<Apollo.QueryResult<any>>;
 
   ngOnInit() {
     this.searchedValues = this.smartSearchFormControl.valueChanges.pipe(

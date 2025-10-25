@@ -71,7 +71,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   ngOnInit() {
     this.loading = true;
     this.readPermissionToObject();
-    this.activatedRoute.paramMap.pipe(map(() => window.history.state))
+    this.activatedRoute.paramMap.pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         this.updateRoute(data.navigationId === 1);
@@ -96,27 +96,28 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
     if (!this.editing) {
       this.editing = true;
       this.setHeaderStyle();
-    } else {
-      const { valid } = this.nameFormControl;
+      return;
+    }
+    
+    const { valid } = this.nameFormControl;
 
-      if (super.validateEdition(
-          { name: this.team.name }, 
-          { name: this.nameFormControl.value })) {
-        this.editing = false;
-        this.setHeaderStyle();
-        return;
-      }
+    if (super.validateEdition(
+        { name: this.team.name }, 
+        { name: this.nameFormControl.value })) {
+      this.editing = false;
+      this.setHeaderStyle();
+      return;
+    }
 
-      if (valid) {
-        this.editing = false;
-        this.setBlockUI(true, 'Updating Team...');
-        this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe({
-            next: team => this.onSuccess(team),
-            error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
-          });
-      }
+    if (valid) {
+      this.editing = false;
+      this.setBlockUI(true, 'Updating Team...');
+      this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe({
+          next: team => this.onSuccess(team),
+          error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
+        });
     }
   }
 
