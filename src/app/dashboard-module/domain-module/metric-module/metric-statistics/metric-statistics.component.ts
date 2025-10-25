@@ -130,14 +130,13 @@ export class SwitchersStatisticsTab {
     const negative = { ...negativeTemplate, data: [] };
     const positive = { ...positiveTemplate, data: [] };
 
-    switcherStatistics.forEach(switcherStats => {
+    for (const switcherStats of switcherStatistics) {
       this.barChartLabels.push(switcherStats.switcher);
       negative.data.push(switcherStats.negative);
       positive.data.push(switcherStats.positive);
-    });
+    }
 
-    this.barChartData.push(negative);
-    this.barChartData.push(positive);
+    this.barChartData.push(negative, positive);
   }
 }
 
@@ -171,14 +170,13 @@ export class ComponentsStatisticsTab {
     const negative = { ...negativeTemplate, data: [] };
     const positive = { ...positiveTemplate, data: [] };
 
-    componentsStatistics.forEach(componentStats => {
+    for (const componentStats of componentsStatistics) {
       this.barChartLabels.push(componentStats.component);
       negative.data.push(componentStats.negative);
       positive.data.push(componentStats.positive);
-    });
+    }
 
-    this.barChartData.push(negative);
-    this.barChartData.push(positive);
+    this.barChartData.push(negative, positive);
   }
 }
 
@@ -216,22 +214,18 @@ export class ReasonsStatisticsTab {
       datasets: []
     };
 
-    reasonsStatistics.forEach(reasonStats => {
-      this.chartData.datasets.push({ 
-        data: [reasonStats.total], 
-        label: reasonStats.reason 
+    for (const reasonStats of reasonsStatistics) {
+      this.chartData.datasets.push({
+        data: [reasonStats.total],
+        label: reasonStats.reason
       });
-    });
+    }
   }
 
 }
 
 export class SwitcherDateTimeGroupedTab {
-  constructor(private readonly parent: MetricStatisticsComponent) {
-      this.MAX_CONTENT = 5;
-      this.content_index = -1;
-      this.total_content = 0;
-  }
+  private readonly MAX_CONTENT = 5;
 
   public chartType: ChartType = 'line';
   public chartLegend = true;
@@ -250,9 +244,13 @@ export class SwitcherDateTimeGroupedTab {
     }
   };
 
-  private readonly MAX_CONTENT: number;
   private content_index: number;
   private total_content: number;
+
+  constructor(private readonly parent: MetricStatisticsComponent) {
+    this.content_index = -1;
+    this.total_content = 0;
+  }
 
   public loadSwitcherDateTimeGroupView(): void {
     this.chartDatasets = [];
@@ -264,7 +262,7 @@ export class SwitcherDateTimeGroupedTab {
     const negative = { ...negativeTemplate, data: [] };
     const positive = { ...positiveTemplate, data: [] };
 
-    switcherStatistics.forEach(switcherStats => {
+    for (const switcherStats of switcherStatistics) {
       this.total_content = switcherStats.dateTimeStatistics.length;
 
       const stats = switcherStats.dateTimeStatistics;
@@ -280,10 +278,9 @@ export class SwitcherDateTimeGroupedTab {
           break;
 
       }
-    });
+    }
 
-    this.chartDatasets.push(negative);
-    this.chartDatasets.push(positive);
+    this.chartDatasets.push(negative, positive);
   }
 
   hasNext(): boolean {
@@ -308,7 +305,7 @@ export class SwitcherDateTimeGroupedTab {
   }
 
   pushMetric(swither: string, date: string) {
-    const dataFound = this.parent.data.data.filter(data => data.config.key === swither && data.date.toString().indexOf(date) >= 0);
+    const dataFound = this.parent.data.data.filter(data => data.config.key === swither && data.date.toString().includes(date));
     this.selectedData.push(dataFound);
   }
 
@@ -318,7 +315,7 @@ export class SwitcherDateTimeGroupedTab {
         if (metrics) {
           this.parent.dialog.open(SwitcherDataStatsDialogComponent, {
             width: '1200px',
-            minWidth: window.innerWidth < 450 ? '95vw' : '',
+            minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
             data: {
               stats: metrics.data,
               switcher: this.parent.switcher,
@@ -335,7 +332,7 @@ export class SwitcherDateTimeGroupedTab {
   }
 
   showLabel(): boolean {
-    return window.screen.width > 750;
+    return globalThis.screen.width > 750;
   }
 }
 

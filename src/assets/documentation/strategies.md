@@ -53,7 +53,7 @@ For each switcher it is possible to add at least 4 different types of strategy.
   Payload validations are useful to validate keys from a JSON input request.
   </br>The available operations for this validator are: Has one, Has all.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_create[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/>
+<img src="[$ASSETS_LOCATION]documentation/images/strategies/strategy_create[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/>
 
 </br></br>
 
@@ -63,7 +63,7 @@ For each switcher it is possible to add at least 4 different types of strategy.
 Strategies are defined per environment, adding more flexibility for you to specify conditions that are not shared or common among environments.
 </br>To simplify, it is possible to clone a created strategy instead of starting from scratch.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_clone[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/><p>
+<img src="[$ASSETS_LOCATION]documentation/images/strategies/strategy_clone[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -72,7 +72,7 @@ Strategies are defined per environment, adding more flexibility for you to speci
 
 Keep control of what is being sent as input to strategies. Under Metrics - Data tab view, besides the result of each call executed you can see what it was sent for each strategy.
 
-<img src="[$ASSETS_LOCATION]/documentation/images/strategies/strategy_data_fail[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/><p>
+<img src="[$ASSETS_LOCATION]documentation/images/strategies/strategy_data_fail[$DARK_SUFFIX].png" class="image-style shadow dark-invert" alt=""/><p>
 
 </br></br>
 
@@ -80,5 +80,5 @@ Keep control of what is being sent as input to strategies. Under Metrics - Data 
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[strategies.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
-    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+    <img src="[$ASSETS_LOCATION]github.svg" style="width: 30px;">
 </a> 

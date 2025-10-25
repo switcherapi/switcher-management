@@ -64,7 +64,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   ngOnInit() {
     this.loading = true;
     this.route.paramMap
-      .pipe(map(() => window.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      .pipe(map(() => globalThis.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data.element) {
           this.updateData(JSON.parse(data.element));
         } else {
@@ -111,19 +111,20 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
-    } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-
-      const newDescription = this.descElement.nativeElement.value;
-      if (super.validateEdition(
-          { description: this.domain.description }, 
-          { description: newDescription})) {
-        this.editing = false;
-        return;
-      }
-
-      this.editDomain(newDescription);
+      return;
     }
+
+    this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+
+    const newDescription = this.descElement.nativeElement.value;
+    if (super.validateEdition(
+        { description: this.domain.description }, 
+        { description: newDescription})) {
+      this.editing = false;
+      return;
+    }
+
+    this.editDomain(newDescription);
   }
 
   delete() {

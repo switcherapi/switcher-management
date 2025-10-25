@@ -33,22 +33,23 @@ export class StrategyService extends ApiService {
   public getAvailableOperations(strategy: Strategy, requirements: StrategyReq): string[] {
     const operations = [];
 
-    requirements.operationRequirements.forEach(opReq => {
+    for (const opReq of requirements.operationRequirements) {
       if (opReq.max >= strategy.values.length) {
         operations.push(opReq.operation);
-      } 
-    })
+      }
+    }
 
     return operations;
   }
 
   public validateStrategy(operation: string, values: string[], requirements: StrategyReq): boolean {
-    const operationReq = requirements.operationRequirements.filter(op => op.operation === operation)[0];
+    const operationReq = requirements.operationRequirements.find(op => op.operation === operation);
 
-    if (values.length > operationReq.max || values.length < operationReq.min)
+    if (!operationReq) {
       return false;
-    else
-      return true;
+    }
+
+    return values.length <= operationReq.max && values.length >= operationReq.min;
   }
 
   public setStrategyEnvironmentStatus(id: string, env: string, status: boolean): Observable<Strategy> {

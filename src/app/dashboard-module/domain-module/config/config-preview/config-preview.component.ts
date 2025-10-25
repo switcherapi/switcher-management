@@ -113,7 +113,7 @@ export class ConfigPreviewComponent extends BasicComponent implements OnInit, On
   private readPermissionToObject(): void {
     this.loadOperationSelectionComponent();
 
-    const element = this.permissions.filter(p => p.id === this.config.id)[0];
+    const element = this.permissions.find(p => p.id === this.config.id);
     this.updatable = element.permissions.find(p => p.action === 'UPDATE').result === 'ok';
     this.removable = element.permissions.find(p => p.action === 'DELETE').result === 'ok';
     

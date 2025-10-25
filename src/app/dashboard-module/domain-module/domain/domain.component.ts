@@ -18,7 +18,7 @@ import { PathRoute, Types } from 'src/app/model/path-route';
 import { Group } from 'src/app/model/group';
 import { Config } from 'src/app/model/config';
 import { Configuration, GraphQLConfigurationResultSet } from 'src/app/model/configuration';
-import { ApolloQueryResult } from '@apollo/client/core';
+import { Apollo } from 'apollo-angular/apollo';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FeatureService } from 'src/app/services/feature.service';
 import { BasicComponent } from '../common/basic-component';
@@ -69,7 +69,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   selectedConfigPath: string;
   
   currentPath = new PathRoute();
-  prevScrollpos = window.scrollY;
+  prevScrollpos = globalThis.scrollY;
   navControl = false;
   slackIntegration = false;
   transferLabel = '';
@@ -115,7 +115,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-    window.onscroll = () => {
+    globalThis.onscroll = () => {
       return;
     };
   }
@@ -123,7 +123,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   onDownloadSnapshot() {
     this.dialog.open(DomainSnapshotComponent, {
       width: '450px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         domainId: this.domainId
       }
@@ -141,7 +141,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
               this.transferLabel = 'Cancel Transfer';
               this.dialog.open(DomainTransferDialogComponent, {
                 width: '450px',
-                minWidth: window.innerWidth < 450 ? '95vw' : '',
+                minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
                 data: {
                   request_id: domain.id,
                   domain: domain.name
@@ -257,7 +257,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       this.currentPath = path;
     }
 
-    let query: Observable<ApolloQueryResult<GraphQLConfigurationResultSet>>;
+    let query: Observable<Apollo.QueryResult<GraphQLConfigurationResultSet>>;
     if (this.currentPath.type === Types.GROUP_TYPE) {
       query = this.domainService.executeConfigurationGroupQuery(this.domainId, this.currentPath.id);
     } else if (this.currentPath.type === Types.CONFIG_TYPE) {
@@ -305,9 +305,9 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   }
 
   private scrollMenuHandler() {
-    window.onscroll = () => {
-      if (!this.navControl && window.innerWidth < 1200) {
-        const currentScrollPos = window.scrollY;
+    globalThis.onscroll = () => {
+      if (!this.navControl && globalThis.innerWidth < 1200) {
+        const currentScrollPos = globalThis.scrollY;
         if (this.prevScrollpos > currentScrollPos) {
             document.getElementById("navbarMenu").style.top = "0";
         } else {

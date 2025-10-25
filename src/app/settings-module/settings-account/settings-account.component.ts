@@ -113,10 +113,10 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
 
   getPlatformIcon(): string {
     switch (this.userPlatform) {
-      case 'Bitbucket': return "assets\\bitbucket.svg";
-      case 'GitHub': return "assets\\github.svg";
-      case 'SAML': return "assets\\saml.svg";
-      default: return "assets\\switcherapi_mark_grey.png";
+      case 'Bitbucket': return String.raw`assets\bitbucket.svg`;
+      case 'GitHub': return String.raw`assets\github.svg`;
+      case 'SAML': return String.raw`assets\saml.svg`;
+      default: return String.raw`assets\switcherapi_mark_grey.png`;
     }
   }
 
@@ -130,7 +130,7 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
     this.userPlatform = this.authService.getUserInfo('platform');
     
     const avatar = this.authService.getUserInfo('avatar');
-    this.profileAvatar = avatar || "assets\\switcherapi_mark_icon.png";
+    this.profileAvatar = avatar || String.raw`assets\switcherapi_mark_icon.png`;
   }
   
   private loadDomains(): void {

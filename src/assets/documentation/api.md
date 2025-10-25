@@ -170,5 +170,5 @@ A GraphQL endpoint can also be used to execute the API. Extra return information
 
 *Did you find an error? Please, open an issue*
 <a href="https://github.com/switcherapi/switcher-management/issues/new?title=fix:+[api.md]+-+[INSERT+SHORT+DESCRIPTION]" target="_blank">
-    <img src="[$ASSETS_LOCATION]\github.svg" style="width: 30px;">
+    <img src="[$ASSETS_LOCATION]github.svg" style="width: 30px;">
 </a> 

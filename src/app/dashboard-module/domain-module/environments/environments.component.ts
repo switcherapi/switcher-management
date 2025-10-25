@@ -67,7 +67,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
   }
@@ -120,14 +120,14 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${selectedEnvironment.name}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        const environment = this.environments.filter(env => env.id === selectedEnvironment.id);
+        const environment = this.environments.find(env => env.id === selectedEnvironment.id);
 
         this.envService.deleteEnvironment(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: env => {
             if (env) {
-              this.environments.splice(this.environments.indexOf(environment[0]), 1);
+              this.environments.splice(this.environments.indexOf(environment), 1);
               this.toastService.showSuccess('Environment removed with success');
             }
           },
@@ -188,7 +188,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
+          for (const element of data) {
             if (element.action === 'UPDATE') {
               this.updatable = element.result === 'ok';
             } else if (element.action === 'DELETE') {
@@ -196,7 +196,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             } else if (element.action === 'CREATE') {
               this.creatable = element.result === 'ok';
             }
-          });
+          }
         }
     });
   }

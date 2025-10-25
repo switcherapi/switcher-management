@@ -69,10 +69,10 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
   }
 
   editPermission(permission: Permission) {
-    const permissionCopy = JSON.parse(JSON.stringify(permission));
+    const permissionCopy = structuredClone(permission);
     const dialogRef = this.dialog.open(TeamPermissionCreateComponent, {
       width: '400px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         domain: this.team.domain,
         permissions: this.dataSource.data,
@@ -173,7 +173,7 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
   }
 
   formatContent(value: string): string {
-    if (window.screen.width < 560)
+    if (globalThis.screen.width < 560)
       return value.substring(0, 3);
     else
       return value;

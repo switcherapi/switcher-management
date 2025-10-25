@@ -66,7 +66,7 @@ export class MetricComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
    }
@@ -95,7 +95,7 @@ export class MetricComponent implements OnInit, OnDestroy {
 
     const dialogRef = this.dialog.open(MetricFilterComponent, {
       width: '450px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: { 
         lockFilter: this.lockFilter,
         filter: key,

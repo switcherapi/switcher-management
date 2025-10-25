@@ -17,8 +17,8 @@ function loadScript(
   onLoaded: (grecaptcha: ReCaptchaV2.ReCaptcha) => void,
   { url, lang, nonce }: { url?: string; lang?: string; nonce?: string } = {},
 ): void {
-  window.ng2recaptchaloaded = () => {
-    onLoaded(window.grecaptcha);
+  globalThis.ng2recaptchaloaded = () => {
+    onLoaded(globalThis.grecaptcha);
   };
   const script = document.createElement("script");
   script.innerHTML = "";

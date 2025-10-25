@@ -30,10 +30,11 @@ export class SearchItemComponent {
   }
 
   renderSegment(data: string, documentToRender: string) {
-    if (data)
-        return data.replace(/\[\$ASSETS_LOCATION\]/g, environment.docsUrl);
-      else
-        return `${environment.docsUrl}${documentToRender} not found`;
+    if (data) {
+      return data.replaceAll('[$ASSETS_LOCATION]', environment.docsUrl);
+    }
+
+    return `${environment.docsUrl}${documentToRender} not found`;
   }
 
 }

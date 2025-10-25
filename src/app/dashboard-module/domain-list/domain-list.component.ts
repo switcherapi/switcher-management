@@ -58,7 +58,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
   createDomain(): void {
     const dialogRef = this.dialog.open(DomainCreateComponent, {
       width: '400px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: { name: '',  description: '' }
     });
 

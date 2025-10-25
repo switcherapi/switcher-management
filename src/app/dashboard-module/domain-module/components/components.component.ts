@@ -76,7 +76,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
    }
@@ -119,7 +119,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          data.forEach(element => {
+          for (const element of data) {
             if (element.action === 'UPDATE') {
               this.updatable = element.result === 'ok';
             } else if (element.action === 'DELETE') {
@@ -127,7 +127,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
             } else if (element.action === 'CREATE') {
               this.creatable = element.result === 'ok';
             }
-          });
+          }
         }
     });
   }
@@ -169,14 +169,14 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${selectedEnvironment.name}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        const component = this.components.filter(env => env.id === selectedEnvironment.id);
+        const component = this.components.find(env => env.id === selectedEnvironment.id);
 
         this.compService.deleteComponent(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: env => {
-            if (env) {
-              this.components.splice(this.components.indexOf(component[0]), 1);
+            if (env && component) {
+              this.components.splice(this.components.indexOf(component), 1);
               this.toastService.showSuccess('Component removed with success');
             }
           },

@@ -84,17 +84,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onGitHubLogin() {
     this.loading = true;
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
+    globalThis.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
   }
 
   onBitbucketLogin() {
     this.loading = true;
-    window.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
+    globalThis.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
   }
 
   onSamlLogin() {
     this.loading = true;
-    window.location.href = `${environment.apiUrl}/admin/saml/login`;
+    globalThis.location.href = `${environment.apiUrl}/admin/saml/login`;
   }
 
   ngOnDestroy() {
@@ -158,8 +158,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private loginWithSAMLToken() {
-    if (window.location.hash) {
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    if (globalThis.location.hash) {
+      const hashParams = new URLSearchParams(globalThis.location.hash.substring(1));
       const token = hashParams.get('token');
 
       if (token) {

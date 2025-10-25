@@ -96,28 +96,29 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     if (!this.editing) {
       this.classStatus = 'header editing';
       this.editing = true;
-    } else {
-      const { valid } = this.nameFormControl;
+      return;
+    }
 
-      if (valid) {
-        this.setBlockUI(true, 'Saving changes...');
-        this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    const { valid } = this.nameFormControl;
 
-        const body = {
-          name: this.nameElement.nativeElement.value,
-          description: this.descElement.nativeElement.value
-        };
+    if (valid) {
+      this.setBlockUI(true, 'Saving changes...');
+      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
 
-        if (super.validateEdition(
-            { name: this.group.name, description: this.group.description },
-            { name: body.name, description: body.description })) {
-          this.setBlockUI(false);
-          this.editing = false;
-          return;
-        }
+      const body = {
+        name: this.nameElement.nativeElement.value,
+        description: this.descElement.nativeElement.value
+      };
 
-        this.editGroup(body);
+      if (super.validateEdition(
+          { name: this.group.name, description: this.group.description },
+          { name: body.name, description: body.description })) {
+        this.setBlockUI(false);
+        this.editing = false;
+        return;
       }
+
+      this.editGroup(body);
     }
   }
 
@@ -207,8 +208,8 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   private editGroup(body: { name: string; description: string; }) {
     this.groupService.updateGroup(this.group.id,
-      body.name != this.group.name ? body.name : undefined,
-      body.description != this.group.description ? body.description : undefined)
+      body.name === this.group.name ? undefined : body.name,
+      body.description === this.group.description ? undefined : body.description)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: data => {

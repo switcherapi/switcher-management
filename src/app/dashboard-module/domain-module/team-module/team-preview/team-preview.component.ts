@@ -97,26 +97,27 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
   edit() {
     if (!this.editing) {
       this.editing = true;
-    } else {
-      const { valid } = this.nameFormControl;
+      return;
+    }
+    
+    const { valid } = this.nameFormControl;
 
-      if (this.validateEdition(
-          { name: this.team.name }, 
-          { name: this.nameFormControl.value })) {
-        this.editing = false;
-        return;
-      }
+    if (this.validateEdition(
+        { name: this.team.name }, 
+        { name: this.nameFormControl.value })) {
+      this.editing = false;
+      return;
+    }
 
-      if (valid) {
-        this.editing = false;
-        this.setBlockUI(true, 'Updating team...');
-        this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe({
-            next: team => this.onSuccess(team),
-            error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
-          });
-      }
+    if (valid) {
+      this.editing = false;
+      this.setBlockUI(true, 'Updating team...');
+      this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe({
+          next: team => this.onSuccess(team),
+          error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
+        });
     }
   }
 

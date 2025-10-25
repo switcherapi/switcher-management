@@ -75,7 +75,7 @@ export interface RecaptchaLoaderOptions {
    * Allows you to change the `grecaptcha` that the `ng-recaptcha` will be relying on.
    * This method is useful when you need to use `grecaptcha.enterprise` instead of the base `grecaptcha`
    *
-   * @param recaptcha the value of `window.grecaptcha` upon script load.
+   * @param recaptcha the value of `globalThis.grecaptcha` upon script load.
    * @returns the {ReCaptchaV2.ReCaptcha} instance that the `ng-recaptcha` lib will use.
    *
    * @example

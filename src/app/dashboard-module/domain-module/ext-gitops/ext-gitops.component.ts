@@ -75,7 +75,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.paramMap
-      .pipe(map(() => window.history.state))
+      .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => this.fetch = data.navigationId === 1);
   }
@@ -96,7 +96,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   onStartNewAccount(): void {
     const dialogRef = this.dialog.open(GitOpsEnvSelectionComponent, {
       width: '400px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         excludeEnvironments: this.gitOpsAccounts
           .filter(account => account.ID)
@@ -161,7 +161,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
   onUpdateTokens(): void {
     const dialogRef = this.dialog.open(GitOpsUpdateTokensComponent, {
       width: '400px',
-      minWidth: window.innerWidth < 450 ? '95vw' : '',
+      minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: {
         environments: this.gitOpsAccounts
           .filter(account => account.ID)
@@ -334,13 +334,12 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE'], 'ADMIN')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
-        data.forEach(perm => {
+        for (const perm of data) {
           if (perm.action === 'UPDATE') {
             this.allowUpdate = perm.result === 'ok';
           }
-        });
-      }
-      );
+        }
+      });
   }
 
   private updateRoute(): void {
