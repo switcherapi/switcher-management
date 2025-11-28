@@ -14,8 +14,8 @@ export type NeverUndefined<T> = T extends undefined ? never : T;
 export type RecaptchaErrorParameters = Parameters<NeverUndefined<ReCaptchaV2.Parameters["error-callback"]>>;
 
 @Component({
-    exportAs: "reCaptcha",
-    selector: "re-captcha",
+    exportAs: 'reCaptcha',
+    selector: 'app-re-captcha',
     template: ``
 })
 export class RecaptchaComponent implements AfterViewInit, OnDestroy {

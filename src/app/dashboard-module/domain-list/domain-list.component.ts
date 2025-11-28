@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -31,21 +31,21 @@ export class DomainListComponent implements OnInit, OnDestroy {
 
   private readonly unsubscribe = new Subject<void>();
 
-  domains: Domain[];
-  collabDomains: Domain[] = [];
+  domains = signal<Domain[]>([]);
+  collabDomains = signal<Domain[]>([]);
 
-  cardListContainerStyle = 'card mt-4 loading';
-  cardCollabListContainerStyle = 'card mt-4 loading';
-  loading = false;
-  loadingCollab = false;
-  error = '';
-  errorCollab = '';
+  cardListContainerStyle = signal('card mt-4 loading');
+  cardCollabListContainerStyle = signal('card mt-4 loading');
+  loading = signal(false);
+  loadingCollab = signal(false);
+  error = signal('');
+  errorCollab = signal('');
 
   ngOnInit() {
-    this.loading = true;
-    this.loadingCollab = true;
-    this.error = '';
-    this.errorCollab = '';
+    this.loading.set(true);
+    this.loadingCollab.set(true);
+    this.error.set('');
+    this.errorCollab.set('');
     this.loadDomain();
     this.loadCollabDomain();
   }
@@ -64,7 +64,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loading = true;
+        this.loading.set(true);
         this.domainService.createDomain(result.name, result.description).subscribe({
           next: domain => {
             if (domain) {
@@ -73,7 +73,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
             }
           },
           error: error => {
-            this.loading = false;
+            this.loading.set(false);
             this.toastService.showError(`Unable to create a new domain. ${error.error}`);
             ConsoleLogger.printError(error);
           }
@@ -86,39 +86,39 @@ export class DomainListComponent implements OnInit, OnDestroy {
     this.domainService.getDomains().pipe(takeUntil(this.unsubscribe)).subscribe({
       next: (data) => {
         if (data) {
-          this.domains = data;
+          this.domains.set(data);
         }
       },
       error: (error) => {
         ConsoleLogger.printError(error);
-        this.loading = false;
-        this.error = this.errorHandler.doError(error);
+        this.loading.set(false);
+        this.error.set(this.errorHandler.doError(error));
       },
       complete: () => {
-        if (!this.domains) {
-          this.error = 'Failed to connect to Switcher API';
+        if (!this.domains().length) {
+          this.error.set('Failed to connect to Switcher API');
         }
-        this.loading = false;
-        this.cardListContainerStyle = 'card mt-4 ready';
+        this.loading.set(false);
+        this.cardListContainerStyle.set('card mt-4 ready');
       }
     });
   }
 
   private loadCollabDomain(): void {
-    this.collabDomains = [];
+    this.collabDomains.set([]);
     this.domainService.getDomainsCollab().pipe(takeUntil(this.unsubscribe)).subscribe({
       next: (data) => {
         if (data?.length) {
-          this.collabDomains = data;
-          this.cardCollabListContainerStyle = 'card mt-4 ready';
+          this.collabDomains.set(data);
+          this.cardCollabListContainerStyle.set('card mt-4 ready');
         }
       }, 
       error: (error) => {
         ConsoleLogger.printError(error);
-        this.loadingCollab = false;
+        this.loadingCollab.set(false);
       },
       complete: () => {
-        this.loadingCollab = false;
+        this.loadingCollab.set(false);
       }
     });
   }

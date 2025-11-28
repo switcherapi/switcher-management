@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, HostListener, inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
@@ -67,9 +67,10 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   valueSelectionFormControl = new FormControl('');
   operationCategoryFormControl = new FormControl('');
 
-  strategyFormatSelected: string;
-  strategyOperations: string[] = [];
-  strategyValuesLength: number;
+  strategyFormatSelected = signal('');
+  strategyOperations = signal<string[]>([]);
+  strategyValuesLength = signal(30);
+  selectedStrategyValue = signal<string | null>(null);
 
   constructor() {
     super();
@@ -93,19 +94,19 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
   @HostListener('window:resize')
   onResize() {
-    this.strategyValuesLength = 30;
+    this.strategyValuesLength.set(30);
     if (globalThis.innerWidth < 1200 && globalThis.innerWidth > 770) {
-      this.strategyValuesLength = 50;
+      this.strategyValuesLength.set(50);
     } else if (globalThis.innerWidth < 770) {
-      this.strategyValuesLength = 20;
+      this.strategyValuesLength.set(20);
     }
   }
 
   edit() {
-    if (!this.editing) {
+    if (!this.editing()) {
       this.loadStrategyRequirements();
       this.classStatus = 'header editing';
-      this.editing = true;
+      this.editing.set(true);
       return;
     }
 
@@ -119,8 +120,8 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
     if (super.validateEdition(
         { operation: this.strategy.operation, description: this.strategy.description }, 
         { operation: body.operation, description: body.description})) {
+      this.editing.set(false);
       this.setBlockUI(false);
-      this.editing = false;
       return;
     }
 
@@ -142,8 +143,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
               this.setBlockUI(false);
               this.toastService.showSuccess(`Strategy removed with success`);
 
-              if (!this.strategyList.strategies.getValue().length)
+              if (!this.strategyList.strategies.getValue().length) {
                 this.scrollToElement(document.getElementById('page-container'));
+              }
             },
             error: error => {
               this.setBlockUI(false);
@@ -208,6 +210,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           next: data => {
             if (data) {
               this.strategyValueSelection.deselectAll();
+              this.selectedStrategyValue.set(null);
               this.updateValueSuccess(data);
             }
           },
@@ -268,6 +271,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 
       this.strategyList.updateStrategies(data);
       this.loadStrategyRequirements();
+      this.selectedStrategyValue.set(null); // Clear selection after update
       this.toastService.showSuccess(`Strategy updated with success`);
     }
   }
@@ -283,13 +287,16 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((s: MatSelectionListChange) => {
         this.strategyValueSelection.deselectAll();
+        this.selectedStrategyValue.set(null); // Clear signal when deselecting
         s.options[0].selected = true;
-        this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
+        const selectedValue = s.source.selectedOptions.selected[0].value;
+        this.valueSelectionFormControl.setValue(selectedValue);
+        this.selectedStrategyValue.set(selectedValue); // Update with new selection
     });
   }
 
   private loadOperationSelectionComponent(): void {
-    const toSelect = this.strategyOperations.find(operation => operation === this.strategy.operation);
+    const toSelect = this.strategyOperations().find(operation => operation === this.strategy.operation);
     this.operationCategoryFormControl.setValue(toSelect);
   }
 
@@ -298,9 +305,9 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(req => {
         this.strategyReq = req;
-        this.strategyOperations = this.strategyService.getAvailableOperations(this.strategy, req);
+        this.strategyOperations.set(this.strategyService.getAvailableOperations(this.strategy, req));
         this.operationCategoryFormControl.setValue(this.strategy.operation);
-        this.strategyFormatSelected = req.operationsAvailable.format;
+        this.strategyFormatSelected.set(req.operationsAvailable.format);
 
         this.valueSelectionFormControl.setValidators([
           Validators.required,
@@ -330,12 +337,13 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
         },
         complete: () => {
           this.setBlockUI(false);
-          this.detailBodyStyle = 'detail-body ready';
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }
 
   private editStrategy(body: { operation: string; description: any; }) {
+    this.setBlockUI(true, 'Updating strategy...');
     this.strategyService.updateStrategy(this.strategy.id, body.description, body.operation)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -345,14 +353,16 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             this.strategy.description = body.description;
   
             this.toastService.showSuccess(`Strategy updated with success`);
-            this.editing = false;
+            this.editing.set(false);
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
+          this.setBlockUI(false);
           this.toastService.showError(`Unable to update '${this.strategy.strategy}' strategy`);
-          this.editing = false;
-        }
+          this.editing.set(false);
+        },
+        complete: () => this.setBlockUI(false)
       });
   }
 
@@ -378,7 +388,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
 }
 
 @Component({
-    selector: 'strategy-changelog-dialog',
+    selector: 'app-strategy-changelog-dialog',
     templateUrl: 'strategy-changelog-dialog.html',
     styleUrls: [
         '../../common/css/create.component.css'

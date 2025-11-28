@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -37,14 +37,14 @@ export class StrategyCloneComponent implements OnInit, OnDestroy {
     Validators.required
   ]);
 
-  environments: Environment[];
+  environments = signal<Environment[]>([]);
 
   ngOnInit() {
     this.environmentService.getEnvironmentsByDomainId(this.data.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(env => {
-        this.environments = env;
-        this.environments = this.environments.filter(environment => environment.name !== this.data.currentEnvironment);
+        const filteredEnvironments = env.filter(environment => environment.name !== this.data.currentEnvironment);
+        this.environments.set(filteredEnvironments);
       });
 
     this.environmentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {

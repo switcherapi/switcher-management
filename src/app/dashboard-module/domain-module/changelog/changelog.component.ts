@@ -53,7 +53,6 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   @Input() domainId: string;
   @Input() domainName: string;
   @Input() strategy: Strategy;
-  removable = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -82,9 +81,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   configId: string;
   groupId: string;
-  classStatus = "mat-elevation-z8 loading";
-  loading = true;
+  classStatus = signal("mat-elevation-z8 loading");
+  loading = signal(true);
   fetch = true;
+  removable = signal(false);
 
   constructor() { 
     this.activatedRoute.parent?.params.subscribe(params => {
@@ -142,7 +142,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         if (data.length) {
           for (const element of data) {
             if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
+              this.removable.set(element.result === 'ok');
             }
           }
         }
@@ -150,7 +150,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadChangeLog(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.domainRouteService.updateView('Change Log', 2);
 
     if (this.strategy) {
@@ -165,7 +165,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadDomainHistory(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.domainService.getHistory(this.domainId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -178,7 +178,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadGroupHistory(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.groupService.getHistory(this.groupId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -199,7 +199,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadConfigHistory(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.configService.getHistory(this.configId, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -218,7 +218,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadStrategyHistory(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.strategyService.getHistory(this.strategy.id, this.pageLimit, this.pageSkip)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
@@ -297,14 +297,14 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       this.pageFetch = false;
     }
 
-    this.loading = false;
-    this.classStatus = "mat-elevation-z8 ready";
+    this.loading.set(false);
+    this.classStatus.set("mat-elevation-z8 ready");
   }
 
   private loadError(error: any): void {
     ConsoleLogger.printError(error);
     this.errorHandler.doError(error);
-    this.loading = false;
+    this.loading.set(false);
   }
 
   private customFilterPredicate(data: History, filter: string): boolean {

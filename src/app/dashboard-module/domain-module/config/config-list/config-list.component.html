@@ -1,17 +1,17 @@
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
 }
-@if (error) {
-<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+@if (error()) {
+<div class="alert alert-danger mt-3 mb-0">{{error()}}</div>
 }
-@if (!loading && !error) {
-<div [ngClass]="cardListContainerStyle" style="border: 0px; margin: 0px !important;">
+@if (!loading() && !error()) {
+<div [ngClass]="cardListContainerStyle()" style="border: 0px; margin: 0px !important;">
     <div class="header-style">
         <div class="div-btn-new">
-            <button mat-button class="btn-element create" (click)="createConfig()" [disabled]="!creatable">
+            <button mat-button class="btn-element create" (click)="createConfig()" [disabled]="!creatable()">
                 <mat-icon style="font-size: large;">create</mat-icon>
                 <div class="options-section-label">New Switcher</div>
             </button>
@@ -33,9 +33,9 @@
         </div>
         }
     </div>
-    @if (!loading) {
+    @if (!loading()) {
     <div>
-        @for (config of configs; track config) {
+        @for (config of configs(); track config) {
         <div>
             <app-config-preview 
                 [domainId]="domainId"
@@ -43,18 +43,18 @@
                 [groupId]="groupId"
                 [config]="config" 
                 [environmentSelectionChange]="environmentSelectionChange"
-                [permissions]="permissions">
+                [permissions]="permissions()">
             </app-config-preview>
         </div>
         }
     </div>
     }
-    @if (configs.length === 10 || skip > 0) {
+    @if (configs().length === 10 || skip > 0) {
     <div class="pagination">
         <button mat-mini-fab class="btn-element create nav" (click)="onPrevious()" disabled="{{skip === 0}}">
             <mat-icon style="font-size: larger;">arrow_back</mat-icon>
         </button>
-        <button mat-mini-fab class="btn-element create nav" (click)="onNext()" disabled="{{configs.length < 10}}">
+        <button mat-mini-fab class="btn-element create nav" (click)="onNext()" disabled="{{configs().length < 10}}">
             <mat-icon style="font-size: larger;">arrow_forward</mat-icon>
         </button>
     </div>

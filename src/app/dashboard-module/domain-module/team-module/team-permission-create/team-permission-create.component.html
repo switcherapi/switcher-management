@@ -16,7 +16,7 @@
                         <mat-form-field class="strategy-style">
                             <mat-label>Component</mat-label>
                             <mat-select [formControl]="routerFormControl">
-                                @for (router of routers; track router) {
+                                @for (router of routers(); track router) {
                                 <mat-option [value]="router" [disabled]="data.permission">
                                     {{router}}
                                 </mat-option>
@@ -26,7 +26,7 @@
                         <mat-form-field class="strategy-style">
                             <mat-label>Permission</mat-label>
                             <mat-select [formControl]="actionFormControl">
-                                @for (action of actions; track action) {
+                                @for (action of actions(); track action) {
                                 <mat-option [value]="action" [disabled]="data.permission">
                                     {{action}}
                                 </mat-option>
@@ -43,7 +43,7 @@
                                     </span>
                                     }
                                 </mat-select-trigger>
-                                @for (environment of environments; track environment) {
+                                @for (environment of environments(); track environment) {
                                 <mat-option [value]="environment">{{environment}}</mat-option>
                                 }
                             </mat-select>
@@ -69,7 +69,7 @@
                             </mat-form-field>
                             <div class="strategy-values-control">
                                 <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
-                                    [disabled]="inputValue.value.length === 0 || !validKeyOnly">Add</button>
+                                    [disabled]="inputValue.value.length === 0 || !validKeyOnly()">Add</button>
                                 <button mat-button class="btn-element" (click)="removeValue(componentValueSelection.selectedOptions.selected[0]?.value)" 
                                     [disabled]="!componentValueSelection.selectedOptions.selected[0]?.value">Remove</button>
                             </div>

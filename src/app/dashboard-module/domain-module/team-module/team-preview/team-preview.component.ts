@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -48,7 +48,7 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
     Validators.minLength(2)
   ]);
 
-  editing: boolean;
+  editing = signal(false);
 
   toggleSectionStyle = 'toggle-style deactivated';
 
@@ -83,7 +83,7 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
           .subscribe({
             next: team => {
               if (team) {
-                this.teamListComponent.removeTeamFromList(team);
+                this.teamListComponent.removeTeamFromList(this.team);
                 this.setBlockUI(false);
                 this.toastService.showSuccess(`Team removed with success`);
               }
@@ -95,8 +95,8 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
   }
   
   edit() {
-    if (!this.editing) {
-      this.editing = true;
+    if (!this.editing()) {
+      this.editing.set(true);
       return;
     }
     
@@ -105,12 +105,12 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
     if (this.validateEdition(
         { name: this.team.name }, 
         { name: this.nameFormControl.value })) {
-      this.editing = false;
+      this.editing.set(false);
       return;
     }
 
     if (valid) {
-      this.editing = false;
+      this.editing.set(false);
       this.setBlockUI(true, 'Updating team...');
       this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
         .pipe(takeUntil(this.unsubscribe))

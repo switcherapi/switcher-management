@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 
 @Component({
-    selector: 'team-invite-dialog',
+    selector: 'app-team-invite-dialog',
     templateUrl: 'team-invite-dialog.html',
     styleUrls: [
         '../../common/css/create.component.css',

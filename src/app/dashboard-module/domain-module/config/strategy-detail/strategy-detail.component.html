@@ -1,16 +1,16 @@
 <app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
-    <div [ngClass]="detailBodyStyle">
+    <div [ngClass]="detailBodyStyle()">
         <section [ngClass]="classStatus" style="width: 100%;">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
                         <mat-label>Operation Name</mat-label>
-                        @if (!editing) {
+                        @if (!editing()) {
                         <input matInput class="readonly-fields" [value]="strategy.operation" readonly>
                         }
-                        @if (editing) {
+                        @if (editing()) {
                         <mat-select [formControl]="operationCategoryFormControl">
-                            @for (operation of strategyOperations; track operation) {
+                            @for (operation of strategyOperations(); track operation) {
                                 <mat-option [value]="operation">
                                     {{operation}}
                                 </mat-option>
@@ -21,7 +21,7 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput class="readonly-fields" [value]="strategy.description" maxlength="256"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
@@ -47,7 +47,7 @@
                             <mat-selection-list #strategyValueSelection>
                                 @for (value of strategy.values; track value) {
                                 <mat-list-option [value]="value" matTooltip="{{ value }}" allowScroll>
-                                    {{ showResumed(value, strategyValuesLength) }}
+                                    {{ showResumed(value, strategyValuesLength()) }}
                                 </mat-list-option>
                                 }
                             </mat-selection-list>
@@ -55,7 +55,7 @@
                         <mat-form-field style="width: 100%;">
                             <mat-label>Value</mat-label>
                             <input #inputValue matInput [formControl]="valueSelectionFormControl" 
-                                matTooltip="{{ strategyFormatSelected }}" maxlength="500" autocomplete="off">
+                                matTooltip="{{ strategyFormatSelected() }}" maxlength="500" autocomplete="off">
                             @if (valueSelectionFormControl.dirty && valueSelectionFormControl.errors) {
                             <mat-error>
                                 Please, check the value format
@@ -68,13 +68,13 @@
                                 <mat-icon style="vertical-align: text-bottom;">add_to_queue</mat-icon>
                                 <div class="options-section-label"> Add</div>
                             </button>
-                            <button mat-button class="btn-element" (click)="editValue(strategyValueSelection.selectedOptions.selected[0]?.value, inputValue.value)" 
-                                [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
+                            <button mat-button class="btn-element" (click)="editValue(selectedStrategyValue(), inputValue.value)" 
+                                [disabled]="!selectedStrategyValue() || !updatable">
                                 <mat-icon style="vertical-align: text-bottom;">sync</mat-icon>
                                 <div class="options-section-label"> Update</div>
                             </button>
-                            <button mat-button class="btn-element btn-red" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
-                                [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value || !updatable">
+                            <button mat-button class="btn-element btn-red" (click)="removeValue(selectedStrategyValue())" 
+                                [disabled]="!selectedStrategyValue() || !updatable">
                                 <mat-icon style="vertical-align: text-bottom;">remove_from_queue</mat-icon>
                                 <div class="options-section-label"> Remove</div>
                             </button>
@@ -101,9 +101,9 @@
                     <mat-icon>receipt</mat-icon>
                     <div class="options-section-label">Change Log</div>
                 </button>
-                <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
+                <button mat-button [ngClass]="editing() ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
                     <mat-icon style="font-size: large;">build</mat-icon>
-                    <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+                    <div class="options-section-label">{{ editing() ? 'Save' : 'Edit' }}</div>
                 </button>
                 <button mat-button class="btn-element" (click)="cloneStrategy()" [disabled]="!creatable">
                     <mat-icon>file_copy</mat-icon>

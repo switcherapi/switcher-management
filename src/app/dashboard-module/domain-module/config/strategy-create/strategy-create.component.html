@@ -16,7 +16,7 @@
                         <mat-form-field class="strategy-style">
                             <mat-label>Strategy</mat-label>
                             <mat-select [formControl]="strategyFormControl">
-                                @for (strategy of strategies; track strategy) {
+                                @for (strategy of strategies(); track strategy) {
                                 <mat-option [value]="strategy">
                                     {{strategy}}
                                 </mat-option>
@@ -26,7 +26,7 @@
                         <mat-form-field class="strategy-style">
                             <mat-label>Operation</mat-label>
                             <mat-select [formControl]="operationFormControl">
-                                @for (operation of operations; track operation) {
+                                @for (operation of operations(); track operation) {
                                 <mat-option [value]="operation">
                                     {{operation}}
                                 </mat-option>
@@ -60,7 +60,7 @@
                                     <mat-form-field>
                                         <mat-label>Value</mat-label>
                                         <input #inputValue matInput
-                                            [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected }}" autocomplete="off">
+                                            [formControl]="valueSelectionFormControl" matTooltip="{{ strategyFormatSelected() }}" autocomplete="off">
                                         @if (valueSelectionFormControl.dirty && valueSelectionFormControl.errors) {
                                         <mat-error>
                                             Please, check the value format
@@ -70,8 +70,8 @@
                                     <div class="strategy-values-control">
                                         <button mat-button class="btn-element" (click)="addValue(inputValue.value)" 
                                             [disabled]="inputValue.value.length === 0">Add</button>
-                                        <button mat-button class="btn-element" (click)="removeValue(strategyValueSelection.selectedOptions.selected[0]?.value)" 
-                                            [disabled]="!strategyValueSelection.selectedOptions.selected[0]?.value">Remove</button>
+                                        <button mat-button class="btn-element" (click)="removeValue(selectedStrategyValue())" 
+                                            [disabled]="!selectedStrategyValue()">Remove</button>
                                     </div>
                                 </mat-card>
                             </div>

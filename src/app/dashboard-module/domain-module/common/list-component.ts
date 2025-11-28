@@ -1,4 +1,4 @@
-import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit, Input, inject } from '@angular/core';
+import { ViewChildren, QueryList, Output, EventEmitter, Directive, AfterViewInit, Input, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { MatSelect } from '@angular/material/select';
@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 
 @Directive()
 export class ListComponent implements AfterViewInit {
+    protected readonly cdr = inject(ChangeDetectorRef, { optional: true });
     private readonly activatedRoute = inject(ActivatedRoute);
     private readonly formBuilder = inject(FormBuilder);
     private readonly envService = inject(EnvironmentService);
@@ -28,14 +29,14 @@ export class ListComponent implements AfterViewInit {
     @Input() childEnvironmentEmitter: EventEmitter<EnvironmentChangeEvent>;
     @Output() environmentSelectionChange = new EventEmitter<string>();
 
-    cardListContainerStyle = 'card mt-4 loading';
+    cardListContainerStyle = signal('card mt-4 loading');
     domainId: string;
     domainName: string;
     groupId: string;
 
     skip = 0;
-    loading = false;
-    error = '';
+    loading = signal(false);
+    error = signal('');
 
     constructor() {
         this.activatedRoute.parent.params.subscribe(params => {
@@ -57,12 +58,13 @@ export class ListComponent implements AfterViewInit {
     }
 
     loadEnvironments(environmentName = 'default'): void {
-        if (this.environments) {
+        if (this.environments && this.environments.length > 0) {
             setTimeout(() => this.initEnvironmentComponent(environmentName), 100);
         } else {
             this.envService.getEnvironmentsByDomainId(this.domainId).subscribe(env => {
                 this.environments = env;
                 this.initEnvironmentComponent(environmentName);
+                this.cdr?.detectChanges();
             });
         }
     }
@@ -96,7 +98,8 @@ export class ListComponent implements AfterViewInit {
     private initEnvironmentComponent(environmentName: string): void {
         this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst(environmentName));
         this.environmentSelectionChange.emit(this.setProductionFirst(environmentName));
-        this.cardListContainerStyle = 'card mt-4 ready';
+        this.cardListContainerStyle.set('card mt-4 ready');
+        this.cdr?.detectChanges();
     }
 
     private onEnvironmentChange(): void {

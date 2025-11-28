@@ -13,13 +13,6 @@ export default defineConfig({
     ],
     processor: angular.processInlineTemplates,
     rules: {
-      "@angular-eslint/directive-selector": [
-        "error",
-        {
-          type: "attribute",
-          prefix: "app"
-        },
-      ],
       "@angular-eslint/component-selector": [
         "error",
         {

@@ -5,7 +5,7 @@
 </div>
 }
 @if (!featureFlag) {
-<div [ngClass]="detailBodyStyle">
+<div [ngClass]="detailBodyStyle()">
     <div class="panel-gitops-detail">
         <img src="assets\gitops.png" style="width: 40px;" alt="gitops" />
         <h3>GitOps Integration</h3>
@@ -16,7 +16,7 @@
 </div>
 }
 @if (featureFlag) {
-<div [ngClass]="detailBodyStyle">
+<div [ngClass]="detailBodyStyle()">
     <div class="panel-gitops-detail">
         <img src="assets\gitops.png" style="width: 40px; height: 40px;" alt="gitops" />
         <h3>GitOps Integration</h3>

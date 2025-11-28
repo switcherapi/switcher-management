@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,18 +42,18 @@ export class TeamComponent implements OnInit, OnDestroy {
 
   domainId: string;
   domainName: string;
-  teams: Team[];
+  teams = signal<Team[]>([]);
 
-  classStatus = "card mt-4 loading";
-  creating = false;
-  loading = false;
-  error = '';
+  classStatus = signal("card mt-4 loading");
+  creating = signal(false);
+  loading = signal(false);
+  error = signal('');
   fetch = true;
 
-  readable = false;
-  updatable = false;
-  removable = false;
-  creatable = false;
+  readable = signal(false);
+  updatable = signal(false);
+  removable = signal(false);
+  creatable = signal(false);
 
   constructor() { 
     this.activatedRoute.parent.parent.params.subscribe(params => {
@@ -83,24 +83,25 @@ export class TeamComponent implements OnInit, OnDestroy {
     if (valid) {
       const teamName = this.teamFormControl.value;
       this.teamFormControl.reset();
-      this.creating = true;
+      this.creating.set(true);
 
       this.teamService.createTeam(this.domainId, teamName)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: team => {
             if (team) {
-              this.teams.push(team);
+              const currentTeams = this.teams();
+              this.teams.set([...currentTeams, team]);
               this.toastService.showSuccess('Team created with success');
             }
           },
           error: error => {
-            this.creating = false;
+            this.creating.set(false);
             this.toastService.showError(error.error);
             ConsoleLogger.printError(error);
           },
           complete: () => {
-            this.creating = false;
+            this.creating.set(false);
           }
         });
     } else {
@@ -109,30 +110,39 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   removeTeamFromList(teamRemoved: Team): void {
-    this.teams = this.teams.filter(team => team._id != teamRemoved._id);
+    if (!teamRemoved?._id) {
+      return;
+    }
+    
+    const currentTeams = this.teams();
+    const updatedTeams = currentTeams.filter(team => team._id !== teamRemoved._id);
+    this.teams.set(updatedTeams);
   }
   
   private loadTeams(): void {
-    this.loading = true;
-    this.error = '';
+    this.loading.set(true);
+    this.error.set('');
     this.readPermissionToObject();
     this.teamService.getTeamsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
-            this.teams = data;
+            this.teams.set(data);
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loading = false;
+          this.loading.set(false);
         },
         complete: () => {
-          this.loading = false;
-          this.classStatus = "card mt-4 ready";
-          if (!this.teams)
-            this.error = 'Failed to connect to Switcher API';
+          this.loading.set(false);
+          this.classStatus.set("card mt-4 ready");
+          const currentTeams = this.teams();
+          
+          if (!currentTeams || currentTeams.length === 0) {
+            this.error.set('Failed to connect to Switcher API');
+          }
         }
       });
   }
@@ -144,13 +154,13 @@ export class TeamComponent implements OnInit, OnDestroy {
         if (data.length) {
           for (const element of data) {
             if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
+              this.updatable.set(element.result === 'ok');
             } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
+              this.removable.set(element.result === 'ok');
             } else if (element.action === 'CREATE') {
-              this.creatable = element.result === 'ok';
+              this.creatable.set(element.result === 'ok');
             } else if (element.action === 'READ') {
-              this.readable = element.result === 'ok';
+              this.readable.set(element.result === 'ok');
             } 
           }
         }

@@ -9,7 +9,7 @@ import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'signup-domain',
+    selector: 'app-signup-domain',
     templateUrl: './signup-domain.component.html',
     styleUrls: ['./signup-domain.component.css'],
     imports: [MatFormField, MatLabel, MatInput, MatButton]

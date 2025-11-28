@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, inject, signal } from '@angular/core';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DetailComponent } from '../../common/detail-component';
 import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
@@ -72,8 +72,8 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   relayTypeFormControl = new FormControl('');
   relayMethodFormControl = new FormControl('');
 
-  relayVerificationEnabled = false;
-  relayVerificationCode: string;
+  relayVerificationEnabled = signal(false);
+  relayVerificationCode = signal('');
 
   constructor() {
     super();
@@ -95,9 +95,9 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     // stores old state in case of error
     this.relayOld = JSON.stringify(this.config.relay);
 
-    if (!this.editing) {
+    if (!this.editing()) {
       this.classStatus = 'header editing';
-      this.editing = true;
+      this.editing.set(true);
       return;
     }
     
@@ -127,7 +127,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         auth_prefix: this.authPrefixElement.nativeElement.value
       })) {
       this.setBlockUI(false);
-      this.editing = false;
+      this.editing.set(false);
       return;
     }
 
@@ -135,7 +135,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   verifyRelay(): void {
-    if (this.relayVerificationCode) {
+    if (this.relayVerificationCode()) {
       this.openRelayVerificationDialog();
       return;
     }
@@ -147,7 +147,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         next: data => {
           this.setBlockUI(false);
           if (data?.code) {
-            this.relayVerificationCode = data.code;
+            this.relayVerificationCode.set(data.code);
             this.openRelayVerificationDialog();
           }
         },
@@ -218,7 +218,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
           if (data) {
             this.toastService.showSuccess(`Relay saved with success`);
             this.config.relay = data.relay;
-            this.editing = false;
+            this.editing.set(false);
             this.parent.updateConfigRelay(data.relay);
           }
           this.setBlockUI(false);
@@ -226,7 +226,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         error: error => {
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update relay: ${error.error}`);
-          this.editing = false;
+          this.editing.set(false);
           this.setBlockUI(false);
 
           this.config.relay = JSON.parse(this.relayOld);
@@ -247,10 +247,10 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       this.edit();
     } else {
       this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
-      this.editing = false;
+      this.editing.set(false);
     }
 
-    this.detailBodyStyle = 'detail-body ready';
+    this.detailBodyStyle.set('detail-body ready');
   }
 
   private readPermissionToObject(): void {
@@ -277,7 +277,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         },
         complete: () => {
           this.setBlockUI(false);
-          this.detailBodyStyle = 'detail-body ready';
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }
@@ -285,13 +285,13 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   private loadRelaySettings(): void {
     this.authService.isAlive()
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.relayVerificationEnabled = !data.attributes.relay_bypass_verification);
+      .subscribe(data => this.relayVerificationEnabled.set(!data.attributes.relay_bypass_verification));
   }
 
   private loadIntegrationSettings(): void {
     this.domainService.getDomain(this.parent.domainId)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.relayVerificationCode = data.integrations.relay.verification_code);
+      .subscribe(data => this.relayVerificationCode.set(data.integrations.relay.verification_code));
   }
 
   public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
@@ -334,7 +334,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       width: '380px',
       data: {
         relay: this.config.relay,
-        code: this.relayVerificationCode,
+        code: this.relayVerificationCode(),
         environment: this.currentEnvironment
       }
     });
@@ -375,7 +375,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 }
 
 @Component({
-    selector: 'relay-detail.verify-dialog',
+    selector: 'app-relay-detail.verify-dialog',
     templateUrl: './relay-detail.verify-dialog.html',
     styleUrls: [
         '../../common/css/create.component.css',

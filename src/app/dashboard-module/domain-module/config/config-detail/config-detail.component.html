@@ -5,14 +5,14 @@
         <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
     </div>
     }
-    <div [ngClass]="detailBodyStyle">
+    <div [ngClass]="detailBodyStyle()">
         <section [ngClass]="classStatus">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
                         <mat-label>Name</mat-label>
                         <input #keyElement matInput [value]="config?.key" maxlength="30"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" special-chars
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" special-chars
                             [autoUpper]="true" [autoUnderscore]="true" [formControl]="keyFormControl"
                             autocomplete="off">
                         @if (keyFormControl.hasError('minlength')) {
@@ -29,7 +29,7 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput [value]="config?.description" maxlength="256"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
@@ -56,7 +56,7 @@
                     </app-environment-config>
                     }
                     <mat-checkbox [(ngModel)]="disableMetrics" [color]="'primary'" style="margin: auto;"
-                        [disabled]="!editing">
+                        [disabled]="!editing()">
                         Disable metrics
                     </mat-checkbox>
                 </div>
@@ -67,7 +67,7 @@
                 <mat-label>Switcher Components</mat-label>
                 <mat-chip-grid #chipList aria-label="Component selection">
                     @for (component of components; track component) {
-                    <mat-chip-row [removable]="editing" (removed)="removeComponent(component)">
+                    <mat-chip-row [removable]="editing()" (removed)="removeComponent(component)">
                         {{component}}
                         <button matChipRemove>
                             <mat-icon>cancel</mat-icon>
@@ -76,7 +76,7 @@
                     }
                     <input #componentInput [formControl]="componentForm" [matAutocomplete]="auto"
                         [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                        (matChipInputTokenEnd)="addComponent($event)" [readonly]="!editing">
+                        (matChipInputTokenEnd)="addComponent($event)" [readonly]="!editing()">
                 </mat-chip-grid>
                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectComponent($event)">
                     @for (component of filteredComponents | async; track component) {
@@ -89,13 +89,13 @@
         </section>
         <section class="strategy-control-style">
             <div class="options-section-config">
-                <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()"
+                <button mat-button [ngClass]="editing() ? 'btn-element save' : 'btn-element'" (click)="edit()"
                     [disabled]="!updatable">
                     <mat-icon style="font-size: large;">build</mat-icon>
-                    <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+                    <div class="options-section-label">{{ editing() ? 'Save' : 'Edit' }}</div>
                 </button>
                 <button mat-button class="btn-element" (click)="addStrategy()"
-                    [disabled]="!strategiesCreatable && !updatable">
+                    [disabled]="!strategiesCreatable() && !updatable">
                     <mat-icon>code</mat-icon>
                     <div class="options-section-label">Add Strategy</div>
                 </button>
@@ -110,7 +110,7 @@
                 </button>
             </div>
         </section>
-        @if (!loadingStrategies) {
+        @if (!loadingStrategies()) {
         <section #strategysection [ngClass]="classStrategySection" style="padding-top: 10px;">
             @if (loading) {
             <div class="card-body loader-div">
@@ -119,8 +119,8 @@
             </div>
             }
 
-            <nav ngbNav #nav="ngbNav" [activeId]="currentTab" class="nav-pills" (navChange)="onNavChange($event)">
-                @if (hasStrategies) {
+            <nav ngbNav #nav="ngbNav" [activeId]="currentTab()" class="nav-pills" (navChange)="onNavChange($event)">
+                @if (hasStrategies()) {
                 <ng-container [ngbNavItem]="1">
                     <a ngbNavLink (click)="scrollToElement(strategysection);">
                         <mat-icon>code</mat-icon>

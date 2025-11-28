@@ -1,20 +1,20 @@
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
 }
-@if (error) {
-<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+@if (error()) {
+<div class="alert alert-danger mt-3 mb-0">{{error()}}</div>
 } @else {
-<div [ngClass]="classStatus" style="border: 0;">
-    @if (!loading) {
+<div [ngClass]="classStatus()" style="border: 0;">
+    @if (!loading()) {
     <div>
-        @if (teams) {
+        @if (teams()) {
         <div class="header-style">
             <div style="display: flex;">
-                <button mat-button class="btn-element create" (click)="createTeam()" [disabled]="inputTeamName.value.length < 2 || !creatable">
-                    @if (creating) {
+                <button mat-button class="btn-element create" (click)="createTeam()" [disabled]="inputTeamName.value.length < 2 || !creatable()">
+                    @if (creating()) {
                     <mat-icon><mat-spinner [diameter]="20"></mat-spinner></mat-icon>
                     } @else {
                     <mat-icon style="font-size: large;">create</mat-icon>
@@ -28,12 +28,12 @@
             </div>
         </div>
         }
-        @for (team of teams; track team) {
+        @for (team of teams(); track team._id) {
         <app-team-preview 
             [team]="team" 
             [teamListComponent]="this" 
-            [removable]="removable" 
-            [updatable]="updatable">
+            [removable]="removable()" 
+            [updatable]="updatable()">
         </app-team-preview>
         }
     </div>

@@ -74,7 +74,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
 
     this.route.params.subscribe(params => {
-      this.detailBodyStyle = 'detail-body loading';
+      this.detailBodyStyle.set('detail-body loading');
       this.loading = true;
       this.groupId = params.groupid;
       
@@ -93,9 +93,9 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   edit() {
-    if (!this.editing) {
+    if (!this.editing()) {
       this.classStatus = 'header editing';
-      this.editing = true;
+      this.editing.set(true);
       return;
     }
 
@@ -114,7 +114,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           { name: this.group.name, description: this.group.description },
           { name: body.name, description: body.description })) {
         this.setBlockUI(false);
-        this.editing = false;
+        this.editing.set(false);
         return;
       }
 
@@ -201,7 +201,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         },
         complete: () => {
           this.loading = false;
-          this.detailBodyStyle = 'detail-body ready';
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }
@@ -219,7 +219,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
               
               this.setBlockUI(false);
               this.toastService.showSuccess(`Group updated with success`);
-              this.editing = false;
+              this.editing.set(false);
             }
           },
           error: error => {
@@ -227,7 +227,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
             ConsoleLogger.printError(error);
             this.toastService.showError(`Unable to update group`);
             this.classStatus = 'header editing';
-            this.editing = true;
+            this.editing.set(true);
           }
         });
   }

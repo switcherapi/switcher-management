@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { takeUntil } from 'rxjs/operators';
@@ -37,23 +37,22 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
   private readonly unsubscribe = new Subject<void>();
 
   accountForm: FormGroup;
-  domains = 1;
+  domains = signal(1);
 
-  userEmail: string;
-  userPlatform: string;
-  profileAvatar: string;
+  userEmail = signal('');
+  userPlatform = signal('');
+  profileAvatar = signal('');
 
   constructor() {
     super();
+    // Initialize FormGroup immediately to avoid template errors
+    this.accountForm = this.formBuilder.group({
+      name: ['', Validators.required]
+    });
   }
 
   ngOnInit(): void {
     this.setBlockUI(true);
-
-    this.accountForm = this.formBuilder.group({
-      name: ['', Validators.required]
-    });
-
     this.loadDomains();
     this.loadAdmin();
     this.setBlockUI(false);
@@ -112,7 +111,7 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
   }
 
   getPlatformIcon(): string {
-    switch (this.userPlatform) {
+    switch (this.userPlatform()) {
       case 'Bitbucket': return String.raw`assets\bitbucket.svg`;
       case 'GitHub': return String.raw`assets\github.svg`;
       case 'SAML': return String.raw`assets\saml.svg`;
@@ -126,11 +125,11 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
 
   private loadAdmin() {
     this.accountFormControl.name.setValue(this.authService.getUserInfo('name'));
-    this.userEmail = this.authService.getUserInfo('email');
-    this.userPlatform = this.authService.getUserInfo('platform');
+    this.userEmail.set(this.authService.getUserInfo('email'));
+    this.userPlatform.set(this.authService.getUserInfo('platform'));
     
     const avatar = this.authService.getUserInfo('avatar');
-    this.profileAvatar = avatar || String.raw`assets\switcherapi_mark_icon.png`;
+    this.profileAvatar.set(avatar || String.raw`assets\switcherapi_mark_icon.png`);
   }
   
   private loadDomains(): void {
@@ -138,7 +137,7 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
       .subscribe({
         next: data => {
           if (data) {
-            this.domains = data.length;
+            this.domains.set(data.length);
           }
         },
         error: error => {

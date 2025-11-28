@@ -5,14 +5,14 @@
         <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
     </div>
     }
-    <div [ngClass]="detailBodyStyle">
+    <div [ngClass]="detailBodyStyle()">
         <section [ngClass]="classStatus">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field>
                         <mat-label>Name</mat-label>
                         <input #nameElement matInput [value]="group?.name" maxlength="30"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" [formControl]="nameFormControl" autocomplete="off">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" [formControl]="nameFormControl" autocomplete="off">
                         
                         @if (nameFormControl.hasError('minlength')) {
                         <mat-error>
@@ -28,7 +28,7 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput [value]="group?.description" maxlength="256"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing }}">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
@@ -64,9 +64,9 @@
         </section>
         <section>
             <div class="options-section">
-                <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
+                <button mat-button [ngClass]="editing() ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
                     <mat-icon style="font-size: large;">build</mat-icon>
-                    <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+                    <div class="options-section-label">{{ editing() ? 'Save' : 'Edit' }}</div>
                 </button>
                 <button mat-button class="btn-element" style="background:#fb5454;" (click)="delete()" [disabled]="!removable">
                     <mat-icon>delete</mat-icon>

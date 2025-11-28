@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, inject, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfigCreateComponent } from '../config-create/config-create.component';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -44,12 +44,13 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
   private readonly unsubscribe = new Subject<void>();
 
-  operations: string[] = [];
-  strategies: string[] = [];
+  operations = signal<string[]>([]);
+  strategies = signal<string[]>([]);
 
-  strategyFormatSelected: string;
+  strategyFormatSelected = signal<string>('');
   strategySelected: string;
   strategyReq: StrategyReq;
+  selectedStrategyValue = signal<string | null>(null);
 
   elementCreationFormGroup: FormGroup;
 
@@ -73,6 +74,11 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
   private readonly strategyValueSelection: MatSelectionList;
 
   ngOnInit(): void {
+    // Initialize data.values if not already set
+    if (!this.data.values) {
+      this.data.values = [];
+    }
+    
     this.loadStrategies();
     this.loadStrategySelectionComponent();
 
@@ -125,16 +131,23 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
         valid = DataUtils.pushValuesIfValid(this.data.values, [value], MAX_VALUE_LENGTH);
       }
 
-      if (!valid)
+      if (valid) {
+        this.selectedStrategyValue.set(null); // Clear selection after adding
+        this.valueSelectionFormControl.setValue(''); // Clear input
+      } else {
         this.toastService.showError(`One or more values are longer than ${MAX_VALUE_LENGTH} characters`);
+      }
     } else {
       this.toastService.showError(`Unable to execute this operation`);
     }
   }
 
-  removeValue(value: string) {
+  removeValue(value: string | null) {
+    if (!value) return;
+    
     if (this.strategyValueSelection.options.length > 1) {
       this.data.values.splice(this.data.values.indexOf(value), 1);
+      this.selectedStrategyValue.set(null);
     } else {
       this.toastService.showError(`One value is required, update or add new values`);
     }
@@ -147,22 +160,28 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
   private loadStrategySelectionComponent(): void {
     this.strategyValueSelection.selectionChange.pipe(takeUntil(this.unsubscribe)).subscribe((s: MatSelectionListChange) => {
       this.strategyValueSelection.deselectAll();
+      this.selectedStrategyValue.set(null);
       s.options[0].selected = true;
-      this.valueSelectionFormControl.setValue(s.source.selectedOptions.selected[0].value);
+      const selectedValue = s.source.selectedOptions.selected[0].value;
+      this.valueSelectionFormControl.setValue(selectedValue);
+      this.selectedStrategyValue.set(selectedValue);
     });
   }
 
   private loadAvailableStrategies(): void {
-    const currentStrategies: Strategy[] = this.data.currentStrategies
-    currentStrategies.forEach(strategy => this.strategies.splice(this.strategies.indexOf(strategy.strategy), 1));
+    const currentStrategies: Strategy[] = this.data.currentStrategies;
+    const filteredStrategies = this.strategies().filter(strategy => 
+      !currentStrategies.some(currentStrategy => currentStrategy.strategy === strategy)
+    );
+    this.strategies.set(filteredStrategies);
   }
 
   private loadOperations(strategySelected: string): void {
     this.strategyService.getStrategiesRequirements(strategySelected).pipe(takeUntil(this.unsubscribe)).subscribe(req => {
       this.strategyReq = req;
       this.data.values = [];
-      this.operations = req.operationsAvailable.operations;
-      this.strategyFormatSelected = req.operationsAvailable.format;
+      this.operations.set(req.operationsAvailable.operations);
+      this.strategyFormatSelected.set(req.operationsAvailable.format);
 
       this.valueSelectionFormControl.setValidators([
         Validators.required,
@@ -173,7 +192,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
 
   private loadStrategies(): void {
     this.strategyService.getStrategiesAvailable().pipe(takeUntil(this.unsubscribe)).subscribe(req => {
-      this.strategies = req.strategiesAvailable;
+      this.strategies.set(req.strategiesAvailable);
       this.loadAvailableStrategies();
     });
   }

@@ -1,11 +1,17 @@
-import { Injectable, TemplateRef } from '@angular/core';
+import { Injectable, TemplateRef, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ToastService {
-    toasts: any[] = [];
+    private readonly _toasts = signal<any[]>([]);
+    
+    // Expose toasts as a getter to maintain compatibility
+    get toasts() {
+        return this._toasts();
+    }
 
     show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
-        this.toasts.push({ textOrTpl, ...options });
+        const currentToasts = this._toasts();
+        this._toasts.set([...currentToasts, { textOrTpl, ...options }]);
     }
 
     showSuccess(textOrTpl: string | TemplateRef<any>) {
@@ -17,6 +23,7 @@ export class ToastService {
     }
 
     remove(toast: any) {
-        this.toasts = this.toasts.filter(t => t !== toast);
+        const currentToasts = this._toasts();
+        this._toasts.set(currentToasts.filter(t => t !== toast));
     }
 }

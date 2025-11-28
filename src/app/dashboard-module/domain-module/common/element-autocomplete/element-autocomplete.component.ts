@@ -5,14 +5,14 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomainService } from 'src/app/services/domain.service';
 import { Group } from 'src/app/model/group';
-import { Apollo } from 'apollo-angular/apollo';
+import { Apollo } from 'apollo-angular';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'element-autocomplete',
+    selector: 'app-element-autocomplete',
     templateUrl: './element-autocomplete.component.html',
     styleUrls: ['./element-autocomplete.component.css'],
     imports: [MatFormField, MatLabel, MatInput, FormsModule, MatAutocompleteTrigger, MatTooltip, ReactiveFormsModule, MatAutocomplete, MatOption, AsyncPipe]

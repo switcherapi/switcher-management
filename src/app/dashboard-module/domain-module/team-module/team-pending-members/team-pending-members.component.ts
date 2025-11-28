@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -41,7 +41,7 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
   dataColumns = ['remove', 'email', 'createdAt', 'request'];
 
-  loading = false;
+  loading = signal(false);
 
   ngOnInit() {
     this.loadPendingInvitations();
@@ -84,7 +84,7 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
   }
 
   private loadPendingInvitations(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.teamService.getPendingInvitations(this.team._id).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: invitations => {
@@ -92,10 +92,10 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loading = false;
+          this.loading.set(false);
         },
         complete: () => {
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

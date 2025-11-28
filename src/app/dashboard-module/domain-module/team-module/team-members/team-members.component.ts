@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -38,12 +38,12 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   @Input() removable = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild('inputMember', { static: true }) inputMember: ElementRef;
 
   dataSource: MatTableDataSource<Admin>;
   dataColumns = ['remove', 'name', 'email'];
 
-  loading = false;
+  loading = signal(false);
+  memberInputValue = signal('');
 
   ngOnInit() {
     this.loadTeam();
@@ -56,6 +56,11 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  onInputChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.memberInputValue.set(target.value);
   }
 
   inviteMember(email: string) {
@@ -90,7 +95,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   }
 
   private loadTeam(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.teamService.getTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: team => {
@@ -100,10 +105,10 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loading = false;
+          this.loading.set(false);
         },
         complete: () => {
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
@@ -114,7 +119,8 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
   }
 
   private onInvite(teamInvite: TeamInvite): void {
-    this.inputMember.nativeElement.value = '';
+    this.memberInputValue.set('');
+    
     this.dialog.open(TeamInviteDialogComponent, {
       width: '450px',
       minWidth: globalThis.innerWidth < 450 ? '95vw' : '',

@@ -337,7 +337,7 @@ export class SwitcherDateTimeGroupedTab {
 }
 
 @Component({
-    selector: 'metric-statistics-data-dialog',
+    selector: 'app-metric-statistics-data-dialog',
     templateUrl: 'metric-statistics-data-dialog.html',
     styleUrls: [
         '../../common/css/create.component.css'

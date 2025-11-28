@@ -21,11 +21,11 @@
                         }
                     </mat-select>
                 </mat-form-field>
-                <element-autocomplete
+                <app-element-autocomplete
                     [parentComponent]="this" 
                     [value]="selectedFilter" 
                     [lockFilter]="lockFilter">
-                </element-autocomplete>
+                </app-element-autocomplete>
                 @if (selectedFilter) {
                 <mat-form-field class="filter-env-selector">
                     <mat-label>Group By</mat-label>

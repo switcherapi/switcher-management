@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm: FormGroup;
   loading = false;
-  apiVersion: string;
+  apiVersion = signal<string | undefined>(undefined);
   error = '';
   success = '';
   status = '';
@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
-          this.apiVersion = data?.attributes.version;
+          this.apiVersion.set(data?.attributes.version);
         },
         error: error => {
           ConsoleLogger.printError(error);

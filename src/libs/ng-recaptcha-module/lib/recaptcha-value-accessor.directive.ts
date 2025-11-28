@@ -11,7 +11,7 @@ import { RecaptchaComponent } from "./recaptcha.component";
             useExisting: forwardRef(() => RecaptchaValueAccessorDirective),
         },
     ],
-    selector: "re-captcha[formControlName],re-captcha[formControl],re-captcha[ngModel]"
+    selector: "app-re-captcha[formControlName],app-re-captcha[formControl],app-re-captcha[ngModel]"
 })
 export class RecaptchaValueAccessorDirective implements ControlValueAccessor {
   private readonly host = inject(RecaptchaComponent);

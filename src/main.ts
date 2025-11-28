@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom, inject } from '@angular/core';
+import { enableProdMode, importProvidersFrom, inject, provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import '@angular/compiler'; // Required for JIT compilation
 
@@ -86,6 +86,7 @@ bootstrapApplication(AppComponent, {
     AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
+    provideZonelessChangeDetection(),
     provideHttpClient(withInterceptorsFromDi()),
     provideCharts(withDefaultRegisterables()),
     provideRouter(routes),

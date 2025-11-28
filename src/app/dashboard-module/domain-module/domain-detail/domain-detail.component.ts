@@ -108,9 +108,9 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   edit() {
-    if (!this.editing) {
+    if (!this.editing()) {
       this.classStatus = 'header editing';
-      this.editing = true;
+      this.editing.set(true);
       return;
     }
 
@@ -120,7 +120,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
     if (super.validateEdition(
         { description: this.domain.description }, 
         { description: newDescription})) {
-      this.editing = false;
+      this.editing.set(false);
       return;
     }
 
@@ -197,14 +197,14 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
             this.domain.description = newDescription;
             this.setBlockUI(false);
             this.toastService.showSuccess(`Domain updated with success`);
-            this.editing = false;
+            this.editing.set(false);
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
           this.setBlockUI(false);
           this.toastService.showError(`Unable to update '${this.domain.name}' domain`);
-          this.editing = false;
+          this.editing.set(false);
         }
       });
   }
@@ -274,7 +274,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         complete: () => {
           this.setBlockUI(false);
           this.loading = false;
-          this.detailBodyStyle = 'detail-body ready';
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }

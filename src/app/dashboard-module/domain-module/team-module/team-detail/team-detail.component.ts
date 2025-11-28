@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
@@ -53,8 +53,13 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   domainId: string;
   domainName: string;
   teamId: string;
-  team: Team;
-  loading = false;
+  team = signal<Team | undefined>(undefined);
+  teamLoading = signal(false);
+
+  // Signal versions of permission properties
+  teamUpdatable = signal(false);
+  teamRemovable = signal(false);
+  teamCreatable = signal(false);
 
   constructor() {
     super();
@@ -69,7 +74,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
    }
 
   ngOnInit() {
-    this.loading = true;
+    this.teamLoading.set(true);
     this.readPermissionToObject();
     this.activatedRoute.paramMap.pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
@@ -77,10 +82,11 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
         this.updateRoute(data.navigationId === 1);
 
         if (data.team) {
-          this.team = JSON.parse(data.team);
-          this.nameFormControl.setValue(this.team.name);
+          const parsedTeam = JSON.parse(data.team);
+          this.team.set(parsedTeam);
+          this.nameFormControl.setValue(parsedTeam.name);
           this.setHeaderStyle();
-          this.loading = false;
+          this.teamLoading.set(false);
         } else {
           this.loadTeam();
         }
@@ -93,47 +99,56 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   }
 
   edit() {
-    if (!this.editing) {
-      this.editing = true;
+    if (!this.editing()) {
+      this.editing.set(true);
       this.setHeaderStyle();
       return;
     }
     
     const { valid } = this.nameFormControl;
 
+    const currentTeam = this.team();
+    if (!currentTeam) return;
+
     if (super.validateEdition(
-        { name: this.team.name }, 
+        { name: currentTeam.name }, 
         { name: this.nameFormControl.value })) {
-      this.editing = false;
+      this.editing.set(false);
       this.setHeaderStyle();
       return;
     }
 
     if (valid) {
-      this.editing = false;
+      this.editing.set(false);
       this.setBlockUI(true, 'Updating Team...');
-      this.teamService.updateTeam(this.team._id, this.nameFormControl.value, this.team.active ? 'true' : 'false')
+      this.teamService.updateTeam(currentTeam._id, this.nameFormControl.value, currentTeam.active ? 'true' : 'false')
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: team => this.onSuccess(team),
-          error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
+          error: error => this.onError(error, `Unable to update team: '${currentTeam.name}'`)
         });
     }
   }
 
   changeStatus(event: MatSlideToggleChange) {
+    const currentTeam = this.team();
+    if (!currentTeam) return;
+    
     this.setBlockUI(true, 'Updating status...');
-    this.teamService.updateTeam(this.team._id, this.team.name, event.checked ? 'true' : 'false')
+    this.teamService.updateTeam(currentTeam._id, currentTeam.name, event.checked ? 'true' : 'false')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: team => this.onSuccess(team),
-        error: error => this.onError(error, `Unable to update team: '${this.team.name}'`)
+        error: error => this.onError(error, `Unable to update team: '${currentTeam.name}'`)
       });
   }
 
   removeTeam() {
+    const currentTeam = this.team();
+    if (!currentTeam) return;
+    
     this.setBlockUI(true, 'Removing team...');
-    this.teamService.deleteTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
+    this.teamService.deleteTeam(currentTeam._id).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: team => {
           if (team) {
@@ -142,13 +157,13 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
             this.toastService.showSuccess(`Team removed with success`);
           }
         },
-        error: error => this.onError(error, `Unable to remove team: '${this.team.name}'`)
+        error: error => this.onError(error, `Unable to remove team: '${currentTeam.name}'`)
       });
   }
 
   private onSuccess(team: any): void {
     if (team) {
-      this.team = team;
+      this.team.set(team);
       this.setHeaderStyle();
       this.setBlockUI(false);
       this.toastService.showSuccess(`Team updated with success`);
@@ -167,17 +182,17 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
       .subscribe({
         next: team => {
           if (team) {
-            this.team = team;
-            this.nameFormControl.setValue(this.team.name);
+            this.team.set(team);
+            this.nameFormControl.setValue(team.name);
             this.setHeaderStyle();
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loading = false;
+          this.teamLoading.set(false);
         },
         complete: () => {
-          this.loading = false;
+          this.teamLoading.set(false);
         }
       });
   }
@@ -187,18 +202,19 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-          this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
-          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+          this.teamUpdatable.set(data.find(permission => permission.action === 'UPDATE')?.result === 'ok');
+          this.teamRemovable.set(data.find(permission => permission.action === 'DELETE')?.result === 'ok');
+          this.teamCreatable.set(data.find(permission => permission.action === 'CREATE')?.result === 'ok');
         }
     });
   }
 
   private setHeaderStyle(): void {
-    if (this.editing) {
+    const currentTeam = this.team();
+    if (this.editing()) {
       this.classStatus = 'header editing';
     } else {
-      this.classStatus = this.team.active ? 'header activated' : 'header deactivated';
+      this.classStatus = currentTeam?.active ? 'header activated' : 'header deactivated';
     }
   }
 

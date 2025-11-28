@@ -1,4 +1,4 @@
-import { OnDestroy, Component, OnInit, inject } from '@angular/core';
+import { OnDestroy, Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -52,7 +52,7 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
 
   private readonly unsubscribe = new Subject<void>();
 
-  detailBodyStyle = 'detail-body loading';
+  detailBodyStyle = signal('detail-body loading');
   accountDetailsStyle = 'card h-100 header activated';
   accountSettingsStyle = 'card h-100 header transparent';
 
@@ -321,11 +321,11 @@ export class ExtGitOpsComponent implements OnInit, OnDestroy {
           this.selectAccount(this.gitOpsAccounts[0]);
 
           this.loading = false;
-          this.detailBodyStyle = 'detail-body ready'
+          this.detailBodyStyle.set('detail-body ready')
         },
         error: () => {
           this.loading = false;
-          this.detailBodyStyle = 'detail-body ready'
+          this.detailBodyStyle.set('detail-body ready')
         }
       });
   }

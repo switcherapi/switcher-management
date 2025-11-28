@@ -1,4 +1,4 @@
-import { OnDestroy, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { OnDestroy, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -39,7 +39,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
   private readonly _modalService = inject(NgbModal);
 
   private readonly unsubscribe = new Subject<void>();
-  detailBodyStyle = 'detail-body loading';
+  detailBodyStyle = signal('detail-body loading');
 
   @ViewChild(SlackSettingsComponent) 
   slackSettings: SlackSettingsComponent;
@@ -167,7 +167,7 @@ export class ExtSlackComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.loading = false;
-          this.detailBodyStyle = 'detail-body ready';
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }
