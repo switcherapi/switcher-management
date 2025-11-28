@@ -8,7 +8,7 @@
         class="mat-elevation-z8"
         style="width: 100%;"
         aria-describedby="metrics"
-        [dataSource]="dataSource" 
+        [dataSource]="dataSource()" 
         (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="switcher">
@@ -70,7 +70,7 @@
     <div style="display: flex; margin: 1rem;">
         <button mat-button class="btn-element" style="background:#fb5454;" 
             (click)="resetSwitcherMetrics()" 
-            [disabled]="!switcher || !dataSource?.data?.length || !removable">
+            [disabled]="!switcher || !dataSource()?.data?.length || !removable()">
             Reset
         </button>
         <button mat-mini-fab class="btn-element"

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
@@ -43,7 +43,7 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   dateAfterFormControl = new FormControl('');
   dateBeforeFormControl = new FormControl('');
 
-  environments: Environment[];
+  environments = signal<Environment[]>([]);
   selectedFilter: string;
   selectedFilterType = 'Switcher';
   lockFilter = false;
@@ -101,7 +101,7 @@ export class MetricFilterComponent implements OnInit, OnDestroy, OnElementAutoco
   private loadEnvironments() {
     this.environmentService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe)).subscribe(env => {
-      this.environments = env;
+      this.environments.set(env);
       this.environmentSelection.setValue(this.data.environment || 'default');
     });
   }

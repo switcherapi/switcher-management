@@ -14,7 +14,7 @@
                 <mat-form-field class="filter-env-selector">
                     <mat-label>Environment</mat-label>
                     <mat-select [formControl]="environmentSelection">
-                        @for (environment of environments; track environment.name) {
+                        @for (environment of environments(); track environment.name) {
                         <mat-option [value]="environment.name">
                             {{environment.name}}
                         </mat-option>
