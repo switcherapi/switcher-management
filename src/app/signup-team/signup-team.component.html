@@ -22,8 +22,7 @@
                 <button mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">
                     <span class="label-color" style="color: white;">Accept</span>
                 </button>
-                }
-                @if (error) {
+                } @else {
                 <div class="alert alert-danger mt-3 mb-0">{{ error }}</div>
                 }
             </div>
