@@ -211,7 +211,13 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
           .subscribe({
             next: data => {
               if (data) {
-                selectedComponent.name = componentChanged.name;
+                const currentComponents = this.components();
+                const updatedComponents = currentComponents.map(comp => 
+                  comp.id === selectedComponent.id 
+                    ? { ...comp, name: componentChanged.name }
+                    : comp
+                );
+                this.components.set(updatedComponents);
                 this.toastService.showSuccess(`Component updated with success`);
               }
             },
