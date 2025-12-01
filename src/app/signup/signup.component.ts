@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, signal, computed, DestroyRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AuthService } from '../auth/services/auth.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
@@ -20,50 +19,51 @@ import { AppVersionComponent } from '../app-version/app-version.component';
     MatButton, AppVersionComponent
   ]
 })
-export class SignupComponent implements OnInit, OnDestroy {
+export class SignupComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly recaptchaV3Service = inject(ReCaptchaV3Service);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly loginForm: FormGroup;
+  readonly loading = signal<boolean>(false);
+  readonly returnUrl = '/dashboard';
+  readonly apiVersion = signal<string>('');
+  readonly error = signal<string>('');
+  readonly recaptchaToken = signal<string>('');
+  readonly status = signal<string>('');
 
-  loginForm: FormGroup;
-  loading = false;
-  returnUrl: string;
-  apiVersion: string;
-  error = '';
-  recaptcha_token: string;
-  status = '';
+  readonly f = computed(() => this.loginForm.controls);
 
-  ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
-    }
-
+  constructor() {
     this.loginForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
 
-    this.returnUrl = '/dashboard';
+    this.checkAuthAndRedirect();
     this.isAlive();
+  }
+
+  private checkAuthAndRedirect(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   getRecaptchaPublicKey(): string {
     return environment.recaptchaPublicKey;
   }
 
-  get f() { return this.loginForm.controls; }
-
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
       return;
     }
 
-    this.status = '';
-    this.loading = true;
+    this.status.set('');
+    this.loading.set(true);
 
     if (!environment.recaptchaPublicKey) {
       this.submitForm();
@@ -71,42 +71,37 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     this.recaptchaV3Service.execute('signup')
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (token) => {
-          this.recaptcha_token = token;
+          this.recaptchaToken.set(token);
           this.submitForm();
         },
         error: (error) => {
           ConsoleLogger.printError('reCAPTCHA error:', error);
-          this.error = 'reCAPTCHA verification failed. Please try again.';
-          this.loading = false;
+          this.error.set('reCAPTCHA verification failed. Please try again.');
+          this.loading.set(false);
         }
       });
   }
 
-  onGitHubLogin() {
-    this.loading = true;
+  onGitHubLogin(): void {
+    this.loading.set(true);
     globalThis.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
   }
 
-  onBitbucketLogin() {
-    this.loading = true;
+  onBitbucketLogin(): void {
+    this.loading.set(true);
     globalThis.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
   }
 
-  onSamlLogin() {
-    this.loading = true;
+  onSamlLogin(): void {
+    this.loading.set(true);
     globalThis.location.href = `${environment.apiUrl}/admin/saml/login`;
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  onKey() {
-    this.error = '';
+  onKey(): void {
+    this.error.set('');
   }
 
   hasGithubIntegration(): boolean {
@@ -125,34 +120,35 @@ export class SignupComponent implements OnInit, OnDestroy {
     return environment.allowSamlAuth;
   }
 
-  private submitForm() {
+  private submitForm(): void {
+    const formControls = this.f();
     this.authService.signup({
-      name: this.f.name.value,
-      email: this.f.email.value,
-      password: this.f.password.value,
-      token: this.recaptcha_token || ''
-    }).pipe(takeUntil(this.unsubscribe))
+      name: formControls.name.value,
+      email: formControls.email.value,
+      password: formControls.password.value,
+      token: this.recaptchaToken() || ''
+    }).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.router.navigate(['/login']);
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.error = error;
-          this.loading = false;
+          this.error.set(error);
+          this.loading.set(false);
         }
       });
   }
 
   private isAlive(): void {
-    this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
+    this.authService.isAlive().pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => {
-          this.apiVersion = data?.attributes.version;
+          this.apiVersion.set(data?.attributes.version || '');
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.status = 'Offline for Maintenance';
+          this.status.set('Offline for Maintenance');
         }
       });
   }
