@@ -7,8 +7,7 @@
                         <mat-label>Relay Type</mat-label>
                         @if (!editing()) {
                         <input matInput class="readonly-fields" [value]="config.relay.type" required readonly>
-                        }
-                        @else {
+                        } @else {
                         <mat-select [formControl]="relayTypeFormControl" required>
                             <mat-option value="VALIDATION">VALIDATION</mat-option>
                             <mat-option value="NOTIFICATION">NOTIFICATION</mat-option>
@@ -39,8 +38,7 @@
                         <mat-label>Relay Method</mat-label>
                         @if (!editing()) {
                         <input matInput class="readonly-fields" [value]="config.relay.method" required readonly>
-                        }
-                        @else {
+                        } @else {
                         <mat-select [formControl]="relayMethodFormControl" required>
                             <mat-option value="GET">GET</mat-option>
                             <mat-option value="POST">POST</mat-option>
