@@ -4,7 +4,7 @@
             <h4 class="card-header">
                 <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher API" />
             </h4>
-            @if (!loading) {
+            @if (!loading()) {
             <div class="card-body">
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
@@ -13,14 +13,14 @@
                             <input matInput type="password" formControlName="password" minlength="5" required>
                         </mat-form-field>
                     </div>
-                    @if (!error) {
-                    <button mat-button class="btn-element" [disabled]="loading">
+                    @if (!error()) {
+                    <button mat-button class="btn-element" [disabled]="loading()">
                         <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
                         <span class="label-color" style="color: white; padding-left: 5px;">Reset</span>
                     </button>
                     }
-                    @if (error) {
-                    <div class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+                    @if (error()) {
+                    <div class="alert alert-danger mt-3 mb-0">{{ error() }}</div>
                     }
                 </form>
             </div>

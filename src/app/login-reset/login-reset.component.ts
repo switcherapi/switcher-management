@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, inject, signal, computed, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { AuthService } from '../auth/services/auth.service';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,42 +15,47 @@ import { MatButton } from '@angular/material/button';
     styleUrls: ['./login-reset.component.css'],
     imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
-export class LoginResetComponent implements OnInit, OnDestroy {
+export class LoginResetComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly recaptchaV3Service = inject(ReCaptchaV3Service);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly loginForm: FormGroup;
 
-  loginForm: FormGroup;
+  readonly loading = signal<boolean>(false);
+  readonly error = signal<string>('');
+  readonly code = signal<string>('');
+  readonly recaptchaToken = signal<string>('');
 
-  loading = false;
-  error = '';
-  code: string;
-  recaptcha_token: string;
+  readonly f = computed(() => this.loginForm.controls);
 
-  ngOnInit() {
+  constructor() {
     this.loginForm = this.formBuilder.group({
       password: ['', Validators.required]
     });
 
-    this.route.queryParams.subscribe(params => {
-      this.code = params['code'];
+    this.handleRouteParams();
+  }
+
+  private handleRouteParams(): void {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.code.set(params['code'] || '');
     
-      if (!this.code) {
+      if (!this.code()) {
         this.router.navigate(['/']);
       }
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
         return;
     }
 
-    this.loading = true;
+    this.loading.set(true);
 
     if (!environment.recaptchaPublicKey) {
       this.submitPasswordReset();
@@ -59,50 +63,44 @@ export class LoginResetComponent implements OnInit, OnDestroy {
     }
 
     this.recaptchaV3Service.execute('password_reset')
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (token) => {
-          this.recaptcha_token = token;
+          this.recaptchaToken.set(token);
           this.submitPasswordReset();
         },
         error: (error) => {
           ConsoleLogger.printError('reCAPTCHA error:', error);
-          this.error = 'reCAPTCHA verification failed. Please try again.';
-          this.loading = false;
+          this.error.set('reCAPTCHA verification failed. Please try again.');
+          this.loading.set(false);
         }
       });
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  onKey(_event: any) {
-    this.error = '';
+  onKey(_event: any): void {
+    this.error.set('');
   }
 
   getRecaptchaPublicKey(): string {
     return environment.recaptchaPublicKey;
   }
 
-  get f() { return this.loginForm.controls; }
-
-  private submitPasswordReset() {
-    this.authService.resetPassword(this.code, this.f.password.value, this.recaptcha_token)
-      .pipe(takeUntil(this.unsubscribe))
+  private submitPasswordReset(): void {
+    const formControls = this.f();
+    this.authService.resetPassword(this.code(), formControls.password.value, this.recaptchaToken())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: success => {
           if (success) {
             this.router.navigateByUrl('/dashboard');
             this.authService.releaseOldSessions.emit(true);
           }
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.error = 'Invalid password format';
-          this.loading = false;
+          this.error.set('Invalid password format');
+          this.loading.set(false);
         }
       });
   }
