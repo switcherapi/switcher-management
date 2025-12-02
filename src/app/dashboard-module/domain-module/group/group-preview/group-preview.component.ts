@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter, inject } from '@angular/core';
+import { Component, OnDestroy, inject, input, computed, signal, effect, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -22,7 +22,7 @@ import { NgClass } from '@angular/common';
     ],
     imports: [BlockUIComponent, NgClass, FormsModule, ReactiveFormsModule, MatSlideToggle]
 })
-export class GroupPreviewComponent extends BasicComponent implements OnInit, OnDestroy {
+export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly groupService = inject(GroupService);
@@ -30,32 +30,45 @@ export class GroupPreviewComponent extends BasicComponent implements OnInit, OnD
 
   private readonly unsubscribe = new Subject<void>();
   
-  @Input() domainId: string;
-  @Input() domainName: string;
-  @Input() group: Group;
-  @Input() environmentSelectionChange: EventEmitter<string>;
-  @Input() permissions: Permissions[];
+  domainId = input.required<string>();
+  domainName = input.required<string>();
+  group = input.required<Group>();
+  environmentSelectionChange = input.required<EventEmitter<string>>();
+  permissions = input.required<Permissions[]>();
 
-  environmentStatusSelection: FormGroup;
-  selectedEnvStatus: boolean;
-  selectedEnv: string;
+  environmentStatusSelection = signal<FormGroup | null>(null);
+  selectedEnvStatus = signal<boolean>(false);
+  selectedEnv = signal<string>('');
 
-  classStatus: string;
-  classBtnStatus: string;
+  classStatus = computed(() => {
+    const status = this.group().activated[this.selectedEnv()] ?? this.group().activated['default'];
+    return status ? 'grid-container activated' : 'grid-container deactivated';
+  });
+  
+  classBtnStatus = computed(() => {
+    const status = this.group().activated[this.selectedEnv()] ?? this.group().activated['default'];
+    return status ? 'header-section activated' : 'header-section deactivated';
+  });
 
-  updatable = false;
-  removable = false;
+  updatable = signal<boolean>(false);
+  removable = signal<boolean>(false);
 
-  toggleSectionStyle = 'toggle-section deactivated';
+  toggleSectionStyle = signal<string>('toggle-section deactivated');
 
   constructor() { 
     super();
-  }
-
-  ngOnInit() {
-    this.readPermissionToObject();
-    this.environmentSelectionChange.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
-      this.selectEnvironment(envName);
+    
+    // Initialize form and permissions when component is created
+    effect(() => {
+      this.readPermissionToObject();
+    }, { allowSignalWrites: true });
+    
+    // Subscribe to environment changes
+    effect(() => {
+      const envChangeEmitter = this.environmentSelectionChange();
+      envChangeEmitter.pipe(takeUntil(this.unsubscribe)).subscribe(envName => {
+        this.selectEnvironment(envName);
+      });
     });
   }
 
@@ -65,31 +78,39 @@ export class GroupPreviewComponent extends BasicComponent implements OnInit, OnD
   }
 
   selectGroup() {
-    this.router.navigate([`/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.group.id}`]);
+    const domainName = this.domainName();
+    const domainId = this.domainId();
+    const group = this.group();
+    this.router.navigate([`/dashboard/domain/${domainName}/${domainId}/groups/${group.id}`]);
   }
 
   selectEnvironment(envName: string): void {
-    this.selectedEnv = envName;
-    const status = this.group.activated[envName] ?? this.group.activated['default'];
+    this.selectedEnv.set(envName);
+    const group = this.group();
+    const status = group.activated[envName] ?? group.activated['default'];
 
-    this.classStatus = status ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = status ? 'header-section activated' : 'header-section deactivated';
-
-    this.environmentStatusSelection.get('environmentStatusSelection').setValue(status);
-    this.selectedEnvStatus = status;
+    const form = this.environmentStatusSelection();
+    if (form) {
+      form.get('environmentStatusSelection')?.setValue(status);
+    }
+    this.selectedEnvStatus.set(status);
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
     this.setBlockUI(true, 'Updating environment...');
-    this.group.activated[this.selectedEnv] = event.checked;
-    this.selectEnvironment(this.selectedEnv);
+    const group = this.group();
+    const selectedEnv = this.selectedEnv();
+    
+    group.activated[selectedEnv] = event.checked;
+    this.selectEnvironment(selectedEnv);
 
-    this.groupService.setGroupEnvironmentStatus(this.group.id, this.selectedEnv, event.checked)
+    this.groupService.setGroupEnvironmentStatus(group.id, selectedEnv, event.checked)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
-            this.group.activated = data.activated;
+            const updatedGroup = this.group();
+            updatedGroup.activated = data.activated;
             this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
@@ -97,37 +118,46 @@ export class GroupPreviewComponent extends BasicComponent implements OnInit, OnD
         error: error => {
           this.setBlockUI(false);
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update the environment '${this.selectedEnv}'`);
+          this.toastService.showError(`Unable to update the environment '${selectedEnv}'`);
         }
       });
   }
 
   private loadOperationSelectionComponent(): void {
-    this.environmentStatusSelection = this.fb.group({
+    const formGroup = this.fb.group({
       environmentStatusSelection: [null, Validators.required]
     });
+    this.environmentStatusSelection.set(formGroup);
   }
 
   private readPermissionToObject(): void {
     this.loadOperationSelectionComponent();
 
-    const element = this.permissions.filter(p => p.id === this.group.id)[0];
-    this.updatable = element.permissions.find(p => p.action === 'UPDATE').result === 'ok';
-    this.removable = element.permissions.find(p => p.action === 'DELETE').result === 'ok';
+    const permissions = this.permissions();
+    const group = this.group();
+    const element = permissions.find(p => p.id === group.id);
     
-    if (this.isEnvStatusChangeAllowed(element)) {
-      this.enableEnvStatusControl();
-    } else {
-      this.disableEnvStatusControl();
+    if (element) {
+      this.updatable.set(element.permissions.find(p => p.action === 'UPDATE')?.result === 'ok');
+      this.removable.set(element.permissions.find(p => p.action === 'DELETE')?.result === 'ok');
+      
+      if (this.isEnvStatusChangeAllowed(element)) {
+        this.enableEnvStatusControl();
+      } else {
+        this.disableEnvStatusControl();
+      }
     }
   }
 
   private enableEnvStatusControl(): void {
-    this.toggleSectionStyle = 'toggle-section';
+    this.toggleSectionStyle.set('toggle-section');
   }
 
   private disableEnvStatusControl(): void {
-    this.environmentStatusSelection.disable({ onlySelf: true });
+    const form = this.environmentStatusSelection();
+    if (form) {
+      form.disable({ onlySelf: true });
+    }
   }
 
   private isEnvStatusChangeAllowed(element: Permissions): boolean {
