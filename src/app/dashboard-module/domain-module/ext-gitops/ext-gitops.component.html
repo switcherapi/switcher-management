@@ -1,10 +1,10 @@
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
 }
-@if (!featureFlag) {
+@if (!featureFlag()) {
 <div [ngClass]="detailBodyStyle()">
     <div class="panel-gitops-detail">
         <img src="assets\gitops.png" style="width: 40px;" alt="gitops" />
@@ -14,13 +14,12 @@
         <p>Oops! Switcher GitOps is unavailable at this time.</p>
     </div>
 </div>
-}
-@if (featureFlag) {
+} @else {
 <div [ngClass]="detailBodyStyle()">
     <div class="panel-gitops-detail">
         <img src="assets\gitops.png" style="width: 40px; height: 40px;" alt="gitops" />
         <h3>GitOps Integration</h3>
-        @if (allowUpdate && gitOpsAccounts.length > 0) {
+        @if (allowUpdate() && gitOpsAccounts().length > 0) {
         <button id="gitopsMenu" mat-button [matMenuTriggerFor]="belowMenu">
             <mat-icon class="menu-icon">arrow_drop_down</mat-icon>
             Options
@@ -37,9 +36,9 @@
             </button>
         </mat-menu>
     </div>
-    @if (!loading && gitOpsAccounts.length === 0) {
+    @if (!loading() && gitOpsAccounts().length === 0) {
     <div class="header">
-        @if (allowUpdate) {
+        @if (allowUpdate()) {
         <div class="card-body">
             <p>No GitOps accounts found. Please add a GitOps account to get started.</p>
             <button mat-button class="btn-element" (click)="onStartNewAccount()">
@@ -48,45 +47,45 @@
             </button>
         </div>
         }
-        @if (!allowUpdate) {
+        @if (!allowUpdate()) {
         <div class="card-body">
             <p>No GitOps accounts found. Please contact your administrator to add a GitOps account.</p>
         </div>
         }
     </div>
     }
-    @if (!loading && gitOpsAccounts.length > 0) {
+    @if (!loading() && gitOpsAccounts().length > 0) {
     <div class="container-fluid content-row">
         <div class="row">
             <div class="col-sm-6">
-                <div [ngClass]="accountDetailsStyle">
+                <div [ngClass]="accountDetailsStyle()">
                     <div class="card-body">
                         <h5 class="card-title">Details</h5>
                         <div class="description">
                             <mat-form-field>
                                 <mat-label>Status</mat-label>
-                                <input matInput [value]="gitOpsSelected.domain.status" readonly>
+                                <input matInput [value]="gitOpsSelected()?.domain?.status" readonly>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Message</mat-label>
-                                <textarea matInput [value]="gitOpsSelected.domain.message" rows="3" readonly></textarea>
+                                <textarea matInput [value]="gitOpsSelected()?.domain?.message" rows="3" readonly></textarea>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Last Sync</mat-label>
-                                <input matInput [value]="gitOpsSelected.domain.lastdate" readonly>
+                                <input matInput [value]="gitOpsSelected()?.domain?.lastdate" readonly>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Last Commit</mat-label>
-                                <input matInput [value]="gitOpsSelected.domain.lastcommit" readonly>
+                                <input matInput [value]="gitOpsSelected()?.domain?.lastcommit" readonly>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Version</mat-label>
-                                <input matInput [value]="gitOpsSelected.domain.version" readonly>
+                                <input matInput [value]="gitOpsSelected()?.domain?.version" readonly>
                             </mat-form-field>
                         </div>
 
                         <div class="options-section">
-                            @if (allowUpdate && canRefresh()) {
+                            @if (allowUpdate() && canRefresh()) {
                             <div>
                                 <button mat-button class="btn-element" (click)="onForceRefresh()" matTooltip="Force refresh current environment account">
                                     <mat-icon style="font-size: large;">cloud_download</mat-icon>
@@ -95,7 +94,7 @@
                             </div>
                             }
                             <div style="width: 6.5rem; display: flex;">
-                                @if (reloading) {
+                                @if (reloading()) {
                                 <div class="options-spinner">
                                     <mat-spinner [diameter]="25"></mat-spinner>
                                 </div>
@@ -112,14 +111,14 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div [ngClass]="accountSettingsStyle">
+                <div [ngClass]="accountSettingsStyle()">
                     <div class="card-body">
                         <h5 class="card-title">Settings</h5>
 
                         <div class="description">
                             <mat-form-field>
                                 <mat-label>Environment</mat-label>
-                                <mat-select [formControl]="formGroup.get('environment')">
+                                <mat-select [formControl]="formGroup()?.get('environment')">
                                     @for (environment of getDomainEnvironments(); track environment) {
                                     <mat-option [value]="environment">
                                         {{environment}}
@@ -129,62 +128,59 @@
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Repository</mat-label>
-                                <input matInput [formControl]="formGroup.get('repository')" [value]="gitOpsSelected.repository">
+                                <input matInput [formControl]="formGroup()?.get('repository')" [value]="gitOpsSelected()?.repository">
                             </mat-form-field>
                             <div class="container-fluid content-row">
                                 <div class="row">
                                     <mat-form-field class="col-sm-6">
                                         <mat-label>Branch</mat-label>
-                                        <input matInput [formControl]="formGroup.get('branch')" [value]="gitOpsSelected.branch">
+                                        <input matInput [formControl]="formGroup()?.get('branch')" [value]="gitOpsSelected()?.branch">
                                     </mat-form-field>
                                     <mat-form-field class="col-sm-6">
                                         <mat-label>Path</mat-label>
-                                        <input matInput [formControl]="formGroup.get('path')" [value]="gitOpsSelected.path">
+                                        <input matInput [formControl]="formGroup()?.get('path')" [value]="gitOpsSelected()?.path">
                                     </mat-form-field>
                                 </div>
                             </div>
                             <mat-form-field>
                                 <mat-label>Token</mat-label>
-                                <input matInput type="password" [formControl]="formGroup.get('token')" [value]="gitOpsSelected.token">
+                                <input matInput type="password" [formControl]="formGroup()?.get('token')" [value]="gitOpsSelected()?.token">
                             </mat-form-field>
 
                             <div>
                                 <mat-form-field>
                                     <mat-label>Window - (s,m,h) greater than 30s</mat-label>
-                                    <input matInput [formControl]="formGroup.get('window')" [value]="gitOpsSelected.settings.window">
+                                    <input matInput [formControl]="formGroup()?.get('window')" [value]="gitOpsSelected()?.settings?.window">
                                 </mat-form-field>
                                 <mat-slide-toggle 
-                                    [formControl]="formGroup.get('active')" 
-                                    [checked]="gitOpsSelected.settings.active">Active</mat-slide-toggle>
+                                    [formControl]="formGroup()?.get('active')" 
+                                    [checked]="gitOpsSelected()?.settings?.active">Active</mat-slide-toggle>
                                 <mat-slide-toggle 
                                     matTooltip="When enabled allow it to fully synchronize the repository with the API"
-                                    [formControl]="formGroup.get('forceprune')" 
-                                    [checked]="gitOpsSelected.settings.forceprune" 
+                                    [formControl]="formGroup()?.get('forceprune')" 
+                                    [checked]="gitOpsSelected()?.settings?.forceprune" 
                                     class="settings-padding">Force Prune</mat-slide-toggle>
                             </div>
                         </div>
 
-                        @if (allowUpdate) {
+                        @if (allowUpdate()) {
                         <div class="options-section">
-                            @if (gitOpsSelected.ID && hasChanges()) {
+                            @if (gitOpsSelected()?.ID && hasChanges()) {
                             <button mat-button class="btn-element" (click)="onUpdate()">
                                 <div class="options-section-label">Update</div>
                                 <mat-icon style="font-size: large;">build</mat-icon>
                             </button>
                             }
-                            @if (!gitOpsSelected.ID) {
+                            @if (!gitOpsSelected()?.ID) {
                             <button mat-button class="btn-element" (click)="onCreate()">
                                 <div class="options-section-label">Create</div>
                                 <mat-icon style="font-size: large;">save</mat-icon>
                             </button>
-                            }
-                            @if (!gitOpsSelected.ID) {
                             <button mat-button class="btn-element" (click)="onDiscard()">
                                 <div class="options-section-label">Discard</div>
                                 <mat-icon style="font-size: large;">close</mat-icon>
                             </button>
-                            }
-                            @if (gitOpsSelected.ID) {
+                            } @else {
                             <button mat-button class="btn-element btn-red" (click)="onUnsubscribe()">
                                 <mat-icon style="font-size: large;">cloud_off</mat-icon>
                                 <div class="options-section-label">Unsubscribe</div>

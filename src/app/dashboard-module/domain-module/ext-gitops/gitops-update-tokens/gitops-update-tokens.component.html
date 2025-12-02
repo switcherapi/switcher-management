@@ -13,8 +13,8 @@
             <div class="description">
                 <mat-form-field>
                     <mat-label>Environment selection</mat-label>
-                    <mat-select cdkFocusInitial multiple [formControl]="formGroup.get('environment')">
-                        @for (environment of environments; track environment) {
+                    <mat-select cdkFocusInitial multiple [formControl]="formGroup()?.get('environment')">
+                        @for (environment of environments(); track environment) {
                         <mat-option [value]="environment">
                             {{environment}}
                         </mat-option>
@@ -23,7 +23,7 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Token</mat-label>
-                    <input matInput [formControl]="formGroup.get('token')">
+                    <input matInput [formControl]="formGroup()?.get('token')">
                 </mat-form-field>
             </div>
         </div>
