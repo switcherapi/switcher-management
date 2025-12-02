@@ -9,7 +9,7 @@ import { MarkdownComponent } from 'ngx-markdown';
       <h3 class="doc-title">Components</h3>
       <img src="assets/switcherapi_mark_white.png" class="doc-icon" alt="Switcher API">
     </div>
-    <markdown [data]="markdown"></markdown>
+    <markdown [data]="markdown()"></markdown>
   `,
     styleUrls: ['../documentation/documentation.component.css'],
     imports: [MarkdownComponent]
