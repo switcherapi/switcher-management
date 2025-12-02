@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { Domain } from 'src/app/model/domain';
 import { NgClass } from '@angular/common';
@@ -12,26 +12,23 @@ import { NgClass } from '@angular/common';
     ],
     imports: [NgClass]
 })
-export class DomainPreviewComponent implements OnInit {
+export class DomainPreviewComponent {
   private readonly router = inject(Router);
 
-  @Input() domain: Domain;
+  domain = input.required<Domain>();
 
-  classStatus: string;
-  classBtnStatus: string;
-
-  ngOnInit() {
-    this.updateStatus();
-  }
+  classStatus = computed(() => 
+    this.domain().activated['default'] ? 'grid-container activated' : 'grid-container deactivated'
+  );
+  
+  classBtnStatus = computed(() => 
+    this.domain().activated['default'] ? 'header-section activated' : 'header-section deactivated'
+  );
 
   selectDomain() {
-    this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domain.name)}/${this.domain.id}`], 
-      { state: { element: JSON.stringify(this.domain) } });
-  }
-
-  updateStatus(): void {
-    this.classStatus = this.domain.activated['default'] ? 'grid-container activated' : 'grid-container deactivated';
-    this.classBtnStatus = this.domain.activated['default'] ? 'header-section activated' : 'header-section deactivated';
+    const domainValue = this.domain();
+    this.router.navigate([`/dashboard/domain/${encodeURIComponent(domainValue.name)}/${domainValue.id}`], 
+      { state: { element: JSON.stringify(domainValue) } });
   }
 
 }
