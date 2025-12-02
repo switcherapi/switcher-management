@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from './auth/services/auth.service';
 import { PwaService } from './services/pwa.service';
 import { environment } from 'src/environments/environment';
@@ -12,39 +13,39 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.css'],
   imports: [RouterOutlet, RouterLink, MatIconModule, MatDividerModule]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly pwaService = inject(PwaService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  currentToken: string;
-  loggedUserName: string;
-  profileAvatar: string;
-  darkMode: boolean;
+  readonly currentToken = signal<string>('');
+  readonly loggedUserName = signal<string>('');
+  readonly profileAvatar = signal<string>('');
+  readonly darkMode = signal<boolean>(false);
 
   constructor() {
+    this.pwaService.checkForUpdate();
+    this.setupSubscriptions();
     this.loadUserSettings();
   }
 
-  ngOnInit() {
-    this.pwaService.checkForUpdate();
-    this.authService.logoff.subscribe((currentToken: string) => {
-      this.currentToken = currentToken;
-    });
+  private setupSubscriptions(): void {
+    this.authService.logoff.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((currentToken: string) => {
+        this.currentToken.set(currentToken);
+      });
   }
 
-  ngOnDestroy(): void {
-    this.authService.logoff.unsubscribe();
-  }
-
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
     this.reloadTheme();
   }
 
-  toggleDarkMode() {
-    this.darkMode = document.documentElement.classList.toggle("dark-mode");
+  toggleDarkMode(): void {
+    const isDark = document.documentElement.classList.toggle("dark-mode");
+    this.darkMode.set(isDark);
     document.documentElement.dispatchEvent(new Event("dark-mode"));
     this.updateTheme();
   }
@@ -53,44 +54,49 @@ export class AppComponent implements OnInit, OnDestroy {
     return environment.allowHomeView;
   }
 
-  onMenuClick(menuId: string) {
+  onMenuClick(menuId: string): void {
     const mainMenu = document.getElementById(menuId);
     if (mainMenu) {
       mainMenu.style.display = "none";
     }
 
     setTimeout(() => {
-      mainMenu.style.display = "block";
+      if (mainMenu) {
+        mainMenu.style.display = "block";
+      }
     }, 500);
   }
 
   private loadUserSettings(): void {
-    this.authService.currentToken.subscribe(x => {
-      this.currentToken = x;
-    });
+    this.authService.currentToken.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(token => {
+        this.currentToken.set(token);
+      });
 
-    this.authService.currentUser.subscribe(() => {
-      this.loggedUserName = this.authService.getUserInfo("name");
-      const avatar = this.authService.getUserInfo("avatar");
-      this.profileAvatar = avatar || String.raw`assets\switcherapi_mark_white.png`;
-    });
+    this.authService.currentUser.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.loggedUserName.set(this.authService.getUserInfo("name"));
+        const avatar = this.authService.getUserInfo("avatar");
+        this.profileAvatar.set(avatar || String.raw`assets\switcherapi_mark_white.png`);
+      });
 
     this.reloadTheme();
   }
 
-  private reloadTheme() {
-    const darkMode = localStorage.getItem("THEME");
-    if (!darkMode) {
-      this.darkMode = document.documentElement.classList.contains("dark-mode");
+  private reloadTheme(): void {
+    const savedTheme = localStorage.getItem("THEME");
+    if (!savedTheme) {
+      const isDark = document.documentElement.classList.contains("dark-mode");
+      this.darkMode.set(isDark);
       this.updateTheme();
-    } else if (darkMode === "dark") {
-      this.darkMode = true;
+    } else if (savedTheme === "dark") {
+      this.darkMode.set(true);
       document.documentElement.classList.add("dark-mode");
     }
   }
 
-  private updateTheme() {
-    localStorage.setItem("THEME", this.darkMode ? "dark" : "light");
+  private updateTheme(): void {
+    localStorage.setItem("THEME", this.darkMode() ? "dark" : "light");
   }
   
 }

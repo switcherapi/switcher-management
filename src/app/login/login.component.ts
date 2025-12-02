@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed, DestroyRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AuthService } from '../auth/services/auth.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
@@ -17,29 +16,42 @@ import { AppVersionComponent } from '../app-version/app-version.component';
   styleUrls: ['./login.component.css'],
   imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton, AppVersionComponent]
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly loginForm: FormGroup;
+  readonly loading = signal<boolean>(false);
+  readonly apiVersion = signal<string | undefined>(undefined);
+  readonly error = signal<string>('');
+  readonly success = signal<string>('');
+  readonly status = signal<string>('');
 
-  loginForm: FormGroup;
-  loading = false;
-  apiVersion = signal<string | undefined>(undefined);
-  error = '';
-  success = '';
-  status = '';
+  readonly f = computed(() => this.loginForm.controls);
 
-  ngOnInit() {
+  constructor() {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+
+    this.checkAuthAndRedirect();
+    this.loginWithSAMLToken();
+    this.handleRouteParams();
+    this.isAlive();
+  }
+
+  private checkAuthAndRedirect(): void {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
     }
+  }
 
-    this.loginWithSAMLToken();
-
-    this.route.queryParams.subscribe(params => {
+  private handleRouteParams(): void {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       const platform = params['platform'];
       const code = params['code'];
 
@@ -53,57 +65,44 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       }
     });
-
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-
-    this.isAlive();
   }
 
-  get f() { return this.loginForm.controls; }
-
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
       return;
     }
 
-    this.status = '';
-    this.loading = true;
+    this.status.set('');
+    this.loading.set(true);
+    const formControls = this.f();
     this.authService.login({
-      email: this.f.email.value,
-      password: this.f.password.value
+      email: formControls.email.value,
+      password: formControls.password.value
     })
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: success => this.onSuccess(success),
         error: error => this.onError(error)
       });
   }
 
-  onGitHubLogin() {
-    this.loading = true;
+  onGitHubLogin(): void {
+    this.loading.set(true);
     globalThis.location.href = `https://github.com/login/oauth/authorize?client_id=${environment.githubApiClientId}`;
   }
 
-  onBitbucketLogin() {
-    this.loading = true;
+  onBitbucketLogin(): void {
+    this.loading.set(true);
     globalThis.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${environment.bitbucketApiClientId}&response_type=code`;
   }
 
-  onSamlLogin() {
-    this.loading = true;
+  onSamlLogin(): void {
+    this.loading.set(true);
     globalThis.location.href = `${environment.apiUrl}/admin/saml/login`;
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  onKey(_event: any) {
-    this.error = '';
+  onKey(_event: any): void {
+    this.error.set('');
   }
 
   hasGithubIntegration(): boolean {
@@ -123,50 +122,50 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private isAlive(): void {
-    this.authService.isAlive().pipe(takeUntil(this.unsubscribe))
+    this.authService.isAlive().pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => {
           this.apiVersion.set(data?.attributes.version);
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.status = 'Offline for Maintenance';
+          this.status.set('Offline for Maintenance');
         }
       });
   }
 
-  private loginWithGitHub(code: string) {
-    this.loading = true;
+  private loginWithGitHub(code: string): void {
+    this.loading.set(true);
 
     this.authService.loginWithGitHub(code)
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: success => this.onSuccess(success),
         error: error => this.onError(error)
       });
   }
 
-  private loginWithBitbucket(code: string) {
-    this.loading = true;
+  private loginWithBitbucket(code: string): void {
+    this.loading.set(true);
 
     this.authService.loginWithBitBucket(code)
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: success => this.onSuccess(success),
         error: error => this.onError(error)
       });
   }
 
-  private loginWithSAMLToken() {
+  private loginWithSAMLToken(): void {
     if (globalThis.location.hash) {
       const hashParams = new URLSearchParams(globalThis.location.hash.substring(1));
       const token = hashParams.get('token');
 
       if (token) {
-        this.loading = true;
+        this.loading.set(true);
 
         this.authService.loginWithSAMLToken(token)
-          .pipe(takeUntil(this.unsubscribe))
+          .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: success => this.onSuccess(success),
             error: error => this.onError(error)
@@ -175,17 +174,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onError(error: any) {
+  private onError(error: any): void {
     ConsoleLogger.printError(error);
-    this.error = error;
-    this.loading = false;
+    this.error.set(error);
+    this.loading.set(false);
   }
 
-  private onSuccess(success: any) {
+  private onSuccess(success: any): void {
     if (success) {
       this.router.navigate(['/dashboard']);
       this.authService.releaseOldSessions.emit(true);
     }
-    this.loading = false;
+    this.loading.set(false);
   }
 }
