@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { Settings, Slack } from 'src/app/model/slack';
 import { MatFormField, MatLabel } from '@angular/material/input';
@@ -16,29 +16,33 @@ import { MatIcon } from '@angular/material/icon';
 export class SlackSettingsComponent {
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  ignoredEnvironments: string[] = [];
-  frozenEnvironments: string[] = [];
-  settings: Settings;
-  updatable = false;
+  readonly ignoredEnvironments = signal<string[]>([]);
+  readonly frozenEnvironments = signal<string[]>([]);
+  readonly settings = signal<Settings | null>(null);
+  readonly updatable = signal(false);
 
   loadSettings(slack: Slack): void {
-    this.settings = { ...slack.settings };
-    this.ignoredEnvironments = Object.assign([], slack.settings.ignored_environments);
-    this.frozenEnvironments = Object.assign([], slack.settings.frozen_environments);
+    this.settings.set({ ...slack.settings });
+    this.ignoredEnvironments.set([...slack.settings.ignored_environments]);
+    this.frozenEnvironments.set([...slack.settings.frozen_environments]);
   }
 
   updateSettings(settings: Settings) {
-    this.settings.ignored_environments = Object.assign([], settings.ignored_environments);
-    this.settings.frozen_environments = Object.assign([], settings.frozen_environments);
+    this.settings.update(current => current ? {
+      ...current,
+      ignored_environments: [...settings.ignored_environments],
+      frozen_environments: [...settings.frozen_environments]
+    } : null);
   }
 
   add(event: MatChipInputEvent, list: string): void {
     const value = (event.value || '').trim();
     if (value) {
-      if (list === 'ignored')
-        this.ignoredEnvironments.push(value);
-      else if (list === 'frozen')
-        this.frozenEnvironments.push(value);
+      if (list === 'ignored') {
+        this.ignoredEnvironments.update(envs => [...envs, value]);
+      } else if (list === 'frozen') {
+        this.frozenEnvironments.update(envs => [...envs, value]);
+      }
     }
 
     event.chipInput.clear();
@@ -46,11 +50,9 @@ export class SlackSettingsComponent {
 
   remove(env: string, list: string): void {
     if (list === 'ignored') {
-      const index = this.ignoredEnvironments.indexOf(env);
-      this.ignoredEnvironments.splice(index, 1);
+      this.ignoredEnvironments.update(envs => envs.filter(e => e !== env));
     } else if (list === 'frozen') {
-      const index = this.frozenEnvironments.indexOf(env);
-      this.frozenEnvironments.splice(index, 1);
+      this.frozenEnvironments.update(envs => envs.filter(e => e !== env));
     }
   }
 

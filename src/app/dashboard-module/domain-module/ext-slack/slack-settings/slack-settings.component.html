@@ -2,7 +2,7 @@
     <mat-form-field>
         <mat-label>Ignored Environments</mat-label>
         <mat-chip-grid #ignoredList>
-          @for (env of ignoredEnvironments; track env) {
+          @for (env of ignoredEnvironments(); track env) {
           <mat-chip-row (removed)="remove(env, 'ignored')"
                 [removable]="true">
             {{env}}
@@ -11,7 +11,7 @@
             </button>
           </mat-chip-row>
           }
-          <input [readonly]="!updatable"
+          <input [readonly]="!updatable()"
                 [matChipInputFor]="ignoredList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="true"
@@ -22,7 +22,7 @@
       <mat-form-field>
         <mat-label>Frozen Environments</mat-label>
         <mat-chip-grid #frozenList>
-          @for (env of frozenEnvironments; track env) {
+          @for (env of frozenEnvironments(); track env) {
           <mat-chip-row (removed)="remove(env, 'frozen')"
                 [removable]="true">
             {{env}}
@@ -31,7 +31,7 @@
             </button>
           </mat-chip-row>
           }
-          <input [readonly]="!updatable"
+          <input [readonly]="!updatable()"
                 [matChipInputFor]="frozenList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="true"
