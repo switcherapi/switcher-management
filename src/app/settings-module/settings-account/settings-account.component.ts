@@ -45,7 +45,6 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
 
   constructor() {
     super();
-    // Initialize FormGroup immediately to avoid template errors
     this.accountForm = this.formBuilder.group({
       name: ['', Validators.required]
     });
