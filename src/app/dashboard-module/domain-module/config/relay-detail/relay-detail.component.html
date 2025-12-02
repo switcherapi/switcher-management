@@ -1,6 +1,6 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
     <div [ngClass]="detailBodyStyle()">
-        <section [ngClass]="classStatus" style="width: 100%;">
+        <section [ngClass]="classStatus()" style="width: 100%;">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
@@ -76,17 +76,17 @@
             <div class="options-section">
                 @if (relayVerificationEnabled() && !isVerified() && !editing()) {
                 <div>
-                    <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable">
+                    <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable()">
                         <mat-icon>verified_user</mat-icon>
                         <div class="options-section-label">Verify</div>
                     </button>
                 </div>
                 }
-                <button mat-button [ngClass]="editing() ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
+                <button mat-button [ngClass]="editing() ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable()">
                     <mat-icon style="font-size: large;">build</mat-icon>
                     <div class="options-section-label">{{ editing() ? 'Save' : 'Edit' }}</div>
                 </button>
-                <button mat-button class="btn-element btn-red" (click)="delete()" [disabled]="!removable">
+                <button mat-button class="btn-element btn-red" (click)="delete()" [disabled]="!removable()">
                     <mat-icon>delete</mat-icon>
                     <div class="options-section-label">Remove</div>
                 </button>

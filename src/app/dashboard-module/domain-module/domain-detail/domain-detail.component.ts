@@ -62,7 +62,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
   }
 
   ngOnInit() {
-    this.loading = true;
+    this.loading.set(true);
     this.route.paramMap
       .pipe(map(() => globalThis.history.state)).pipe(takeUntil(this.unsubscribe)).subscribe(data => {
         if (data.element) {
@@ -109,12 +109,12 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   edit() {
     if (!this.editing()) {
-      this.classStatus = 'header editing';
+      this.classStatus.set('header editing');
       this.editing.set(true);
       return;
     }
 
-    this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
 
     const newDescription = this.descElement.nativeElement.value;
     if (super.validateEdition(
@@ -255,13 +255,13 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domain.id, ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
-      'DOMAIN', undefined, undefined, this.currentEnvironment)
+      'DOMAIN', undefined, undefined, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data.length) {
-            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.updatable.set(data.find(permission => permission.action === 'UPDATE').result === 'ok');
+            this.removable.set(data.find(permission => permission.action === 'DELETE').result === 'ok');
             this.envEnable.next(
               data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
               data.find(permission => permission.action === 'UPDATE').result === 'nok'
@@ -273,7 +273,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         },
         complete: () => {
           this.setBlockUI(false);
-          this.loading = false;
+          this.loading.set(false);
           this.detailBodyStyle.set('detail-body ready');
         }
       });

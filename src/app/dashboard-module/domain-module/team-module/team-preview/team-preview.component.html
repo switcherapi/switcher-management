@@ -1,4 +1,4 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
     <div class="detail-body">
         <section class="{{ team.active ? 'header activated' : 'header deactivated' }}">
             <div class="header-container">

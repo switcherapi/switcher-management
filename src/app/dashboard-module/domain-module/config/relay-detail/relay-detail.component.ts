@@ -50,7 +50,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   @Input() config: Config;
   @Input() parent: ConfigDetailComponent;
-  @Input() declare currentEnvironment: string;
+  @Input() currentEnvironmentInput: string;
 
   @ViewChild('descElement', { static: true })
   descElement: ElementRef;
@@ -96,7 +96,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.relayOld = JSON.stringify(this.config.relay);
 
     if (!this.editing()) {
-      this.classStatus = 'header editing';
+      this.classStatus.set('header editing');
       this.editing.set(true);
       return;
     }
@@ -107,15 +107,15 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       return;
     }
 
-    this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
 
     if (super.validateEdition(
       { 
         type: this.config.relay.type,
         method: this.config.relay.method,
         description: this.config.relay.description,
-        endpoint: this.config.relay.endpoint[this.currentEnvironment],
-        auth_token: this.getRelayAttribute('auth_token') ? this.config.relay.auth_token[this.currentEnvironment] : '',
+        endpoint: this.config.relay.endpoint[this.currentEnvironmentInput],
+        auth_token: this.getRelayAttribute('auth_token') ? this.config.relay.auth_token[this.currentEnvironmentInput] : '',
         auth_prefix: this.config.relay.auth_prefix || ''
       }, 
       { 
@@ -160,7 +160,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   delete() {
-    if (!this.config.relay.endpoint[this.currentEnvironment]) {
+    if (!this.config.relay.endpoint[this.currentEnvironmentInput]) {
       this.updateConfiguredRelay(this.config);
       return;
     }
@@ -171,7 +171,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     modalConfirmation.result.then((result) => {
       if (result) {
         this.setBlockUI(true, 'Removing relay...');
-        this.configService.removeConfigRelay(this.config.id, this.currentEnvironment)
+        this.configService.removeConfigRelay(this.config.id, this.currentEnvironmentInput)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: data => {
@@ -192,7 +192,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   isVerified(): boolean {
     if (this.config.relay.verified)
-      return this.config.relay.verified[this.currentEnvironment];
+      return this.config.relay.verified[this.currentEnvironmentInput];
     return false;
   }
 
@@ -201,13 +201,13 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     this.config.relay.type = this.relayTypeFormControl.value;
     this.config.relay.method = this.relayMethodFormControl.value;
     this.config.relay.description = this.descElement.nativeElement.value;
-    this.config.relay.endpoint[this.currentEnvironment] = this.endpointFormControl.value;
+    this.config.relay.endpoint[this.currentEnvironmentInput] = this.endpointFormControl.value;
 
     if (!this.config.relay.auth_token) {
       this.config.relay.auth_token = new Map<string, string>();
     }
     
-    this.config.relay.auth_token[this.currentEnvironment] = this.authTokenElement.nativeElement.value;
+    this.config.relay.auth_token[this.currentEnvironmentInput] = this.authTokenElement.nativeElement.value;
     this.config.relay.auth_prefix = this.authPrefixElement.nativeElement.value;
 
     this.setBlockUI(true, 'Updating relay...');
@@ -236,17 +236,17 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   private loadRelay(): void {
-    this.currentStatus = this.config.relay.activated[this.currentEnvironment];
+    this.currentStatus.set(this.config.relay.activated[this.currentEnvironmentInput]);
 
     this.relayTypeFormControl.setValue(this.config.relay.type);
     this.relayMethodFormControl.setValue(this.config.relay.method);
     this.endpointFormControl.setValue(this.getRelayAttribute('endpoint'));
     this.authTokenElement.nativeElement.value = this.getRelayAttribute('auth_token');
 
-    if (this.config.relay.endpoint[this.currentEnvironment] == undefined) {
+    if (this.config.relay.endpoint[this.currentEnvironmentInput] == undefined) {
       this.edit();
     } else {
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
       this.editing.set(false);
     }
 
@@ -255,20 +255,22 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.parent.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE', 'DELETE_RELAY'], 
-      'SWITCHER', 'key', this.config.key, this.currentEnvironment)
+      'SWITCHER', 'key', this.config.key, this.currentEnvironmentInput)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data.length) {
-            this.removable = 
-              data.find(permission => permission.action === 'DELETE').result === 'ok' ||
-              data.find(permission => permission.action === 'DELETE_RELAY').result === 'ok';
-            this.updatable = 
-              data.find(permission => permission.action === 'UPDATE').result === 'ok' ||
-              data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
+            this.removable.set(
+              data.find(permission => permission.action === 'DELETE')?.result === 'ok' ||
+              data.find(permission => permission.action === 'DELETE_RELAY')?.result === 'ok'
+            );
+            this.updatable.set(
+              data.find(permission => permission.action === 'UPDATE')?.result === 'ok' ||
+              data.find(permission => permission.action === 'UPDATE_RELAY')?.result === 'ok'
+            );
             this.envEnable.next(
-              data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
-              data.find(permission => permission.action === 'UPDATE').result === 'nok'
+              data.find(permission => permission.action === 'UPDATE_ENV_STATUS')?.result === 'nok' &&
+              data.find(permission => permission.action === 'UPDATE')?.result === 'nok'
             );
           }
         },
@@ -304,7 +306,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       .subscribe({
         next: data => {
           if (data) {
-            this.config.relay.activated[this.currentEnvironment] = env[this.currentEnvironment];
+            this.config.relay.activated[this.currentEnvironmentInput] = env[this.currentEnvironmentInput];
             this.parent.updateConfigRelay(data.relay);
             this.selectEnvironment(env);
             this.toastService.showSuccess(`Environment updated with success`);
@@ -320,11 +322,11 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   private updateConfiguredRelay(data: Config): void {
-    delete this.config.relay.activated[this.currentEnvironment];
+    delete this.config.relay.activated[this.currentEnvironmentInput];
     if (this.config.relay.auth_token) {
-      delete this.config.relay.auth_token[this.currentEnvironment];
+      delete this.config.relay.auth_token[this.currentEnvironmentInput];
     }
-    delete this.config.relay.endpoint[this.currentEnvironment];
+    delete this.config.relay.endpoint[this.currentEnvironmentInput];
     this.parent.updateConfigRelay(data.relay);
     this.parent.updateNavTab(1);
   }
@@ -335,21 +337,21 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       data: {
         relay: this.config.relay,
         code: this.relayVerificationCode(),
-        environment: this.currentEnvironment
+        environment: this.currentEnvironmentInput
       }
     });
 
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
       if (data) {
         this.setBlockUI(true, 'Verifying Relay...');
-        this.configService.verifyRelay(this.config.id, this.currentEnvironment)
+        this.configService.verifyRelay(this.config.id, this.currentEnvironmentInput)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
             next: response => {
               this.setBlockUI(false);
               if (response.status === 'verified') {
                 this.toastService.showSuccess(`Relay verified with success`);
-                this.config.relay.verified[this.currentEnvironment] = true;
+                this.config.relay.verified[this.currentEnvironmentInput] = true;
               } else {
                 this.toastService.showError(`Failed to verify Relay`);
               }
@@ -366,8 +368,8 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   private getRelayAttribute(field: string): string {
     if (this.config.relay[field]) {
-      if (this.config.relay[field][this.currentEnvironment])
-        return this.config.relay[field][this.currentEnvironment];
+      if (this.config.relay[field][this.currentEnvironmentInput])
+        return this.config.relay[field][this.currentEnvironmentInput];
     }
     return '';
   }

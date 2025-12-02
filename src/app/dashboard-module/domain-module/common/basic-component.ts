@@ -1,14 +1,11 @@
-import { ChangeDetectorRef, inject } from "@angular/core";
+import { signal } from "@angular/core";
 
 export class BasicComponent {
-    private readonly cdr = inject(ChangeDetectorRef, { optional: true });
-    
-    blockuiEnabled = false;
-    blockuiMessage = 'Loading...';
+    blockuiEnabled = signal(false);
+    blockuiMessage = signal('Loading...');
 
     protected setBlockUI(enable: boolean, message = 'Loading...'): void {
-        this.blockuiEnabled = enable;
-        this.blockuiMessage = message;
-        this.cdr?.detectChanges();
+        this.blockuiEnabled.set(enable);
+        this.blockuiMessage.set(message);
     }
 }

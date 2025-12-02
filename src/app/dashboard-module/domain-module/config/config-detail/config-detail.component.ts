@@ -108,7 +108,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     return relay?.activated ? relay.activated[currentEnv] !== undefined : false;
   });
 
-  override loading = true;
+  override loading = signal(true);
   loadingStrategies = signal(true);
   hasStrategies = signal(false);
   hasNewStrategy = signal(false);
@@ -134,8 +134,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ngOnInit() {
     (document.getElementsByClassName('container')[0] as HTMLElement).style.minHeight = '1100px';
 
-    this.loading = true;
-    this.currentEnvironmentSignal.set(this.currentEnvironment || 'default');
+    this.loading.set(true);
+    this.currentEnvironmentSignal.set(this.currentEnvironment() || 'default');
 
     this.route.parent.params.subscribe(params => {
       this.domainId = params.domainid;
@@ -168,7 +168,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   edit() {
     if (!this.editing()) {
-      this.classStatus = 'header editing';
+      this.classStatus.set('header editing');
       this.editing.set(true);
       return;
     }
@@ -177,7 +177,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     if (valid) {
       this.setBlockUI(true, 'Saving changes...');
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
 
       const body = {
         key: this.keyElement.nativeElement.value,
@@ -189,7 +189,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         description: this.config.description,
         components: String(this.config.components.map(component => component.name)),
         disable_metrics: this.config.disable_metrics === undefined ?
-          false : this.config.disable_metrics[this.currentEnvironment]
+          false : this.config.disable_metrics[this.currentEnvironment()]
       }, {
         key: body.key,
         description: body.description,
@@ -248,7 +248,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           result.description,
           result.strategy,
           result.operation,
-          this.currentEnvironment,
+          this.currentEnvironment(),
           result.values).subscribe({
             next: () => {
               this.setBlockUI(false);
@@ -274,7 +274,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     }
 
     this.config.relay.activated[this.currentEnvironmentSignal()] = true;
-    this.currentEnvironmentSignal.set(this.currentEnvironment);
+    this.currentEnvironmentSignal.set(this.currentEnvironment());
     this.updateData(this.config);
 
     this.classStrategySection = 'strategy-section relay';
@@ -354,7 +354,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     this.config = config;
     this.configRelay.set(config.relay);
     this.disableMetrics = this.config.disable_metrics ?
-      this.config.disable_metrics[this.currentEnvironment] : false;
+      this.config.disable_metrics[this.currentEnvironment()] : false;
     this.loadComponents();
     this.keyFormControl.setValue(config.key);
 
@@ -379,11 +379,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private isMetricDisabled() {
-    if (this.config.disable_metrics[this.currentEnvironment] === undefined) {
+    if (this.config.disable_metrics[this.currentEnvironment()] === undefined) {
       return true;
     }
     
-    return this.config.disable_metrics[this.currentEnvironment];
+    return this.config.disable_metrics[this.currentEnvironment()];
   }
 
   private loadConfig() {
@@ -402,14 +402,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE'],
-      'SWITCHER', 'key', this.config.key, this.currentEnvironment)
+      'SWITCHER', 'key', this.config.key, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data.length) {
-            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
+            this.updatable.set(data.find(permission => permission.action === 'UPDATE').result === 'ok');
             this.relayUpdatable.set(data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok');
-            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.removable.set(data.find(permission => permission.action === 'DELETE').result === 'ok');
             this.envEnable.next(
               data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
               data.find(permission => permission.action === 'UPDATE').result === 'nok'
@@ -420,12 +420,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.loading = false;
+          this.loading.set(false);
           this.detailBodyStyle.set('detail-body ready');
         }
       });
 
-    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'STRATEGY', undefined, undefined, this.currentEnvironment)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'STRATEGY', undefined, undefined, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
@@ -437,7 +437,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.loading = false;
+          this.loading.set(false);
           this.detailBodyStyle.set('detail-body ready');
         }
       });
@@ -525,7 +525,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update switcher`);
-          this.classStatus = 'header editing';
+          this.classStatus.set('header editing');
           this.editing.set(true);
         }
       });
@@ -535,7 +535,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if (!this.config.disable_metrics)
       this.config.disable_metrics = new Map<string, boolean>();
 
-    this.config.disable_metrics[this.currentEnvironment] = this.disableMetrics;
+    this.config.disable_metrics[this.currentEnvironment()] = this.disableMetrics;
     return this.config.disable_metrics;
   }
 
@@ -570,7 +570,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   private loadStrategies(focus?: boolean) {
     this.loadingStrategies.set(true);
     this.error.set('');
-    this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment)
+        this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {

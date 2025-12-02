@@ -1,7 +1,7 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
 @if (!teamLoading()) {
 <div style="padding-top: 20px;">
-    <section [ngClass]="classStatus">
+    <section [ngClass]="classStatus()">
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
@@ -80,4 +80,4 @@
     </section>
 </div>
 }
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true"></app-block-ui>
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true"></app-block-ui>

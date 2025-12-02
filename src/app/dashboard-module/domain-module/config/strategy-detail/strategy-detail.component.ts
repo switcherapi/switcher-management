@@ -105,12 +105,12 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
   edit() {
     if (!this.editing()) {
       this.loadStrategyRequirements();
-      this.classStatus = 'header editing';
+      this.classStatus.set('header editing');
       this.editing.set(true);
       return;
     }
 
-    this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+    this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
 
     const body = {
       operation: this.operationCategoryFormControl.value,
@@ -323,12 +323,12 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       .subscribe({
         next: data => {
           if (data.length) {
-            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
-            this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+            this.updatable.set(data.find(permission => permission.action === 'UPDATE')?.result === 'ok');
+            this.removable.set(data.find(permission => permission.action === 'DELETE')?.result === 'ok');
+            this.creatable.set(data.find(permission => permission.action === 'CREATE')?.result === 'ok');
             this.envEnable.next(
-              data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
-              data.find(permission => permission.action === 'UPDATE').result === 'nok'
+              data.find(permission => permission.action === 'UPDATE_ENV_STATUS')?.result === 'nok' &&
+              data.find(permission => permission.action === 'UPDATE')?.result === 'nok'
             );
           }
         },

@@ -185,13 +185,11 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
             this.team.set(team);
             this.nameFormControl.setValue(team.name);
             this.setHeaderStyle();
+            this.teamLoading.set(false);
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.teamLoading.set(false);
-        },
-        complete: () => {
           this.teamLoading.set(false);
         }
       });
@@ -212,9 +210,9 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
   private setHeaderStyle(): void {
     const currentTeam = this.team();
     if (this.editing()) {
-      this.classStatus = 'header editing';
+      this.classStatus.set('header editing');
     } else {
-      this.classStatus = currentTeam?.active ? 'header activated' : 'header deactivated';
+      this.classStatus.set(currentTeam?.active ? 'header activated' : 'header deactivated');
     }
   }
 
