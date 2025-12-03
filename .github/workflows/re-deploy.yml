@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Kustomize
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.ARGOCD_PAT }}
           repository: switcherapi/switcher-deployment
