@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject, input, computed, signal, effect, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, inject, input, signal, effect, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -41,20 +41,12 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
   selectedEnvStatus = signal<boolean>(false);
   selectedEnv = signal<string>('');
 
-  classStatus = computed(() => {
-    const status = this.config().activated[this.selectedEnv()] ?? this.config().activated['default'];
-    return status ? 'grid-container activated' : 'grid-container deactivated';
-  });
-  
-  classBtnStatus = computed(() => {
-    const status = this.config().activated[this.selectedEnv()] ?? this.config().activated['default'];
-    return status ? 'header-section activated' : 'header-section deactivated';
-  });
+  classStatus = signal<string>('grid-container deactivated');
+  classBtnStatus = signal<string>('header-section deactivated');
+  toggleSectionStyle = signal<string>('toggle-section deactivated');
 
   updatable = signal<boolean>(false);
   removable = signal<boolean>(false);
-
-  toggleSectionStyle = signal<string>('toggle-section deactivated');
 
   constructor() { 
     super();
@@ -93,6 +85,7 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
     const selectedEnv = this.selectedEnv();
     
     config.activated[selectedEnv] = event.checked;
+    this.updateCssClasses(event.checked);
     this.selectEnvironment(selectedEnv);
 
     this.configService.setConfigEnvironmentStatus(config.id, selectedEnv, event.checked)
@@ -100,8 +93,6 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
       .subscribe({
         next: data => {
           if (data) {
-            const updatedConfig = this.config();
-            updatedConfig.activated = data.activated;
             this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
@@ -131,6 +122,7 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
       form.get('environmentStatusSelection')?.setValue(status);
     }
     this.selectedEnvStatus.set(status);
+    this.updateCssClasses(status);
   }
 
   private readPermissionToObject(): void {
@@ -166,6 +158,11 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
   private isEnvStatusChangeAllowed(element: Permissions): boolean {
     return element.permissions.find(p => p.action === 'UPDATE_ENV_STATUS').result === 'ok' ||
       element.permissions.find(p => p.action === 'UPDATE').result === 'ok'
+  }
+
+  private updateCssClasses(isActivated: boolean): void {
+    this.classStatus.set(isActivated ? 'grid-container activated' : 'grid-container deactivated');
+    this.classBtnStatus.set(isActivated ? 'header-section activated' : 'header-section deactivated');
   }
 
 }

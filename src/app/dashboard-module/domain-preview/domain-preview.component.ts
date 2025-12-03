@@ -1,4 +1,4 @@
-import { Component, inject, input, computed } from '@angular/core';
+import { Component, inject, input, signal, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { Domain } from 'src/app/model/domain';
 import { NgClass } from '@angular/common';
@@ -17,18 +17,27 @@ export class DomainPreviewComponent {
 
   domain = input.required<Domain>();
 
-  classStatus = computed(() => 
-    this.domain().activated['default'] ? 'grid-container activated' : 'grid-container deactivated'
-  );
-  
-  classBtnStatus = computed(() => 
-    this.domain().activated['default'] ? 'header-section activated' : 'header-section deactivated'
-  );
+  classStatus = signal<string>('grid-container deactivated');
+  classBtnStatus = signal<string>('header-section deactivated');
+
+  constructor() {
+    // Initialize CSS classes when domain input changes
+    effect(() => {
+      const domain = this.domain();
+      const isActivated = domain.activated['default'];
+      this.updateCssClasses(isActivated);
+    });
+  }
 
   selectDomain() {
     const domainValue = this.domain();
     this.router.navigate([`/dashboard/domain/${encodeURIComponent(domainValue.name)}/${domainValue.id}`], 
       { state: { element: JSON.stringify(domainValue) } });
+  }
+
+  private updateCssClasses(isActivated: boolean): void {
+    this.classStatus.set(isActivated ? 'grid-container activated' : 'grid-container deactivated');
+    this.classBtnStatus.set(isActivated ? 'header-section activated' : 'header-section deactivated');
   }
 
 }

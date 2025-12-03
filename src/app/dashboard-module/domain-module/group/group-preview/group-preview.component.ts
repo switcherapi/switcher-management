@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject, input, computed, signal, effect, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, inject, input, signal, effect, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -40,20 +40,12 @@ export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
   selectedEnvStatus = signal<boolean>(false);
   selectedEnv = signal<string>('');
 
-  classStatus = computed(() => {
-    const status = this.group().activated[this.selectedEnv()] ?? this.group().activated['default'];
-    return status ? 'grid-container activated' : 'grid-container deactivated';
-  });
-  
-  classBtnStatus = computed(() => {
-    const status = this.group().activated[this.selectedEnv()] ?? this.group().activated['default'];
-    return status ? 'header-section activated' : 'header-section deactivated';
-  });
+  classStatus = signal<string>('grid-container deactivated');
+  classBtnStatus = signal<string>('header-section deactivated');
+  toggleSectionStyle = signal<string>('toggle-section deactivated');
 
   updatable = signal<boolean>(false);
   removable = signal<boolean>(false);
-
-  toggleSectionStyle = signal<string>('toggle-section deactivated');
 
   constructor() { 
     super();
@@ -94,6 +86,7 @@ export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
       form.get('environmentStatusSelection')?.setValue(status);
     }
     this.selectedEnvStatus.set(status);
+    this.updateCssClasses(status);
   }
 
   updateEnvironmentStatus(event: MatSlideToggleChange) {
@@ -101,7 +94,9 @@ export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
     const group = this.group();
     const selectedEnv = this.selectedEnv();
     
+    // Update group object and UI for immediate feedback
     group.activated[selectedEnv] = event.checked;
+    this.updateCssClasses(event.checked);
     this.selectEnvironment(selectedEnv);
 
     this.groupService.setGroupEnvironmentStatus(group.id, selectedEnv, event.checked)
@@ -109,8 +104,6 @@ export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
       .subscribe({
         next: data => {
           if (data) {
-            const updatedGroup = this.group();
-            updatedGroup.activated = data.activated;
             this.setBlockUI(false);
             this.toastService.showSuccess(`Environment updated with success`);
           }
@@ -163,6 +156,11 @@ export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
   private isEnvStatusChangeAllowed(element: Permissions): boolean {
     return element.permissions.find(p => p.action === 'UPDATE_ENV_STATUS').result === 'ok' ||
       element.permissions.find(p => p.action === 'UPDATE').result === 'ok'
+  }
+
+  private updateCssClasses(isActivated: boolean): void {
+    this.classStatus.set(isActivated ? 'grid-container activated' : 'grid-container deactivated');
+    this.classBtnStatus.set(isActivated ? 'header-section activated' : 'header-section deactivated');
   }
 
 }
