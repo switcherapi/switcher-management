@@ -162,7 +162,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       width: '400px',
       minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
       data: { 
-        currentEnvironment: this.currentEnvironment,
+        currentEnvironment: this.currentEnvironment(),
         domainId: this.strategyList.parent.domainId
       }
     });
