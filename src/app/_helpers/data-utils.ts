@@ -6,7 +6,7 @@ export class DataUtils {
     let success = true;
     value.forEach(v => {
       if (v.length <= max) {
-        if (arr.indexOf(v) === -1) {
+        if (!arr.includes(v)) {
           arr.push(v);
         }
       } else {
