@@ -21,7 +21,7 @@
         </li>
         <hr style="margin: 0;">
         <li>
-            @if (currentToken) {
+            @if (currentToken()) {
             <a class="topbar-menu-item" routerLink="/dashboard" title="Dashboard" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">dashboard</mat-icon>
                 Dashboard
@@ -35,7 +35,7 @@
             </a>
         </li>
         <li>
-            @if (!currentToken) {
+            @if (!currentToken()) {
             <a class="topbar-menu-item" routerLink="/login" title="Sign in" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">login</mat-icon>
                 Sign in
@@ -44,7 +44,7 @@
         </li>
         <hr style="margin: 0;">
         <li>
-            @if (!currentToken) {
+            @if (!currentToken()) {
             <a class="topbar-menu-item" routerLink="/signup" title="Sign up" (click)="onMenuClick('mainMenu')">
                 <mat-icon class="menu-item-icon">person_add</mat-icon>
                 Sign up
@@ -56,31 +56,31 @@
     <mat-divider class="divider-style"></mat-divider>
 
     <div class="navbar-nav" style="width: 100%;">
-        @if (currentToken) {
+        @if (currentToken()) {
         <a class="nav-item nav-link hide-main-menu" routerLink="/dashboard">Dashboard</a>
         }
         <a class="nav-item nav-link hide-main-menu" routerLink="/documentation">Documentation</a>
-        @if (!currentToken) {
+        @if (!currentToken()) {
         <a class="nav-item nav-link hide-main-menu" routerLink="/login">Sign in</a>
         }
         <a id="appTitle" class="nav-item nav-link hide-non-mobile" routerLink="/">Switcher Management</a>
-        @if (!currentToken) {
+        @if (!currentToken()) {
         <div class="menu-border-left">
             <a id="toggleTheme" class="nav-item nav-link transition" (click)="toggleDarkMode()">
-                <mat-icon>{{ darkMode ? 'brightness_7' : 'brightness_4' }}</mat-icon>
+                <mat-icon>{{ darkMode() ? 'brightness_7' : 'brightness_4' }}</mat-icon>
             </a>
             <a id="signUp" class="nav-item nav-link hide-main-menu" routerLink="/signup">Sign up</a>
         </div>
         }
-        @if (currentToken) {
+        @if (currentToken()) {
         <div id="menuProfile" class="profile-btn menu-border-left">
-            <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar }}" alt="User avatar">
+            <img class="profile-avatar switcher-logo transition" src="{{ profileAvatar() }}" alt="User avatar">
         </div>
         }
-        @if (currentToken) {
+        @if (currentToken()) {
         <ul id="profileMenu" class="navigation-nested nav-user">
             <li class="menu-header navigation-nested__header">
-                <div>{{ loggedUserName }}</div>
+                <div>{{ loggedUserName() }}</div>
             </li>
             <li>
                 <a class="topbar-menu-item" routerLink="/settings/account" title="Profile Panel" (click)="onMenuClick('profileMenu')">
@@ -90,7 +90,7 @@
             </li>
             <li>
                 <a class="topbar-menu-item" title="Profile Panel" (click)="toggleDarkMode()">
-                    <mat-icon class="menu-item-icon">{{ darkMode ? 'brightness_7' : 'brightness_4' }}</mat-icon>
+                    <mat-icon class="menu-item-icon">{{ darkMode() ? 'brightness_7' : 'brightness_4' }}</mat-icon>
                     Toggle Dark theme
                 </a>
             </li>

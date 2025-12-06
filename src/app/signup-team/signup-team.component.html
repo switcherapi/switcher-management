@@ -4,27 +4,26 @@
             <h4 class="card-header">
                 <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher Management"/>
             </h4>
-            @if (!loading) {
+            @if (!loading()) {
             <div class="card-body">
                 <div class="form-group">
                     <mat-form-field>
                         <mat-label>Domain</mat-label>
-                        <input matInput type="text" value="{{ domain }}" readonly="true">
+                        <input matInput type="text" value="{{ domain() }}" readonly="true">
                     </mat-form-field>
                 </div>
                 <div class="form-group">
                     <mat-form-field>
                         <mat-label>Team</mat-label>
-                        <input matInput type="text" value="{{ team }}" readonly="true">
+                        <input matInput type="text" value="{{ team() }}" readonly="true">
                     </mat-form-field>
                 </div>
-                @if (!error) {
-                <button mat-button class="btn-element" [disabled]="loading" (click)="onAccept()">
+                @if (!error()) {
+                <button mat-button class="btn-element" [disabled]="loading()" (click)="onAccept()">
                     <span class="label-color" style="color: white;">Accept</span>
                 </button>
-                }
-                @if (error) {
-                <div class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+                } @else {
+                <div class="alert alert-danger mt-3 mb-0">{{ error() }}</div>
                 }
             </div>
             } @else {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListComponent } from '../../common/list-component';
@@ -46,10 +46,10 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   private readonly toastService = inject(ToastService);
   private readonly errorHandler = inject(RouterErrorHandler);
 
-  permissions: Permissions[];
-  groups: Group[];
+  permissions = signal<Permissions[]>([]);
+  groups = signal<Group[]>([]);
 
-  creatable = false;
+  creatable = signal(false);
 
   constructor() {
     const fb = inject(FormBuilder);
@@ -64,9 +64,9 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   ngOnInit() {
-    this.cardListContainerStyle = 'card mt-4 loading';
-    this.loading = true;
-    this.error = '';
+    this.cardListContainerStyle.set('card mt-4 loading');
+    this.loading.set(true);
+    this.error.set('');
 
     this.readPermissionToObject();
     this.readChildPermissions(this.environmentSelection.get('environmentSelection').value ?? 'default');
@@ -87,7 +87,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loading = true;
+        this.loading.set(true);
         this.groupService.createGroup(this.domainId, result.name, result.description)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe({
@@ -117,7 +117,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
   }
 
   protected onEnvChange($event: EnvironmentChangeEvent) {
-    this.loading = true;
+    this.loading.set(true);
     this.environmentSelectionChange.emit($event.environmentName);
     this.readChildPermissions($event.environmentName);
   }
@@ -133,21 +133,22 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
       .subscribe({
         next: data => {
           if (data) {
-            this.groups = data;
+            this.groups.set(data);
             super.loadEnvironments(environmentName);
             this.domainRouteService.updateView(decodeURIComponent(this.domainName), 0);
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loading = false;
-          this.error = this.errorHandler.doError(error);
+          this.loading.set(false);
+          this.error.set(this.errorHandler.doError(error));
         },
         complete: () => {
-          if (!this.groups) {
-            this.error = 'Failed to connect to Switcher API';
+          if (this.groups() === null) {
+            this.error.set('Failed to connect to Switcher API');
           }
-          this.loading = false;
+
+          this.loading.set(false);
         }
       });
   }
@@ -157,7 +158,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data.length) {
-          this.creatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+          this.creatable.set(data.find(permission => permission.action === 'CREATE').result === 'ok');
         }
     });
   }
@@ -167,7 +168,7 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(response => {
         if (response.data.permission.length) {
-          this.permissions = response.data.permission;
+          this.permissions.set(response.data.permission);
         }
 
         this.loadGroups(environmentName);

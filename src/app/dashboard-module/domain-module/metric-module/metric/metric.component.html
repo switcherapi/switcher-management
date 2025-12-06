@@ -1,5 +1,5 @@
 <div [ngClass]="metricViewClass">
-    @if (!loading) {
+    @if (!loading()) {
     <div class="header-filter">
         <button mat-button class="btn-element" (click)="onFilter()">
             <mat-icon style="font-size: larger;">filter_list</mat-icon>
@@ -12,25 +12,25 @@
         <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
     </div>
     }
-    @if (error) {
-    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    @if (error()) {
+    <div class="alert alert-danger mt-3 mb-0">{{error()}}</div>
     }
     <section id="data-section" [ngClass]="classStatus" style="margin-top: 20px;">
-        @if (!loading) {
+        @if (!loading()) {
         <div #tabmetrics>
             <nav ngbNav #nav="ngbNav" class="nav-tabs" (navChange)="onNavChange($event)">
                 <ng-container [ngbNavItem]="1">
                     <a ngbNavLink>Overall Statistics</a>
                     <ng-template ngbNavContent>
-                        <app-metric-statistics [data]="metrics" [switcher]="switcher" 
+                        <app-metric-statistics [data]="metrics()" [switcher]="switcher" 
                             [environment]="environment" [parent]="this"></app-metric-statistics>
                     </ng-template>
                 </ng-container>
-                @if (metrics.data) {
+                @if (metrics().data) {
                 <ng-container [ngbNavItem]="2">
                     <a ngbNavLink>Data</a>
                     <ng-template ngbNavContent>
-                        <app-metric-data [data]="metrics.data" [switcher]="switcher" [parent]="this"></app-metric-data>
+                        <app-metric-data [data]="metrics().data" [switcher]="switcher" [parent]="this"></app-metric-data>
                     </ng-template>
                 </ng-container>
                 }

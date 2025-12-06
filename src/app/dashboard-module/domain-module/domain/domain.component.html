@@ -1,28 +1,28 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
 <div class="container" >
     <div class="container, card mt-4">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
-                @if (icon === 0) {
+                @if (icon() === 0) {
                 <mat-icon>receipt</mat-icon>
                 }
-                @if (icon === 1) {
+                @if (icon() === 1) {
                 <mat-icon> bar_chart</mat-icon>
                 }
-                @if (icon === 2) {
+                @if (icon() === 2) {
                 <mat-icon>receipt</mat-icon>
                 }
-                @if (icon === 3) {
+                @if (icon() === 3) {
                 <mat-icon>devices_other</mat-icon>
                 }
-                @if (icon === 4) {
+                @if (icon() === 4) {
                 <mat-icon> apps</mat-icon>
                 }
-                @if (icon === 6) {
+                @if (icon() === 6) {
                 <mat-icon> people</mat-icon>
                 }
-                {{ title }}
+                {{ title() }}
 
                 <button id="domainOptions" mat-button [matMenuTriggerFor]="belowMenu" style="float:right">
                     <mat-icon> list_alt</mat-icon>
@@ -36,10 +36,10 @@
                         <mat-icon>cloud_download</mat-icon>
                         Download Snapshot
                     </button>
-                    @if (transferLabel) {
+                    @if (transferLabel()) {
                     <button mat-menu-item (click)="onDomainTransfer()">
                         <mat-icon>next_week</mat-icon>
-                        {{ transferLabel }}
+                        {{ transferLabel() }}
                     </button>
                     }
                     <div style="margin-bottom: .5rem; border-bottom: 1px solid rgba(179,179,179,.1); width: 100%;">
@@ -75,7 +75,7 @@
             <a (click)="gotoListChildren()">
                 <mat-icon id="iconListChildren" style="color: white;" matTooltip="{{ getLabelListChildren() }}">format_list_bulleted</mat-icon>
             </a>
-            <element-autocomplete class="element-filter mobile-only" [parentComponent]="this"></element-autocomplete>
+            <app-element-autocomplete class="element-filter mobile-only" [parentComponent]="this"></app-element-autocomplete>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" (click)="navToggled()"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Domain menu">
                 <span class="navbar-toggler-icon"></span>
@@ -108,29 +108,29 @@
                     <a class="nav-item nav-link" (click)="gotoTeams()"
                         data-bs-toggle="collapse" data-bs-target="#navbarContent">Teams</a>
                 </div>
-                <element-autocomplete class="element-filter non-mobile-only" [parentComponent]="this"></element-autocomplete>
+                <app-element-autocomplete class="element-filter non-mobile-only" [parentComponent]="this"></app-element-autocomplete>
             </div>
         </nav>
 
-        @if (loading) {
+        @if (loading()) {
         <div class="div-router-history loading-spinner">
             <mat-spinner [diameter]="25"></mat-spinner>
         </div>
         } @else {
         <div class="div-router-history">
-            @if (domain) {
+            @if (domain()) {
             <a class="router-history" (click)="gotoDetails(selectedDomainPath)">
-                <span class="badge"></span>{{ domain.name }}
+                <span class="badge"></span>{{ domain()!.name }}
             </a>
             }
-            @if (group) {
+            @if (group()) {
             <a class="router-history" (click)="gotoDetails(selectedGroupPath)">
-                / <span class="badge"></span>{{ group.name }}
+                / <span class="badge"></span>{{ group()!.name }}
             </a>
             }
-            @if (config) {
+            @if (config()) {
             <a class="router-history" (click)="gotoDetails(selectedConfigPath)">
-                / <span class="badge"></span>{{ config.key }}
+                / <span class="badge"></span>{{ config()!.key }}
             </a>
             }
         </div>

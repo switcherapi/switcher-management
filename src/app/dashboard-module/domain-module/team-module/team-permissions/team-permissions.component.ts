@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { takeUntil } from 'rxjs/operators';
@@ -49,7 +49,7 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
   @Input() creatable = false;
   @Input() removable = false;
 
-  loading = false;
+  loading = signal(false);
 
   constructor() {
     super();
@@ -158,10 +158,12 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
       .subscribe({
         next: permissionUpdated => {
           if (permissionUpdated) {
+            permission.active = event.checked;
             this.toastService.showSuccess('Permission updated with success');
           }
         },
         error: error => {
+          permission.active = !event.checked;
           this.toastService.showError('Permission denied');
           ConsoleLogger.printError(error);
           this.setBlockUI(false);
@@ -200,7 +202,7 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
   }
 
   private loadPermissions(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.permissionService.getPermissionsByTeam(this.team._id).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: permissions => {
@@ -211,10 +213,10 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loading = false;
+          this.loading.set(false);
         },
         complete: () => {
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

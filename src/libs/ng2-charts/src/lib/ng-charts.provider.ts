@@ -1,10 +1,10 @@
 import { InjectionToken } from '@angular/core';
+import { DeepPartial } from '@apollo/client/utilities';
 import {
   ChartComponentLike,
   Defaults,
   registerables as defaultRegisterables,
 } from 'chart.js';
-import { DeepPartial } from 'chart.js/dist/types/utils';
 import { merge } from 'lodash-es';
 
 export const NG_CHARTS_CONFIGURATION =

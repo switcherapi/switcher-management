@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -49,23 +49,23 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
 
   private readonly unsubscribe = new Subject<void>();
 
-  components: SwitcherComponent[];
+  components = signal<SwitcherComponent[]>([]);
 
   compFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2)
   ]);
 
-  updatable = false;
-  removable = false;
-  creatable = false;
+  updatable = signal(false);
+  removable = signal(false);
+  creatable = signal(false);
 
   domainId: string;
   domainName: string;
-  classStatus = "card mt-4 loading";
-  loading = true;
-  creating = false;
-  error = '';
+  classStatus = signal("card mt-4 loading");
+  loading = signal(true);
+  creating = signal(false);
+  error = signal('');
   fetch = true;
 
   constructor() {
@@ -93,23 +93,22 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
   }
 
   private loadComponents(): void {
-    this.loading = true;
-    this.classStatus = "card mt-4 loading";
+    this.loading.set(true);
+    this.classStatus.set("card mt-4 loading");
 
     this.compService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (components: SwitcherComponent[]) => {
-          this.components = components;
+          this.components.set(components);
         },
         error: (error: any) => {
-          this.error = error;
-          this.loading = false;
-          this.error = this.errorHandler.doError(error);
+          this.error.set(this.errorHandler.doError(error));
+          this.loading.set(false);
         },
         complete: () => {
-          this.loading = false;
-          this.classStatus = "card mt-4 ready";
+          this.loading.set(false);
+          this.classStatus.set("card mt-4 ready");
         }
       });
   }
@@ -121,11 +120,11 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
         if (data.length) {
           for (const element of data) {
             if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
+              this.updatable.set(element.result === 'ok');
             } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
+              this.removable.set(element.result === 'ok');
             } else if (element.action === 'CREATE') {
-              this.creatable = element.result === 'ok';
+              this.creatable.set(element.result === 'ok');
             }
           }
         }
@@ -138,24 +137,25 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
     if (valid) {
       const componentName = this.compFormControl.value;
       this.compFormControl.reset();
-      this.creating = true;
+      this.creating.set(true);
 
       this.compService.createComponent(this.domainId, componentName)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: data => {
             if (data.component) {
-              this.components.push(data.component);
+              const currentComponents = this.components();
+              this.components.set([...currentComponents, data.component]);
               this.confirmKeyCreated(data.apiKey, data.component.name);
             }
           },
           error: error => {
-            this.creating = false;
+            this.creating.set(false);
             this.toastService.showError(error.error);
             ConsoleLogger.printError(error);
           },
           complete: () => {
-            this.creating = false;
+            this.creating.set(false);
           }
         });
     } else {
@@ -169,14 +169,16 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${selectedEnvironment.name}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        const component = this.components.find(env => env.id === selectedEnvironment.id);
+        const currentComponents = this.components();
+        const component = currentComponents.find(env => env.id === selectedEnvironment.id);
 
         this.compService.deleteComponent(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: env => {
             if (env && component) {
-              this.components.splice(this.components.indexOf(component), 1);
+              const updatedComponents = currentComponents.filter(c => c.id !== selectedEnvironment.id);
+              this.components.set(updatedComponents);
               this.toastService.showSuccess('Component removed with success');
             }
           },
@@ -209,7 +211,13 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
           .subscribe({
             next: data => {
               if (data) {
-                selectedComponent.name = componentChanged.name;
+                const currentComponents = this.components();
+                const updatedComponents = currentComponents.map(comp => 
+                  comp.id === selectedComponent.id 
+                    ? { ...comp, name: componentChanged.name }
+                    : comp
+                );
+                this.components.set(updatedComponents);
                 this.toastService.showSuccess(`Component updated with success`);
               }
             },
@@ -269,7 +277,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
 }
 
 @Component({
-    selector: 'component.edit-dialog',
+    selector: 'app-component.edit-dialog',
     templateUrl: 'component.edit-dialog.html',
     styleUrls: [
         '../common/css/create.component.css',

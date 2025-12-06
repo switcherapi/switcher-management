@@ -53,17 +53,16 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   @Input() domainId: string;
   @Input() domainName: string;
   @Input() strategy: Strategy;
-  removable = false;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   
-  dataSource: MatTableDataSource<History>;
+  dataSource = signal<MatTableDataSource<History> | null>(null);
   dataColumns = ['newValue', 'date', 'updatedBy'];
   pageLimit = 11;
-  pageLength = 11;
-  pageSkip = 0;
-  pageFetch = true;
+  pageLength = signal(11);
+  pageSkip = signal(0);
+  pageFetch = signal(true);
   columnsToDisplay = [
     {
       data: 'newValue',
@@ -80,11 +79,12 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   ];
   expandedElement = signal<History | null>(null);
 
-  configId: string;
-  groupId: string;
-  classStatus = "mat-elevation-z8 loading";
-  loading = true;
-  fetch = true;
+  configId = signal<string>('');
+  groupId = signal<string>('');
+  classStatus = signal("mat-elevation-z8 loading");
+  loading = signal(true);
+  fetch = signal(true);
+  removable = signal(false);
 
   constructor() { 
     this.activatedRoute.parent?.params.subscribe(params => {
@@ -93,14 +93,14 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.params.subscribe(params => {
-      this.groupId = params.groupid;
-      this.configId = params.configid;
+      this.groupId.set(params.groupid || '');
+      this.configId.set(params.configid || '');
     });
 
     this.activatedRoute.paramMap
       .pipe(map(() => globalThis.history.state))
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.fetch = data.navigationId === 1);
+      .subscribe(data => this.fetch.set(data.navigationId === 1));
   }
 
   ngOnInit() {
@@ -127,10 +127,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   onPage(event: PageEvent) {
-    this.pageSkip = (event.pageSize * (event.pageIndex + 1)) - event.pageSize;
-    this.pageSkip = this.pageSkip + (this.pageLength - this.pageSkip);
+    const newPageSkip = (event.pageSize * (event.pageIndex + 1)) - event.pageSize;
+    this.pageSkip.set(newPageSkip + (this.pageLength() - newPageSkip));
     
-    if (this.pageFetch) {
+    if (this.pageFetch()) {
       this.loadChangeLog();
     }
   }
@@ -142,7 +142,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         if (data.length) {
           for (const element of data) {
             if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
+              this.removable.set(element.result === 'ok');
             }
           }
         }
@@ -150,14 +150,14 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadChangeLog(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.domainRouteService.updateView('Change Log', 2);
 
     if (this.strategy) {
       this.loadStrategyHistory();
-    } else if (this.configId) {
+    } else if (this.configId()) {
       this.loadConfigHistory();
-    } else if (this.groupId) {
+    } else if (this.groupId()) {
       this.loadGroupHistory();
     } else {
       this.loadDomainHistory();
@@ -165,8 +165,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadDomainHistory(): void {
-    this.loading = true;
-    this.domainService.getHistory(this.domainId, this.pageLimit, this.pageSkip)
+    this.loading.set(true);
+    this.domainService.getHistory(this.domainId, this.pageLimit, this.pageSkip())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => this.loadSuccess(data),
@@ -178,20 +178,20 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadGroupHistory(): void {
-    this.loading = true;
-    this.groupService.getHistory(this.groupId, this.pageLimit, this.pageSkip)
+    this.loading.set(true);
+    this.groupService.getHistory(this.groupId(), this.pageLimit, this.pageSkip())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => this.loadSuccess(data),
         error: error => this.loadError(error)
       });
 
-    if (this.fetch) {
-      this.groupService.getGroupById(this.groupId)
+    if (this.fetch()) {
+      this.groupService.getGroupById(this.groupId())
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
-          this.domainRouteService.updatePath(this.groupId, data.name, Types.GROUP_TYPE, 
-            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}`);
+          this.domainRouteService.updatePath(this.groupId(), data.name, Types.GROUP_TYPE, 
+            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId()}`);
       });
     } else {
       this.domainRouteService.refreshPath();
@@ -199,27 +199,27 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadConfigHistory(): void {
-    this.loading = true;
-    this.configService.getHistory(this.configId, this.pageLimit, this.pageSkip)
+    this.loading.set(true);
+    this.configService.getHistory(this.configId(), this.pageLimit, this.pageSkip())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => this.loadSuccess(data),
         error: error => this.loadError(error)
       });
 
-    if (this.fetch) {
-      this.configService.getConfigById(this.configId, false)
+    if (this.fetch()) {
+      this.configService.getConfigById(this.configId(), false)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
-          this.domainRouteService.updatePath(this.configId, data.key, Types.CONFIG_TYPE, 
-            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId}/switchers/${this.configId}`);
+          this.domainRouteService.updatePath(this.configId(), data.key, Types.CONFIG_TYPE, 
+            `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${this.groupId()}/switchers/${this.configId()}`);
       });
     }
   }
 
   private loadStrategyHistory(): void {
-    this.loading = true;
-    this.strategyService.getHistory(this.strategy.id, this.pageLimit, this.pageSkip)
+    this.loading.set(true);
+    this.strategyService.getHistory(this.strategy.id, this.pageLimit, this.pageSkip())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => this.loadSuccess(data),
@@ -228,17 +228,19 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private loadDataSource(data: History[], refresh: boolean): void {
-    if (this.dataSource && refresh) {
-      data = this.dataSource.data.concat(data);
-      this.pageLength = data.length;
+    const currentDataSource = this.dataSource();
+    if (currentDataSource && refresh) {
+      data = currentDataSource.data.concat(data);
+      this.pageLength.set(data.length);
     }
       
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = (dataHistory: History, filter: string) => {
+    const newDataSource = new MatTableDataSource(data);
+    newDataSource.sort = this.sort;
+    newDataSource.paginator = this.paginator;
+    newDataSource.filterPredicate = (dataHistory: History, filter: string) => {
       return this.customFilterPredicate(dataHistory, filter);
     };
+    this.dataSource.set(newDataSource);
   }
 
   private resetDomainChangeLog(): void {
@@ -251,7 +253,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private resetGroupChangeLog(): void {
-    this.groupService.resetHistory(this.groupId)
+    this.groupService.resetHistory(this.groupId())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => this.changeLogSuccess(data),
@@ -260,7 +262,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   private resetConfigChangeLog(): void {
-    this.configService.resetHistory(this.configId)
+    this.configService.resetHistory(this.configId())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => this.changeLogSuccess(data),
@@ -279,8 +281,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   private changeLogSuccess(data: any): void {
     if (data) {
-      this.dataSource = new MatTableDataSource(null);
-      this.pageLength = 0;
+      this.dataSource.set(new MatTableDataSource([]));
+      this.pageLength.set(0);
       this.toastService.showSuccess(`Change Log reseted with success`);
     }
   }
@@ -294,17 +296,17 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     if (data?.length) {
       this.loadDataSource(data, true);
     } else {
-      this.pageFetch = false;
+      this.pageFetch.set(false);
     }
 
-    this.loading = false;
-    this.classStatus = "mat-elevation-z8 ready";
+    this.loading.set(false);
+    this.classStatus.set("mat-elevation-z8 ready");
   }
 
   private loadError(error: any): void {
     ConsoleLogger.printError(error);
     this.errorHandler.doError(error);
-    this.loading = false;
+    this.loading.set(false);
   }
 
   private customFilterPredicate(data: History, filter: string): boolean {
@@ -326,7 +328,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    const data = this.dataSource.data.slice();
+    const currentDataSource = this.dataSource();
+    if (!currentDataSource) return;
+    
+    const data = currentDataSource.data.slice();
     
     if (!sort.active || sort.direction === '') {
       return;
@@ -380,10 +385,13 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const currentDataSource = this.dataSource();
+    if (!currentDataSource) return;
+    
+    currentDataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    if (currentDataSource.paginator) {
+      currentDataSource.paginator.firstPage();
     }
   }
 
@@ -395,9 +403,9 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       if (result) {
         if (this.strategy) {
           this.resetStrategyChangeLog();
-        } else if (this.configId) {
+        } else if (this.configId()) {
           this.resetConfigChangeLog();
-        } else if (this.groupId) {
+        } else if (this.groupId()) {
           this.resetGroupChangeLog();
         } else {
           this.resetDomainChangeLog();

@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 
 @Component({
-    selector: 'domain-transfer-dialog',
+    selector: 'app-domain-transfer-dialog',
     templateUrl: 'domain-transfer-dialog.html',
     styleUrls: [
         '../../common/css/create.component.css',

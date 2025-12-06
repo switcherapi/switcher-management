@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, inject, signal, computed, DestroyRef } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Domain } from '../model/domain';
 import { SlackInstallation } from '../model/slack';
 import { DomainService } from '../services/domain.service';
@@ -21,55 +20,72 @@ import { MatIcon } from '@angular/material/icon';
     styleUrls: ['./slack-auth.component.css'],
     imports: [MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatInput, MatButton, MatIcon]
 })
-export class SlackAuthComponent implements OnInit, OnDestroy {
+export class SlackAuthComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly domainService = inject(DomainService);
   private readonly slackService = inject(SlackService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
+  private readonly enterpriseId = signal<string>('');
+  private readonly teamId = signal<string>('');
 
-  private enterprise_id: string;
-  private team_id: string;
-
-  domainFormControl = new FormControl(undefined);
+  readonly domainFormControl = new FormControl<Domain | undefined>(undefined);
   
-  domains: Domain[];
-  selectedDomain: Domain;
-  installation: SlackInstallation;
-  loading = false;
-  error = '';
+  readonly domains = signal<Domain[]>([]);
+  readonly selectedDomain = signal<Domain | undefined>(undefined);
+  readonly installation = signal<SlackInstallation | undefined>(undefined);
+  readonly loading = signal<boolean>(false);
+  readonly error = signal<string>('');
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.enterprise_id = params['e_id'] ?? '';
-      this.team_id = params['t_id'] ?? '';
-      this.error = this.validate(params['error'], params['reason']);
+  readonly validationError = computed(() => {
+    const selectedDomain = this.selectedDomain();
+    const enterpriseId = this.enterpriseId();
+    const teamId = this.teamId();
+
+    if (!selectedDomain) {
+      return 'Please, select a Domain to proceed with the Slack installation';
+    }
+
+    if (!enterpriseId && !teamId) {
+      return 'Unable to load Slack Authorization from the given URL';
+    }
+
+    return '';
+  });
+
+  constructor() {
+    // Initialize query params subscription
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.enterpriseId.set(params['e_id'] ?? '');
+      this.teamId.set(params['t_id'] ?? '');
+      
+      const validationError = this.validate(params['error'], params['reason']);
+      this.error.set(validationError);
 
       this.loadDomains();
     });
 
-    this.domainFormControl.valueChanges.subscribe(value => {
-      this.selectedDomain = value;
-      this.error = this.validate();
-      if (!this.error)
+    // Form control value changes subscription
+    this.domainFormControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      this.selectedDomain.set(value);
+      const validationError = this.validationError();
+      this.error.set(validationError);
+      
+      if (!validationError && value) {
         this.loadSlackInstallation();
-    })
+      }
+    });
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  private loadDomains() {
+  private loadDomains(): void {
     this.domainService.getDomains()
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => {
           if (data) {
-            this.domains = data.filter(domain => !domain.integrations.slack);
+            this.domains.set(data.filter(domain => !domain.integrations.slack));
           }
         },
         error: error => {
@@ -80,56 +96,54 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
   }
 
   private loadSlackInstallation(): void {
-    this.loading = true;
-    this.slackService.findSlackInstallation(this.enterprise_id, this.team_id)
-      .pipe(takeUntil(this.unsubscribe))
+    this.loading.set(true);
+    this.slackService.findSlackInstallation(this.enterpriseId(), this.teamId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: installation => {
-          this.installation = installation;
-          this.loading = false;
+          this.installation.set(installation);
+          this.loading.set(false);
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.error = 'Unable to load Slack Installation';
-          this.loading = false;
+          this.error.set('Unable to load Slack Installation');
+          this.loading.set(false);
         }
       });
   }
 
   private validate(responseCode?: number, responseReason?: string): string {
-    if (responseCode == 1) {
+    if (responseCode === 1) {
       ConsoleLogger.printError(responseReason);
       return 'Unable to proceed with the Slack installation, try it again';
     }
-
-    if (!this.selectedDomain)
-      return 'Please, select a Domain to proceed with the Slack installation';
-
-    if (!this.enterprise_id && !this.team_id)
-      return 'Unable to load Slack Authorization from the given URL';
+    return '';
   }
 
   onAuthorize(): void {
-    this.loading = true;
-    this.slackService.authorizeInstallation(this.selectedDomain.id, this.team_id)
-      .pipe(takeUntil(this.unsubscribe))
+    this.loading.set(true);
+    const selectedDomain = this.selectedDomain();
+    if (!selectedDomain) return;
+    
+    this.slackService.authorizeInstallation(selectedDomain.id, this.teamId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.toastService.showSuccess(`Slack App succesfully installed for ${this.selectedDomain.name}`);
+          this.toastService.showSuccess(`Slack App succesfully installed for ${selectedDomain.name}`);
           this.router.navigate(['/dashboard']);
         },
         error: error => {
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to complete the Slack installation`);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
 
   onDecline(): void {
-    this.loading = true;
-    this.slackService.declineInstallation(this.enterprise_id, this.team_id)
-      .pipe(takeUntil(this.unsubscribe))
+    this.loading.set(true);
+    this.slackService.declineInstallation(this.enterpriseId(), this.teamId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.router.navigate(['/dashboard']);
@@ -137,7 +151,7 @@ export class SlackAuthComponent implements OnInit, OnDestroy {
         error: error => {
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to decline Slack installation`);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

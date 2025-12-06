@@ -4,10 +4,10 @@
             <h4 class="card-header">
                 <img src="assets\switcherapi_management_white.png" style="width: 220px;" alt="Switcher API"/>
             </h4>
-            @if (!loading) {
+            @if (!loading()) {
             <div class="card-body">
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    @if (!success) {
+                    @if (!success()) {
                     <div class="form-group">
                         @if (hasInternalAuthEnabled()) {
                         <mat-form-field>
@@ -29,36 +29,36 @@
                     </div>
                     <div class="btn-container">
                         @if (hasInternalAuthEnabled()) {
-                        <button mat-button class="btn-element" [disabled]="loading">
+                        <button mat-button class="btn-element" [disabled]="loading()">
                             <img class="switcher-logo" src="assets\switcherapi_mark_white.png" style="width: 20px;" alt="Switcher API" />
                             <span class="label-color" style="color: white; padding-left: 5px;">Login</span>
                         </button>
                         }
                         @if (hasGithubIntegration()) {
-                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onGitHubLogin()">
+                        <button mat-button class="btn-element white" [disabled]="loading()" (click)="onGitHubLogin()">
                             <img src="assets\github.svg" style="width: 20px;" alt="GitHub" />
                             <span style="color: black; padding-left: 5px;">GitHub</span>
                         </button>
                         }
                         @if (hasBitbucketIntegration()) {
-                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onBitbucketLogin()">
+                        <button mat-button class="btn-element white" [disabled]="loading()" (click)="onBitbucketLogin()">
                             <img src="assets\bitbucket.svg" style="width: 20px;" alt="Bitbucket" />
                             <span style="color: black; padding-left: 5px;">Bitbucket</span>
                         </button>
                         }
                         @if (hasSamlAuthEnabled()) {
                         <hr />
-                        <button mat-button class="btn-element white" [disabled]="loading" (click)="onSamlLogin()">
+                        <button mat-button class="btn-element white" [disabled]="loading()" (click)="onSamlLogin()">
                             <img src="assets\saml.svg" style="width: 20px;" alt="SAML" />
                             <span style="color: black; padding-left: 5px;">SAML</span>
                         </button>
                         }
                     </div>
-                    @if (error) {
-                    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                    @if (error()) {
+                    <div class="alert alert-danger mt-3 mb-0">{{error()}}</div>
                     }
-                    @if (status) {
-                    <div class="alert alert-danger mt-3 mb-0">{{status}}</div>
+                    @if (status()) {
+                    <div class="alert alert-danger mt-3 mb-0">{{status()}}</div>
                     }
                 </form>
             </div>
@@ -68,7 +68,7 @@
                 <img src="assets\switcherapi_mark_grey.png" width="60" style="transform: translate(0%,-145%);" alt="Switcher API" />
             </div>
             }
-            <app-version [apiVersion]="apiVersion"></app-version>
+            <app-version [apiVersion]="apiVersion()"></app-version>
         </div>
     </div>
 </div>

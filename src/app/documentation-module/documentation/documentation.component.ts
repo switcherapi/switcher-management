@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 
@@ -11,8 +11,8 @@ import { MatIcon } from '@angular/material/icon';
 export class DocumentationComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
 
-  sideBarTopPos: number;
-  prevScrollpos = window.scrollY;
+  readonly sideBarTopPos = signal<number>(0);
+  readonly prevScrollpos = signal<number>(window.scrollY);
 
   ngOnInit() {
     this.scrollMenuHandler();
@@ -47,14 +47,17 @@ export class DocumentationComponent implements OnInit, OnDestroy {
   }
 
   scrollMenuHandler() {
-    window.onscroll = function () {
+    window.onscroll = () => {
       const currentScrollPos = window.scrollY;
-      if (this.prevScrollpos > currentScrollPos) {
-          document.getElementById("sidebarCollapse").style.top = "0px";
-      } else {
-          document.getElementById("sidebarCollapse").style.top = "-60px";
+      const sidebarCollapse = document.getElementById("sidebarCollapse");
+      if (sidebarCollapse) {
+        if (this.prevScrollpos() > currentScrollPos) {
+          sidebarCollapse.style.top = "0px";
+        } else {
+          sidebarCollapse.style.top = "-60px";
+        }
       }
-      this.prevScrollpos = currentScrollPos;
+      this.prevScrollpos.set(currentScrollPos);
     }
   }
 

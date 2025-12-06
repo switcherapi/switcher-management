@@ -43,12 +43,12 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  dataSource: MatTableDataSource<MetricData>;
+  dataSource = signal<MatTableDataSource<MetricData>>(new MatTableDataSource<MetricData>([]));
   dataColumns = ['switcher', 'component', 'result', 'date'];
 
   expandedElement = signal<MetricData | null>(null);
 
-  removable = false;
+  removable = signal(false);
 
   totalPages: number;
   page = 1;
@@ -62,7 +62,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
     this.pageLoaded = this.data.length;
     this.totalPages = this.date ? (() => {
       //if filtered by date, get the sum of positive and negative results
-      const switcherFound = this.parent.metrics.statistics.switchers.find(switcher => switcher.switcher === this.parent.switcher);
+      const switcherFound = this.parent.metrics().statistics.switchers.find(switcher => switcher.switcher === this.parent.switcher);
       const dateStats = switcherFound?.dateTimeStatistics?.filter(date => date.date == this.date) || [];
       return dateStats.map(sumResults => sumResults.negative + sumResults.positive)[0] || 0;
     })() :
@@ -91,10 +91,11 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const dataSourceInstance = this.dataSource();
+    dataSourceInstance.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    if (dataSourceInstance.paginator) {
+      dataSourceInstance.paginator.firstPage();
     }
   }
 
@@ -109,7 +110,8 @@ export class MetricDataComponent implements OnInit, OnDestroy {
           .subscribe({
             next: data => {
               if (data) {
-                this.dataSource = new MatTableDataSource(null);
+                this.dataSource.set(new MatTableDataSource(null));
+                this.refreshParentData();
                 this.toastService.showSuccess(`Metrics reseted with success`);
               }
             },
@@ -127,7 +129,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
       return;
     }
     
-    const data = this.dataSource.data.slice();
+    const data = this.dataSource().data.slice();
     const sortedData = [...data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
@@ -187,8 +189,8 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   private getTotalStatistics(): number {
-    if (this.parent.metrics.statistics.switchers.length) {
-      const found = this.parent.metrics.statistics.switchers
+    if (this.parent.metrics().statistics.switchers.length) {
+      const found = this.parent.metrics().statistics.switchers
         .find(switcher => switcher.switcher === this.parent.switcher);
 
       return found ? found.total : 0;
@@ -204,7 +206,7 @@ export class MetricDataComponent implements OnInit, OnDestroy {
         if (data.length) {
           data.forEach(element => {
             if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
+              this.removable.set(element.result === 'ok');
             }
           });
         }
@@ -212,12 +214,13 @@ export class MetricDataComponent implements OnInit, OnDestroy {
   }
 
   private loadDataSource(data: MetricData[]): void {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = (metricData: MetricData, filter: string) => {
+    const dataSourceInstance = new MatTableDataSource(data);
+    dataSourceInstance.sort = this.sort;
+    dataSourceInstance.paginator = this.paginator;
+    dataSourceInstance.filterPredicate = (metricData: MetricData, filter: string) => {
       return this.customFilterPredicate(metricData, filter);
     };
+    this.dataSource.set(dataSourceInstance);
   }
 
   private customFilterPredicate(data: MetricData, filter: string): boolean {
@@ -232,6 +235,27 @@ export class MetricDataComponent implements OnInit, OnDestroy {
         return e.input.toLowerCase().toString().includes(filter) ||
           e.strategy.toLowerCase().toString().includes(filter);
       }).length > 0;
+  }
+
+  private refreshParentData(): void {
+    this.parent.loadDataMetrics(1, this.parent.environment, this.date, this.date)
+      .subscribe({
+        next: metrics => {
+          const currentMetrics = this.parent.metrics();
+          currentMetrics.data = metrics?.data || [];
+          this.parent.metrics.set({ ...currentMetrics });
+          
+          // Update local data and pagination counters
+          this.data = metrics?.data || [];
+          this.page = 1;
+          this.pageLoaded = this.data.length;
+          this.currentPageSize = this.data.length;
+          this.totalPages = 0;
+        },
+        error: error => {
+          ConsoleLogger.printError(error);
+        }
+      });
   }
   
 }

@@ -1,4 +1,4 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
     <h3 class="settings-title">
         Account Profile
     </h3>
@@ -15,14 +15,14 @@
                 <div class="description">
                     <mat-form-field>
                         <mat-label>Email</mat-label>
-                        <input style="color: gray;" matInput [value]="userEmail" readonly>
+                        <input style="color: gray;" matInput [value]="userEmail()" readonly>
                     </mat-form-field>
                 </div>
                 <div class="description" style="display: block;">
                     <fieldset>
                         <legend style="font-size: inherit;">Connected with</legend>
                         <img class="platform" src="{{ getPlatformIcon() }}" alt=""/>
-                        <span class="platform-name">{{ userPlatform }}</span>
+                        <span class="platform-name">{{ userPlatform() }}</span>
                     </fieldset>
                 </div>
                 <hr>
@@ -31,17 +31,17 @@
                     padding: 20px;">
                     <fieldset>
                         <legend style="font-size: inherit; color: #fb5454;">Delete account</legend>
-                        @if (domains > 0) {
-                        <p>This account has {{ domains }} Domain(s) that must be either deleted or transfered to another account.</p>
+                        @if (domains() > 0) {
+                        <p>This account has {{ domains() }} Domain(s) that must be either deleted or transfered to another account.</p>
                         }
-                        @if (domains === 0) {
+                        @if (domains() === 0) {
                         <p>
                             <strong>Important:</strong> This process is not reversible. 
                             Once you delete your account you will lose all of your data, and the account will be terminated.
                         </p>
                         }
                     </fieldset>
-                    <button mat-button class="btn-element btn-red" [disabled]="domains > 0" (click)="onDelete()">
+                    <button mat-button class="btn-element btn-red" [disabled]="domains() > 0" (click)="onDelete()">
                         Delete account
                     </button>
                 </div>
@@ -54,7 +54,7 @@
             </form>
         </div>
         <div class="settings-right">
-            <img class="avatar" src="{{ profileAvatar }}" alt="">
+            <img class="avatar" src="{{ profileAvatar() }}" alt="">
         </div>
     </section>
 </app-block-ui>

@@ -1,7 +1,5 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnInit, inject, signal, effect } from '@angular/core';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
@@ -15,7 +13,6 @@ import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
@@ -30,70 +27,65 @@ import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
         '../../common/css/create.component.css',
         './domain-snapshot.component.css'
     ],
-    imports: [BlockUIComponent, MatDialogTitle, MatToolbar, MatIconButton, MatIcon, CdkScrollable, MatDialogContent, 
+    imports: [BlockUIComponent, MatDialogTitle, MatToolbar, MatIconButton, MatIcon, MatDialogContent, 
       MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatCheckbox, 
       MatDialogActions, MatButton, CdkCopyToClipboard
     ]
 })
-export class DomainSnapshotComponent extends BasicComponent implements OnInit, OnDestroy {
+export class DomainSnapshotComponent extends BasicComponent implements OnInit {
   dialogRef = inject<MatDialogRef<DomainSnapshotComponent>>(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
   private readonly environmentService = inject(EnvironmentService);
   private readonly componentService = inject(ComponentService);
   private readonly domainService = inject(DomainService);
   private readonly toastService = inject(ToastService);
-
-  private readonly unsubscribe = new Subject<void>();
   
   componentSelection = new FormControl('-', []);
   environmentSelection = new FormControl('default', [
     Validators.required
   ]);
 
-
-  components: SwitcherComponent[];
-  environments: Environment[];
+  components = signal<SwitcherComponent[]>([]);
+  environments = signal<Environment[]>([]);
+  includeStatus = signal(true);
+  includeDescription = signal(true);
+  snapshot = signal<string | null>(null);
 
   private readonly domainId: string;
-
-  includeStatus = true;
-  includeDescription = true;
-  snapshot: string;
 
   constructor() {
     super();
     const data = this.data;
-
     this.domainId = data.domainId;
+
+    effect(() => {
+      const envValue = this.environmentSelection.value;
+      if (envValue) {
+        this.data.environment = envValue;
+      }
+    });
+    
+    effect(() => {
+      const compValue = this.componentSelection.value;
+      if (compValue) {
+        this.data.component = compValue;
+      }
+    });
   }
 
   ngOnInit() {
     this.environmentService.getEnvironmentsByDomainId(this.domainId)
-      .pipe(takeUntil(this.unsubscribe))
       .subscribe(environments => {
-        this.environments = environments;
-        this.environments = this.environments.filter(environment => environment.name !== this.data.currentEnvironment);
+        const filteredEnvironments = environments.filter(environment => 
+          environment.name !== this.data.currentEnvironment);
+        this.environments.set(filteredEnvironments);
       });
-
-    this.componentService.getComponentsByDomain(this.domainId)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(components => {
-        this.components = [{ name: '-' } as SwitcherComponent];
-        this.components.push(...components);
-      });
-
-    this.environmentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
-      this.data.environment = value;
-    });
     
-    this.componentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
-      this.data.component = value;
-    });
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+    this.componentService.getComponentsByDomain(this.domainId)
+      .subscribe(components => {
+        const componentsList = [{ name: '-' } as SwitcherComponent, ...components];
+        this.components.set(componentsList);
+      });
   }
 
   onCancel(): void {
@@ -108,15 +100,15 @@ export class DomainSnapshotComponent extends BasicComponent implements OnInit, O
       const environment = this.environmentSelection.value;
       
       this.setBlockUI(true, 'Downloading...');
-      this.snapshot = null;
+      this.snapshot.set(null);
       this.domainService.executeSnapshotQuery(
-        this.domainId, environment, component, this.includeStatus, this.includeDescription)
-        .pipe(takeUntil(this.unsubscribe))
+        this.domainId, environment, component, this.includeStatus(), this.includeDescription())
         .subscribe({
-          next: result => {
+          next: (result: any) => {
             if (result) {
               const omitTypename = (key: any, value: any) => key === "__typename" ? undefined : value;
-              this.snapshot = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
+              const snapshotData = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
+              this.snapshot.set(snapshotData);
               this.lockEnvSelection();
               this.toastService.showSuccess(`Snapshot downloaded with success`);
             }
@@ -131,13 +123,13 @@ export class DomainSnapshotComponent extends BasicComponent implements OnInit, O
   }
 
   onCopy() {
-    this.snapshot = null;
+    this.snapshot.set(null);
     this.lockEnvSelection();
     this.toastService.showSuccess(`Snapshot copied with success`);
   }
 
   private lockEnvSelection(): void {
-    if (this.snapshot) {
+    if (this.snapshot()) {
       this.environmentSelection.disable({ onlySelf: true });
       this.componentSelection.disable({ onlySelf: true });
     } else {

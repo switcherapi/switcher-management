@@ -1,5 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, signal } from '@angular/core';
 import { ToastsContainerComponent } from '../../_helpers/toasts-container.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
@@ -9,19 +8,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     styleUrls: ['./settings.component.css'],
     imports: [ToastsContainerComponent, RouterLink, RouterOutlet]
 })
-export class SettingsComponent implements OnDestroy {
+export class SettingsComponent {
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly navControl = signal<boolean>(false);
 
-  navControl = false;
-
-  navToggled() {
-    this.navControl = !this.navControl;
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+  navToggled(): void {
+    this.navControl.set(!this.navControl());
   }
 
 }

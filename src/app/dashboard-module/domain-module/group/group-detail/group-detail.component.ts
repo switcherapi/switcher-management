@@ -66,7 +66,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.loading = true;
+    this.loading.set(true);
 
     this.route.parent.params.subscribe(params => {
       this.domainId = params.domainid;
@@ -74,8 +74,8 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
     });
 
     this.route.params.subscribe(params => {
-      this.detailBodyStyle = 'detail-body loading';
-      this.loading = true;
+      this.detailBodyStyle.set('detail-body loading');
+      this.loading.set(true);
       this.groupId = params.groupid;
       
       const groupFromState = this.router.currentNavigation()?.extras.state?.element;
@@ -93,9 +93,9 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   edit() {
-    if (!this.editing) {
-      this.classStatus = 'header editing';
-      this.editing = true;
+    if (!this.editing()) {
+      this.classStatus.set('header editing');
+      this.editing.set(true);
       return;
     }
 
@@ -103,7 +103,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
     if (valid) {
       this.setBlockUI(true, 'Saving changes...');
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
 
       const body = {
         name: this.nameElement.nativeElement.value,
@@ -114,7 +114,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           { name: this.group.name, description: this.group.description },
           { name: body.name, description: body.description })) {
         this.setBlockUI(false);
-        this.editing = false;
+        this.editing.set(false);
         return;
       }
 
@@ -183,13 +183,13 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_ENV_STATUS', 'DELETE'], 
-      'GROUP', 'name', this.group.name, this.currentEnvironment)
+      'GROUP', 'name', this.group.name, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data.length) {
-            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.updatable.set(data.find(permission => permission.action === 'UPDATE').result === 'ok');
+            this.removable.set(data.find(permission => permission.action === 'DELETE').result === 'ok');
             this.envEnable.next(
               data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
               data.find(permission => permission.action === 'UPDATE').result === 'nok'
@@ -200,8 +200,8 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.loading = false;
-          this.detailBodyStyle = 'detail-body ready';
+          this.loading.set(false);
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }
@@ -219,15 +219,15 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
               
               this.setBlockUI(false);
               this.toastService.showSuccess(`Group updated with success`);
-              this.editing = false;
+              this.editing.set(false);
             }
           },
           error: error => {
             this.setBlockUI(false);
             ConsoleLogger.printError(error);
             this.toastService.showError(`Unable to update group`);
-            this.classStatus = 'header editing';
-            this.editing = true;
+            this.classStatus.set('header editing');
+            this.editing.set(true);
           }
         });
   }

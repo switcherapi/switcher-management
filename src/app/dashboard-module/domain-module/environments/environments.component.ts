@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -41,23 +41,23 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
   private readonly unsubscribe = new Subject<void>();
 
-  environments: Environment[];
+  environments = signal<Environment[]>([]);
 
   envFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(2)
   ]);
 
-  updatable = false;
-  removable = false;
-  creatable = false;
+  updatable = signal(false);
+  removable = signal(false);
+  creatable = signal(false);
 
   domainId: string;
   domainName: string;
-  classStatus = "card mt-4 loading";
-  loading = true;
-  creating = false;
-  error = '';
+  classStatus = signal("card mt-4 loading");
+  loading = signal(true);
+  creating = signal(false);
+  error = signal('');
   fetch = true;
 
   constructor() { 
@@ -89,24 +89,25 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     if (valid) {
       const envName = this.envFormControl.value;
       this.envFormControl.reset();
-      this.creating = true;
+      this.creating.set(true);
 
       this.envService.createEnvironment(this.domainId, envName)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: env => {
             if (env) {
-              this.environments.push(env);
+              const currentEnvironments = this.environments();
+              this.environments.set([...currentEnvironments, env]);
               this.toastService.showSuccess('Environment created with success');
             }
           },
           error: error => {
-            this.creating = false;
+            this.creating.set(false);
             this.toastService.showError(error.error);
             ConsoleLogger.printError(error);
           },
           complete: () => {
-            this.creating = false;
+            this.creating.set(false);
           }
         });
     } else {
@@ -120,14 +121,15 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     modalConfirmation.componentInstance.question = `Are you sure you want to remove ${selectedEnvironment.name}?`;
     modalConfirmation.result.then((result) => {
       if (result) {
-        const environment = this.environments.find(env => env.id === selectedEnvironment.id);
+        const currentEnvironments = this.environments();
 
         this.envService.deleteEnvironment(selectedEnvironment.id)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: env => {
             if (env) {
-              this.environments.splice(this.environments.indexOf(environment), 1);
+              const updatedEnvironments = currentEnvironments.filter(e => e.id !== selectedEnvironment.id);
+              this.environments.set(updatedEnvironments);
               this.toastService.showSuccess('Environment removed with success');
             }
           },
@@ -165,20 +167,20 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   }
   
   private loadEnvironments(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.envService.getEnvironmentsByDomainId(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: env => {
-          this.environments = env.filter(e => e.name != 'default');
+          this.environments.set(env.filter(e => e.name != 'default'));
         },
         error: error => {
-          this.error = this.errorHandler.doError(error);
-          this.loading = false;
+          this.error.set(this.errorHandler.doError(error));
+          this.loading.set(false);
         },
         complete: () => {
-          this.loading = false;
-          this.classStatus = "card mt-4 ready";
+          this.loading.set(false);
+          this.classStatus.set("card mt-4 ready");
         }
       });
   }
@@ -190,11 +192,11 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
         if (data.length) {
           for (const element of data) {
             if (element.action === 'UPDATE') {
-              this.updatable = element.result === 'ok';
+              this.updatable.set(element.result === 'ok');
             } else if (element.action === 'DELETE') {
-              this.removable = element.result === 'ok';
+              this.removable.set(element.result === 'ok');
             } else if (element.action === 'CREATE') {
-              this.creatable = element.result === 'ok';
+              this.creatable.set(element.result === 'ok');
             }
           }
         }

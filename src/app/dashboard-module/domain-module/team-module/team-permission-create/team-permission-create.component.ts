@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -41,13 +41,13 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
 
   private readonly unsubscribe = new Subject<void>();
 
-  routers: string[] = [];
-  actions: string[] = [];
-  environments: string[] = [];
-  key: string;
-  validKeyOnly: boolean;
+  routers = signal<string[]>([]);
+  actions = signal<string[]>([]);
+  environments = signal<string[]>([]);
+  key = signal<string>('');
+  validKeyOnly = signal<boolean>(false);
 
-  strategySelected: string;
+  strategySelected = signal<string>('');
 
   elementCreationFormGroup: FormGroup;
 
@@ -120,7 +120,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       .subscribe({
         next: routers => {
           if (routers) {
-            this.routers = routers.routersAvailable;
+            this.routers.set(routers.routersAvailable);
             if (this.data.router) {
               this.routerFormControl.setValue(this.data.router);
             }
@@ -138,7 +138,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       .subscribe({
         next: actions => {
           if (actions) {
-            this.actions = actions.actionsAvailable;
+            this.actions.set(actions.actionsAvailable);
             if (this.data.action) {
               this.actionFormControl.setValue(this.data.action);
             }
@@ -156,7 +156,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       .subscribe({
         next: environments => {
           if (environments) {
-            this.environments = environments.map(environment => environment.name);
+            this.environments.set(environments.map(environment => environment.name));
             if (this.data.environments) {
               this.environmentFormControl.setValue(this.data.environments);
             }
@@ -190,7 +190,7 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
 
   private loadIdentifiedBy(): void {
     if (this.data.values.length) {
-      this.data.identifiedBy = this.key;
+      this.data.identifiedBy = this.key();
     } else {
       this.data.identifiedBy = '';
       this.data.values = [];
@@ -203,12 +203,12 @@ export class TeamPermissionCreateComponent implements OnInit, OnDestroy {
       this.permissionService.getKeysByRouter(value).pipe(takeUntil(this.unsubscribe))
         .subscribe({
           next: permissionValue => {
-            this.key = permissionValue.key;
-            this.validKeyOnly = permissionValue?.key;
+            this.key.set(permissionValue.key);
+            this.validKeyOnly.set(permissionValue?.key);
           },
           error: error => {
             ConsoleLogger.printError(error);
-            this.validKeyOnly = false;
+            this.validKeyOnly.set(false);
             this.valueSelectionFormControl.setValue(null);
             this.data.values = [];
           }

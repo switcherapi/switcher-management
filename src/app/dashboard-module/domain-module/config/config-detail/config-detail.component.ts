@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
@@ -83,7 +83,15 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ]);
 
   classStrategySection: string;
-  disableMetrics: boolean;
+  private readonly _disableMetrics = signal(false);
+  
+  get disableMetrics(): boolean {
+    return this._disableMetrics();
+  }
+  
+  set disableMetrics(value: boolean) {
+    this._disableMetrics.set(value);
+  }
 
   domainId: string;
   domainName: string;
@@ -91,18 +99,25 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   configId: string;
   config: Config;
   strategies = new BehaviorSubject<Strategy[]>([]);
-  strategiesCreatable = false;
-  relayUpdatable = false;
+  strategiesCreatable = signal(false);
+  relayUpdatable = signal(false);
+  private readonly configRelay = signal<any>(null);
+  hasRelay = computed(() => {
+    const relay = this.configRelay();
+    const currentEnv = this.currentEnvironmentSignal();
+    return relay?.activated ? relay.activated[currentEnv] !== undefined : false;
+  });
 
-  loading = true;
-  loadingStrategies = true;
-  hasStrategies = false;
-  hasNewStrategy = false;
-  error = '';
+  override loading = signal(true);
+  loadingStrategies = signal(true);
+  hasStrategies = signal(false);
+  hasNewStrategy = signal(false);
+  error = signal('');
 
   //tabset control
   strategy_section_height = '450px';
-  currentTab = 1;
+  currentTab = signal(1);
+  currentEnvironmentSignal = signal('default');
 
   // Component attributes
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -119,7 +134,8 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   ngOnInit() {
     (document.getElementsByClassName('container')[0] as HTMLElement).style.minHeight = '1100px';
 
-    this.loading = true;
+    this.loading.set(true);
+    this.currentEnvironmentSignal.set(this.currentEnvironment() || 'default');
 
     this.route.parent.params.subscribe(params => {
       this.domainId = params.domainid;
@@ -140,7 +156,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       }
     });
 
-    this.hasNewStrategy = false;
+    this.hasNewStrategy.set(false);
   }
 
   ngOnDestroy() {
@@ -151,9 +167,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   edit() {
-    if (!this.editing) {
-      this.classStatus = 'header editing';
-      this.editing = true;
+    if (!this.editing()) {
+      this.classStatus.set('header editing');
+      this.editing.set(true);
       return;
     }
 
@@ -161,7 +177,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     if (valid) {
       this.setBlockUI(true, 'Saving changes...');
-      this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+      this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
 
       const body = {
         key: this.keyElement.nativeElement.value,
@@ -173,7 +189,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         description: this.config.description,
         components: String(this.config.components.map(component => component.name)),
         disable_metrics: this.config.disable_metrics === undefined ?
-          false : this.config.disable_metrics[this.currentEnvironment]
+          false : this.config.disable_metrics[this.currentEnvironment()]
       }, {
         key: body.key,
         description: body.description,
@@ -181,7 +197,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         disable_metrics: this.disableMetrics
       })) {
         this.setBlockUI(false);
-        this.editing = false;
+        this.editing.set(false);
         return;
       }
 
@@ -226,13 +242,13 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe(result => {
       if (result) {
         this.setBlockUI(true, 'Adding Strategy...');
-        this.hasNewStrategy = true;
+        this.hasNewStrategy.set(true);
         this.strategyService.createStrategy(
           this.config.id,
           result.description,
           result.strategy,
           result.operation,
-          this.currentEnvironment,
+          this.currentEnvironment(),
           result.values).subscribe({
             next: () => {
               this.setBlockUI(false);
@@ -250,24 +266,22 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   addRelay() {
-    this.currentTab = 2;
+    this.currentTab.set(2);
     if (!this.config.relay?.activated) {
       this.config.relay = new ConfigRelay();
       this.config.relay.type = 'VALIDATION';
       this.config.relay.method = 'GET';
     }
 
-    this.config.relay.activated[this.currentEnvironment] = true;
+    this.config.relay.activated[this.currentEnvironmentSignal()] = true;
+    this.currentEnvironmentSignal.set(this.currentEnvironment());
     this.updateData(this.config);
 
     this.classStrategySection = 'strategy-section relay';
-    setTimeout(() => this.currentTab = 2, 500);
+    setTimeout(() => this.currentTab.set(2), 500);
   }
 
-  hasRelay() {
-    return this.config?.relay?.activated ?
-      this.config.relay.activated[this.currentEnvironment] != undefined : false;
-  }
+
 
   addComponent(event: MatChipInputEvent): void {
     if (!this.matAutocomplete.isOpen) {
@@ -308,16 +322,16 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   onNavChange($event: NgbNavChangeEvent) {
-    this.currentTab = $event.nextId;
-    this.updateNavTab(this.currentTab);
+    this.currentTab.set($event.nextId);
+    this.updateNavTab(this.currentTab());
   }
 
   updateNavTab(tab: number): void {
-    this.currentTab = tab;
+    this.currentTab.set(tab);
 
-    if (this.currentTab === 1) {
+    if (tab === 1) {
       this.classStrategySection = 'strategy-section strategies';
-    } else if (this.currentTab === 2) {
+    } else if (tab === 2) {
       this.classStrategySection = 'strategy-section relay';
     } else {
       this.classStrategySection = 'strategy-section metrics';
@@ -326,6 +340,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   onEnvChange($event: EnvironmentChangeEvent) {
     this.selectEnvironment($event);
+    this.currentEnvironmentSignal.set($event.environmentName);
 
     if ($event.reloadPermissions) {
       this.readPermissionToObject();
@@ -337,8 +352,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   updateData(config: Config): void {
     this.config = config;
+    this.configRelay.set(config.relay);
     this.disableMetrics = this.config.disable_metrics ?
-      this.config.disable_metrics[this.currentEnvironment] : false;
+      this.config.disable_metrics[this.currentEnvironment()] : false;
     this.loadComponents();
     this.keyFormControl.setValue(config.key);
 
@@ -354,18 +370,20 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
       this.config.relay = new ConfigRelay();
       this.config.relay.type = 'VALIDATION';
       this.config.relay.method = 'GET';
+      this.configRelay.set(this.config.relay);
       return;
     }
 
     this.config.relay = relay;
+    this.configRelay.set(relay);
   }
 
   private isMetricDisabled() {
-    if (this.config.disable_metrics[this.currentEnvironment] === undefined) {
+    if (this.config.disable_metrics[this.currentEnvironment()] === undefined) {
       return true;
     }
     
-    return this.config.disable_metrics[this.currentEnvironment];
+    return this.config.disable_metrics[this.currentEnvironment()];
   }
 
   private loadConfig() {
@@ -384,14 +402,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
   private readPermissionToObject(): void {
     this.adminService.readCollabPermission(this.domainId, ['UPDATE', 'UPDATE_RELAY', 'UPDATE_ENV_STATUS', 'DELETE'],
-      'SWITCHER', 'key', this.config.key, this.currentEnvironment)
+      'SWITCHER', 'key', this.config.key, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data.length) {
-            this.updatable = data.find(permission => permission.action === 'UPDATE').result === 'ok';
-            this.relayUpdatable = data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok';
-            this.removable = data.find(permission => permission.action === 'DELETE').result === 'ok';
+            this.updatable.set(data.find(permission => permission.action === 'UPDATE').result === 'ok');
+            this.relayUpdatable.set(data.find(permission => permission.action === 'UPDATE_RELAY').result === 'ok');
+            this.removable.set(data.find(permission => permission.action === 'DELETE').result === 'ok');
             this.envEnable.next(
               data.find(permission => permission.action === 'UPDATE_ENV_STATUS').result === 'nok' &&
               data.find(permission => permission.action === 'UPDATE').result === 'nok'
@@ -402,25 +420,25 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.loading = false;
-          this.detailBodyStyle = 'detail-body ready';
+          this.loading.set(false);
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
 
-    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'STRATEGY', undefined, undefined, this.currentEnvironment)
+    this.adminService.readCollabPermission(this.domainId, ['CREATE'], 'STRATEGY', undefined, undefined, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data.length) {
-            this.strategiesCreatable = data.find(permission => permission.action === 'CREATE').result === 'ok';
+            this.strategiesCreatable.set(data.find(permission => permission.action === 'CREATE').result === 'ok');
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
         },
         complete: () => {
-          this.loading = false;
-          this.detailBodyStyle = 'detail-body ready';
+          this.loading.set(false);
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }
@@ -500,15 +518,15 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
             this.setBlockUI(false);
             this.toastService.showSuccess(`Switcher updated with success`);
-            this.editing = false;
+            this.editing.set(false);
           }
         },
         error: error => {
           this.setBlockUI(false);
           ConsoleLogger.printError(error);
           this.toastService.showError(`Unable to update switcher`);
-          this.classStatus = 'header editing';
-          this.editing = true;
+          this.classStatus.set('header editing');
+          this.editing.set(true);
         }
       });
   }
@@ -517,7 +535,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     if (!this.config.disable_metrics)
       this.config.disable_metrics = new Map<string, boolean>();
 
-    this.config.disable_metrics[this.currentEnvironment] = this.disableMetrics;
+    this.config.disable_metrics[this.currentEnvironment()] = this.disableMetrics;
     return this.config.disable_metrics;
   }
 
@@ -550,30 +568,30 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private loadStrategies(focus?: boolean) {
-    this.loadingStrategies = true;
-    this.error = '';
-    this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment)
+    this.loadingStrategies.set(true);
+    this.error.set('');
+        this.strategyService.getStrategiesByConfig(this.config.id, this.currentEnvironment())
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
           if (data) {
-            this.hasStrategies = data.length > 0;
+            this.hasStrategies.set(data.length > 0);
             this.strategies.next(data);
 
-            if (this.hasStrategies && focus) {
+            if (this.hasStrategies() && focus) {
               this.updateNavTab(1);
             }
           }
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.loadingStrategies = false;
+          this.loadingStrategies.set(false);
         },
         complete: () => {
           if (!this.strategies.getValue().length) {
-            this.error = 'Failed to connect to Switcher API';
+            this.error.set('Failed to connect to Switcher API');
           }
-          this.loadingStrategies = false;
+          this.loadingStrategies.set(false);
         }
       });
   }

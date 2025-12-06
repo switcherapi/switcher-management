@@ -1,19 +1,19 @@
-@if (dataSource) {
+@if (dataSource()) {
 <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off">
 </mat-form-field>
 }
 
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading"/>
 </div>
 }
-<div [ngClass]="classStatus">
-    @if (!loading && dataSource) {
-    <table mat-table [dataSource]="dataSource" aria-describedby="changelog-table"
+<div [ngClass]="classStatus()">
+    @if (!loading() && dataSource()) {
+    <table mat-table [dataSource]="dataSource()" aria-describedby="changelog-table"
         multiTemplateDataRows class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="newValue">
@@ -73,12 +73,12 @@
     <div class="tablelog-footer">
         <button mat-button class="btn-element" style="background:#fb5454;" 
             (click)="resetHistory()" 
-            [disabled]="!dataSource?.data?.length || !removable">
+            [disabled]="!dataSource()?.data?.length || !removable()">
             Reset
         </button>
         <mat-paginator 
             [pageSizeOptions]="[5, 10, 25, 50]"
-            [length]="pageLength"
+            [length]="pageLength()"
             (page)="onPage($event)">
         </mat-paginator>
     </div>

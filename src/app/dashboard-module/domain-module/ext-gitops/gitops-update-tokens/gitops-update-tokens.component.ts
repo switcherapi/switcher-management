@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
@@ -23,25 +22,19 @@ import { MatOption } from '@angular/material/autocomplete';
       MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatInput, MatDialogActions, MatButton
     ]
 })
-export class GitOpsUpdateTokensComponent implements OnInit, OnDestroy {
+export class GitOpsUpdateTokensComponent {
   data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject<MatDialogRef<GitOpsUpdateTokensComponent>>(MatDialogRef);
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
-
-  environments: string[];
-  token: string;
-  formGroup: FormGroup;
+  environments = signal<string[]>([]);
+  token = signal<string>('');
+  formGroup = signal<FormGroup>(null);
   
-  ngOnInit() {
-    this.environments = this.data.environments;
+  constructor() {
+    this.environments.set(this.data.environments);
     this.formInit();
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
   onCancel(): void {
@@ -49,7 +42,8 @@ export class GitOpsUpdateTokensComponent implements OnInit, OnDestroy {
   }
 
   onSave(data: any) {
-    const { valid } = this.formGroup;
+    const formGroup = this.formGroup();
+    const { valid } = formGroup;
 
     if (valid) {
         this.dialogRef.close(data);
@@ -57,17 +51,19 @@ export class GitOpsUpdateTokensComponent implements OnInit, OnDestroy {
   }
 
   private formInit(): void {
-    this.formGroup = this.fb.group({
+    const formGroup = this.fb.group({
       environment: new FormControl('', [Validators.required]),
       token: new FormControl('', [Validators.required])
     });
+    
+    this.formGroup.set(formGroup);
 
-    this.formGroup.get('environment').valueChanges
-      .pipe(takeUntil(this.unsubscribe))
+    formGroup.get('environment').valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.data.selection = value);
 
-    this.formGroup.get('token').valueChanges
-      .pipe(takeUntil(this.unsubscribe))
+    formGroup.get('token').valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.data.token = value);
   }
 

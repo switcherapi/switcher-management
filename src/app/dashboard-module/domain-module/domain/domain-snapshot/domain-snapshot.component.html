@@ -1,4 +1,4 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
     <h4 mat-dialog-title>
         <mat-toolbar class="dialog-header">
             <span>Domain Snapshot</span>
@@ -15,7 +15,7 @@
                     <mat-form-field>
                         <mat-label>Environment</mat-label>
                         <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
-                            @for (environment of environments; track environment.name) {
+                            @for (environment of environments(); track environment.name) {
                             <mat-option [value]="environment.name">
                                 {{environment.name}}
                             </mat-option>
@@ -25,28 +25,28 @@
                     <mat-form-field>
                         <mat-label>Component</mat-label>
                         <mat-select #componentSelectionChange [formControl]="componentSelection">
-                            @for (component of components; track component.name) {
+                            @for (component of components(); track component.name) {
                             <mat-option [value]="component.name">
                                 {{component.name}}
                             </mat-option>
                             }
                         </mat-select>
                     </mat-form-field>
-                    <mat-checkbox color="primary" [(ngModel)]="includeStatus" [disabled]="snapshot">Environment Status</mat-checkbox>
-                    <mat-checkbox color="primary" [(ngModel)]="includeDescription" [disabled]="snapshot">Description</mat-checkbox>
+                    <mat-checkbox color="primary" [checked]="includeStatus()" (change)="includeStatus.set($event.checked)" [disabled]="snapshot()">Environment Status</mat-checkbox>
+                    <mat-checkbox color="primary" [checked]="includeDescription()" (change)="includeDescription.set($event.checked)" [disabled]="snapshot()">Description</mat-checkbox>
                 </div>
             </div>
         </section>
     </div>
     <div mat-dialog-actions style="float: right;">
-        @if (!snapshot) {
+        @if (!snapshot()) {
         <button class="btn-save" mat-button (click)="onDownload()">
             <mat-icon>cloud_download</mat-icon>
             <div class="options-section-label"> Download</div>
         </button>
         }
-        @if (snapshot) {
-        <button class="btn-save" mat-button (click)="onCopy()" [cdkCopyToClipboard]="snapshot">
+        @if (snapshot()) {
+        <button class="btn-save" mat-button (click)="onCopy()" [cdkCopyToClipboard]="snapshot()">
             <mat-icon>file_copy</mat-icon>
             <div class="options-section-label"> Copy to clipboard</div>
         </button>

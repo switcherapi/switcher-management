@@ -1,10 +1,10 @@
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />
 </div>
 }
-<div [ngClass]="detailBodyStyle">
+<div [ngClass]="detailBodyStyle()">
     <div class="panel-slack-detail">
         <img src="assets\slack.svg" class="slack-img" style="width: 30px;" alt="slack" />
         <h3>Slack Integration</h3>
@@ -13,25 +13,25 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="card h-100">
-                    @if (slack) {
+                    @if (slack(); as slackData) {
                     <div class="card-body">
                         <h5 class="card-title">Details</h5>
                         <div class="description">
                             <mat-form-field>
                                 <mat-label>Team Name</mat-label>
-                                <input matInput [value]="slack.team_name" readonly>
+                                <input matInput [value]="slackData.team_name" readonly>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Approval Channel</mat-label>
-                                <input matInput [value]="slack.channel" readonly>
+                                <input matInput [value]="slackData.channel" readonly>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Installed At</mat-label>
-                                <input matInput [value]="slack.installed_at * 1000 | date:'medium'" readonly>
+                                <input matInput [value]="slackData.installed_at * 1000 | date:'medium'" readonly>
                             </mat-form-field>
-                            @if (allowUpdate) {
+                            @if (allowUpdate()) {
                             <a class="ticket_stats" style="text-align: center;" title="Clean opened tickets" (click)="onResetTicketsHistory()">
-                                <mat-icon>fiber_new</mat-icon> {{slack.tickets_opened}}
+                                <mat-icon>fiber_new</mat-icon> {{slackData.tickets_opened}}
                             </a>
                             }
                         </div>
@@ -45,9 +45,9 @@
                         <h5 class="card-title">Settings</h5>
                         <app-slack-settings></app-slack-settings>
 
-                        @if (allowUpdate) {
+                        @if (allowUpdate()) {
                         <div class="options-section">
-                            @if (slackUpdate) {
+                            @if (slackUpdate()) {
                             <button mat-button class="btn-element" (click)="onUpdate()">
                                 <mat-icon style="font-size: large;">build</mat-icon>
                                 <div class="options-section-label">Update</div>

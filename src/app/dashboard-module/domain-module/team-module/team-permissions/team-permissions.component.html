@@ -1,4 +1,4 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
 <div class="filter-permission-style">
     <button mat-button class="btn-element" (click)="createPermission()" [disabled]="!creatable">
         <mat-icon style="font-size: large;">create</mat-icon>
@@ -9,7 +9,7 @@
         <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
     </mat-form-field>
 </div>
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />

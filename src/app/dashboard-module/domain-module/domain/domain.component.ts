@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
@@ -18,7 +18,7 @@ import { PathRoute, Types } from 'src/app/model/path-route';
 import { Group } from 'src/app/model/group';
 import { Config } from 'src/app/model/config';
 import { Configuration, GraphQLConfigurationResultSet } from 'src/app/model/configuration';
-import { Apollo } from 'apollo-angular/apollo';
+import { Apollo } from 'apollo-angular';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { FeatureService } from 'src/app/services/feature.service';
 import { BasicComponent } from '../common/basic-component';
@@ -49,20 +49,19 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   private readonly groupService = inject(GroupService);
   private readonly featureService = inject(FeatureService);
   private readonly toastService = inject(ToastService);
-  private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly unsubscribe = new Subject<void>();
 
-  loading = true;
-  title: string;
-  icon: number;
+  loading = signal(true);
+  title = signal('Loading...');
+  icon = signal(0);
 
   domainId: string;
   domainName: string;
 
-  domain: Domain;
-  group: Group;
-  config: Config;
+  domain = signal<Domain | undefined>(undefined);
+  group = signal<Group | undefined>(undefined);
+  config = signal<Config | undefined>(undefined);
 
   selectedDomainPath: string;
   selectedGroupPath: string;
@@ -71,8 +70,8 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   currentPath = new PathRoute();
   prevScrollpos = globalThis.scrollY;
   navControl = false;
-  slackIntegration = false;
-  transferLabel = '';
+  slackIntegration = signal(false);
+  transferLabel = signal('');
 
   constructor() {
     super();
@@ -100,15 +99,14 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
     if (environment.slackUrl) {
       this.featureService.isEnabled({ feature: 'SLACK_INTEGRATION' })
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(feature => this.slackIntegration = feature?.status);
+        .subscribe(feature => this.slackIntegration.set(feature?.status || false));
     }
     
     this.domainRouteService.viewHeaderEvent
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
-        this.title = data.title;
-        this.icon = data.icon;
-        this.cdr.detectChanges();
+        this.title.set(data.title);
+        this.icon.set(data.icon);
     });
   }
 
@@ -137,8 +135,8 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       .subscribe({
         next: domain => {
           if (domain) {
-            if (this.transferLabel === 'Transfer Domain') {
-              this.transferLabel = 'Cancel Transfer';
+            if (this.transferLabel() === 'Transfer Domain') {
+              this.transferLabel.set('Cancel Transfer');
               this.dialog.open(DomainTransferDialogComponent, {
                 width: '450px',
                 minWidth: globalThis.innerWidth < 450 ? '95vw' : '',
@@ -148,7 +146,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
                 }
               });
             } else {
-              this.transferLabel = 'Transfer Domain';
+              this.transferLabel.set('Transfer Domain');
               this.toastService.showSuccess(`Transfer canceled with success`);
             }
           }
@@ -234,15 +232,15 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   }
 
   hasSlackIntegration(): boolean {
-    return this.slackIntegration;
+    return this.slackIntegration();
   }
 
   hasSlackInstalled(): boolean {
-    return this.domain?.integrations?.slack != undefined;
+    return this.domain()?.integrations?.slack != undefined;
   }
 
   canInstallSlack(): boolean {
-    return this.transferLabel.length > 0;
+    return this.transferLabel().length > 0;
   }
 
   navToggled() {
@@ -281,26 +279,27 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   }
 
   private updateData(configuration: Configuration) {
-    this.domain = configuration.domain;
-    this.group = configuration.group ? configuration.group[0] : undefined;
-    this.config = configuration.config ? configuration.config[0] : undefined;
+    this.domain.set(configuration.domain);
+    this.group.set(configuration.group ? configuration.group[0] : undefined);
+    this.config.set(configuration.config ? configuration.config[0] : undefined);
 
     this.selectedDomainPath = `/dashboard/domain/${this.domainName}/${this.domainId}`;
-    this.selectedGroupPath = `${this.selectedDomainPath}/groups/${this.group?.id}`;
-    this.selectedConfigPath = `${this.selectedGroupPath}/switchers/${this.config?.id}`;
+    this.selectedGroupPath = `${this.selectedDomainPath}/groups/${this.group()?.id}`;
+    this.selectedConfigPath = `${this.selectedGroupPath}/switchers/${this.config()?.id}`;
 
     this.setLoading(false);
   }
 
   private checkDomainOwner() {
     const currentUserId = this.authService.getUserInfo('sessionid');
-    if (currentUserId == this.domain?.owner) {
-      if (this.domain.transfer)
-        this.transferLabel = 'Cancel Transfer';
+    const domain = this.domain();
+    if (currentUserId == domain?.owner) {
+      if (domain.transfer)
+        this.transferLabel.set('Cancel Transfer');
       else
-        this.transferLabel = 'Transfer Domain';
+        this.transferLabel.set('Transfer Domain');
     } else {
-      this.transferLabel = '';
+      this.transferLabel.set('');
     }
   }
 
@@ -326,11 +325,11 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       .subscribe({
         next: config => {
           if (config) {
-            this.config = config;
+            this.config.set(config);
             this.currentPath.id = config.id;
             this.currentPath.type = Types.CONFIG_TYPE;
             this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${item.parent._id}/switchers/${config.id}`;
-            this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.config) } });
+            this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.config()) } });
           }
         },
         error: error => {
@@ -345,11 +344,11 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       .subscribe({
         next: group => {
           if (group) {
-            this.group = group;
+            this.group.set(group);
             this.currentPath.id = group.id;
             this.currentPath.type = Types.GROUP_TYPE;
             this.currentPath.path = `/dashboard/domain/${this.domainName}/${this.domainId}/groups/${group.id}`;
-            this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.group) } });
+            this.router.navigate([this.currentPath.path], { state: { element: JSON.stringify(this.group()) } });
           }
         },
         error: error => {
@@ -359,8 +358,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
   }
 
   private setLoading(value: boolean) {
-    this.loading = value;
-    this.cdr.detectChanges();
+    this.loading.set(value);
   }
 
 }

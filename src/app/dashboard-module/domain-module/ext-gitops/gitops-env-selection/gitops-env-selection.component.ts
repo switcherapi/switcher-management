@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { Environment } from 'src/app/model/environment';
 import { EnvironmentService } from 'src/app/services/environment.service';
@@ -25,35 +24,32 @@ import { MatOption } from '@angular/material/autocomplete';
       MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MatDialogActions, MatButton
     ]
 })
-export class GitOpsEnvSelectionComponent implements OnInit, OnDestroy {
+export class GitOpsEnvSelectionComponent {
   dialogRef = inject<MatDialogRef<GitOpsEnvSelectionComponent>>(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
   private readonly environmentService = inject(EnvironmentService);
-
-  private readonly unsubscribe = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   environmentSelection = new FormControl('', [
     Validators.required
   ]);
 
-  environments: Environment[];
+  environments = signal<Environment[]>([]);
 
-  ngOnInit() {
+  constructor() {
+    // Load environments
     this.environmentService.getEnvironmentsByDomainId(this.data.domainId)
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(env => {
-        this.environments = env.filter(environment => 
-          this.data.excludeEnvironments.indexOf(environment.name) === -1);
+        const filteredEnv = env.filter(environment => 
+          !this.data.excludeEnvironments.includes(environment.name));
+        this.environments.set(filteredEnv);
       });
 
-    this.environmentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
+    // Form value changes
+    this.environmentSelection.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.data.environment = value;
-    })
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+    });
   }
 
   onCancel(): void {

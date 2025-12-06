@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject, signal } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -53,11 +53,11 @@ export class MetricComponent implements OnInit, OnDestroy {
   domainId: string;
   domainName: string;
   classStatus = "loading";
-  loading = true;
-  error = '';
+  loading = signal(true);
+  error = signal('');
   fetch = true;
 
-  metrics: Metric;
+  metrics = signal<Metric>(new Metric());
 
   constructor() {
     this.activatedRoute.parent.parent.params.subscribe(params => {
@@ -72,7 +72,7 @@ export class MetricComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    this.metrics = new Metric();
+    this.metrics.set(new Metric());
     
     if (this.switcher) {
       this.loadMetrics(1);
@@ -136,8 +136,8 @@ export class MetricComponent implements OnInit, OnDestroy {
   }
 
   private loadMetricStatistics(environment: string = this.environment, dateBefore?: string, dateAfter?: string): void {
-    this.loading = true;
-    this.error = '';
+    this.loading.set(true);
+    this.error.set('');
 
     const metricStatisticsRequest = {
       domainId: this.domainId,
@@ -154,9 +154,11 @@ export class MetricComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: statistics => {
-          this.loading = false;
+          this.loading.set(false);
           if (statistics) {
-            this.metrics.statistics = statistics;
+            const currentMetrics = this.metrics();
+            currentMetrics.statistics = statistics;
+            this.metrics.set({ ...currentMetrics });
           }
         },
         error: error => this.onError(error),
@@ -171,19 +173,21 @@ export class MetricComponent implements OnInit, OnDestroy {
   }
 
   private loadMetrics(page: number, environment?: string, dateBefore?: string, dateAfter?: string): void {
-    this.loading = true;
-    this.error = '';
+    this.loading.set(true);
+    this.error.set('');
     this.loadDataMetrics(page, environment, dateBefore, dateAfter)
     .subscribe({
       next: metrics => {
-        this.loading = false;
+        this.loading.set(false);
         this.loadMetricStatistics(environment, dateBefore, dateAfter);
         if (metrics) {
-          if (this.switcher && this.filterType === 'Switcher')
-            this.metrics.data = metrics.data;
-          else {
-            this.metrics.data = null;
+          const currentMetrics = this.metrics();
+          if (this.switcher && this.filterType === 'Switcher') {
+            currentMetrics.data = metrics.data;
+          } else {
+            currentMetrics.data = null;
           }
+          this.metrics.set({ ...currentMetrics });
         }
       },
       error: error => this.onError(error),
@@ -194,7 +198,7 @@ export class MetricComponent implements OnInit, OnDestroy {
   private onError(error: any) {
     ConsoleLogger.printError(error);
     this.errorHandler.doError(error);
-    this.loading = false;
+    this.loading.set(false);
   }
 
   private updateRoute(): void {

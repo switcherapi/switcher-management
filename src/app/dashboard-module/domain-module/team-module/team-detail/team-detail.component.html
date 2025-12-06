@@ -1,13 +1,13 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
-@if (!loading) {
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
+@if (!teamLoading()) {
 <div style="padding-top: 20px;">
-    <section [ngClass]="classStatus">
+    <section [ngClass]="classStatus()">
         <div class="header-container">
             <div class="description" style="width: 350px;">
                 <mat-form-field>
                     <mat-label>Name</mat-label>
-                    <input matInput readonly="{{!editing}}" 
-                        [ngStyle]="editing ? {'color': 'black'} : ''" 
+                    <input matInput readonly="{{!editing()}}" 
+                        [ngStyle]="editing() ? {'color': 'black'} : ''" 
                         [formControl]="nameFormControl"
                         autocomplete="off">
                 </mat-form-field>
@@ -30,21 +30,21 @@
     </section>
     <section class="options-section">
         <div class="toggle-section">
-            <mat-slide-toggle [checked]="team.active" [ngClass]="updatable ? 'toggle-style' : 'toggle-style deactivated'" 
-                (change)="changeStatus($event)" [disabled]="!updatable">
+            <mat-slide-toggle [checked]="team()?.active" [ngClass]="teamUpdatable() ? 'toggle-style' : 'toggle-style deactivated'" 
+                (change)="changeStatus($event)" [disabled]="!teamUpdatable()">
             </mat-slide-toggle>
         </div>
-        <button mat-button [ngClass]="editing ? 'btn-element save btn-edit' : 'btn-element btn-edit'" (click)="edit()" [disabled]="!updatable">
+        <button mat-button [ngClass]="editing() ? 'btn-element save btn-edit' : 'btn-element btn-edit'" (click)="edit()" [disabled]="!teamUpdatable()">
             <mat-icon style="font-size: large;">build</mat-icon>
-            <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+            <div class="options-section-label">{{ editing() ? 'Save' : 'Edit' }}</div>
         </button>
-        <button mat-button class="btn-element btn-remove btn-red" (click)="removeTeam()" [disabled]="!removable">
+        <button mat-button class="btn-element btn-remove btn-red" (click)="removeTeam()" [disabled]="!teamRemovable()">
             <mat-icon>delete</mat-icon>
             <div class="options-section-label">Remove</div>
         </button>
     </section>
     <section style="padding-top: 20px;">
-        @if (loading) {
+        @if (teamLoading()) {
         <div class="card-body loader-div">
             <div class="loader"></div>
             <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API" />
@@ -55,22 +55,22 @@
                 <ng-container ngbNavItem>
                     <a ngbNavLink>Members</a>
                     <ng-template ngbNavContent>
-                        <app-team-members [team]="team" [creatable]="creatable" [updatable]="updatable"
-                            [removable]="removable"></app-team-members>
+                        <app-team-members [team]="team()!" [creatable]="teamCreatable()" [updatable]="teamUpdatable()"
+                            [removable]="teamRemovable()"></app-team-members>
                     </ng-template>
                 </ng-container>
                 <ng-container ngbNavItem>
                     <a ngbNavLink>Permissions</a>
                     <ng-template ngbNavContent>
-                        <app-team-permissions [team]="team" [creatable]="creatable" [updatable]="updatable"
-                            [removable]="removable"></app-team-permissions>
+                        <app-team-permissions [team]="team()!" [creatable]="teamCreatable()" [updatable]="teamUpdatable()"
+                            [removable]="teamRemovable()"></app-team-permissions>
                     </ng-template>
                 </ng-container>
                 <ng-container ngbNavItem>
                     <a ngbNavLink>Pending</a>
                     <ng-template ngbNavContent>
-                        <app-team-pending-members [team]="team" [creatable]="creatable" [updatable]="updatable"
-                            [removable]="removable"></app-team-pending-members>
+                        <app-team-pending-members [team]="team()!" [creatable]="teamCreatable()" [updatable]="teamUpdatable()"
+                            [removable]="teamRemovable()"></app-team-pending-members>
                     </ng-template>
                 </ng-container>
             </nav>
@@ -80,4 +80,4 @@
     </section>
 </div>
 }
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true"></app-block-ui>
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true"></app-block-ui>

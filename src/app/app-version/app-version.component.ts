@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, input, inject, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/services/auth.service';
 import { ConsoleLogger } from '../_helpers/console-logger';
@@ -12,36 +11,30 @@ import { MatTooltip } from '@angular/material/tooltip';
     styleUrls: ['./app-version.component.css'],
     imports: [MatTooltip]
 })
-export class AppVersionComponent implements OnInit {
+export class AppVersionComponent {
   private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly apiVersion = input<string>();
+  readonly apiReleaseTime = signal<string>('');
+  readonly smVersion = signal<string>(environment.version);
+  readonly smReleaseTime = signal<string>(this.toLocaleString(environment.releaseTime));
 
-  @Input() apiVersion: string;
-  apiReleaseTime: string;
-  smVersion: string;
-  smReleaseTime: string;
-
-  ngOnInit(): void {
-    this.smVersion = environment.version;
-    this.smReleaseTime = this.toLocaleString(environment.releaseTime);
-
-    if (!this.apiVersion) {
+  constructor() {
+    if (!this.apiVersion()) {
       this.loadApiMetadata();
     }
   }
 
   private loadApiMetadata(): void {
-    this.authService.isAlive().pipe(takeUntil(this.unsubscribe)).subscribe({
+    this.authService.isAlive().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         if (data) {
-          this.apiVersion = data.attributes.version;
-          this.apiReleaseTime = this.toLocaleString(data.attributes.release_time);
+          this.apiReleaseTime.set(this.toLocaleString(data.attributes.release_time));
         }
       },
       error: (error) => {
         ConsoleLogger.printError(error);
-        this.apiVersion = '[offline]';
       }
     });
   }

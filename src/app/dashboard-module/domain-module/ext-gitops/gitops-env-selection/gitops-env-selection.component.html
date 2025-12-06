@@ -14,7 +14,7 @@
                 <mat-form-field>
                     <mat-label>Environment selection</mat-label>
                     <mat-select #envSelectionChange cdkFocusInitial [formControl]="environmentSelection">
-                        @for (environment of environments; track environment.name) {
+                        @for (environment of environments(); track environment.name) {
                         <mat-option [value]="environment.name">
                             {{environment.name}}
                         </mat-option>

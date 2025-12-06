@@ -1,36 +1,36 @@
 import { DataUtils } from 'src/app/_helpers/data-utils';
 import { EnvironmentChangeEvent } from '../environment-config/environment-config.component';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, signal } from '@angular/core';
 import { Environment } from 'src/app/model/environment';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 export class DetailComponent {
     childEnvironmentEmitter = new EventEmitter<EnvironmentChangeEvent>();
-    detailBodyStyle = 'detail-body loading';
+    detailBodyStyle = signal('detail-body loading');
     
-    classStatus: string;
-    editing: boolean;
-    currentStatus: boolean;
-    currentEnvironment = 'default';
-    environments: Environment[];
-    loading: boolean;
+    classStatus = signal('');
+    editing = signal(false);
+    currentStatus = signal(false);
+    currentEnvironment = signal('default');
+    environments = signal<Environment[]>([]);
+    loading = signal(false);
 
-    blockuiEnabled = false;
-    blockuiMessage: string;
+    blockuiEnabled = signal(false);
+    blockuiMessage = signal('');
 
-    updatable = false;
-    removable = false;
-    creatable = false;
+    updatable = signal(false);
+    removable = signal(false);
+    creatable = signal(false);
 
     protected selectEnvironment(event: EnvironmentChangeEvent): void {
-        this.currentEnvironment = event.environmentName;
-        this.currentStatus = event.status;
+        this.currentEnvironment.set(event.environmentName);
+        this.currentStatus.set(event.status);
         this.childEnvironmentEmitter.emit(event);
         
-        if (this.editing) {
-            this.classStatus = 'header editing';
+        if (this.editing()) {
+            this.classStatus.set('header editing');
         } else {
-            this.classStatus = this.currentStatus ? 'header activated' : 'header deactivated';
+            this.classStatus.set(this.currentStatus() ? 'header activated' : 'header deactivated');
         }
     }
 
@@ -45,8 +45,8 @@ export class DetailComponent {
     }
 
     protected setBlockUI(enable: boolean, message?: string): void {
-        this.blockuiEnabled = enable;
-        this.blockuiMessage = message;
+        this.blockuiEnabled.set(enable);
+        this.blockuiMessage.set(message || '');
     }
 
     scrollToElement($element: any): void {
@@ -56,7 +56,7 @@ export class DetailComponent {
     }
 
     onEnvLoaded(environments: Environment[]): void {
-        this.environments = environments;
+        this.environments.set(environments);
     }
 
     onEnvChange($event: EnvironmentChangeEvent) {

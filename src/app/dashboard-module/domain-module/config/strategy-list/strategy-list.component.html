@@ -1,6 +1,6 @@
 <div #tabstrategies>
-    <mat-tab-group (selectedTabChange)="scrollToElement(tabstrategies)" [selectedIndex]="moveToEnd ? strategies.getValue().length : 0">
-        @for (strategy of strategies.getValue(); track strategy.strategy) {
+    <mat-tab-group (selectedTabChange)="scrollToElement(tabstrategies)" [selectedIndex]="selectedTabIndex()">
+        @for (strategy of strategiesSignal(); track strategy.strategy) {
         <mat-tab label="{{strategy.strategy}}">
             <app-strategy-detail [strategy]="strategy" [strategyList]="this"></app-strategy-detail>
         </mat-tab>

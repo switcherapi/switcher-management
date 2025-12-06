@@ -1,14 +1,13 @@
-<app-block-ui [isBlocked]="blockuiEnabled" [message]="blockuiMessage" [showSpinner]="true">
-    <div [ngClass]="detailBodyStyle">
-        <section [ngClass]="classStatus" style="width: 100%;">
+<app-block-ui [isBlocked]="blockuiEnabled()" [message]="blockuiMessage()" [showSpinner]="true">
+    <div [ngClass]="detailBodyStyle()">
+        <section [ngClass]="classStatus()" style="width: 100%;">
             <div class="header-container">
                 <div class="description" style="width: 350px;">
                     <mat-form-field class="operations-style">
                         <mat-label>Relay Type</mat-label>
-                        @if (!editing) {
+                        @if (!editing()) {
                         <input matInput class="readonly-fields" [value]="config.relay.type" required readonly>
-                        }
-                        @if (editing) {
+                        } @else {
                         <mat-select [formControl]="relayTypeFormControl" required>
                             <mat-option value="VALIDATION">VALIDATION</mat-option>
                             <mat-option value="NOTIFICATION">NOTIFICATION</mat-option>
@@ -19,7 +18,7 @@
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput class="readonly-fields"
                             [value]="config.relay.description ? config.relay.description : ''" maxlength="256"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" rows="6" readonly="{{ !editing }}">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="6" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
@@ -28,7 +27,7 @@
                     <mat-form-field>
                         <mat-label>Endpoint</mat-label>
                         <input #endpointElement matInput maxlength="200" required
-                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}"  autocomplete="off" [formControl]="endpointFormControl">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}"  autocomplete="off" [formControl]="endpointFormControl">
                         @if (endpointFormControl.hasError('required')) {
                         <mat-error>
                             Endpoint must be valid
@@ -37,10 +36,9 @@
                     </mat-form-field>
                     <mat-form-field class="operations-style">
                         <mat-label>Relay Method</mat-label>
-                        @if (!editing) {
+                        @if (!editing()) {
                         <input matInput class="readonly-fields" [value]="config.relay.method" required readonly>
-                        }
-                        @if (editing) {
+                        } @else {
                         <mat-select [formControl]="relayMethodFormControl" required>
                             <mat-option value="GET">GET</mat-option>
                             <mat-option value="POST">POST</mat-option>
@@ -51,12 +49,12 @@
                         <mat-label>Authorization Prefix</mat-label>
                         <input #authPrefixElement matInput
                             [value]="config.relay.auth_prefix ? config.relay.auth_prefix : ''" maxlength="50"
-                            [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" autocomplete="off">
+                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" autocomplete="off">
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Authorization Token</mat-label>
-                        <input #authTokenElement matInput maxlength="200" type="{{ !editing ? 'password' : 'text' }}"
-                                [ngStyle]="editing ? {'color': 'black'} : ''" readonly="{{ !editing }}" autocomplete="off">
+                        <input #authTokenElement matInput maxlength="200" type="{{ !editing() ? 'password' : 'text' }}"
+                                [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" autocomplete="off">
                     </mat-form-field>
                 </div>
                 <div class="description">
@@ -76,19 +74,19 @@
         </section>
         <section class="strategy-control-style">
             <div class="options-section">
-                @if (relayVerificationEnabled && !isVerified() && !editing) {
+                @if (relayVerificationEnabled() && !isVerified() && !editing()) {
                 <div>
-                    <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable">
+                    <button mat-button class="btn-element" (click)="verifyRelay()" [disabled]="!updatable()">
                         <mat-icon>verified_user</mat-icon>
                         <div class="options-section-label">Verify</div>
                     </button>
                 </div>
                 }
-                <button mat-button [ngClass]="editing ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable">
+                <button mat-button [ngClass]="editing() ? 'btn-element save' : 'btn-element'" (click)="edit()" [disabled]="!updatable()">
                     <mat-icon style="font-size: large;">build</mat-icon>
-                    <div class="options-section-label">{{ editing ? 'Save' : 'Edit' }}</div>
+                    <div class="options-section-label">{{ editing() ? 'Save' : 'Edit' }}</div>
                 </button>
-                <button mat-button class="btn-element btn-red" (click)="delete()" [disabled]="!removable">
+                <button mat-button class="btn-element btn-red" (click)="delete()" [disabled]="!removable()">
                     <mat-icon>delete</mat-icon>
                     <div class="options-section-label">Remove</div>
                 </button>

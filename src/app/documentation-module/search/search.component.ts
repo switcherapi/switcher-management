@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { SearchDocsService } from '../services/searchdocs.service';
 import { SearchDocsResponse } from '../model/searchdocs-response';
 import { SearchItemComponent } from '../search-item/search-item.component';
@@ -15,32 +16,31 @@ import { SearchItemComponent } from '../search-item/search-item.component';
     ],
     imports: [SearchItemComponent]
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent {
   private readonly searchDocsService = inject(SearchDocsService);
   private readonly route = inject(ActivatedRoute);
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly query = toSignal(
+    this.route.paramMap.pipe(
+      switchMap(params => of(params.get('query')))
+    ),
+    { initialValue: null }
+  );
+  
+  readonly searchDocsResponse = signal<SearchDocsResponse | null>(null);
+  readonly loading = signal<boolean>(true);
 
-  query: string;
-  searchDocsResponse: SearchDocsResponse;
-  loading = true;
-
-  ngOnInit(): void {
-    this.loading = true;
-    this.route.paramMap.subscribe(params => {
-      this.query = params.get("query");
-      if (this.query) {
-        this.searchDocsService.search(this.query).pipe(takeUntil(this.unsubscribe)).subscribe(result => {
-          this.searchDocsResponse = result;
-          this.loading = false;
+  constructor() {
+    effect(() => {
+      const currentQuery = this.query();
+      if (currentQuery) {
+        this.loading.set(true);
+        this.searchDocsService.search(currentQuery).subscribe(result => {
+          this.searchDocsResponse.set(result);
+          this.loading.set(false);
         });
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
 }

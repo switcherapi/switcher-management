@@ -1,14 +1,14 @@
 <div class="filter-member-style">
-    <button mat-button class="btn-element" (click)="inviteMember(inputMember.value)" [disabled]="inputMember.value.length < 2 || !creatable">
+    <button mat-button class="btn-element" (click)="inviteMember(memberInputValue())" [disabled]="memberInputValue().length < 2 || !creatable">
         <mat-icon style="font-size: large;">perm_identity</mat-icon>
         Invite
     </button>
     <mat-form-field class="filter-input">
         <mat-label>Filter / Email</mat-label>
-        <input #inputMember matInput (keyup)="applyFilter($event.target.value)">
+        <input matInput [value]="memberInputValue()" (input)="onInputChange($event)" (keyup)="applyFilter($event.target.value)">
     </mat-form-field>
 </div>
-@if (loading) {
+@if (loading()) {
 <div class="card-body loader-div">
     <div class="loader"></div>
     <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="loading" />

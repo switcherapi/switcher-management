@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastService } from '../_helpers/toast.service';
 import { ConsoleLogger } from '../_helpers/console-logger';
 import { TeamService } from '../services/team.service';
@@ -14,74 +13,68 @@ import { MatButton } from '@angular/material/button';
     styleUrls: ['./signup-team.component.css'],
     imports: [MatFormField, MatLabel, MatInput, MatButton]
 })
-export class SignupTeamComponent implements OnInit, OnDestroy {
+export class SignupTeamComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly teamService = inject(TeamService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly unsubscribe = new Subject<void>();
+  readonly loading = signal<boolean>(false);
+  readonly error = signal<string>('');
+  readonly request = signal<string>('');
+  readonly team = signal<string>('');
+  readonly domain = signal<string>('');
 
-  loading = false;
-  error = '';
-  request: string;
-  team: string;
-  domain: string;
-
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.request = params['request'];
+  constructor() {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.request.set(params['request'] || '');
     
-      if (this.request) {
+      if (this.request()) {
         this.loadInvite();
       }
     });
   }
 
   private loadInvite(): void {
-    this.teamService.getInvitation(this.request).pipe(takeUntil(this.unsubscribe))
+    this.teamService.getInvitation(this.request()).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: invite => {
           if (invite) {
-            this.team = invite.team;
-            this.domain = invite.domain;
+            this.team.set(invite.team);
+            this.domain.set(invite.domain);
           }
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.error = error.error;
-          this.loading = false;
+          this.error.set(error.error);
+          this.loading.set(false);
         }
       });
   }
 
-  onAccept() {
-    this.loading = true;
+  onAccept(): void {
+    this.loading.set(true);
 
-    this.teamService.acceptInvitation(this.request).pipe(takeUntil(this.unsubscribe))
+    this.teamService.acceptInvitation(this.request()).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: success => {
           if (success) {
             this.router.navigate(['/dashboard']);
             this.toastService.showSuccess(`Joined with success`);
           }
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.error = error.error;
-          this.loading = false;
+          this.error.set(error.error);
+          this.loading.set(false);
         }
       });
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  onKey(_event: any) {
-    this.error = '';
+  onKey(_event: any): void {
+    this.error.set('');
   }
 }

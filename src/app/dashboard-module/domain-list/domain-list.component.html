@@ -1,5 +1,5 @@
 <div class="container" >
-    <div [ngClass]="cardListContainerStyle">
+    <div [ngClass]="cardListContainerStyle()">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
@@ -11,23 +11,23 @@
             </div>
         </h4>
         <div class="card-body">
-            @if (loading) {
+            @if (loading()) {
             <div class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
             }
-            @if (error) {
-            <div class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+            @if (error()) {
+            <div class="alert alert-danger mt-3 mb-0">{{ error() }}</div>
             }
-            @if (!loading) {
-                @for (domain of domains; track domain) {
+            @if (!loading()) {
+                @for (domain of domains(); track domain) {
                     <app-domain-preview [domain]="domain"></app-domain-preview>
                 }
             }
         </div>
     </div>
-    <div [ngClass]="cardCollabListContainerStyle">
+    <div [ngClass]="cardCollabListContainerStyle()">
         <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         <h4 class="card-header">
             <div>
@@ -35,17 +35,17 @@
             </div>
         </h4>
         <div class="card-body">
-            @if (loadingCollab) {
+            @if (loadingCollab()) {
             <div class="card-body loader-div">
                 <div class="loader"></div>
                 <img src="assets\switcherapi_mark_grey.png" width="60" class="loader-logo" alt="Switcher API logo"/>
             </div>
             }
-            @if (errorCollab) {
-            <div class="alert alert-danger mt-3 mb-0">{{ errorCollab }}</div>
+            @if (errorCollab()) {
+            <div class="alert alert-danger mt-3 mb-0">{{ errorCollab() }}</div>
             }
-            @if (!loadingCollab) {
-                @for (domain of collabDomains; track domain) {
+            @if (!loadingCollab()) {
+                @for (domain of collabDomains(); track domain) {
                     <app-domain-preview [domain]="domain"></app-domain-preview>
                 }
             }
