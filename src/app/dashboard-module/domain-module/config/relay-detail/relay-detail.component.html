@@ -60,7 +60,7 @@
                 <div class="description">
                     @if (config.relay) {
                     <app-environment-config
-                        [selectedEnvName]="currentEnvironment"
+                        [selectedEnvName]="currentEnvironment()"
                         [enable]="envEnable"
                         [domainId]="parent.domainId" 
                         [configuredEnvironments]="config.relay.activated"
