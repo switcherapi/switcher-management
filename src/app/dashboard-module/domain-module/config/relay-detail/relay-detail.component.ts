@@ -297,6 +297,11 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   public updateEnvironmentStatus(env: EnvironmentChangeEvent): void {
+    if (this.editing()) {
+      this.currentStatus.set(env.status);
+      return;
+    }
+
     const configRelayStatus = new ConfigRelayStatus();
     configRelayStatus.activated[env.environmentName] = env.status;
 

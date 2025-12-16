@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, startWith } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
@@ -102,11 +102,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   strategiesCreatable = signal(false);
   relayUpdatable = signal(false);
   private readonly configRelay = signal<any>(null);
-  hasRelay = computed(() => {
-    const relay = this.configRelay();
-    const currentEnv = this.currentEnvironmentSignal();
-    return relay?.activated ? relay.activated[currentEnv] !== undefined : false;
-  });
 
   override loading = signal(true);
   loadingStrategies = signal(true);
@@ -281,8 +276,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
     setTimeout(() => this.currentTab.set(2), 500);
   }
 
-
-
   addComponent(event: MatChipInputEvent): void {
     if (!this.matAutocomplete.isOpen) {
       const input = event.chipInput.inputElement;
@@ -376,6 +369,12 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
 
     this.config.relay = relay;
     this.configRelay.set(relay);
+  }
+
+  hasRelay() {
+    const relay = this.configRelay();
+    const currentEnv = this.currentEnvironmentSignal();
+    return relay?.activated ? relay.activated[currentEnv] !== undefined : false;
   }
 
   private isMetricDisabled() {
