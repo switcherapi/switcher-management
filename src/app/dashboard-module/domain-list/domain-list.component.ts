@@ -95,9 +95,10 @@ export class DomainListComponent implements OnInit, OnDestroy {
         this.error.set(this.errorHandler.doError(error));
       },
       complete: () => {
-        if (!this.domains().length) {
+        if (this.domains() == null) {
           this.error.set('Failed to connect to Switcher API');
         }
+        
         this.loading.set(false);
         this.cardListContainerStyle.set('card mt-4 ready');
       }
