@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/_helpers/toast.service';
@@ -50,6 +50,8 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
   private readonly unsubscribe = new Subject<void>();
 
   components = signal<SwitcherComponent[]>([]);
+  filterText = signal<string>('');
+  filteredComponents = computed(() => this.filterComponents());
 
   compFormControl = new FormControl('', [
     Validators.required,
@@ -85,6 +87,11 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
     this.loadComponents();
     this.readPermissionToObject();
     this.updateRoute();
+    
+    // Subscribe to form control changes for filtering
+    this.compFormControl.valueChanges
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(value => this.filterText.set(value || ''));
   }
 
   ngOnDestroy() {
@@ -129,6 +136,18 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
           }
         }
     });
+  }
+
+  private filterComponents(): SwitcherComponent[] {
+    const filter = this.filterText().toLowerCase().trim();
+
+    if (!filter) {
+      return this.components();
+    }
+
+    return this.components().filter(component => 
+      component.name.toLowerCase().includes(filter)
+    );
   }
 
   createComponent() {

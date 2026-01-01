@@ -27,7 +27,7 @@
     </div>
     @if (!loading()) {
     <div>
-        @for (component of components(); track component) {
+        @for (component of filteredComponents(); track component) {
         <div class="grid-container">
             <label class="label-env-name" for="inputComponentName">
                 <mat-icon>devices_other</mat-icon>

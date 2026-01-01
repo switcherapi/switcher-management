@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,6 +42,8 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
   private readonly unsubscribe = new Subject<void>();
 
   environments = signal<Environment[]>([]);
+  filterText = signal<string>('');
+  filteredEnvironments = computed(() => this.filterEnvironments());
 
   envFormControl = new FormControl('', [
     Validators.required,
@@ -76,6 +78,11 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     this.loadEnvironments();
     this.readPermissionToObject();
     this.updateRoute();
+    
+    // Subscribe to form control changes for filtering
+    this.envFormControl.valueChanges
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(value => this.filterText.set(value || ''));
   }
 
   ngOnDestroy() {
@@ -212,6 +219,18 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     } else {
       this.domainRouteService.refreshPath();
     }
+  }
+
+  private filterEnvironments(): Environment[] {
+    const filter = this.filterText().toLowerCase().trim();
+
+    if (!filter) {
+      return this.environments();
+    }
+
+    return this.environments().filter(environment => 
+      environment.name.toLowerCase().includes(filter)
+    );
   }
 
 }

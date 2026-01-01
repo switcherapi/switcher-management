@@ -27,7 +27,7 @@
     </div>
     @if (!loading()) {
     <div>
-        @for (environment of environments(); track environment) {
+        @for (environment of filteredEnvironments(); track environment) {
         <div class="grid-container">
             <label class="label-env-name" for="inputEnvironmentName">
                 <mat-icon>apps</mat-icon>
