@@ -1,24 +1,24 @@
-import { throwError } from "rxjs";
+import { throwError } from 'rxjs';
 
 export class ApiService {
     
     handleError(error: any) {
-        let errorMessage = '';
-        
         if (error.error instanceof ErrorEvent) {
-            errorMessage = `Error: ${error.error.message}`;
-        } else if (error.status === 401) {
-            return throwError(() => error);
-        } else if (error.status === 422) {
-            errorMessage = 'Invalid arguments';
-        } else if (error.status === 404) {
-            errorMessage = error.error ?? 'Value not found';
-        } else if (error.status === 503 || error.status === 0) {
-            errorMessage = 'Switcher API is offline';
-        } else {
-            errorMessage = error.error;
+            return throwError(() => `Error: ${error.error.message}`);
         }
 
-        return throwError(() => errorMessage);
+        switch (error.status) {
+            case 401:
+                return throwError(() => error);
+            case 422:
+                return throwError(() => 'Invalid arguments');
+            case 404:
+                return throwError(() => error.error ?? 'Value not found');
+            case 503:
+            case 0:
+                return throwError(() => 'Switcher API is offline');
+            default:
+                return throwError(() => error.error);
+        }
     }
 }
