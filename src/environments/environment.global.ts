@@ -1,5 +1,5 @@
 export const environment_global = {
-    version: 'v2.2.0',
+    version: 'v2.2.1',
     releaseTime: new Date().toUTCString(),
     recaptchaPublicKey: '6Lc4fMErAAAAAJSdF2ZRV6HJI_m-nhiDu8Gue18P',
     allowInternalAuth: true,

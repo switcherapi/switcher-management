@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, Input, inject, signal } from '
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { ToastService } from 'src/app/_helpers/toast.service';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { DatePipe, NgClass } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,6 +37,9 @@ import { MatButton } from '@angular/material/button';
     ]
 })
 export class ChangelogComponent implements OnInit, OnDestroy {
+  // Optional dialog reference used by Strategy Detail Change Log Dialog
+  private readonly dialogRef = inject<MatDialogRef<ChangelogComponent>>(MatDialogRef, { optional: true });
+
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly domainRouteService = inject(DomainRouteService);
   private readonly adminService = inject(AdminService);
@@ -396,6 +400,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   }
 
   resetHistory() {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
+    
     const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Change Log Reset';
     modalConfirmation.componentInstance.question = 'Are you sure you want to reset the change log?';
