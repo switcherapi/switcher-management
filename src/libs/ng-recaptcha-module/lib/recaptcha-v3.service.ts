@@ -1,8 +1,8 @@
-import { inject, Injectable, NgZone } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { inject, Injectable, NgZone } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
-import { RECAPTCHA_V3_SITE_KEY } from "./tokens";
-import { RecaptchaLoaderService } from "./recaptcha-loader.service";
+import { RECAPTCHA_V3_SITE_KEY } from './tokens';
+import { RecaptchaLoaderService } from './recaptcha-loader.service';
 
 export interface OnExecuteData {
   /**
@@ -94,14 +94,14 @@ export class ReCaptchaV3Service {
    */
   public execute(action: string): Observable<string> {
     const subject = new Subject<string>();
-    if (!this.grecaptcha) {
+    if (this.grecaptcha) {
+      this.executeActionWithSubject(action, subject);
+    } else {
       if (!this.actionBacklog) {
         this.actionBacklog = [];
       }
 
       this.actionBacklog.push([action, subject]);
-    } else {
-      this.executeActionWithSubject(action, subject);
     }
 
     return subject.asObservable();

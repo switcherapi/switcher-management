@@ -36,7 +36,7 @@ export class DomainCreateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.nameFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.name = value;
-    })
+    });
   }
 
   ngOnDestroy() {

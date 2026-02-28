@@ -1,4 +1,4 @@
-import { environment_global } from "./environment.global";
+import { environment_global } from './environment.global';
 
 export const environment = {
   production: false,

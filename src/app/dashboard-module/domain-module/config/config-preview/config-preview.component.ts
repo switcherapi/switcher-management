@@ -94,7 +94,7 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
         next: data => {
           if (data) {
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Environment updated with success`);
+            this.toastService.showSuccess('Environment updated with success');
           }
         },
         error: error => {
@@ -157,7 +157,7 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
 
   private isEnvStatusChangeAllowed(element: Permissions): boolean {
     return element.permissions.find(p => p.action === 'UPDATE_ENV_STATUS').result === 'ok' ||
-      element.permissions.find(p => p.action === 'UPDATE').result === 'ok'
+      element.permissions.find(p => p.action === 'UPDATE').result === 'ok';
   }
 
   private updateCssClasses(isActivated: boolean): void {

@@ -64,7 +64,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
 
   domainId: string;
   domainName: string;
-  classStatus = signal("card mt-4 loading");
+  classStatus = signal('card mt-4 loading');
   loading = signal(true);
   creating = signal(false);
   error = signal('');
@@ -101,7 +101,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
 
   private loadComponents(): void {
     this.loading.set(true);
-    this.classStatus.set("card mt-4 loading");
+    this.classStatus.set('card mt-4 loading');
 
     this.compService.getComponentsByDomain(this.domainId)
       .pipe(takeUntil(this.unsubscribe))
@@ -115,7 +115,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
         },
         complete: () => {
           this.loading.set(false);
-          this.classStatus.set("card mt-4 ready");
+          this.classStatus.set('card mt-4 ready');
         }
       });
   }
@@ -207,7 +207,7 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
           }
         });
       }
-    })
+    });
   }
 
   editComponent(selectedComponent: SwitcherComponent): void {
@@ -237,12 +237,12 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
                     : comp
                 );
                 this.components.set(updatedComponents);
-                this.toastService.showSuccess(`Component updated with success`);
+                this.toastService.showSuccess('Component updated with success');
               }
             },
             error: error => {
               ConsoleLogger.printError(error);
-              this.toastService.showError(`Unable to update component`);
+              this.toastService.showError('Unable to update component');
             }
           });
       }
@@ -267,12 +267,12 @@ export class ComponentsComponent extends BasicComponent implements OnInit, OnDes
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to generate an API Key`);
+              this.toastService.showError('Unable to generate an API Key');
               ConsoleLogger.printError(error);
             }
           });
       }
-    })
+    });
   }
 
   private confirmKeyCreated(apiKey: string, componentName: string): void {
@@ -320,7 +320,7 @@ export class ComponentEditDialogComponent {
   }
 
   copyKey() {
-    this.toastService.showSuccess(`API Key copied with success`);
+    this.toastService.showSuccess('API Key copied with success');
   }
 
 }

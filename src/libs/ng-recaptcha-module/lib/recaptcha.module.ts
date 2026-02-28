@@ -1,6 +1,6 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
-import { RecaptchaLoaderService } from "./recaptcha-loader.service";
+import { RecaptchaLoaderService } from './recaptcha-loader.service';
 
 @NgModule({
   providers: [RecaptchaLoaderService],

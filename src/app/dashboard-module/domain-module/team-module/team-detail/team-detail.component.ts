@@ -154,7 +154,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
           if (team) {
             this.setBlockUI(false);
             this.router.navigate([`/dashboard/domain/${encodeURIComponent(this.domainName)}/${this.domainId}/teams`]);
-            this.toastService.showSuccess(`Team removed with success`);
+            this.toastService.showSuccess('Team removed with success');
           }
         },
         error: error => this.onError(error, `Unable to remove team: '${currentTeam.name}'`)
@@ -166,7 +166,7 @@ export class TeamDetailComponent extends DetailComponent implements OnInit, OnDe
       this.team.set(team);
       this.setHeaderStyle();
       this.setBlockUI(false);
-      this.toastService.showSuccess(`Team updated with success`);
+      this.toastService.showSuccess('Team updated with success');
     }
   }
 

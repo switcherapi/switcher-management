@@ -18,7 +18,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   constructor() { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -50,22 +50,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
-
-      return this.authService.refreshToken().pipe(
-        switchMap((token: any) => {
-          this.isRefreshing = false;
-          this.refreshTokenSubject.next(token.token);
-          return next.handle(this.addToken(request, token.token));
-        }),
-        catchError((error) => {
-          this.router.navigate(['/login']);
-          return throwError(() => error);
-        }));
-
-    } else {
+    if (this.isRefreshing) {
       return this.refreshTokenSubject.pipe(
         filter(token => token != null),
         take(1),
@@ -73,5 +58,19 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
           return next.handle(this.addToken(request, jwt));
         }));
     }
+    
+    this.isRefreshing = true;
+    this.refreshTokenSubject.next(null);
+
+    return this.authService.refreshToken().pipe(
+      switchMap((token: any) => {
+        this.isRefreshing = false;
+        this.refreshTokenSubject.next(token.token);
+        return next.handle(this.addToken(request, token.token));
+      }),
+      catchError((error) => {
+        this.router.navigate(['/login']);
+        return throwError(() => error);
+      }));
   }
 }

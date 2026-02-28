@@ -10,17 +10,24 @@ export class SpecialCharacterDirective {
     @Input() autoUnderscore = false;
 
     @HostListener('input', ['$event']) onInput(event) {
-        if (this.autoUpper)
+        if (this.autoUpper) {
             event.target.value = event.target.value.toUpperCase();
-        if (this.autoLower)
+        }
+
+        if (this.autoLower) {
             event.target.value = event.target.value.toLowerCase();
-        if (this.autoUnderscore)
-            event.target.value = event.target.value.replace(/\s/g, '_');
+        }
+
+        if (this.autoUnderscore) {
+            event.target.value = event.target.value.replaceAll(/\s/g, '_');
+        }
     }
 
     @HostListener('keypress', ['$event']) onKeyPress(event) {
-        if (this.autoUnderscore && event.key === ' ')
+        if (this.autoUnderscore && event.key === ' ') {
             return true;
+        }
+
         return new RegExp(this.allowRegexStr).test(event.key);
     }
 
@@ -30,12 +37,17 @@ export class SpecialCharacterDirective {
 
     validateFields(event) {
         setTimeout(() => {
-            if (this.autoUnderscore)
-                this.el.nativeElement.value = this.el.nativeElement.value.replace(/\s/g, '_');
-            if (this.autoUpper)
+            if (this.autoUnderscore) {
+                this.el.nativeElement.value = this.el.nativeElement.value.replaceAll(/\s/g, '_');
+            }
+
+            if (this.autoUpper) {
                 this.el.nativeElement.value = this.el.nativeElement.value.toUpperCase();
-            if (this.autoLower)
+            }
+
+            if (this.autoLower) {
                 this.el.nativeElement.value = this.el.nativeElement.value.toLowerCase();
+            }
 
             this.el.nativeElement.value =  this.el.nativeElement.value.replace(this.allowRegexStr, '');
             event.preventDefault();

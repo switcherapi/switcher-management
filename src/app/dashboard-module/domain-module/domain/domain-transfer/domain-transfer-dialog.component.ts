@@ -31,7 +31,7 @@ import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
     }
   
     onCopy() {
-      this.toastService.showSuccess(`Domain transfer link copied with success`);
+      this.toastService.showSuccess('Domain transfer link copied with success');
     }
 
     getUrl() {

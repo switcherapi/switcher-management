@@ -175,10 +175,11 @@ export class TeamPermissionsComponent extends BasicComponent implements OnInit, 
   }
 
   formatContent(value: string): string {
-    if (globalThis.screen.width < 560)
+    if (globalThis.screen.width < 560) {
       return value.substring(0, 3);
-    else
+    } else {
       return value;
+    }
   }
 
   sortData(sort: Sort) {

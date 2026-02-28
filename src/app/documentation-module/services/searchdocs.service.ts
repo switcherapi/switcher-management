@@ -30,7 +30,7 @@ export class SearchDocsService extends ApiService {
       previewLength: `${request.previewLength}`,
       ignoreCase: `${request.ignoreCase}`,
       trimContent: `${request.trimContent}`
-    }
+    };
 
     return this.http.get<SearchDocsResponse>(`${environment.apiSearchDocsUrl}/`, { params }).pipe(catchError(super.handleError));
   }

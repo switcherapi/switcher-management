@@ -49,7 +49,7 @@ export class StrategyCloneComponent implements OnInit, OnDestroy {
 
     this.environmentSelection.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.environment = value;
-    })
+    });
   }
 
   ngOnDestroy() {

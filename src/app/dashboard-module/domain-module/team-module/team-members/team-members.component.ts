@@ -89,7 +89,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`)
+          this.toastService.showError(`Unable to remove ${member.name} - ${error.error}`);
         }
       });
   }
@@ -100,7 +100,7 @@ export class TeamMembersComponent implements OnInit, OnDestroy {
       .subscribe({
         next: team => {
           if (team) {
-            this.loadDataSource(team.members)
+            this.loadDataSource(team.members);
           }
         },
         error: error => {

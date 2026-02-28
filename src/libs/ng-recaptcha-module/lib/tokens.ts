@@ -1,9 +1,9 @@
-import { InjectionToken } from "@angular/core";
+import { InjectionToken } from '@angular/core';
 
-import { RecaptchaSettings } from "./recaptcha-settings";
+import { RecaptchaSettings } from './recaptcha-settings';
 
-export const RECAPTCHA_SETTINGS = new InjectionToken<RecaptchaSettings>("recaptcha-settings");
-export const RECAPTCHA_V3_SITE_KEY = new InjectionToken<string>("recaptcha-v3-site-key");
+export const RECAPTCHA_SETTINGS = new InjectionToken<RecaptchaSettings>('recaptcha-settings');
+export const RECAPTCHA_V3_SITE_KEY = new InjectionToken<string>('recaptcha-v3-site-key');
 
 /**
  * Specifies the options for loading the reCAPTCHA script tag.
@@ -108,4 +108,4 @@ export interface RecaptchaLoaderOptions {
 /**
  * See the documentation for `RecaptchaLoaderOptions`.
  */
-export const RECAPTCHA_LOADER_OPTIONS = new InjectionToken<RecaptchaLoaderOptions>("recaptcha-loader-options");
+export const RECAPTCHA_LOADER_OPTIONS = new InjectionToken<RecaptchaLoaderOptions>('recaptcha-loader-options');

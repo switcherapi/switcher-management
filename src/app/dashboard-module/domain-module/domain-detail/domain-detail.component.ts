@@ -91,12 +91,12 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
             next: admin => {
               this.setBlockUI(false);
               if (admin) {
-                this.toastService.showSuccess(`Left with success`);
+                this.toastService.showSuccess('Left with success');
               }
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to leave this domain`);
+              this.toastService.showError('Unable to leave this domain');
               ConsoleLogger.printError(error);
             },
             complete: () => {
@@ -140,11 +140,11 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
             next: () => {
               this.setBlockUI(false);
               this.router.navigate(['/dashboard']);
-              this.toastService.showSuccess(`Domain removed with success`);
+              this.toastService.showSuccess('Domain removed with success');
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to remove this domain`);
+              this.toastService.showError('Unable to remove this domain');
               ConsoleLogger.printError(error);
             }
           });
@@ -170,7 +170,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           }
         },
         error: error => {
-          this.toastService.showError(`Unable to load Domain`);
+          this.toastService.showError('Unable to load Domain');
           ConsoleLogger.printError(error);
         }
       });
@@ -196,7 +196,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           if (data) {
             this.domain.description = newDescription;
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Domain updated with success`);
+            this.toastService.showSuccess('Domain updated with success');
             this.editing.set(false);
           }
         },
@@ -218,7 +218,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
           if (data) {
             this.selectEnvironment(env);
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Environment updated with success`);
+            this.toastService.showSuccess('Environment updated with success');
           }
         },
         error: error => {
@@ -237,7 +237,7 @@ export class DomainDetailComponent extends DetailComponent implements OnInit, On
         next: data => {
           if (data) {
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Environment removed with success`);
+            this.toastService.showSuccess('Environment removed with success');
           }
         },
         error: error => {

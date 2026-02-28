@@ -19,8 +19,8 @@ export class ListComponent implements AfterViewInit {
 
     protected unsubscribe = new Subject<void>();
     
-    @ViewChildren("envSelectionChange")
-    public component: QueryList<MatSelect>
+    @ViewChildren('envSelectionChange')
+    public component: QueryList<MatSelect>;
     private envSelectionChange: MatSelect;
 
     environmentSelection: FormGroup;

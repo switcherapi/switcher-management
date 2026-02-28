@@ -85,7 +85,7 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
               if (team) {
                 this.teamListComponent.removeTeamFromList(this.team);
                 this.setBlockUI(false);
-                this.toastService.showSuccess(`Team removed with success`);
+                this.toastService.showSuccess('Team removed with success');
               }
             },
             error: error => this.onError(error, `Unable to remove team: '${this.team.name}'`)
@@ -146,7 +146,7 @@ export class TeamPreviewComponent extends BasicComponent implements OnInit, OnDe
   private onSuccess(team: Team): void {
     this.team = team;
     this.setBlockUI(false);
-    this.toastService.showSuccess(`Team updated with success`);
+    this.toastService.showSuccess('Team updated with success');
   }
 
 }

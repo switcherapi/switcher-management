@@ -34,13 +34,13 @@ export class SignupDomainComponent {
       next: success => {
         if (success) {
           this.router.navigate(['/dashboard']);
-          this.toastService.showSuccess(`Domain transfered with success`);
+          this.toastService.showSuccess('Domain transfered with success');
         }
         this.loading.set(false);
       },
       error: error => {
         ConsoleLogger.printError(error);
-        this.error.set(`Domain cannot be transfered`);
+        this.error.set('Domain cannot be transfered');
         this.loading.set(false);
       }
     });

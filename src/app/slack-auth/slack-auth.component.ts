@@ -90,7 +90,7 @@ export class SlackAuthComponent {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to load Domains`);
+          this.toastService.showError('Unable to load Domains');
         }
       });
   }
@@ -134,7 +134,7 @@ export class SlackAuthComponent {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to complete the Slack installation`);
+          this.toastService.showError('Unable to complete the Slack installation');
           this.loading.set(false);
         }
       });
@@ -150,7 +150,7 @@ export class SlackAuthComponent {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to decline Slack installation`);
+          this.toastService.showError('Unable to decline Slack installation');
           this.loading.set(false);
         }
       });

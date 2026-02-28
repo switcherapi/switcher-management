@@ -112,11 +112,11 @@ export class MetricDataComponent implements OnInit, OnDestroy {
               if (data) {
                 this.dataSource.set(new MatTableDataSource(null));
                 this.refreshParentData();
-                this.toastService.showSuccess(`Metrics reseted with success`);
+                this.toastService.showSuccess('Metrics reseted with success');
               }
             },
             error: error => {
-              this.toastService.showError(`Unable to reset Metrics`);
+              this.toastService.showError('Unable to reset Metrics');
               ConsoleLogger.printError(error);
             }
           });

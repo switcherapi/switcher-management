@@ -1,4 +1,4 @@
-import { signal } from "@angular/core";
+import { signal } from '@angular/core';
 
 export class BasicComponent {
     blockuiEnabled = signal(false);

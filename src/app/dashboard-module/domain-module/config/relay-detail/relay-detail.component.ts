@@ -103,7 +103,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
     
     const { valid } = this.endpointFormControl;
     if (!valid) {
-      this.toastService.showError(`Unable to save relay`);
+      this.toastService.showError('Unable to save relay');
       return;
     }
 
@@ -153,7 +153,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
         },
         error: error => {
           this.setBlockUI(false);
-          this.toastService.showError(`Unable to generate a verification code`);
+          this.toastService.showError('Unable to generate a verification code');
           ConsoleLogger.printError(error);
         }
       });
@@ -182,7 +182,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to remove this relay`);
+              this.toastService.showError('Unable to remove this relay');
               ConsoleLogger.printError(error);
             }
           });
@@ -191,8 +191,10 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
   }
 
   isVerified(): boolean {
-    if (this.config.relay.verified)
+    if (this.config.relay.verified) {
       return this.config.relay.verified[this.currentEnvironmentInput];
+    }
+
     return false;
   }
 
@@ -216,7 +218,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
       .subscribe({
         next: data => {
           if (data) {
-            this.toastService.showSuccess(`Relay saved with success`);
+            this.toastService.showSuccess('Relay saved with success');
             this.config.relay = data.relay;
             this.editing.set(false);
             this.parent.updateConfigRelay(data.relay);
@@ -314,7 +316,7 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
             this.config.relay.activated[this.currentEnvironmentInput] = env[this.currentEnvironmentInput];
             this.parent.updateConfigRelay(data.relay);
             this.selectEnvironment(env);
-            this.toastService.showSuccess(`Environment updated with success`);
+            this.toastService.showSuccess('Environment updated with success');
             this.setBlockUI(false);
           }
         },
@@ -355,15 +357,15 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
             next: response => {
               this.setBlockUI(false);
               if (response.status === 'verified') {
-                this.toastService.showSuccess(`Relay verified with success`);
+                this.toastService.showSuccess('Relay verified with success');
                 this.config.relay.verified[this.currentEnvironmentInput] = true;
               } else {
-                this.toastService.showError(`Failed to verify Relay`);
+                this.toastService.showError('Failed to verify Relay');
               }
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to verify Relay`);
+              this.toastService.showError('Unable to verify Relay');
               ConsoleLogger.printError(error);
             }
           });
@@ -373,8 +375,9 @@ export class RelayDetailComponent extends DetailComponent implements OnInit, OnD
 
   private getRelayAttribute(field: string): string {
     if (this.config.relay[field]) {
-      if (this.config.relay[field][this.currentEnvironmentInput])
+      if (this.config.relay[field][this.currentEnvironmentInput]) {
         return this.config.relay[field][this.currentEnvironmentInput];
+      }
     }
     return '';
   }

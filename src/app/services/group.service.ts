@@ -39,7 +39,8 @@ export class GroupService extends ApiService {
   public setGroupEnvironmentStatus(id: string, env: string, status: boolean): Observable<Group> {
     const body = {
       [`${env}`]: status
-    }
+    };
+
     return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/updateStatus/` + id), body)
       .pipe(catchError(super.handleError));
   }
@@ -47,13 +48,14 @@ export class GroupService extends ApiService {
   public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Group> {
     const body = {
       env
-    }
+    };
+
     return this.http.patch<Group>((`${environment.apiUrl}/groupconfig/removeStatus/${id}`), body)
       .pipe(catchError(super.handleError));
   }
 
   public updateGroup(id: string, name?: string, description?: string): Observable<Group> {
-    const body: any = {}
+    const body: any = {};
 
     if (name) body.name = name;
     if (description) body.description = description;
@@ -67,7 +69,8 @@ export class GroupService extends ApiService {
       name,
       description,
       domain
-    }
+    };
+    
     return this.http.post<Group>((`${environment.apiUrl}/groupconfig/create`), body)
       .pipe(catchError(super.handleError));
   }

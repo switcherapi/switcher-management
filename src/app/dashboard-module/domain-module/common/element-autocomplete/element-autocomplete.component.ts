@@ -105,8 +105,9 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
         };
       }).filter(comp => comp.description.length));
 
-    if (filtered)
+    if (filtered) {
       this.searchListItems.push(...filtered.flat());
+    }
   }
 
   private loadBySwitcher(groups: Group[]) {
@@ -125,8 +126,9 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
         };
       }));
 
-    if (filtered)
+    if (filtered) {
       this.searchListItems.push(...filtered.flat());
+    }
   }
 
   private loadByGroup(groups: Group[]) {
@@ -167,13 +169,15 @@ export class ElementAutocompleteComponent implements OnInit, OnDestroy {
         const filterValuePrefix = (filterValue as unknown as string).split(':')[1];
         if ((item.name.toLowerCase().includes(filterValuePrefix) || 
             item.description.toLowerCase().includes(filterValuePrefix)) &&
-            item.type.toLowerCase().includes(typePrefix))
+            item.type.toLowerCase().includes(typePrefix)) {
           return item;
+        }
       } else 
         if (item.name.toLowerCase().includes(filterValue) ||
             item.description.toLowerCase().includes(filterValue) ||
-            item.type.toLowerCase().includes(filterValue))
+            item.type.toLowerCase().includes(filterValue)) {
           return item;
+        }
       }
     );
   }

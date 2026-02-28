@@ -1,4 +1,4 @@
-import { ConsoleLogger } from "./console-logger";
+import { ConsoleLogger } from './console-logger';
 
 export class JsonReader {
 
@@ -23,7 +23,7 @@ export class JsonReader {
     public static isValidJSONString(value: string): boolean {
         try {
             const parsed = JSON.parse(value);
-            return parsed && typeof parsed === "object";
+            return parsed && typeof parsed === 'object';
         } catch (e) {
             ConsoleLogger.printError(e);
             return false;

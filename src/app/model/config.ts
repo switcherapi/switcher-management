@@ -1,4 +1,4 @@
-import { Admin } from "./admin";
+import { Admin } from './admin';
 
 export class Config {
   _id: string;

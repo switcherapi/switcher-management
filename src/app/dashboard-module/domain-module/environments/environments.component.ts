@@ -56,7 +56,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
   domainId: string;
   domainName: string;
-  classStatus = signal("card mt-4 loading");
+  classStatus = signal('card mt-4 loading');
   loading = signal(true);
   creating = signal(false);
   error = signal('');
@@ -187,7 +187,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.loading.set(false);
-          this.classStatus.set("card mt-4 ready");
+          this.classStatus.set('card mt-4 ready');
         }
       });
   }

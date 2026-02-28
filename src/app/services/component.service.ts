@@ -24,7 +24,8 @@ export class ComponentService extends ApiService {
     const body = {
       name,
       domain
-    }
+    };
+
     return this.http.post<SwitcherComponent>(`${environment.apiUrl}/component/create`, body).pipe(catchError(super.handleError));
   }
 
@@ -35,7 +36,8 @@ export class ComponentService extends ApiService {
   public updateComponent(id: string, name: string): Observable<SwitcherComponent> {
     const body = {
       name
-    }
+    };
+    
     return this.http.patch<SwitcherComponent>(`${environment.apiUrl}/component/${id}`, body).pipe(catchError(super.handleError));
   }
 

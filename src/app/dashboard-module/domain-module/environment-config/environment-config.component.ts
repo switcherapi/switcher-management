@@ -106,14 +106,17 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   }
 
   isDisableToRemove(): boolean {
-    if (this.selectedEnvName === 'default')
+    if (this.selectedEnvName === 'default') {
       return true;
+    }
    
-    if (this.notSelectableEnvironments)
+    if (this.notSelectableEnvironments) {
       return true;
+    }
 
-    if (this.configuredEnvironments[this.selectedEnvName] === undefined)
+    if (this.configuredEnvironments[this.selectedEnvName] === undefined) {
       return true;
+    }
     
     return false;
   }
@@ -125,11 +128,11 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
         this.environments = env;
         this.outputEnvLoaded.emit(env);
 
-        if (!this.notSelectableEnvironments)
-          this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
-        else {
+        if (this.notSelectableEnvironments) {
           this.selectedEnvName = this.selectedEnvName || Object.keys(this.configuredEnvironments)[0];
           this.environmentSelection.get('environmentSelection').setValue(this.selectedEnvName);
+        } else {
+          this.environmentSelection.get('environmentSelection').setValue(this.setProductionFirst());
         }
 
         this.selectedEnvStatus = this.configuredEnvironments[this.environmentSelection.get('environmentSelection').value];
@@ -152,7 +155,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
   }
 
   private setProductionFirst(): string {
-    const env = JSON.parse(JSON.stringify(this.configuredEnvironments));
+    const env = structuredClone(this.configuredEnvironments);
     const keys = Object.keys(env);
     let defaultEnv: Environment;
     
@@ -161,7 +164,7 @@ export class EnvironmentConfigComponent implements OnInit, OnDestroy {
     }
 
     if (defaultEnv) {
-      this.selectedEnvName = defaultEnv.name
+      this.selectedEnvName = defaultEnv.name;
       return defaultEnv.name;
     }
 

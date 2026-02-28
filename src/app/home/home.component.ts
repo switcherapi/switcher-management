@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
 export class HomeComponent {
 
   getImage(resource: string): string {
-    const darkPrefix = document.documentElement.classList.contains("dark-mode") ? '_dark' : '';
+    const darkPrefix = document.documentElement.classList.contains('dark-mode') ? '_dark' : '';
     return `assets/${resource}${darkPrefix}.png`;
   }
 

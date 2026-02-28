@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 const STATUS_BY_ENV = `
   statusByEnv {
