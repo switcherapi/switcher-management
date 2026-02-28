@@ -14,4 +14,4 @@ export const environment_global = {
     apiFeatureUrl: 'https://switcherapi.com/feature',
     apiUrl: 'https://switcherapi.com/api',
     slackUrl: 'https://slack.switcherapi.com/slack/install'
-}
+};

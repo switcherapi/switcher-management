@@ -62,7 +62,7 @@ export class SignupTeamComponent {
         next: success => {
           if (success) {
             this.router.navigate(['/dashboard']);
-            this.toastService.showSuccess(`Joined with success`);
+            this.toastService.showSuccess('Joined with success');
           }
           this.loading.set(false);
         },

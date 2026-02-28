@@ -1,10 +1,10 @@
-import { Injectable, inject } from "@angular/core";
-import { ApiService } from "./api.service";
-import { HttpBackend, HttpClient } from "@angular/common/http";
-import { FeatureRequest, FeatureResponse } from "../model/feature";
-import { environment } from "src/environments/environment";
-import { catchError } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { Injectable, inject } from '@angular/core';
+import { HttpBackend, HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
+import { FeatureRequest, FeatureResponse } from '../model/feature';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'

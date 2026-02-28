@@ -135,11 +135,11 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
             next: () => {
               this.setBlockUI(false);
               this.router.navigate([this.domainRouteService.getPreviousPath()]);
-              this.toastService.showSuccess(`Group removed with success`);
+              this.toastService.showSuccess('Group removed with success');
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to remove this group`);
+              this.toastService.showError('Unable to remove this group');
               ConsoleLogger.printError(error);
             }
           });
@@ -175,7 +175,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
           }
         },
         error: error => {
-          this.toastService.showError(`Unable to load Group`);
+          this.toastService.showError('Unable to load Group');
           ConsoleLogger.printError(error);
         }
       });
@@ -218,14 +218,14 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
               this.group.description = body.description;
               
               this.setBlockUI(false);
-              this.toastService.showSuccess(`Group updated with success`);
+              this.toastService.showSuccess('Group updated with success');
               this.editing.set(false);
             }
           },
           error: error => {
             this.setBlockUI(false);
             ConsoleLogger.printError(error);
-            this.toastService.showError(`Unable to update group`);
+            this.toastService.showError('Unable to update group');
             this.classStatus.set('header editing');
             this.editing.set(true);
           }
@@ -240,7 +240,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
       .subscribe({
         next: data => {
           if (data) {
-            this.toastService.showSuccess(`Environment updated with success`);
+            this.toastService.showSuccess('Environment updated with success');
           }
         },
         error: error => {
@@ -260,7 +260,7 @@ export class GroupDetailComponent extends DetailComponent implements OnInit, OnD
         next: data => {
           if (data) {
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Environment removed with success`);
+            this.toastService.showSuccess('Environment removed with success');
           }
         },
         error: error => {

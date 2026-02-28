@@ -24,7 +24,8 @@ export class EnvironmentService extends ApiService {
     const body = {
       name,
       domain
-    }
+    };
+    
     return this.http.post<Environment>(`${environment.apiUrl}/environment/create`, body).pipe(catchError(super.handleError));
   }
 

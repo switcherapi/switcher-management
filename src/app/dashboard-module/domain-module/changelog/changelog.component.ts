@@ -85,7 +85,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   configId = signal<string>('');
   groupId = signal<string>('');
-  classStatus = signal("mat-elevation-z8 loading");
+  classStatus = signal('mat-elevation-z8 loading');
   loading = signal(true);
   fetch = signal(true);
   removable = signal(false);
@@ -287,12 +287,12 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     if (data) {
       this.dataSource.set(new MatTableDataSource([]));
       this.pageLength.set(0);
-      this.toastService.showSuccess(`Change Log reseted with success`);
+      this.toastService.showSuccess('Change Log reseted with success');
     }
   }
 
   private changeLogError(error: any): void {
-    this.toastService.showError(`Unable to reset the Change Log`);
+    this.toastService.showError('Unable to reset the Change Log');
         ConsoleLogger.printError(error);
   }
 
@@ -304,7 +304,7 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     }
 
     this.loading.set(false);
-    this.classStatus.set("mat-elevation-z8 ready");
+    this.classStatus.set('mat-elevation-z8 ready');
   }
 
   private loadError(error: any): void {

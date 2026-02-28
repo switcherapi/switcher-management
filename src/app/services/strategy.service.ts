@@ -55,7 +55,8 @@ export class StrategyService extends ApiService {
   public setStrategyEnvironmentStatus(id: string, env: string, status: boolean): Observable<Strategy> {
     const body = {
       [`${env}`]: status
-    }
+    };
+    
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/updateStatus/` + id), body).pipe(catchError(super.handleError));
   }
 
@@ -63,14 +64,16 @@ export class StrategyService extends ApiService {
     const body = {
       description,
       operation
-    }
+    };
+
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/` + id), body).pipe(catchError(super.handleError));
   }
 
   public addValue(id: string, newValue: string): Observable<Strategy> {
     const body = {
       value: newValue
-    }
+    };
+
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/addval/` + id), body).pipe(catchError(super.handleError));
   }
 
@@ -78,14 +81,16 @@ export class StrategyService extends ApiService {
     const body = {
       oldvalue,
       newvalue
-    }
+    };
+
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/updateval/` + id), body).pipe(catchError(super.handleError));
   }
 
   public deleteValue(id: string, value: string): Observable<Strategy> {
     const body = {
       value
-    }
+    };
+
     return this.http.patch<Strategy>((`${environment.apiUrl}/configstrategy/removeval/` + id), body).pipe(catchError(super.handleError));
   }
 
@@ -97,7 +102,8 @@ export class StrategyService extends ApiService {
       operation,
       config,
       env
-    }
+    };
+    
     return this.http.post<Strategy>((`${environment.apiUrl}/configstrategy/create`), body).pipe(catchError(super.handleError));
   }
 

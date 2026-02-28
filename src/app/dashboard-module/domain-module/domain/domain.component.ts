@@ -147,7 +147,7 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
               });
             } else {
               this.transferLabel.set('Transfer Domain');
-              this.toastService.showSuccess(`Transfer canceled with success`);
+              this.toastService.showSuccess('Transfer canceled with success');
             }
           }
         },
@@ -175,8 +175,9 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
 
   getLabelListChildren() {
     if (this.currentPath.type === Types.GROUP_TYPE || 
-        this.currentPath.type === Types.CONFIG_TYPE)
+        this.currentPath.type === Types.CONFIG_TYPE) {
       return 'Switchers';
+    }
     return 'Groups';
   }
 
@@ -294,10 +295,11 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
     const currentUserId = this.authService.getUserInfo('sessionid');
     const domain = this.domain();
     if (currentUserId == domain?.owner) {
-      if (domain.transfer)
+      if (domain.transfer) {
         this.transferLabel.set('Cancel Transfer');
-      else
+      } else {
         this.transferLabel.set('Transfer Domain');
+      }
     } else {
       this.transferLabel.set('');
     }
@@ -308,15 +310,15 @@ export class DomainComponent extends BasicComponent implements OnInit, OnDestroy
       if (!this.navControl && globalThis.innerWidth < 1200) {
         const currentScrollPos = globalThis.scrollY;
         if (this.prevScrollpos > currentScrollPos) {
-            document.getElementById("navbarMenu").style.top = "0";
+            document.getElementById('navbarMenu').style.top = '0';
         } else {
-            document.getElementById("navbarMenu").style.top = "-90px";
+            document.getElementById('navbarMenu').style.top = '-90px';
         }
         this.prevScrollpos = currentScrollPos;
       } else {
-        document.getElementById("navbarMenu").style.top = "0";
+        document.getElementById('navbarMenu').style.top = '0';
       }
-    }
+    };
   }
 
   private redirectToSwitcher(item: any) {

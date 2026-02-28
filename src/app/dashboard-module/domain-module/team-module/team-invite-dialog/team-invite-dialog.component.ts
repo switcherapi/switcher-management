@@ -31,7 +31,7 @@ import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
     }
   
     onCopy() {
-      this.toastService.showSuccess(`Team invite copied with success`);
+      this.toastService.showSuccess('Team invite copied with success');
     }
 
     getUrl() {

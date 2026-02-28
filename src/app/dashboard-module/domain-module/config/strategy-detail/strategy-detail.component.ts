@@ -141,7 +141,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             next: () => {
               this.strategyList.reloadStrategies(this.strategy);
               this.setBlockUI(false);
-              this.toastService.showSuccess(`Strategy removed with success`);
+              this.toastService.showSuccess('Strategy removed with success');
 
               if (!this.strategyList.strategies.getValue().length) {
                 this.scrollToElement(document.getElementById('page-container'));
@@ -149,7 +149,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to remove this strategy`);
+              this.toastService.showError('Unable to remove this strategy');
               ConsoleLogger.printError(error);
             }
           });
@@ -184,7 +184,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
                   this.strategy.operation,
                   result.environment,
                   this.strategy.values).subscribe({
-                    next: () => this.toastService.showSuccess(`Strategy cloned with success`),
+                    next: () => this.toastService.showSuccess('Strategy cloned with success'),
                     error: error => {
                       this.toastService.showError(error.error);
                       ConsoleLogger.printError(error);
@@ -218,7 +218,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           complete: () => this.setBlockUI(false)
         });
     } else {
-      this.toastService.showError(`Unable to execute this operation`);
+      this.toastService.showError('Unable to execute this operation');
     }
   }
 
@@ -234,7 +234,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           complete: () => this.setBlockUI(false)
         });
     } else {
-      this.toastService.showError(`Unable to execute this operation`);
+      this.toastService.showError('Unable to execute this operation');
     }
   }
 
@@ -249,7 +249,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
           complete: () => this.setBlockUI(false)
         });
     } else {
-      this.toastService.showError(`One value is required, update or add new values`);
+      this.toastService.showError('One value is required, update or add new values');
     }
   }
 
@@ -272,7 +272,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       this.strategyList.updateStrategies(data);
       this.loadStrategyRequirements();
       this.selectedStrategyValue.set(null); // Clear selection after update
-      this.toastService.showSuccess(`Strategy updated with success`);
+      this.toastService.showSuccess('Strategy updated with success');
     }
   }
 
@@ -352,7 +352,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
             this.strategy.operation = body.operation;
             this.strategy.description = body.description;
   
-            this.toastService.showSuccess(`Strategy updated with success`);
+            this.toastService.showSuccess('Strategy updated with success');
             this.editing.set(false);
           }
         },
@@ -374,7 +374,7 @@ export class StrategyDetailComponent extends DetailComponent implements OnInit, 
       .subscribe({
         next: data => {
           if (data) {
-            this.toastService.showSuccess(`Environment updated with success`);
+            this.toastService.showSuccess('Environment updated with success');
           }
         },
         error: error => {

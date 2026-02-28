@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from "@angular/forms";
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export class DataUtils {
 
@@ -24,14 +24,14 @@ export class DataUtils {
   public static valueInputValidator(format: string): ValidatorFn {
     return (control: AbstractControl): Record<string, any> | null => {
       if (!control.value.match(format)) {
-        return [control.value]
+        return [control.value];
       }
       return null;
     };
   }
 
   public static isArrDiff(oldArr: any[], newArr: any[]): boolean {
-    return oldArr.join(',') !== newArr.join(',')
+    return oldArr.join(',') !== newArr.join(',');
   }
 
 }

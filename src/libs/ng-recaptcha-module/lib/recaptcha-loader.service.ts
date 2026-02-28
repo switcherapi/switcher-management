@@ -1,14 +1,14 @@
-import { isPlatformBrowser } from "@angular/common";
-import { Injectable, PLATFORM_ID, inject } from "@angular/core";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { filter } from "rxjs/operators";
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
-import { loader } from "./load-script";
+import { loader } from './load-script';
 import {
   RECAPTCHA_LOADER_OPTIONS,
   RECAPTCHA_V3_SITE_KEY,
   RecaptchaLoaderOptions,
-} from "./tokens";
+} from './tokens';
 
 function toNonNullObservable<T>(subject: BehaviorSubject<T | null>): Observable<T> {
   return subject.asObservable().pipe(filter<T>((value) => value !== null));
@@ -71,7 +71,7 @@ export class RecaptchaLoaderService {
         const newUrl = new URL(this.baseUrl ?? url);
 
         if (this.language) {
-          newUrl.searchParams.set("hl", this.language);
+          newUrl.searchParams.set('hl', this.language);
         }
 
         return {

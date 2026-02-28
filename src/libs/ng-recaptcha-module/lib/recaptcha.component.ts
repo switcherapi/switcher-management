@@ -1,22 +1,22 @@
 /// <reference types="grecaptcha" />
 
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, NgZone, OnDestroy, Output, inject } from "@angular/core";
-import { Subscription } from "rxjs";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, NgZone, OnDestroy, Output, inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { RecaptchaLoaderService } from "./recaptcha-loader.service";
-import { RecaptchaSettings } from "./recaptcha-settings";
-import { RECAPTCHA_SETTINGS } from "./tokens";
+import { RecaptchaLoaderService } from './recaptcha-loader.service';
+import { RecaptchaSettings } from './recaptcha-settings';
+import { RECAPTCHA_SETTINGS } from './tokens';
 
 let nextId = 0;
 
 export type NeverUndefined<T> = T extends undefined ? never : T;
 
-export type RecaptchaErrorParameters = Parameters<NeverUndefined<ReCaptchaV2.Parameters["error-callback"]>>;
+export type RecaptchaErrorParameters = Parameters<NeverUndefined<ReCaptchaV2.Parameters['error-callback']>>;
 
 @Component({
     exportAs: 'reCaptcha',
     selector: 'app-re-captcha',
-    template: ``
+    template: ''
 })
 export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -24,7 +24,7 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   private readonly zone = inject(NgZone);
 
   @Input()
-  @HostBinding("attr.id")
+  @HostBinding('attr.id')
   public id = `ngrecaptcha-${nextId++}`;
 
   @Input() public siteKey?: string;
@@ -33,7 +33,7 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   @Input() public size?: ReCaptchaV2.Size;
   @Input() public tabIndex?: number;
   @Input() public badge?: ReCaptchaV2.Badge;
-  @Input() public errorMode: "handled" | "default" = "default";
+  @Input() public errorMode: 'handled' | 'default' = 'default';
 
   @Output() public resolved = new EventEmitter<string | null>();
   /**
@@ -87,15 +87,15 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
    * Does nothing if component's size is not set to "invisible".
    */
   public execute(): void {
-    if (this.size !== "invisible") {
+    if (this.size !== 'invisible') {
       return;
     }
 
-    if (this.widget != null) {
-      void this.grecaptcha.execute(this.widget);
-    } else {
+    if (this.widget == null) {
       // delay execution of recaptcha until it actually renders
       this.executeRequested = true;
+    } else {
+      void this.grecaptcha.execute(this.widget);
     }
   }
 
@@ -142,7 +142,7 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
       callback: (response: string) => {
         this.zone.run(() => this.captchaResponseCallback(response));
       },
-      "expired-callback": () => {
+      'expired-callback': () => {
         this.zone.run(() => this.expired());
       },
       sitekey: this.siteKey,
@@ -152,8 +152,8 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
       type: this.type,
     };
 
-    if (this.errorMode === "handled") {
-      renderOptions["error-callback"] = (...args: RecaptchaErrorParameters) => {
+    if (this.errorMode === 'handled') {
+      renderOptions['error-callback'] = (...args: RecaptchaErrorParameters) => {
         this.zone.run(() => this.onError(args));
       };
     }

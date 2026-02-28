@@ -10,7 +10,7 @@ export abstract class MarkdownInjector {
 
   protected init(documentToRender: string): void {
     this.markdownService.getSource(`${environment.docsUrl}${documentToRender}`).subscribe(data => {
-      const darkPrefix = document.documentElement.classList.contains("dark-mode") ? '_dark' : '';
+      const darkPrefix = document.documentElement.classList.contains('dark-mode') ? '_dark' : '';
       
       const processedMarkdown = data ? 
         data.replaceAll('[$ASSETS_LOCATION]', environment.docsUrl).replaceAll('[$DARK_SUFFIX]', darkPrefix) : 

@@ -48,11 +48,11 @@ export class GroupCreateComponent implements OnInit, OnDestroy {
 
     this.nameFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.name = value;
-    })
+    });
 
     this.descFormControl.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe(value => {
       this.data.description = value;
-    })
+    });
   }
 
   ngOnDestroy() {

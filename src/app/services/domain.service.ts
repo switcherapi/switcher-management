@@ -43,21 +43,24 @@ export class DomainService extends ApiService {
   public setDomainEnvironmentStatus(id: string, env: string, status: boolean): Observable<Domain> {
     const body = {
       [`${env}`]: status
-    }
+    };
+
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/updateStatus/${id}`), body).pipe(catchError(super.handleError));
   }
 
   public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Domain> {
     const body = {
       env
-    }
+    };
+
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/removeStatus/${id}`), body).pipe(catchError(super.handleError));
   }
 
   public updateDomain(id: string, description: string): Observable<Domain> {
     const body = {
       description
-    }
+    };
+
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/${id}`), body).pipe(catchError(super.handleError));
   }
 
@@ -65,7 +68,8 @@ export class DomainService extends ApiService {
     const body = {
       name,
       description
-    }
+    };
+
     return this.http.post<Domain>((`${environment.apiUrl}/domain/create`), body).pipe(catchError(super.handleError));
   }
 
@@ -76,14 +80,16 @@ export class DomainService extends ApiService {
   public requestDomainTransfer(domain: string): Observable<Domain> {
     const body = {
       domain,
-    }
+    };
+
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/transfer/request`), body).pipe(catchError(super.handleError));
   }
 
   public acceptDomainTransfer(domain: string): Observable<Domain> {
     const body = {
       domain,
-    }
+    };
+    
     return this.http.patch<Domain>((`${environment.apiUrl}/domain/transfer/accept`), body).pipe(catchError(super.handleError));
   }
 

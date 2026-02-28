@@ -213,11 +213,11 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             next: () => {
               this.setBlockUI(false);
               this.router.navigate([this.domainRouteService.getPreviousPath()]);
-              this.toastService.showSuccess(`Switcher removed with success`);
+              this.toastService.showSuccess('Switcher removed with success');
             },
             error: error => {
               this.setBlockUI(false);
-              this.toastService.showError(`Unable to remove this switcher`);
+              this.toastService.showError('Unable to remove this switcher');
               ConsoleLogger.printError(error);
             }
           });
@@ -394,7 +394,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to load this Switcher`);
+          this.toastService.showError('Unable to load this Switcher');
         }
       });
   }
@@ -451,7 +451,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         next: data => {
           if (data) {
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Environment updated with success`);
+            this.toastService.showSuccess('Environment updated with success');
           }
         },
         error: error => {
@@ -471,7 +471,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           if (data) {
             this.config.activated = data.activated;
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Environment removed with success`);
+            this.toastService.showSuccess('Environment removed with success');
           }
         },
         error: error => {
@@ -516,14 +516,14 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
             this.updateConfigComponents();
 
             this.setBlockUI(false);
-            this.toastService.showSuccess(`Switcher updated with success`);
+            this.toastService.showSuccess('Switcher updated with success');
             this.editing.set(false);
           }
         },
         error: error => {
           this.setBlockUI(false);
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to update switcher`);
+          this.toastService.showError('Unable to update switcher');
           this.classStatus.set('header editing');
           this.editing.set(true);
         }
@@ -531,8 +531,9 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
   }
 
   private getDisableMetricsChange(): any {
-    if (!this.config.disable_metrics)
+    if (!this.config.disable_metrics) {
       this.config.disable_metrics = new Map<string, boolean>();
+    }
 
     this.config.disable_metrics[this.currentEnvironment()] = this.disableMetrics;
     return this.config.disable_metrics;
@@ -556,7 +557,7 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
         next: data => {
           if (data) {
             this.config.components = data.components;
-            this.toastService.showSuccess(`Switcher Components updated with success`);
+            this.toastService.showSuccess('Switcher Components updated with success');
           }
         },
         error: error => {

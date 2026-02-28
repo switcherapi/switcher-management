@@ -24,7 +24,7 @@ export class StrategyListComponent {
 
   scrollToElement($element: any): void {
     setTimeout(() => {
-      $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+      $element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
     }, 200);
   }
 

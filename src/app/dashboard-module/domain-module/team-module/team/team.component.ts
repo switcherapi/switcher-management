@@ -44,7 +44,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   domainName: string;
   teams = signal<Team[]>([]);
 
-  classStatus = signal("card mt-4 loading");
+  classStatus = signal('card mt-4 loading');
   creating = signal(false);
   loading = signal(false);
   error = signal('');
@@ -137,7 +137,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.loading.set(false);
-          this.classStatus.set("card mt-4 ready");
+          this.classStatus.set('card mt-4 ready');
           const currentTeams = this.teams();
           
           if (!currentTeams || currentTeams.length === 0) {

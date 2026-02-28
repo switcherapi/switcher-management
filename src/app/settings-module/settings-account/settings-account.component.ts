@@ -89,7 +89,7 @@ export class SettingsAccountComponent extends BasicComponent implements OnInit, 
   onDelete() {
     const modalConfirmation = this._modalService.open(NgbdModalConfirmComponent);
     modalConfirmation.componentInstance.title = 'Deleting account';
-    modalConfirmation.componentInstance.question = `Are you sure you want to delete this account?`;
+    modalConfirmation.componentInstance.question = 'Are you sure you want to delete this account?';
     modalConfirmation.result.then((result) => {
       if (result) {
         this.adminService.deleteAdmin().pipe(takeUntil(this.unsubscribe))

@@ -52,7 +52,7 @@ export class MetricComponent implements OnInit, OnDestroy {
 
   domainId: string;
   domainName: string;
-  classStatus = "loading";
+  classStatus = 'loading';
   loading = signal(true);
   error = signal('');
   fetch = true;
@@ -162,7 +162,7 @@ export class MetricComponent implements OnInit, OnDestroy {
           }
         },
         error: error => this.onError(error),
-        complete: () => this.classStatus = "ready"
+        complete: () => this.classStatus = 'ready'
       });
   }
 
@@ -191,7 +191,7 @@ export class MetricComponent implements OnInit, OnDestroy {
         }
       },
       error: error => this.onError(error),
-      complete: () => this.classStatus = "ready"
+      complete: () => this.classStatus = 'ready'
     });
   }
 

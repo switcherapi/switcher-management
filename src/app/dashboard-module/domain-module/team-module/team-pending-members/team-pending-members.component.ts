@@ -66,7 +66,7 @@ export class TeamPendingMembersComponent implements OnInit, OnDestroy {
         },
         error: error => {
           ConsoleLogger.printError(error);
-          this.toastService.showError(`Unable to remove invitation request - ${error.error}`)
+          this.toastService.showError(`Unable to remove invitation request - ${error.error}`);
         }
       });
   }

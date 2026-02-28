@@ -43,8 +43,9 @@ export class MetricStatisticsComponent implements OnInit, OnDestroy {
   reasonsTab: ReasonsStatisticsTab;
 
   ngOnInit() {
-    if(!this.data?.statistics)
+    if(!this.data?.statistics) {
       return;
+    }
 
     this.loading = true;
 
@@ -117,8 +118,9 @@ export class SwitchersStatisticsTab {
   };
 
   onClick(event: any) {
-    if (event.active.length)
+    if (event.active.length) {
       this.selectSwitcherKey(event.active[0].index);
+    }
   }
 
   selectSwitcherKey(index: number) {
@@ -274,9 +276,9 @@ export class SwitcherDateTimeGroupedTab {
             .substring(stats[this.content_index].date.length - 2));
           negative.data.push(stats[this.content_index].negative);
           positive.data.push(stats[this.content_index].positive);
-        } else
+        } else {
           break;
-
+        }
       }
     }
 
@@ -292,14 +294,16 @@ export class SwitcherDateTimeGroupedTab {
   }
 
   onClick(event: any) {
-    if (event.active.length)
+    if (event.active.length) {
         this.expandSelectedData(event.active[0].index);
+    }
   }
 
   onPrevious(): void {
     this.content_index -= this.MAX_CONTENT * 2;
-    if (this.content_index < 0) 
+    if (this.content_index < 0) {
       this.content_index = -1;
+    }
 
     this.loadSwitcherDateTimeGroupView();
   }

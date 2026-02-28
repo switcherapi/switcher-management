@@ -106,11 +106,11 @@ export class DomainSnapshotComponent extends BasicComponent implements OnInit {
         .subscribe({
           next: (result: any) => {
             if (result) {
-              const omitTypename = (key: any, value: any) => key === "__typename" ? undefined : value;
+              const omitTypename = (key: any, value: any) => key === '__typename' ? undefined : value;
               const snapshotData = JSON.stringify(JSON.parse(JSON.stringify(result.data), omitTypename), null, 2);
               this.snapshot.set(snapshotData);
               this.lockEnvSelection();
-              this.toastService.showSuccess(`Snapshot downloaded with success`);
+              this.toastService.showSuccess('Snapshot downloaded with success');
             }
             this.setBlockUI(false);
           },
@@ -125,7 +125,7 @@ export class DomainSnapshotComponent extends BasicComponent implements OnInit {
   onCopy() {
     this.snapshot.set(null);
     this.lockEnvSelection();
-    this.toastService.showSuccess(`Snapshot copied with success`);
+    this.toastService.showSuccess('Snapshot copied with success');
   }
 
   private lockEnvSelection(): void {

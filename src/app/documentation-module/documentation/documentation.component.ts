@@ -30,12 +30,12 @@ export class DocumentationComponent implements OnInit, OnDestroy {
     }
 
     if (document.getElementById('sidebar').className == 'active') {
-      document.getElementById('sidebar').className = "";
-      document.getElementById('content').className = "";
+      document.getElementById('sidebar').className = '';
+      document.getElementById('content').className = '';
     } else {
       window.scrollTo(0, 0);
-      document.getElementById('sidebar').className = "active";
-      document.getElementById('content').className = "hide";
+      document.getElementById('sidebar').className = 'active';
+      document.getElementById('content').className = 'hide';
     }
   }
 
@@ -49,16 +49,16 @@ export class DocumentationComponent implements OnInit, OnDestroy {
   scrollMenuHandler() {
     window.onscroll = () => {
       const currentScrollPos = window.scrollY;
-      const sidebarCollapse = document.getElementById("sidebarCollapse");
+      const sidebarCollapse = document.getElementById('sidebarCollapse');
       if (sidebarCollapse) {
         if (this.prevScrollpos() > currentScrollPos) {
-          sidebarCollapse.style.top = "0px";
+          sidebarCollapse.style.top = '0px';
         } else {
-          sidebarCollapse.style.top = "-60px";
+          sidebarCollapse.style.top = '-60px';
         }
       }
       this.prevScrollpos.set(currentScrollPos);
-    }
+    };
   }
 
   private setMenuSelection(selectionMenu?: string) {

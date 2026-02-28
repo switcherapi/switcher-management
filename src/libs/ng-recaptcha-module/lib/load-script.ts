@@ -1,6 +1,6 @@
 /// <reference types="grecaptcha" />
 
-import { RecaptchaLoaderOptions } from "./tokens";
+import { RecaptchaLoaderOptions } from './tokens';
 
 declare global {
   interface Window {
@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-export type RenderMode = "explicit" | { key: string };
+export type RenderMode = 'explicit' | { key: string };
 
 function loadScript(
   renderMode: RenderMode,
@@ -20,17 +20,17 @@ function loadScript(
   globalThis.ng2recaptchaloaded = () => {
     onLoaded(globalThis.grecaptcha);
   };
-  const script = document.createElement("script");
-  script.innerHTML = "";
+  const script = document.createElement('script');
+  script.innerHTML = '';
 
   const { url: baseUrl, nonce: onBeforeLoadNonce } = onBeforeLoad(
-    new URL(url || "https://www.google.com/recaptcha/api.js"),
+    new URL(url || 'https://www.google.com/recaptcha/api.js'),
   );
-  baseUrl.searchParams.set("render", renderMode === "explicit" ? renderMode : renderMode.key);
-  baseUrl.searchParams.set("onload", "ng2recaptchaloaded");
-  baseUrl.searchParams.set("trustedtypes", "true");
+  baseUrl.searchParams.set('render', renderMode === 'explicit' ? renderMode : renderMode.key);
+  baseUrl.searchParams.set('onload', 'ng2recaptchaloaded');
+  baseUrl.searchParams.set('trustedtypes', 'true');
   if (lang) {
-    baseUrl.searchParams.set("hl", lang);
+    baseUrl.searchParams.set('hl', lang);
   }
 
   script.src = baseUrl.href;
@@ -38,7 +38,7 @@ function loadScript(
   const nonceValue = onBeforeLoadNonce || nonce;
 
   if (nonceValue) {
-    script.setAttribute("nonce", nonceValue);
+    script.setAttribute('nonce', nonceValue);
   }
   script.async = true;
   script.defer = true;
@@ -51,9 +51,9 @@ function newLoadScript({
   onLoaded,
 }: { v3SiteKey: string | undefined; onLoaded(recaptcha: ReCaptchaV2.ReCaptcha): void } & Pick<
   Required<RecaptchaLoaderOptions>,
-  "onBeforeLoad"
+  'onBeforeLoad'
 >) {
-  const renderMode: RenderMode = v3SiteKey ? { key: v3SiteKey } : "explicit";
+  const renderMode: RenderMode = v3SiteKey ? { key: v3SiteKey } : 'explicit';
 
   loader.loadScript(renderMode, onBeforeLoad, onLoaded);
 }

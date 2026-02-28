@@ -1,10 +1,10 @@
-import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import angular from "angular-eslint";
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import angular from 'angular-eslint';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig({
-    files: ["**/*.ts"],
+    files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
@@ -13,39 +13,42 @@ export default defineConfig({
     ],
     processor: angular.processInlineTemplates,
     rules: {
-      "@angular-eslint/component-selector": [
-        "error",
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
+      curly: ['error', 'multi-line'],
+      '@angular-eslint/component-selector': [
+        'error',
         {
-          type: "element",
-          style: "kebab-case",
+          type: 'element',
+          style: 'kebab-case',
         },
       ],
-      "@typescript-eslint/no-unused-expressions": [
-        "error",
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
         {
           allowShortCircuit: true,
           allowTernary: true,
         },
       ],
-      "@typescript-eslint/no-empty-function": [
-        "error",
+      '@typescript-eslint/no-empty-function': [
+        'error',
         {
-          allow: ["arrowFunctions"],
+          allow: ['arrowFunctions'],
         },
       ],
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
   {
-    files: ["**/*.html"],
+    files: ['**/*.html'],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
     rules: {
-      "@angular-eslint/template/click-events-have-key-events": "off",
-      "@angular-eslint/template/interactive-supports-focus": "off"
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off'
     },
   }
 );

@@ -168,7 +168,7 @@ export class AuthService {
       errorMessage = result.error.error;
     } else {
       ConsoleLogger.printError(result);
-      errorMessage = `Switcher API is offline`;
+      errorMessage = 'Switcher API is offline';
     }
     
     return throwError(() => errorMessage);

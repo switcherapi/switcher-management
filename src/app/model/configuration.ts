@@ -1,5 +1,5 @@
 import { Config } from './config';
-import { Domain } from './domain'
+import { Domain } from './domain';
 import { Group } from './group';
 
 export class GraphQLConfigurationResultSet {

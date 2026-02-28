@@ -46,7 +46,8 @@ export class ConfigService extends ApiService {
   public setConfigEnvironmentStatus(id: string, env: string, status: boolean): Observable<Config> {
     const body = {
       [`${env}`]: status
-    }
+    };
+
     return this.http.patch<Config>(`${environment.apiUrl}/config/updateStatus/${id}`, body)
       .pipe(catchError(super.handleError));
   }
@@ -54,13 +55,14 @@ export class ConfigService extends ApiService {
   public removeDomainEnvironmentStatus(id: string,  env: string): Observable<Config> {
     const body = {
       env
-    }
+    };
+
     return this.http.patch<Config>((`${environment.apiUrl}/config/removeStatus/${id}`), body)
       .pipe(catchError(super.handleError));
   }
 
   public updateConfig(id: string, key?: string, description?: string, disable_metrics?: any): Observable<Config> {
-    const body: any = {}
+    const body: any = {};
 
     if (key) body.key = key;
     if (description) body.description = description;
@@ -73,7 +75,8 @@ export class ConfigService extends ApiService {
   public updateConfigComponents(id: string, componentsId: string[]): Observable<Config> {
     const body = {
       components: componentsId
-    }
+    };
+
     return this.http.patch<Config>(`${environment.apiUrl}/config/updateComponents/${id}`, body)
       .pipe(catchError(super.handleError));
   }
@@ -100,7 +103,8 @@ export class ConfigService extends ApiService {
       key,
       description,
       group
-    }
+    };
+    
     return this.http.post<Config>((`${environment.apiUrl}/config/create`), body)
       .pipe(catchError(super.handleError));
   }

@@ -1,7 +1,7 @@
-import { Directive, forwardRef, HostListener, inject } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Directive, forwardRef, HostListener, inject } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { RecaptchaComponent } from "./recaptcha.component";
+import { RecaptchaComponent } from './recaptcha.component';
 
 @Directive({
     providers: [
@@ -11,7 +11,7 @@ import { RecaptchaComponent } from "./recaptcha.component";
             useExisting: forwardRef(() => RecaptchaValueAccessorDirective),
         },
     ],
-    selector: "app-re-captcha[formControlName],app-re-captcha[formControl],app-re-captcha[ngModel]"
+    selector: 'app-re-captcha[formControlName],app-re-captcha[formControl],app-re-captcha[ngModel]'
 })
 export class RecaptchaValueAccessorDirective implements ControlValueAccessor {
   private readonly host = inject(RecaptchaComponent);
@@ -41,7 +41,7 @@ export class RecaptchaValueAccessorDirective implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  @HostListener("resolved", ["$event"]) public onResolve($event: string): void {
+  @HostListener('resolved', ['$event']) public onResolve($event: string): void {
     if (this.onChange) {
       this.onChange($event);
     }

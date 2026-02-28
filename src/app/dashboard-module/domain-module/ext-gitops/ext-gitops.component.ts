@@ -354,11 +354,11 @@ export class ExtGitOpsComponent {
           this.selectAccount(data[0]);
 
           this.loading.set(false);
-          this.detailBodyStyle.set('detail-body ready')
+          this.detailBodyStyle.set('detail-body ready');
         },
         error: () => {
           this.loading.set(false);
-          this.detailBodyStyle.set('detail-body ready')
+          this.detailBodyStyle.set('detail-body ready');
         }
       });
   }

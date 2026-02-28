@@ -138,7 +138,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
         this.toastService.showError(`One or more values are longer than ${MAX_VALUE_LENGTH} characters`);
       }
     } else {
-      this.toastService.showError(`Unable to execute this operation`);
+      this.toastService.showError('Unable to execute this operation');
     }
   }
 
@@ -149,7 +149,7 @@ export class StrategyCreateComponent implements OnInit, OnDestroy {
       this.data.values.splice(this.data.values.indexOf(value), 1);
       this.selectedStrategyValue.set(null);
     } else {
-      this.toastService.showError(`One value is required, update or add new values`);
+      this.toastService.showError('One value is required, update or add new values');
     }
   }
 
