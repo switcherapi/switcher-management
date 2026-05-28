@@ -1,0 +1,5 @@
+{
+    // Enable js/ts validation when introducing new features or refactoring code
+    // This is disabled by default to reduce noise/distractions when working on existing code
+    "js/ts.validate.enabled": false
+}

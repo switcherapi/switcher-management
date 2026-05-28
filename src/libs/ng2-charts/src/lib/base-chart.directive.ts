@@ -12,7 +12,7 @@ import {
 import { ThemeService } from './theme.service';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { merge } from 'lodash-es';
+import { merge } from 'es-toolkit';
 import {
   NG_CHARTS_CONFIGURATION,
   NgChartsConfiguration,
@@ -86,11 +86,11 @@ export class BaseChartDirective<
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const requireRender = ['type'];
+    const requireRender = new Set(['type']);
     const propertyNames = Object.getOwnPropertyNames(changes);
 
     if (
-      propertyNames.some((key) => requireRender.includes(key)) ||
+      propertyNames.some((key) => requireRender.has(key)) ||
       propertyNames.every((key) => changes[key].isFirstChange())
     ) {
       this.render();
@@ -167,7 +167,7 @@ export class BaseChartDirective<
     TData,
     TLabel
   >['options'] {
-    return merge(
+    return [
       {
         onHover: (event: ChartEvent, active: object[]) => {
           if (!this.chartHover.observed) {
@@ -184,8 +184,8 @@ export class BaseChartDirective<
           this.zone.run(() => this.chartClick.emit({ event, active }));
         },
       },
-      this.themeOverrides,
-      this.options,
+      this.themeOverrides ?? {},
+      this.options ?? {},
       {
         plugins: {
           legend: {
@@ -193,7 +193,7 @@ export class BaseChartDirective<
           },
         },
       },
-    );
+    ].reduce((acc, obj) => merge(acc, obj), {}) as ChartConfiguration<TType, TData, TLabel>['options'];
   }
 
   private getChartConfiguration(): ChartConfiguration<TType, TData, TLabel> {
