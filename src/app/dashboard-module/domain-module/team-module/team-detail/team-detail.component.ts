@@ -12,7 +12,7 @@ import { Team } from 'src/app/model/team';
 import { TeamService } from 'src/app/services/team.service';
 import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -30,7 +30,7 @@ import { BlockUIComponent } from 'src/app/shared/block-ui/block-ui.component';
         '../../common/css/detail.component.css',
         './team-detail.component.css'
     ],
-    imports: [NgClass, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, ReactiveFormsModule, MatError, MatSlideToggle, 
+    imports: [NgClass, MatFormField, MatLabel, MatInput, FormsModule, ReactiveFormsModule, MatError, MatSlideToggle, 
       MatButton, MatIcon, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, TeamMembersComponent, 
       TeamPermissionsComponent, TeamPendingMembersComponent, NgbNavOutlet, BlockUIComponent
     ]

@@ -18,7 +18,8 @@
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput class="readonly-fields"
                             [value]="config.relay.description ? config.relay.description : ''" maxlength="256"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="6" readonly="{{ !editing() }}">
+                            [style.color]="editing() ? 'black' : null"
+                            rows="6" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
@@ -27,7 +28,8 @@
                     <mat-form-field>
                         <mat-label>Endpoint</mat-label>
                         <input #endpointElement matInput maxlength="200" required
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}"  autocomplete="off" [formControl]="endpointFormControl">
+                            [style.color]="editing() ? 'black' : null"
+                            readonly="{{ !editing() }}"  autocomplete="off" [formControl]="endpointFormControl">
                         @if (endpointFormControl.hasError('required')) {
                         <mat-error>
                             Endpoint must be valid
@@ -49,12 +51,12 @@
                         <mat-label>Authorization Prefix</mat-label>
                         <input #authPrefixElement matInput
                             [value]="config.relay.auth_prefix ? config.relay.auth_prefix : ''" maxlength="50"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" autocomplete="off">
+                            [style.color]="editing() ? 'black' : null" readonly="{{ !editing() }}" autocomplete="off">
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Authorization Token</mat-label>
                         <input #authTokenElement matInput maxlength="200" type="{{ !editing() ? 'password' : 'text' }}"
-                                [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" autocomplete="off">
+                                [style.color]="editing() ? 'black' : null" readonly="{{ !editing() }}" autocomplete="off">
                     </mat-form-field>
                 </div>
                 <div class="description">

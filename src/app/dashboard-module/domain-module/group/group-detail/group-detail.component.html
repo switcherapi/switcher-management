@@ -12,7 +12,8 @@
                     <mat-form-field>
                         <mat-label>Name</mat-label>
                         <input #nameElement matInput [value]="group?.name" maxlength="30"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" [formControl]="nameFormControl" autocomplete="off">
+                            [style.color]="editing() ? 'black' : null"
+                            readonly="{{ !editing() }}" [formControl]="nameFormControl" autocomplete="off">
                         
                         @if (nameFormControl.hasError('minlength')) {
                         <mat-error>
@@ -28,7 +29,8 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput [value]="group?.description" maxlength="256"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing() }}">
+                            [style.color]="editing() ? 'black' : null"
+                            rows="3" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>

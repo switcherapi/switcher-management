@@ -18,7 +18,7 @@ import { StrategyService } from 'src/app/services/strategy.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { DataUtils } from 'src/app/_helpers/data-utils';
 import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
-import { NgClass, NgStyle, DatePipe } from '@angular/common';
+import { NgClass, DatePipe } from '@angular/common';
 import { MatFormField, MatLabel, MatInput, MatHint, MatError } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
@@ -38,7 +38,7 @@ import { ChangelogComponent } from '../../changelog/changelog.component';
         './strategy-detail.component.css'
     ],
     imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, MatSelect, FormsModule, ReactiveFormsModule, 
-      MatOption, NgStyle, MatHint, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatSelectionList, 
+      MatOption, MatHint, MatCard, MatCardHeader, MatCardSubtitle, MatCardContent, MatSelectionList, 
       MatListOption, MatTooltip, MatError, MatButton, MatIcon, EnvironmentConfigComponent, DatePipe
     ]
 })

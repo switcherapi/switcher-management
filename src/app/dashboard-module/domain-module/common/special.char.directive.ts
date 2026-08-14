@@ -23,7 +23,8 @@ export class SpecialCharacterDirective {
         }
     }
 
-    @HostListener('keypress', ['$event']) onKeyPress(event) {
+    @HostListener('keypress', ['$event']) 
+    onKeyPress(event) {
         if (this.autoUnderscore && event.key === ' ') {
             return true;
         }
@@ -31,11 +32,12 @@ export class SpecialCharacterDirective {
         return new RegExp(this.allowRegexStr).test(event.key);
     }
 
-    @HostListener('paste', ['$event']) blockPaste(event: KeyboardEvent) {
+    @HostListener('paste', ['$event']) 
+    blockPaste(event: ClipboardEvent) {
         this.validateFields(event);
     }
 
-    validateFields(event) {
+    validateFields(event: ClipboardEvent) {
         setTimeout(() => {
             if (this.autoUnderscore) {
                 this.el.nativeElement.value = this.el.nativeElement.value.replaceAll(/\s/g, '_');

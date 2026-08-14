@@ -16,7 +16,7 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput [value]="domain?.description" maxlength="256"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing() }}">
+                            [style.color]="editing() ? 'black' : null" rows="3" readonly="{{ !editing() }}">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>

@@ -15,7 +15,7 @@ import { DomainRouteService } from 'src/app/services/domain-route.service';
 import { Types } from 'src/app/model/path-route';
 import { EnvironmentChangeEvent, EnvironmentConfigComponent } from '../../environment-config/environment-config.component';
 import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
-import { NgClass, NgStyle, DatePipe } from '@angular/common';
+import { NgClass, DatePipe } from '@angular/common';
 import { MatFormField, MatLabel, MatInput, MatError, MatHint } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -28,7 +28,7 @@ import { ConfigListComponent } from '../../config/config-list/config-list.compon
         '../../common/css/detail.component.css',
         './group-detail.component.css'
     ],
-    imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, 
+    imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, FormsModule, 
       ReactiveFormsModule, MatError, MatHint, EnvironmentConfigComponent, MatButton, MatIcon, ConfigListComponent, DatePipe
     ]
 })

@@ -118,7 +118,7 @@
                         <div class="description">
                             <mat-form-field>
                                 <mat-label>Environment</mat-label>
-                                <mat-select [formControl]="formGroup()?.get('environment')">
+                                <mat-select [formControl]="$any(formGroup()?.get('environment'))">
                                     @for (environment of getDomainEnvironments(); track environment) {
                                     <mat-option [value]="environment">
                                         {{environment}}
@@ -128,36 +128,36 @@
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Repository</mat-label>
-                                <input matInput [formControl]="formGroup()?.get('repository')" [value]="gitOpsSelected()?.repository">
+                                <input matInput [formControl]="$any(formGroup()?.get('repository'))" [value]="gitOpsSelected()?.repository">
                             </mat-form-field>
                             <div class="container-fluid content-row">
                                 <div class="row">
                                     <mat-form-field class="col-sm-6">
                                         <mat-label>Branch</mat-label>
-                                        <input matInput [formControl]="formGroup()?.get('branch')" [value]="gitOpsSelected()?.branch">
+                                        <input matInput [formControl]="$any(formGroup()?.get('branch'))" [value]="gitOpsSelected()?.branch">
                                     </mat-form-field>
                                     <mat-form-field class="col-sm-6">
                                         <mat-label>Path</mat-label>
-                                        <input matInput [formControl]="formGroup()?.get('path')" [value]="gitOpsSelected()?.path">
+                                        <input matInput [formControl]="$any(formGroup()?.get('path'))" [value]="gitOpsSelected()?.path">
                                     </mat-form-field>
                                 </div>
                             </div>
                             <mat-form-field>
                                 <mat-label>Token</mat-label>
-                                <input matInput type="password" [formControl]="formGroup()?.get('token')" [value]="gitOpsSelected()?.token">
+                                <input matInput type="password" [formControl]="$any(formGroup()?.get('token'))" [value]="gitOpsSelected()?.token">
                             </mat-form-field>
 
                             <div>
                                 <mat-form-field>
                                     <mat-label>Window - (s,m,h) greater than 30s</mat-label>
-                                    <input matInput [formControl]="formGroup()?.get('window')" [value]="gitOpsSelected()?.settings?.window">
+                                    <input matInput [formControl]="$any(formGroup()?.get('window'))" [value]="gitOpsSelected()?.settings?.window">
                                 </mat-form-field>
                                 <mat-slide-toggle 
-                                    [formControl]="formGroup()?.get('active')" 
+                                    [formControl]="$any(formGroup()?.get('active'))" 
                                     [checked]="gitOpsSelected()?.settings?.active">Active</mat-slide-toggle>
                                 <mat-slide-toggle 
                                     matTooltip="When enabled allow it to fully synchronize the repository with the API"
-                                    [formControl]="formGroup()?.get('forceprune')" 
+                                    [formControl]="$any(formGroup()?.get('forceprune'))" 
                                     [checked]="gitOpsSelected()?.settings?.forceprune" 
                                     class="settings-padding">Force Prune</mat-slide-toggle>
                             </div>
