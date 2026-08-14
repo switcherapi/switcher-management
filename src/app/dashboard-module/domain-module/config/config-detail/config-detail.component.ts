@@ -24,7 +24,7 @@ import { StrategyService } from 'src/app/services/strategy.service';
 import { ComponentService } from 'src/app/services/component.service';
 import { Config, ConfigRelay } from 'src/app/model/config';
 import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
-import { NgClass, NgStyle, AsyncPipe, DatePipe } from '@angular/common';
+import { NgClass, AsyncPipe, DatePipe } from '@angular/common';
 import { MatFormField, MatLabel, MatInput, MatError, MatHint } from '@angular/material/input';
 import { SpecialCharacterDirective } from '../../common/special.char.directive';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -42,7 +42,7 @@ import { MetricComponent } from '../../metric-module/metric/metric.component';
         './config-detail.component.css'
     ],
     imports: [
-      BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, FormsModule, SpecialCharacterDirective, NgStyle, 
+      BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, FormsModule, SpecialCharacterDirective, 
       ReactiveFormsModule, MatError, MatHint, EnvironmentConfigComponent, MatCheckbox, MatChipGrid, MatChipRow, 
       MatChipRemove, MatIcon, MatAutocompleteTrigger, MatChipInput, MatAutocomplete, MatOption, 
       MatButton, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, StrategyListComponent, 

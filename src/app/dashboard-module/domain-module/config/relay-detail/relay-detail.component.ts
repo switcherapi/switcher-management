@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { DomainService } from 'src/app/services/domain.service';
 import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatFormField, MatLabel, MatInput, MatHint, MatError } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
@@ -33,7 +33,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
         './relay-detail.component.css'
     ],
     imports: [BlockUIComponent, NgClass, MatFormField, MatLabel, MatInput, MatSelect, FormsModule, 
-      ReactiveFormsModule, MatOption, NgStyle, MatHint, MatError, EnvironmentConfigComponent, 
+      ReactiveFormsModule, MatOption, MatHint, MatError, EnvironmentConfigComponent, 
       MatButton, MatIcon
     ]
 })

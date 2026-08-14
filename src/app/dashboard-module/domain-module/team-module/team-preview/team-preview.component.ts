@@ -14,7 +14,7 @@ import { NgbdModalConfirmComponent } from 'src/app/_helpers/confirmation-dialog'
 import { BasicComponent } from '../../common/basic-component';
 import { BlockUIComponent } from '../../../../shared/block-ui/block-ui.component';
 import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
-import { NgStyle, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -26,7 +26,7 @@ import { MatIcon } from '@angular/material/icon';
         '../../common/css/detail.component.css',
         './team-preview.component.css'
     ],
-    imports: [BlockUIComponent, MatFormField, MatLabel, MatInput, FormsModule, NgStyle, 
+    imports: [BlockUIComponent, MatFormField, MatLabel, MatInput, FormsModule, 
       ReactiveFormsModule, MatError, MatSlideToggle, NgClass, MatButton, MatIcon, BlockUIComponent
     ]
 })

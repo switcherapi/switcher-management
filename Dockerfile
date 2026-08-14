@@ -15,7 +15,7 @@ RUN npm ci && \
 	npm prune --omit=dev
 
 # ---------- Release ----------
-FROM nginx:1.31.1-alpine-slim
+FROM nginx:1.31.3-alpine-slim
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf

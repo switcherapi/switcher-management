@@ -6,8 +6,8 @@
             <div class="description" style="width: 350px;">
                 <mat-form-field>
                     <mat-label>Name</mat-label>
-                    <input matInput readonly="{{!editing()}}" 
-                        [ngStyle]="editing() ? {'color': 'black'} : ''" 
+                    <input matInput readonly="{{!editing()}}"
+                        [style.color]="editing() ? 'black' : null"
                         [formControl]="nameFormControl"
                         autocomplete="off">
                 </mat-form-field>

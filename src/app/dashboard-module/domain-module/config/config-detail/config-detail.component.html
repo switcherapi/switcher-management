@@ -12,7 +12,8 @@
                     <mat-form-field>
                         <mat-label>Name</mat-label>
                         <input #keyElement matInput [value]="config?.key" maxlength="30"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" readonly="{{ !editing() }}" special-chars
+                            [style.color]="editing() ? 'black' : null"
+                            readonly="{{ !editing() }}" special-chars
                             [autoUpper]="true" [autoUnderscore]="true" [formControl]="keyFormControl"
                             autocomplete="off">
                         @if (keyFormControl.hasError('minlength')) {
@@ -29,7 +30,9 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea #descElement matInput [value]="config?.description" maxlength="256"
-                            [ngStyle]="editing() ? {'color': 'black'} : ''" rows="3" readonly="{{ !editing() }}">
+                            readonly="{{ !editing() }}" special-chars
+                            [autoUpper]="true" [autoUnderscore]="true"
+                            autocomplete="off" rows="3">
                         </textarea>
                         <mat-hint align="end">{{descElement.value.length}} / 256</mat-hint>
                     </mat-form-field>
@@ -128,7 +131,7 @@
                     </a>
                     <ng-template ngbNavContent>
                         <hr>
-                        <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy" [parent]="this"
+                        <app-strategy-list [strategies]="strategies" [moveToEnd]="hasNewStrategy()" [parent]="this"
                             style="width: 100%; display: grid;"></app-strategy-list>
                     </ng-template>
                 </ng-container>
