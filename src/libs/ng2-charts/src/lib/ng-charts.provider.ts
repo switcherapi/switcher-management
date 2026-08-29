@@ -38,6 +38,9 @@ export function withDefaultRegisterables(
 export function provideCharts(
   ...configurations: readonly NgChartsConfiguration[]
 ) {
-  const config: NgChartsConfiguration = configurations.reduce((acc, conf) => merge(acc, conf), {});
+  const config: NgChartsConfiguration = configurations.reduce(
+    (acc, conf) => merge(acc, conf) as NgChartsConfiguration,
+    {} as NgChartsConfiguration,
+  );
   return { provide: NG_CHARTS_CONFIGURATION, useValue: config };
 }

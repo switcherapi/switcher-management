@@ -7,7 +7,7 @@ A JavaScript SDK for Switcher API
 
 ***
 
-### Overview
+### About
 
 **Switcher Client JS** is a feature-rich SDK for integrating [Switcher API](https://github.com/switcherapi/switcher-api) into your JS-based applications (Web, Node.js, Bun, Cloudflare Workers). It provides robust feature flag management with enterprise-grade capabilities.
 
@@ -42,10 +42,10 @@ Client.buildContext({
 });
 
 // 2. Get a switcher instance
-const switcher = Client.getSwitcher();
+const switcher = Client.getSwitcher('FEATURE01');
 
 // 3. Check if a feature is enabled
-const isFeatureEnabled = await switcher.isItOn('FEATURE01');
+const isFeatureEnabled = await switcher.isItOn();
 console.log('Feature enabled:', isFeatureEnabled);
 ```
 
@@ -101,12 +101,13 @@ Client.buildContext({
   freeze: false,                        // Prevent background updates
   logger: true,                         // Enable request logging
   snapshotLocation: './snapshot/',      // Snapshot files directory
-  snapshotAutoUpdateInterval: 300,      // Auto-update interval (seconds)
+  snapshotAutoUpdateInterval: 30,       // Auto-update interval (seconds)
   snapshotWatcher: true,                // Monitor snapshot changes
   silentMode: '5m',                     // Fallback timeout
   restrictRelay: true,                  // Relay restrictions in local mode
   regexSafe: true,                      // Prevent reDOS attacks
-  certPath: './certs/ca.pem'            // SSL certificate path
+  certPath: './certs/ca.pem',           // SSL certificate path
+  autoRefreshToken: true                // Automatically refresh API token
 });
 ```
 
@@ -126,6 +127,7 @@ Client.buildContext({
 | `regexMaxBlackList` | number | Max cached regex failures |
 | `regexMaxTimeLimit` | number | Regex timeout in milliseconds |
 | `certPath` | string | Path to SSL certificate file |
+| `autoRefreshToken` | boolean | Automatically refresh API token |
 
 > **Security Note:** `regexSafe` prevents ReDoS attacks. Keep this enabled in production.
 
@@ -138,19 +140,22 @@ Client.buildContext({
 Multiple ways to check if a feature is enabled:
 
 ```js
+// Non-persisted switcher instance
 const switcher = Client.getSwitcher();
+// Persisted switcher instance
+const switcher = Client.getSwitcher('FEATURE01');
 
-// Synchronous (local mode only)
-const isEnabled = switcher.isItOn('FEATURE01');              // Returns: boolean
-const isEnabledBool = switcher.isItOnBool('FEATURE01');      // Returns: boolean
-const detailResult = switcher.detail().isItOn('FEATURE01');  // Returns: { result, reason, metadata }
-const detailDirect = switcher.isItOnDetail('FEATURE01');     // Returns: { result, reason, metadata }
+// 🚀 Synchronous (local mode only)
+const isEnabled = switcher.isItOn();              // Returns: boolean
+const isEnabledBool = switcher.isItOnBool();      // Returns: boolean
+const detailResult = switcher.detail().isItOn();  // Returns: { result, reason, metadata }
+const detailDirect = switcher.isItOnDetail();     // Returns: { result, reason, metadata }
 
-// Asynchronous (remote/hybrid mode)
-const isEnabledAsync = await switcher.isItOn('FEATURE01');              // Returns: Promise<boolean>
-const isEnabledBoolAsync = await switcher.isItOnBool('FEATURE01', true); // Returns: Promise<boolean>
-const detailResultAsync = await switcher.detail().isItOn('FEATURE01');  // Returns: Promise<SwitcherResult>
-const detailDirectAsync = await switcher.isItOnDetail('FEATURE01', true); // Returns: Promise<SwitcherResult>
+// 🌐 Asynchronous (remote/hybrid mode)
+const isEnabledAsync = await switcher.isItOn();               // Returns: Promise<boolean>
+const isEnabledBoolAsync = await switcher.isItOnBool(true);   // Returns: Promise<boolean>
+const detailResultAsync = await switcher.detail().isItOn();   // Returns: Promise<SwitcherResult>
+const detailDirectAsync = await switcher.isItOnDetail(true);  // Returns: Promise<SwitcherResult>
 ```
 
 #### Strategy Validation
@@ -173,10 +178,10 @@ Fast method that includes everything in a single call:
 
 ```js
 const result = await switcher
-  .defaultResult(true)          // Fallback result if API is unavailable
-  .throttle(1000)               // Cache result for 1 second
-  .checkValue('User 1')         // User-based strategy
-  .checkNetwork('192.168.0.1')  // Network-based strategy
+  .defaultResult(true)          // 🛡️ Fallback result if API is unavailable
+  .throttle(1000)               // ⚡ Cache result for 1 second
+  .checkValue('User 1')         // 👤 User-based strategy
+  .checkNetwork('192.168.0.1')  // 🌐 Network-based strategy
   .isItOn('FEATURE01');
 ```
 
@@ -203,6 +208,15 @@ Client.subscribeNotifyError((error) => {
 });
 ```
 
+##### Flush cached results from throttling
+
+When using throttling, you can clear cached results for a specific switcher:
+
+```js
+// Clear cached results for a specific switcher
+Client.getSwitcher('FEATURE01').flushExecutions();
+```
+
 #### Hybrid Mode
 
 Force specific switchers to resolve remotely while running in local mode. Ideal for features requiring remote validation (e.g., Relay Strategies):
@@ -212,6 +226,25 @@ const switcher = Client.getSwitcher();
 
 // Force remote resolution for this specific call
 const result = await switcher.remote().isItOn('FEATURE01');
+```
+
+#### Circuit Breaker: Silent Mode
+
+This feature allows you to specify how long the client SDK should attempt to restore connectivity in case of remote API failures.
+
+When the API is unavailable, the SDK will automatically operate in silent mode, evaluating Switchers using a local snapshot. It is important to note that any Switcher Key configured must be able to resolve without external dependencies (e.g., Switcher Relay).
+
+Make sure to configure the scheduled snapshot auto-update to keep the local snapshot up to date with the remote API.
+
+Here is an example - in-memory snapshot with auto-update every 30 seconds:
+
+```js
+Client.buildContext({ 
+  url, apiKey, domain, component, environment 
+}, {
+  snapshotAutoUpdateInterval: 30,
+  silentMode: '5m',
+});
 ```
 
 ---
@@ -360,15 +393,15 @@ try {
 }
 ```
 
-> **Use Case:** Perfect for external processes that manage snapshot files independently.
+> **💡 Use Case:** Perfect for external processes that manage snapshot files independently.
 
 #### Auto-Update Scheduler
 
 Run the SDK in local mode (zero latency) while keeping snapshots automatically updated:
 
 ```js
-// Update every 3 seconds (3000 milliseconds)
-Client.scheduleSnapshotAutoUpdate(3000, {
+// Update every 3 seconds
+Client.scheduleSnapshotAutoUpdate(3, {
     success: (updated) => console.log('Snapshot updated', updated),
     reject: (err: Error) => console.log(err)
 });

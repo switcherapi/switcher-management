@@ -7,7 +7,7 @@ A Java SDK for Switcher API
 
 ***
 
-### Overview
+### About
 
 The Switcher Client SDK is a comprehensive Java library for integrating with [Switcher API](https://github.com/switcherapi/switcher-api), a cloud-based feature flag management system. This SDK enables you to control feature toggles, A/B testing, and configuration management in your Java applications.
 
@@ -85,14 +85,14 @@ This approach automatically loads configuration from a properties file, ideal fo
 Create `src/main/resources/switcherapi.properties`:
 
 ```properties
-### Required Configuration
+# Required Configuration
 switcher.context=com.example.MyAppFeatures
 switcher.url=https://api.switcherapi.com
-switcher.apikey=YOUR_API_KEY
-switcher.component=my-application
-switcher.domain=MY_DOMAIN
+switcher.apikey=[API_KEY]
+switcher.component=[COMPONENT_NAME]
+switcher.domain=[DOMAIN_NAME}
 
-### Optional Configuration
+# Optional Configuration
 switcher.environment=default
 switcher.timeout=3000
 switcher.poolsize=2
@@ -110,6 +110,7 @@ switcher.poolsize=2
 | `switcher.environment`              | ❌ | default | Environment name (dev, staging, default)                                             |
 | `switcher.local`                    | ❌ | false   | Enable local-only mode                                                               |
 | `switcher.check`                    | ❌ | false   | Validate switcher keys on startup                                                    |
+| `switcher.auth.autorefresh`         | ❌ | false   | Automatically refresh API token before expiration                                    |
 | `switcher.relay.restrict`           | ❌ | true    | Defines if client will trigger local snapshot relay verification                     |
 | `switcher.snapshot.location`        | ❌ | -       | Directory for snapshot files                                                         |
 | `switcher.snapshot.auto`            | ❌ | false   | Auto-load snapshots on startup                                                       |
@@ -152,10 +153,10 @@ public class MyAppFeatures extends SwitcherContextBase {
     static {
         configure(ContextBuilder.builder()
             .context(MyAppFeatures.class.getName())
-            .apiKey("YOUR_API_KEY")
+            .apiKey("[API_KEY]")
             .url("https://api.switcherapi.com")
-            .domain("MY_DOMAIN")
-            .component("my-application")
+            .domain("[DOMAIN_NAME]")
+            .component("[COMPONENT_NAME]")
             .environment("default"));
         
         initializeClient();
@@ -301,9 +302,9 @@ Default mode that communicates directly with Switcher API.
 ```java
 MyAppFeatures.configure(ContextBuilder.builder()
     .url("https://api.switcherapi.com")
-    .apiKey("YOUR_API_KEY")
-    .domain("MY_DOMAIN")
-    .component("my-app"));
+    .apiKey("[API_KEY]")
+    .domain("[DOMAIN_NAME]")
+    .component("[COMPONENT_NAME]"));
 
 MyAppFeatures.initializeClient();
 ```
@@ -346,12 +347,12 @@ switcher.forceRemote().isItOn();
 ```java
 MyAppFeatures.configure(ContextBuilder.builder()
     .url("https://api.switcherapi.com")
-    .apiKey("YOUR_API_KEY")
-    .domain("MY_DOMAIN")
+    .apiKey("[API_KEY]")
+    .domain("[DOMAIN_NAME]")
     .local(true)
     .snapshotAutoLoad(true)
     .snapshotAutoUpdateInterval("30s")  // Check for updates every 30 seconds
-    .component("my-app"));
+    .component("[COMPONENT_NAME]"));
 
 MyAppFeatures.initializeClient();
 
@@ -367,6 +368,28 @@ MyAppFeatures.scheduleSnapshotAutoUpdate("30s", new SnapshotCallback() {
         logger.error("Failed to update snapshot: {}", e.getMessage());
     }
 });
+```
+
+#### Circuit Breaker: Silent Mode
+
+This feature allows you to specify how long the client SDK should attempt to restore connectivity in case of remote API failures.
+
+When the API is unavailable, the SDK will automatically operate in silent mode, evaluating Switchers using a local snapshot. It is important to note that any Switcher Key configured must be able to resolve without external dependencies (e.g., Switcher Relay).
+
+Make sure to configure the scheduled snapshot auto-update to keep the local snapshot up to date with the remote API.
+
+Here is an example - in-memory snapshot with auto-update every 30 seconds:
+
+```java
+MyAppFeatures.configure(ContextBuilder.builder()
+    .context(MyAppFeatures.class.getName())
+    .apiKey("[API_KEY]")
+    .url("https://api.switcherapi.com")
+    .domain("[DOMAIN_NAME")
+    .component("[COMPONENT_NAME]")
+    .silentMode("5m")
+    .snapshotAutoUpdateInterval("30s")
+);
 ```
 
 ### Advanced Features
@@ -413,23 +436,6 @@ MyAppFeatures.configure(ContextBuilder.builder()
 
 #### Performance Optimization
 
-##### Silent Mode (Resilience)
-
-Automatically fall back to cached results when API is unavailable:
-
-```java
-MyAppFeatures.configure(ContextBuilder.builder()
-    .silentMode("30s")  // Retry API calls every 30 seconds when failing
-    .url("https://api.switcherapi.com")
-    // ... other config
-);
-```
-
-**Time formats supported:**
-- `5s` - 5 seconds
-- `2m` - 2 minutes  
-- `1h` - 1 hour
-
 ##### Connection Pooling
 
 ```java
@@ -471,7 +477,7 @@ void testWithConditions() {
 }
 ```
 
-##### JUnit 5 Integration
+##### JUnit Jupiter Integration
 
 ###### Single Switcher Test
 
