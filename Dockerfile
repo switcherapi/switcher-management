@@ -12,10 +12,10 @@ COPY ./ /usr/local/app/
 # Install all dependencies, both production and development, build, and remove dev dependencies
 RUN npm ci && \
 	npm run build:prod && \
-	npm prune --omit=dev
+	npm prune --omit=dev --legacy-peer-deps
 
 # ---------- Release ----------
-FROM nginx:1.31.3-alpine-slim
+FROM nginx:1.31.4-alpine-slim
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf

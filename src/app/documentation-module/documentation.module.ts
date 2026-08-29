@@ -1,17 +1,18 @@
 import { NgModule, SecurityContext } from '@angular/core';
-import { MarkdownModule, SANITIZE } from 'ngx-markdown';
+import { provideMarkdown, SANITIZE } from 'ngx-markdown';
 import { DocumentationRoutingModule } from './documentation.routing';
 
 @NgModule({
     imports: [
-        DocumentationRoutingModule,
-        MarkdownModule.forRoot({
-        sanitize: {
-            provide: SANITIZE,
-            useValue: SecurityContext.NONE
-        },
-        }),
-        MarkdownModule.forChild()
+        DocumentationRoutingModule
+    ],
+    providers: [
+        provideMarkdown({
+            sanitize: {
+                provide: SANITIZE,
+                useValue: SecurityContext.NONE
+            },
+        })
     ]
 })
 export class DocumentationModuleModule { }
