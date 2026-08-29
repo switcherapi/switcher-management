@@ -27,6 +27,8 @@ jobs:
         run: |
           npm ci
           npm run lint
+          npm run build:prod
+          npm prune --omit=dev --legacy-peer-deps
 
   docker:
     name: Publish Docker Image
