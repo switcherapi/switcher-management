@@ -3,6 +3,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { Routes, RouterModule, mapToCanActivate } from '@angular/router';
 import { SettingsAccountComponent } from './settings-account/settings-account.component';
+import { AuthorizedAppsComponent } from './settings-authorized-apps/settings-authorized-apps.component';
 
 const routes: Routes = [
   { 
@@ -13,6 +14,11 @@ const routes: Routes = [
       {
         path: 'account',
         component: SettingsAccountComponent, 
+        canActivate: mapToCanActivate([AuthGuard])
+      },
+      {
+        path: 'authorized-apps',
+        component: AuthorizedAppsComponent,
         canActivate: mapToCanActivate([AuthGuard])
       }
     ]

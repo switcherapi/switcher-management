@@ -1,0 +1,89 @@
+.settings-title {
+    margin-top: 10px;
+    font-size: 1.4rem;
+}
+
+.settings-content {
+    display: block;
+}
+
+.settings-body {
+    width: 100%;
+}
+
+.description-text {
+    margin-bottom: 1.5rem;
+}
+
+.authorized-apps-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #cccccc80;
+    background: white;
+}
+
+.authorized-apps-table th {
+    background: #549bfb94;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    font-weight: normal;
+}
+
+.authorized-apps-table th,
+.authorized-apps-table td {
+    padding: .85rem;
+    border-bottom: 1px solid #eaeaea;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.authorized-apps-table tbody tr:hover {
+    background: #5298ff17;
+}
+
+.client-id {
+    color: #666;
+    font-size: .85rem;
+    word-break: break-all;
+}
+
+.actions-column {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.btn-element.btn-red {
+    background: #fb5454;
+}
+
+.empty-state {
+    border: 1px dashed #cccccc;
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+    border-radius: 4px;
+}
+
+.empty-state mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: .75rem;
+}
+
+@media only screen and (max-width: 800px) {
+    .authorized-apps-table th,
+    .authorized-apps-table td {
+        padding: .6rem;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .actions-column {
+        white-space: normal;
+    }
+
+    .btn-element.btn-red {
+        width: 100%;
+    }
+}

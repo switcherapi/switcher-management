@@ -1,0 +1,149 @@
+:host {
+  text-align: center;
+  display: block;
+  margin-top: 0px !important;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h4 {
+  color: #fff;
+  background-color: rgb(66, 71, 77);
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.card {
+  box-shadow: 0 5px 5px -3px #0003,0 8px 10px 1px #00000024,0 3px 14px 2px #0000001f;
+}
+
+.panel-oauth-detail {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.oauth-img {
+  border-radius: 100%;
+}
+
+.scope-message {
+  text-align: left;
+}
+
+.scope-list {
+  text-align: left;
+}
+
+.scope-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+.scope-chip {
+  background: #549bfb;
+  color: white;
+  border-radius: 999px;
+  padding: .2rem .75rem;
+  font-size: .85rem;
+}
+
+.scope-description {
+  color: #555;
+}
+
+.btn-container {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn-element {
+  background: #42474d;
+  color: white;
+  transition: all .5s;
+}
+
+.btn-element:hover {
+  background: #82878d;
+}
+
+.btn-element.white {
+  background: white;
+  border: 1px solid black;
+  margin-left: 10px;
+}
+
+.loader {
+  margin: auto;
+  border-radius: 100%;
+  border-top: 5px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+.loader-div {
+  margin-top: 40px;
+  animation: 10s ease-out 0s 1 fadeIn;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+:host ::ng-deep .mat-button-wrapper {
+  color: white;
+}
+
+@media only screen and (max-width: 990px) {
+  .btn-container {
+    width: 100%;
+  }
+
+  .btn-element {
+    width: 100%;
+  }
+
+  .btn-element.white {
+    margin-top: 10px;
+    margin-left: 0px;
+  }
+
+  .scope-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .35rem;
+  }
+}
