@@ -1,0 +1,61 @@
+<app-block-ui [isBlocked]="loading()" [message]="blockUiMessage()" [showSpinner]="true">
+    <h3 class="settings-title">
+        Authorized Apps
+    </h3>
+    <hr>
+    <section class="settings-content">
+        <div class="settings-body">
+            <p class="description-text">
+                Review the OAuth clients that can access your Switcher API account and revoke access when it is no longer needed.
+            </p>
+
+            @if (comingSoon()) {
+            <div class="alert alert-info mb-0">
+                Authorized apps management is coming soon.
+            </div>
+            } @else if (error()) {
+            <div class="alert alert-danger mb-0">
+                {{ error() }}
+            </div>
+            } @else if (!authorizedApps().length) {
+            <div class="empty-state">
+                <mat-icon>vpn_key</mat-icon>
+                <p>No authorized applications yet.</p>
+            </div>
+            } @else {
+            <div class="table-responsive">
+                <table class="authorized-apps-table">
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Scope</th>
+                            <th>Authorized</th>
+                            <th class="actions-column">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (app of authorizedApps(); track app.client_id) {
+                        <tr>
+                            <td>
+                                <strong>{{ getClientLabel(app) }}</strong>
+                                @if (app.client_name) {
+                                <div class="client-id">{{ app.client_id }}</div>
+                                }
+                            </td>
+                            <td>{{ app.scope || 'No scopes requested' }}</td>
+                            <td>{{ app.createdAt | date: 'medium' }}</td>
+                            <td class="actions-column">
+                                <button mat-button class="btn-element btn-red" (click)="onRevoke(app)">
+                                    <mat-icon>delete</mat-icon>
+                                    Revoke
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </div>
+    </section>
+</app-block-ui>

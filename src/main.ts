@@ -72,6 +72,11 @@ const routes: Routes = [
         loadComponent: () => import('./app/slack-auth/slack-auth.component').then(m => m.SlackAuthComponent), 
         canActivate: mapToCanActivate([AuthGuard]) 
     },
+    {
+        path: 'oauth/consent',
+        loadComponent: () => import('./app/oauth-consent/oauth-consent.component').then(m => m.OauthConsentComponent),
+        canActivate: mapToCanActivate([AuthGuard])
+    },
     { path: '**', redirectTo: '/dashboard' }
 ];
 
