@@ -141,10 +141,6 @@ export class ConfigListComponent extends ListComponent implements OnInit, OnDest
           this.error.set(this.errorHandler.doError(error));
         },
         complete: () => {
-          if (this.configs() === null) {
-            this.error.set('Failed to connect to Switcher API');
-          }
-          
           this.loading.set(false);
         }
       });

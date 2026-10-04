@@ -15,7 +15,7 @@ RUN npm ci && \
 	npm prune --omit=dev --legacy-peer-deps
 
 # ---------- Release ----------
-FROM nginx:1.31.4-alpine-slim
+FROM nginx:1.31.6-alpine-slim
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf

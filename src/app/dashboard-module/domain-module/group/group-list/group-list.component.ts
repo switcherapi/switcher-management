@@ -144,10 +144,6 @@ export class GroupListComponent extends ListComponent implements OnInit, OnDestr
           this.error.set(this.errorHandler.doError(error));
         },
         complete: () => {
-          if (this.groups() === null) {
-            this.error.set('Failed to connect to Switcher API');
-          }
-
           this.loading.set(false);
         }
       });
