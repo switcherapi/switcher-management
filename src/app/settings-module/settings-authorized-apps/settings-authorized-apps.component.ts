@@ -44,7 +44,7 @@ export class AuthorizedAppsComponent {
       if (result) {
         this.revokeApp(app);
       }
-    });
+    }, () => {});
   }
 
   getClientLabel(app: AuthorizedApp): string {

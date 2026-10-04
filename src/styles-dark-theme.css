@@ -155,6 +155,7 @@ html.dark-mode pre[class*="language-"] {
 }
 
 html.dark-mode app-changelog,
+html.dark-mode app-settings-authorized-apps,
 html.dark-mode app-team-detail,
 html.dark-mode app-metric-data,
 html.dark-mode app-metric .header-filter,

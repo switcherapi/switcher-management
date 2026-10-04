@@ -588,9 +588,6 @@ export class ConfigDetailComponent extends DetailComponent implements OnInit, On
           this.loadingStrategies.set(false);
         },
         complete: () => {
-          if (!this.strategies.getValue().length) {
-            this.error.set('Failed to connect to Switcher API');
-          }
           this.loadingStrategies.set(false);
         }
       });

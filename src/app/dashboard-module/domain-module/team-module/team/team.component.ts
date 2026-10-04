@@ -138,11 +138,6 @@ export class TeamComponent implements OnInit, OnDestroy {
         complete: () => {
           this.loading.set(false);
           this.classStatus.set('card mt-4 ready');
-          const currentTeams = this.teams();
-          
-          if (!currentTeams || currentTeams.length === 0) {
-            this.error.set('Failed to connect to Switcher API');
-          }
         }
       });
   }
