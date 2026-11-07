@@ -41,6 +41,10 @@ export class AppVersionComponent {
 
   private toLocaleString(utcDateString: string): string {
     try {
+      if (Number.isNaN(Date.parse(utcDateString))) {
+        return utcDateString;
+      }
+
       const utcDate = new Date(utcDateString);
       const localDateString = utcDate.toLocaleString();
       
