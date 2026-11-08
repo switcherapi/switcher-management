@@ -46,7 +46,7 @@ export class LoginComponent {
 
   private checkAuthAndRedirect(): void {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
+      this.navigateAfterLogin();
     }
   }
 
@@ -61,7 +61,7 @@ export class LoginComponent {
         } else if (platform === 'bitbucket') {
           this.loginWithBitbucket(code);
         } else {
-          this.router.navigate(['/']);
+          void this.router.navigate(['/']);
         }
       }
     });
@@ -182,9 +182,20 @@ export class LoginComponent {
 
   private onSuccess(success: any): void {
     if (success) {
-      this.router.navigate(['/dashboard']);
+      this.navigateAfterLogin();
       this.authService.releaseOldSessions.emit(true);
     }
     this.loading.set(false);
+  }
+
+  private navigateAfterLogin(): void {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+
+    if (returnUrl?.startsWith('/') && !returnUrl.startsWith('//')) {
+      void this.router.navigateByUrl(returnUrl);
+      return;
+    }
+
+    void this.router.navigate(['/dashboard']);
   }
 }
