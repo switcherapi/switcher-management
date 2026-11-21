@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM node:24-alpine AS builder
+FROM node:26-alpine AS builder
 
 # Required for @parcel/watcher
 RUN apk add --update g++ make python3 && rm -rf /var/cache/apk/*
@@ -15,7 +15,7 @@ RUN npm ci && \
 	npm prune --omit=dev --legacy-peer-deps
 
 # ---------- Release ----------
-FROM nginx:1.31.6-alpine-slim
+FROM nginx:1.31.9-alpine-slim
 
 # Copy nginx config file
 RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/nginx.conf
