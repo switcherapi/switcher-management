@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject, input, signal, effect, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, inject, input, signal, effect, untracked, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -53,8 +53,12 @@ export class ConfigPreviewComponent extends BasicComponent implements OnDestroy 
     
     // Initialize form and permissions when component is created
     effect(() => {
-      this.readPermissionToObject();
-      this.loadOperationSelectionComponent();
+      this.permissions();
+      this.config();
+      untracked(() => {
+        this.readPermissionToObject();
+        this.loadOperationSelectionComponent();
+      });
     }, { allowSignalWrites: true });
     
     // Subscribe to environment changes

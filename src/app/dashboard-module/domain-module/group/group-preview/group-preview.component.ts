@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject, input, signal, effect, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, inject, input, signal, effect, untracked, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -52,7 +52,9 @@ export class GroupPreviewComponent extends BasicComponent implements OnDestroy {
     
     // Initialize form and permissions when component is created
     effect(() => {
-      this.readPermissionToObject();
+      this.permissions();
+      this.group();
+      untracked(() => this.readPermissionToObject());
     }, { allowSignalWrites: true });
     
     // Subscribe to environment changes
